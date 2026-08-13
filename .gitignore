@@ -1,0 +1,21 @@
+# 依赖与构建
+node_modules/
+dist/
+*.tsbuildinfo
+
+# 本地配置（含 token，勿提交）
+.env
+.env.local
+
+# 数据产物
+data/
+output/
+
+# 文档不上传 GitHub
+/docs/
+
+# 编辑器与系统
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,21 @@
+{
+  "name": "dsh-market",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DSH Market —— DeepSeek Harness 插件市场：持续收录 / 搜索 / 实用五维评分 / 个性化推荐 / 一键安装",
+  "workspaces": [
+    "schema",
+    "collector",
+    "web",
+    "plugin"
+  ],
+  "scripts": {
+    "collect": "npm run start -w collector",
+    "test": "npm run test -w collector",
+    "dev:web": "npm run dev -w web",
+    "build:web": "npm run build -w web"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
