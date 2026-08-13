@@ -1,5 +1,5 @@
 /**
- * 插件卡片：类型/名称/描述/标签 + 左短条右雷达图评分区 + 元信息
+ * 插件卡片：类型/名称/描述/标签 + 左短条右雷达图评分区 + 元信息 + 收藏
  */
 import type { DshPlugin } from "@dsh-market/schema";
 import RadarChart, { RADAR_ORDER, RADAR_LABELS } from "./RadarChart";
@@ -16,15 +16,34 @@ function timeAgo(iso: string): string {
   return iso.slice(0, 10);
 }
 
-export default function PluginCard({ plugin }: { plugin: DshPlugin }) {
+interface Props {
+  plugin: DshPlugin;
+  favorite: boolean;
+  onToggleFavorite: (id: string) => void;
+  onOpen: (plugin: DshPlugin) => void;
+}
+
+export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen }: Props) {
   const b = plugin.score.breakdown;
   return (
-    <article className="card">
+    <article className="card" onClick={() => onOpen(plugin)}>
       <div className="card-top">
         <span className={`pill ${plugin.type === "skill" ? "pill-skill" : "pill-plugin"}`}>
           {plugin.type === "skill" ? "SKILL" : "PLUGIN"}
         </span>
-        <span style={{ fontSize: 11, color: "#8CA3BB" }}>{timeAgo(plugin.pushedAt)}</span>
+        <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 11, color: "#8CA3BB" }}>{timeAgo(plugin.pushedAt)}</span>
+          <button
+            className={`fav-star ${favorite ? "on" : ""}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleFavorite(plugin.id);
+            }}
+            title={favorite ? "取消收藏" : "收藏"}
+          >
+            {favorite ? "★" : "☆"}
+          </button>
+        </span>
       </div>
       <h4>{plugin.name}</h4>
       <div className="desc">{plugin.description}</div>
