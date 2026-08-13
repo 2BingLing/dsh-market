@@ -13,23 +13,22 @@ import {
 const TOPICS = ["dsh-plugin", "deepseek-harness-plugin", "dsh"];
 const ORG = "dsh-external";
 
-/** 搜索 topic 相关仓库（按 stars 排序，取前 N 页） */
-export async function scanByTopics(maxPerTopic = 200): Promise<GithubRepo[]> {
+/** 搜索 topic 相关仓库（按 stars 排序，取前 maxPerTopic 条，控制候选规模） */
+export async function scanByTopics(maxPerTopic = 100): Promise<GithubRepo[]> {
   const out: GithubRepo[] = [];
   for (const topic of TOPICS) {
     const q = encodeURIComponent(`topic:${topic}`);
-    const first = await githubFetch<GithubSearchResult>(
-      `/search/repositories?q=${q}&sort=stars&order=desc&per_page=100`
-    );
-    out.push(...first.items);
-    // 搜索 API 每请求最多 1000 条，这里保守取 200
-    if (first.items.length === 100) {
-      const second = await githubFetch<GithubSearchResult>(
-        `/search/repositories?q=${q}&sort=stars&order=desc&per_page=100&page=2`
+    const items: GithubRepo[] = [];
+    const pages = Math.ceil(maxPerTopic / 100);
+    for (let page = 1; page <= pages; page++) {
+      const res = await githubFetch<GithubSearchResult>(
+        `/search/repositories?q=${q}&sort=stars&order=desc&per_page=100&page=${page}`
       );
-      out.push(...second.items);
+      items.push(...res.items);
+      if (res.items.length < 100) break;
     }
-    console.log(`  topic:${topic} -> ${first.total_count} total, took ${first.items.length + (first.items.length === 100 ? 100 : 0)}`);
+    out.push(...items);
+    console.log(`  topic:${topic} -> ${items.length} repos`);
   }
   return out;
 }

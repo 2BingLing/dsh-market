@@ -24,6 +24,7 @@ export interface ScoreInput {
   topics: string[];
   readmeContent: string | null;
   hasSkillMd: boolean;
+  needsConfig: boolean;
 }
 
 const WEIGHTS = {
@@ -228,7 +229,8 @@ export function computePracticalScore(
 
   const breakdown: PracticalScoreBreakdown = { maintain, practical, popularity, ease, signal };
   const conf = confidence(input);
-  const total = Math.round(clip(weightedGeometricMean(breakdown) * conf * 100));
+  // weightedGeometricMean 返回 0-100 量级，直接乘置信度，无需再 *100
+  const total = Math.round(clip(weightedGeometricMean(breakdown) * conf));
 
   return {
     total,
