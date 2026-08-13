@@ -11,9 +11,9 @@ dist/
 data/
 output/
 
-# 文档不上传 GitHub
+# 文档和demo不上传 GitHub
 /docs/
-
+/design-ref/
 # 编辑器与系统
 .DS_Store
 Thumbs.db

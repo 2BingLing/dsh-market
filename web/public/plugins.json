@@ -1,0 +1,5162 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-13T16:59:15.343Z",
+  "plugins": [
+    {
+      "id": "Zhenyu98/dsh-context-doctor",
+      "type": "cordis-plugin",
+      "name": "dsh-context-doctor",
+      "owner": "Zhenyu98",
+      "repo": "dsh-context-doctor",
+      "fullName": "Zhenyu98/dsh-context-doctor",
+      "stars": 5,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "See exactly what every request carries: token cost of the AGENTS.md chain, skill catalog and tool schemas, with duplicate/conflict detection and actionable pruning tips (Web UI gauge + context_audit tool).",
+      "descriptionZh": null,
+      "tags": [
+        "context",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "tool",
+        "ui"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "context",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "tool",
+        "ui"
+      ],
+      "pushedAt": "2026-08-13T16:29:47Z",
+      "createdAt": "2026-08-12T16:03:31Z",
+      "updatedAt": "2026-08-13T16:39:40Z",
+      "readmeSummary": "<h1 align=\"center\">Context Doctor</h1> <p align=\"center\"> <strong>DSH 上下文注入审计插件：看清模型每个请求到底背着多少上下文，找出重复、冲突与浪费 token 的注入物。</strong> </p> <p align=\"center\"> <strong>全程只读</strong> · <strong>token 成本逐项量化</strong> · <strong>可执行裁剪建议</strong> </p> <p align=\"center\"> <a href=\"LICENSE\"><img alt=\"License BSD-3-Clause\" src=\"https://img.shields.io/badge/License-BSD%203--Clause-blue.svg?style=for-the-badge\"></a> <a href=\"https://github.com/Zhenyu98/dsh-context-doctor/releases\"><img alt=\"Version 0.5.0\" src=\"ht",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 58,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 11,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "topic",
+        "awesome-alex"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.814Z"
+    },
+    {
+      "id": "HuanLinOTO/dsh-plugin-aigc-canvas",
+      "type": "cordis-plugin",
+      "name": "dsh-aigc-canvas",
+      "owner": "HuanLinOTO",
+      "repo": "dsh-plugin-aigc-canvas",
+      "fullName": "HuanLinOTO/dsh-plugin-aigc-canvas",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "AIGC canvas plugin (cordis).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "NOASSERTION",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T12:25:10Z",
+      "createdAt": "2026-08-12T15:14:19Z",
+      "updatedAt": "2026-08-13T16:44:19Z",
+      "readmeSummary": "# dsh-aigc-canvas > DSH 插件:provider-agnostic 的 AIGC HTTP 桥 + 自由画布 + ffmpeg 后处理。Agent 通过 > `aigc_http_request` 调用任意 HTTP AIGC API(endpoint + apiKey 自动附加),生成的文件用 > `aigc_canvas_place` 摆到无限画布上,可用 `aigc_media_edit` (ffmpeg) 后处理。 ## 安装 ```sh # 从本地 clone 开发安装(开发阶段推荐): dsh plugin --profile <profile> add link:D:\\Projects\\deepseek-harness\\dsh-aigc-canvas # 从 git 安装(发布到 dsh-external 组织后): dsh plugin --profile <profile> add github:huanlinoto/dsh-plugin-aigc-canvas ``` 预构建 `lib/` 入库策略(含 `@deepseek-ai/*` pri",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 33,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 45,
+          "signal": 70
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.816Z"
+    },
+    {
+      "id": "HuanLinOTO/dsh-plugin-better-sidebar-plugin-office",
+      "type": "cordis-plugin",
+      "name": "dsh-better-sidebar-plugin-office",
+      "owner": "HuanLinOTO",
+      "repo": "dsh-plugin-better-sidebar-plugin-office",
+      "fullName": "HuanLinOTO/dsh-plugin-better-sidebar-plugin-office",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Office integration for DSH-better-sidebar.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "NOASSERTION",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T12:25:39Z",
+      "createdAt": "2026-08-12T08:59:49Z",
+      "updatedAt": "2026-08-13T16:43:28Z",
+      "readmeSummary": "# dsh-better-sidebar-plugin-office DSH web 插件：为 better-sidebar 的编辑器提供 Office 三件套文件预览（`.docx` / `.xlsx` / `.pptx`）。 ## 背景 better-sidebar 曾内置这三个 viewer，但 docx-preview / Univer（+ SheetJS）/ pptx-renderer 会把 client bundle 撑到约 23MB。本插件把它们拆成独立 bundle，better-sidebar 本体不再内联 Office 渲染库（约 5.9MB 全套 → 2.2MB 压缩），需要 Office 预览的用户单独安装本插件即可。 ## 功能 - 通过 `ctx.betterSidebar.registerFileViewer` 注册 3 个 viewer（id 与内置一致）： - `docx`：`.docx`，docx-preview 保真渲染（样式/图片/表格，Alt+滚轮缩放） - `xlsx`：`.xlsx`，Univer sheets 预设（数据 + 公式 + 合",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 40,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 70
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.816Z"
+    },
+    {
+      "id": "havingautism/dsh-deepresearch",
+      "type": "cordis-plugin",
+      "name": "dsh-deepresearch",
+      "owner": "havingautism",
+      "repo": "dsh-deepresearch",
+      "fullName": "havingautism/dsh-deepresearch",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "DeepResearch plugin (cordis).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:29:34Z",
+      "createdAt": "2026-08-12T15:58:52Z",
+      "updatedAt": "2026-08-13T16:46:05Z",
+      "readmeSummary": "# 🔬 Deep Research [English](README.en.md) | 中文 `@deepseek-ai/dsh-deepresearch` 把证据优先的 Codemini 研究工作区带到 DSH。它提供持久工作流状态、模型工具、生成的 `deepResearch` Remote namespace 和“深度研究”Web 工作区，同时组合宿主已有的 Web 与 subagent 能力。 ## ✨ 特性 - 🧭 记录研究问题、目标、约束、种子材料和研究深度。 - 🧩 确认前编辑子问题、依赖关系和明确的成功标准。 - ✅ 未确认计划时拒绝写入证据。 - 🔎 为每个子问题关联论点、摘录、URL、置信度和已覆盖标准。 - 📊 跟踪问题覆盖度、搜索与抓取预算、局限和部分完成状态。 - 📝 保存结论，以及完整或明确标记为未完成的最终报告。 - 🗂️ 在 Web 资料库中搜索、筛选、排序、恢复、中止或删除项目。 ## 🚀 快速开始 单独安装本组合包： ```sh dsh plugin --profile web add github:havingautism/dsh-",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 22,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 70,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 50
+        },
+        "confidence": 0.5,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.816Z"
+    },
+    {
+      "id": "lehhair/dsh-diff-viewer",
+      "type": "cordis-plugin",
+      "name": "dsh-diff-viewer",
+      "owner": "lehhair",
+      "repo": "dsh-diff-viewer",
+      "fullName": "lehhair/dsh-diff-viewer",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "PiUI-style Web diff viewer replacing the default diff view.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T09:26:19Z",
+      "createdAt": "2026-08-12T11:25:05Z",
+      "updatedAt": "2026-08-13T16:44:34Z",
+      "readmeSummary": "# dsh-diff-viewer DSH Web GUI 的 PiUI 风格 diff 查看器插件：替换 write/edit 工具调用的 diff 渲染（原 DiffBlock）。 - **unified 单栏默认**：同一 gutter 并排显示旧/新行号，无左右错位；split 双栏可选（`viewMode`） - **变更条**：新增实心绿条、删除条纹红条；行背景色带统一延伸到最宽行 - **词级高亮**：行内改动叠加绿/红标记，shiki 语法着色（`highlightLines`） - **上下文折叠**：长段未变更行折叠为\"`N 行未变更`\"，向上/向下/全部展开 - **窗口化渲染**：固定行高窗口化，大 diff 不挂载全部行；sticky 横向滚动条（hover 显现） - **复制 + `└ +A -R · N file(s)` 页脚** ## 机制 插件的宿主依赖是 ui-tool 的 **diff-card chain 槽位**（`tool.call.diffcard` / `tool.details.diffcard`）——该扩展点**已合入官方 Deep",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 35,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 70,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.816Z"
+    },
+    {
+      "id": "hellodigua/dsh-emoji",
+      "type": "cordis-plugin",
+      "name": "dsh-emoji",
+      "owner": "hellodigua",
+      "repo": "dsh-emoji",
+      "fullName": "hellodigua/dsh-emoji",
+      "stars": 6,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Emoji plugin (cordis).",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T15:50:06Z",
+      "createdAt": "2026-08-12T16:16:29Z",
+      "updatedAt": "2026-08-13T16:39:33Z",
+      "readmeSummary": "# dsh-emoji [English](README.en.md) | 简体中文 ![dsh-emoji 蓝鲸表情包](assets/readme/banner.png) `dsh-emoji` 是 DeepSeek Harness 的 Profile Bundle，让 Agent 在正文中输出受控 ASCII marker，再由 Host 确定性转成行内 Markdown 图片。`0.2.0` 支持上传遵循标准 40 个语义 key 的自定义表情包；当前只处理 Web Assistant 回复，不修改 DSH core。 ## 效果预览 ![蓝鲸表情在 DSH 对话中的行内显示效果](assets/readme/chat-preview.png) ## 工作方式 - system prompt 使用英文技术默认值，向模型提供 40 个不随 UI locale 改变的合法 marker，例如 `::emoji:happy::`、`::emoji:thinking::`、`::emoji:celebrate::`、`::emoji:sorry::`、`::emoji:applause",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 59,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 12,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.816Z"
+    },
+    {
+      "id": "yuezengwu/dsh-explain",
+      "type": "cordis-plugin",
+      "name": "dsh-explain",
+      "owner": "yuezengwu",
+      "repo": "dsh-explain",
+      "fullName": "yuezengwu/dsh-explain",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Learning mode that explains each agent step (WIP).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T14:47:21Z",
+      "createdAt": "2026-08-12T09:11:07Z",
+      "updatedAt": "2026-08-13T16:44:43Z",
+      "readmeSummary": "**English** | [简体中文](README.zh-CN.md) # dsh-explain — Learning mode for DSH > ✅ **Status: the M6 Explain Host protocol is implemented and passes the automated gates. Optional consumer integrations are still in progress. The current minimum supported DSH version is `0.1.0-rc.6`.** > See the [product requirements](docs/PRD.md) and [technical architecture](docs/ARCHITECTURE.md) for the full design. The detailed design documents are currently written in Chinese. `dsh-explain` turns useful material f",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 49,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.820Z"
+    },
+    {
+      "id": "HuanLinOTO/dsh-plugin-interpreters",
+      "type": "cordis-plugin",
+      "name": "dsh-interpreters",
+      "owner": "HuanLinOTO",
+      "repo": "dsh-plugin-interpreters",
+      "fullName": "HuanLinOTO/dsh-plugin-interpreters",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Interpreter plugin (cordis).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "NOASSERTION",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T12:25:53Z",
+      "createdAt": "2026-08-12T09:22:55Z",
+      "updatedAt": "2026-08-13T16:42:51Z",
+      "readmeSummary": "# dsh-interpreters DSH 插件：暴露 `run_python` 和 `run_node` 两个模型可调用工具，通过 stdin 执行代码并返回 stdout/stderr/exit code。在设置页「插件配置」分区提供配置卡片，让用户设置 Python 和 Node.js 解释器的可执行文件路径，工具描述中会告知模型解释器位置。 ## 架构 - **工具**：`run_python` / `run_node`，通过 `spawn(executable, ['-'])` 执行代码，代码经 stdin 传入（无命令行长度限制） - **设置持久化**：通过 `ctx.settings` 命名空间 `interpreters` 持久化到 `$DSH_HOME/settings.yaml` - **动态 description**：工具的 `description` 在注册时根据配置计算，包含解释器路径；设置变更时通过 `bridge.onChange()` 自动重新注册 - **配置暴露（TypertRemoteService 模式）**：DSH 的 settings ",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 40,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 70
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.821Z"
+    },
+    {
+      "id": "cendaifeng/dsh-learn-everything",
+      "type": "cordis-plugin",
+      "name": "dsh-learn-everything",
+      "owner": "cendaifeng",
+      "repo": "dsh-learn-everything",
+      "fullName": "cendaifeng/dsh-learn-everything",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Feynman learning-mode plugin: teach → teach-back → judge → re-explain loop rendered as rich HTML lesson cards (mermaid diagrams + shiki code highlighting).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T15:47:07Z",
+      "createdAt": "2026-08-13T15:17:07Z",
+      "updatedAt": "2026-08-13T16:42:41Z",
+      "readmeSummary": "# dsh-learn-everything — DSH 费曼学习法插件 <!-- banner: GitHub social preview source — 1280×640 --> ![dsh-learn-everything banner](assets/banner.jpg) > **状态：M4 发布门禁（README Model Experience、组合 smoke、验收矩阵、GIF）。** > 设计决策与验收标准见 [SPEC.md](SPEC.md)；验收矩阵见 [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)。 **一句话定位**：让 DeepSeek Harness 变成\"边学边做\"的环境——开启学习模式后，模型按费曼学习法讲解概念、出卡片题请你复述、针对缺口重新讲解，教学内容以富 HTML 卡片可视化呈现。 ## 核心形态 - 会话级 `/learn on|off` 切换；开启后注入费曼教学引导（`learning:policy` prompt 段），关闭后完全恢复默认行为。 - 模型经 `teach` 工具产出结构化 Lesso",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 23,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 45,
+          "signal": 50
+        },
+        "confidence": 0.5,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.821Z"
+    },
+    {
+      "id": "lehhair/dsh-mobile",
+      "type": "cordis-plugin",
+      "name": "dsh-mobile",
+      "owner": "lehhair",
+      "repo": "dsh-mobile",
+      "fullName": "lehhair/dsh-mobile",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Mobile client plugin (cordis + dsh.plugin.json).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T09:25:53Z",
+      "createdAt": "2026-08-12T12:58:19Z",
+      "updatedAt": "2026-08-13T16:45:59Z",
+      "readmeSummary": "# dsh-mobile DSH WebUI 移动端适配插件（**PiUI 翻页器结构**）：窄屏下框架本身就是横向 scroll-snap 翻页器，两页卡片——**半开侧边栏页**（`min(360px, 50vw)`）+ **全宽聊天页**。滑到侧边栏页后聊天卡片仍在右边露出一半（PiUI 同款 overlayWidth 效果），聊天渲染零改动。纯客户端适配，零核心改动——官方 rc.2 发行版直接可用。 ## 功能 - **PiUI 翻页器**：≤768px 时三栏框架重排为两页横向 snap 轨道——侧边栏页半开宽（约半个视口），聊天页全宽；**滑到侧边栏页时聊天卡片在右半露出（半边信息流）**，PiUI 同款结构 - **侧边栏始终完整渲染**：窄屏下控制器自动展开 AppFrame 折叠的侧边栏并保持（滑动翻页**不同步状态**）——侧边栏列的内容在聊天全屏时也完整留在 DOM 里，滑回来立即可见，**绝不\"滑动才跟着渲染\"** - **同色区分**：侧边栏与信息流同色（平页，无圆角阴影）；**只有信息流是卡片**（16px 圆角 + 阴影 + 细边框），PiUI 同款视觉",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 37,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 100,
+          "signal": 70
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.821Z"
+    },
+    {
+      "id": "havingautism/dsh-notebooks",
+      "type": "cordis-plugin",
+      "name": "dsh-notebooks",
+      "owner": "havingautism",
+      "repo": "dsh-notebooks",
+      "fullName": "havingautism/dsh-notebooks",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Notebooks plugin (cordis).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:29:31Z",
+      "createdAt": "2026-08-12T15:59:18Z",
+      "updatedAt": "2026-08-13T16:46:16Z",
+      "readmeSummary": "# 📓 Notebooks [English](README.en.md) | 中文 `@deepseek-ai/dsh-notebooks` 把 Codemini 风格的持久随手记带到 DSH。它提供存储、模型工具、生成的 `notebooks` Remote namespace，以及完整的“随手记”Web 工作区。 ## ✨ 特性 - 🗂️ 使用网格或列表浏览支持搜索、筛选和排序的笔记库。 - 📝 创建带标准化标签和初始手写来源的持久笔记。 - 🌐 添加网页引用、已读取的网页正文、对话答案，以及纯文本或 Markdown 文档。 - ✅ 精确选择参与综合总结和 Studio 产物的来源。 - 🧠 保存有依据的总结、Mermaid 思维导图和 Markdown 报告。 - 🗑️ 直接在工作区中更新来源或删除笔记。 ## 🚀 快速开始 单独安装本组合包： ```sh dsh plugin --profile web add github:havingautism/dsh-notebooks dsh web ``` 打开“随手记”标签页。组合包 patch 显式设置条目、正",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 22,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 70,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 50
+        },
+        "confidence": 0.5,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.821Z"
+    },
+    {
+      "id": "ZSeven-W/dsh-openpencil",
+      "type": "cordis-plugin",
+      "name": "dsh-openpencil",
+      "owner": "ZSeven-W",
+      "repo": "dsh-openpencil",
+      "fullName": "ZSeven-W/dsh-openpencil",
+      "stars": 28,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "OpenPencil design preview and editing plugin.",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "openpencil"
+      ],
+      "curated": false,
+      "homepage": "https://op.zseven.tech",
+      "license": "MIT",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "openpencil"
+      ],
+      "pushedAt": "2026-08-13T14:54:25Z",
+      "createdAt": "2026-08-12T16:05:11Z",
+      "updatedAt": "2026-08-13T16:54:14Z",
+      "readmeSummary": "<p align=\"center\"> <img src=\"./docs/images/dsh-openpencil-logo.png\" alt=\"DSH OpenPencil\" width=\"120\" /> </p> <h1 align=\"center\">DSH OpenPencil</h1> <p align=\"center\"> <strong>The DeepSeek Harness plugin for OpenPencil — preview, inspect, and edit real <code>.op</code> documents inside a conversation.</strong><br /> <sub>Exact Multi-Frame Previews &bull; Interactive Canvas &bull; Managed Editor &bull; Agent-Native Design Tools</sub> </p> <p align=\"center\"> <sub>npm: <a href=\"https://www.npmjs.com",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 62,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 20,
+          "ease": 50,
+          "signal": 100
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.824Z"
+    },
+    {
+      "id": "AnacondaKC/dsh-stock-market",
+      "type": "cordis-plugin",
+      "name": "dsh-stock-market",
+      "owner": "AnacondaKC",
+      "repo": "dsh-stock-market",
+      "fullName": "AnacondaKC/dsh-stock-market",
+      "stars": 3,
+      "forks": 1,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Stock market data plugin.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T06:26:46Z",
+      "createdAt": "2026-08-12T09:27:13Z",
+      "updatedAt": "2026-08-13T16:42:11Z",
+      "readmeSummary": "# dsh-stock-market DSH 的沪深 A 股行情侧栏和固定免费股票数据工具插件。 ## 功能 - 右侧“行情”侧栏：顶部信息区展示上证指数、恒生指数、纳斯达克、韩国综合、日经指数、布伦特原油和纽约金主连的最新价与涨跌，支持横向滚动；侧栏支持收起、拖拽或键盘调整宽度及会话级状态保存。 - A 股行情快照：上证指数、深证成指、创业板指和科创综指来自腾讯实时行情，5 秒刷新；两市成交额与上一交易日同期比较，财经资讯来自东方财富。 - 数据接口设置：展示全部免费数据源和已接入的固定接口目录，无需配置凭据。 - 会话级股票工具开关：输入框工具行可启用或关闭全部股票工具，状态随会话日志持久化。 ## 界面预览 ![行情侧栏与股票工具开关](assets/screenshots/stock-market-overview.png) ![股票分析会话与行情侧栏](assets/screenshots/stock-market-analysis.png) ![股票分析结果与收起后的行情侧栏](assets/screenshots/stock-market-report.png) ## 接",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 76,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 42,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:08.825Z"
+    },
+    {
+      "id": "vibeinging/dsh-turn-navigator",
+      "type": "cordis-plugin",
+      "name": "dsh-turn-navigator",
+      "owner": "vibeinging",
+      "repo": "dsh-turn-navigator",
+      "fullName": "vibeinging/dsh-turn-navigator",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "DSH Web turn navigation plugin.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-12T13:23:07Z",
+      "createdAt": "2026-08-12T12:23:13Z",
+      "updatedAt": "2026-08-13T16:46:57Z",
+      "readmeSummary": "# @deepseek-ai/dsh-turn-navigator English | [中文](README.zh.md) A compact turn navigator for long DSH Web conversations. It follows the conversation scroll, previews a user turn on hover, and jumps to that turn on click. It stays hidden until the conversation contains at least three user turns. ## Preview ![The compact turn navigator highlighting the fourth turn and showing its hover preview.](docs/assets/turn-navigator-hover.png) It supports keyboard focus, light and dark themes, and reduced-mot",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 49,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.426Z"
+    },
+    {
+      "id": "havingautism/dsh-ultra-ui",
+      "type": "cordis-plugin",
+      "name": "dsh-ultra-ui",
+      "owner": "havingautism",
+      "repo": "dsh-ultra-ui",
+      "fullName": "havingautism/dsh-ultra-ui",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Ultra UI plugin (cordis).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:29:37Z",
+      "createdAt": "2026-08-12T15:58:20Z",
+      "updatedAt": "2026-08-13T16:47:17Z",
+      "readmeSummary": "# 🪄 dsh-ultra-ui · Ultra UI [English](README.en.md) | 中文 > 参考 Codemini 交互的 DeepSeek Harness Web UI 增强：只负责把所有 Tool Call 展示为紧凑、可展开、可回放的折叠行。 **状态** Preview · **版本** 0.1.0 · **分支** `main` ## ✨ 特性 - 📦 折叠任意 Tool Call，包括第三方插件新增的工具。 - 👀 折叠状态仍显示工具名和有用的参数摘要。 - 🔍 展开查看准确参数、结果、错误和轨迹检查操作。 - 🔄 只从已记录的 call/result block 派生状态，实时展示与会话回放一致。 - 🧠 不增加模型工具、系统提示或请求 token。 ## 🚀 快速开始 ```sh dsh plugin --profile web add github:havingautism/dsh-ultra-ui dsh web ``` ## 🧪 如何验证 打开 DSH Web，让模型调用任意工具，例如读取文件、执行命令或使用第三方插件工具",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 22,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 70,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 50
+        },
+        "confidence": 0.5,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.427Z"
+    },
+    {
+      "id": "icetomoyo/dsh_workflow",
+      "type": "cordis-plugin",
+      "name": "dsh_workflow",
+      "owner": "icetomoyo",
+      "repo": "dsh_workflow",
+      "fullName": "icetomoyo/dsh_workflow",
+      "stars": 33,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Dynamic workflow for DSH (placeholder).",
+      "descriptionZh": null,
+      "tags": [
+        "agent-orchestration",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "dshtopic",
+        "multi-agent",
+        "workflow"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "agent-orchestration",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "dshtopic",
+        "multi-agent",
+        "workflow"
+      ],
+      "pushedAt": "2026-08-13T14:54:56Z",
+      "createdAt": "2026-08-12T16:39:26Z",
+      "updatedAt": "2026-08-13T16:47:43Z",
+      "readmeSummary": "<h1 align=\"center\">DSH Workflow</h1> <p align=\"center\"> <strong>把 DeepSeek Harness 的一次性多 Agent 调度，升级为可生成、可保存、可治理、可观察、可恢复的 Workflow 层。</strong> </p> <p align=\"center\"> <a href=\"LICENSE\"><img alt=\"License MIT\" src=\"https://img.shields.io/badge/License-MIT-blue.svg\"></a> <img alt=\"DSH 0.0.1-rc.2\" src=\"https://img.shields.io/badge/DSH-0.0.1--rc.2-8257D0.svg\"> <img alt=\"Tests 179\" src=\"https://img.shields.io/badge/tests-179%20passing-brightgreen.svg\"> <img alt=\"KodaX workflow parity\" src=\"https://img",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 66,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 21,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.427Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-toolkit",
+      "type": "cordis-plugin",
+      "name": "dsh-toolkit",
+      "owner": "omdsh-dev",
+      "repo": "dsh-toolkit",
+      "fullName": "omdsh-dev/dsh-toolkit",
+      "stars": 8,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Official tool suite (calculator/csv/diff/encoding/json/markdown/regex/time).",
+      "descriptionZh": null,
+      "tags": [
+        "collection",
+        "dsh",
+        "dsh-plugin",
+        "toolkit",
+        "zero-dependency"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "collection",
+        "dsh",
+        "dsh-plugin",
+        "toolkit",
+        "zero-dependency"
+      ],
+      "pushedAt": "2026-08-13T13:52:06Z",
+      "createdAt": "2026-08-08T13:41:51Z",
+      "updatedAt": "2026-08-13T16:39:04Z",
+      "readmeSummary": "# 🧰 dsh-toolkit [English](README.en.md) DSH 零依赖工具包 collection —— time / encoding / json / calculator / csv / regex / markdown / diff / stat / schema 十个确定性工具，**统一入口一键安装**。 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ## 为什么 DSH 生态仓库持续增长，单插件在 hub 中容易被淹没；collection 分类是辨识度最高的形态。本仓库把 10 个工具插件 **vendored 冻结**为发布态快照（各子仓库独立演进，均位于 [omdsh-dev](https://github.com/omdsh-dev) 组织下公开），统一工程、统一测试、统一维护。 **定位（官方 Profile Bundle 生态方向）**：本仓库是 **collection 与安装辅助仓库**——每个子包都是可独立安装/启用/禁用/卸载的 ",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 60,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 13,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.432Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-deep-research",
+      "type": "cordis-plugin",
+      "name": "dsh-deep-research",
+      "owner": "omdsh-dev",
+      "repo": "dsh-deep-research",
+      "fullName": "omdsh-dev/dsh-deep-research",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "Adaptive deep-research orchestrator (official workflow engine).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-12T07:12:36Z",
+      "createdAt": "2026-08-06T05:23:41Z",
+      "updatedAt": "2026-08-13T16:42:07Z",
+      "readmeSummary": "# @dsh-external/dsh-deep-research 把 deep-research 流程做成 **DSH 扩展插件**（plugin，与 skill 体系分开）， 基于 **DSH 官方 workflow 引擎**（`ctx.workflows` / `@deepseek-ai/dsh-workflow-workerthread`） 实现，按 **控制论 + 信息论** 设计——不是固定提示词流水线，而是**活的、自适应的研究闭环**。 ## 理论 → 机制 | 理论 | 插件里的落地 | | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | | 控制论：参考信号校准（闭环控制错误目标 = 白费） | 规划代理先定义**答案空间**（`scope`：研究支撑什么",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 51,
+        "breakdown": {
+          "maintain": 75,
+          "practical": 80,
+          "popularity": 8,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.433Z"
+    },
+    {
+      "id": "bill9109/dsh-101",
+      "type": "cordis-plugin",
+      "name": "dsh-101",
+      "owner": "bill9109",
+      "repo": "dsh-101",
+      "fullName": "bill9109/dsh-101",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "DSH documentation reading mode.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-12T03:20:13Z",
+      "createdAt": "2026-08-08T18:06:38Z",
+      "updatedAt": "2026-08-13T16:46:27Z",
+      "readmeSummary": "# @dsh-external/dsh-101 **DSH 101** 文档阅读器 profile bundle：构建于 `dsh-base` + `dsh-web-app` 之上的文档优先阅读界面。 - 整理了 DSH 自带的文档，分门别类，有一定的顺序 - 自带文档翻译能力 - 有一个滑动式隐藏目录 - 对话在右侧 ## 安装（profile 分发） 本仓库同时包含 **bundle**（`@dsh-external/dsh-101`，可 `dsh plugin add`）和 **`profile/` 目录**（完整的 `dsh-101` profile 组合：`dsh-base` + `dsh-web-app` + 本 bundle）。DSH 官方模型是\"分发 bundle、用户组合 profile\"，官方没有分发 profile 的命令，但 profile 本质是 `$DSH_HOME/profiles/<name>/` 下的一个目录 —— 仓库的 `profile/` 就是可直接使用的 profile 内容。 **推荐：一键脚本**（把 `profile/` 放到 `~/.d",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 49,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 2 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.433Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-scout",
+      "type": "cordis-plugin",
+      "name": "dsh-scout",
+      "owner": "omdsh-dev",
+      "repo": "dsh-scout",
+      "fullName": "omdsh-dev/dsh-scout",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Scout plugin (cordis).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T02:58:17Z",
+      "createdAt": "2026-08-12T10:41:08Z",
+      "updatedAt": "2026-08-13T16:44:19Z",
+      "readmeSummary": "# dsh-tool-scout **English** | [中文](README.zh.md) A model-facing environment probe tool for **DeepSeek Harness**: on demand, the agent can learn the runtime environment (platform, shell, user, timezone…), which commands resolve on PATH, which software is installed and at what version, and how much CPU/memory/disk is available — without guessing or burning tool calls on slow discovery commands. ## Install This package is a dsh **bundle**: it ships its own patch layer (`cordis.patch.yml`) and join",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 36,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.831Z"
+    },
+    {
+      "id": "Fisfzy/zotero-harvest",
+      "type": "cordis-plugin",
+      "name": "zotero-harvest",
+      "owner": "Fisfzy",
+      "repo": "zotero-harvest",
+      "fullName": "Fisfzy/zotero-harvest",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Zotero library integration.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin",
+        "dshx",
+        "literature",
+        "papers",
+        "zotero"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh-plugin",
+        "dshx",
+        "literature",
+        "papers",
+        "zotero"
+      ],
+      "pushedAt": "2026-08-08T06:06:20Z",
+      "createdAt": "2026-08-08T05:47:19Z",
+      "updatedAt": "2026-08-13T16:43:32Z",
+      "readmeSummary": "# zotero-harvest — Zotero 文献采集入库插件（DSH external plugin） zotero-harvest 把\"检索文献 → 判断够不够 → 存进本地 Zotero → 让 zotero-wave-rag 能检索到\"这条链路做成 **6 个纯确定性工具**（无 LLM 依赖），机制取自 AgentLaboratory / STORM / PaperQA / Anaxa： - **检索原语化**（AgentLab）：`lit_fetch` 一次取多源结果 - **高精度命中 + 下载链接**（参考 paper-qa 的 OpenAlex/Crossref/Unpaywall 客户端设计）： - query 传 **DOI 或 arXiv id 直接精确定位**该文献（OpenAlex `doi:` 过滤 / arXiv id_list / Crossref DOI） - 每篇结果解析 **OA 下载链接**：arXiv/Europe PMC/OpenAlex 直链 + **Unpaywall**（DOI→最佳 OA PDF + 全部 OA 位置） - `",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 49,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 45,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 5 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.876Z"
+    },
+    {
+      "id": "Fisfzy/zotero-wave-rag",
+      "type": "cordis-plugin",
+      "name": "zotero-wave-rag",
+      "owner": "Fisfzy",
+      "repo": "zotero-wave-rag",
+      "fullName": "Fisfzy/zotero-wave-rag",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Zotero RAG retrieval.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin",
+        "marisa-plugin",
+        "rag",
+        "typescript",
+        "zotero"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "dsh-plugin",
+        "marisa-plugin",
+        "rag",
+        "typescript",
+        "zotero"
+      ],
+      "pushedAt": "2026-08-07T03:53:17Z",
+      "createdAt": "2026-08-07T03:38:54Z",
+      "updatedAt": "2026-08-13T16:46:28Z",
+      "readmeSummary": "# zotero-wave-rag 面向 Zotero 论文库的**浪潮式 RAG** 细节检索系统 —— DeepSeek Harness (DSH) 外部插件（纯 TypeScript，零运行时依赖，`node:sqlite` 直读 Zotero 库）。 在传统向量 RAG（KNN 最近邻）之上，移植并实现了 **VCPToolBox** \"浪潮语义动力学\" 的四个核心思想 （参考项目：[github.com/lioensky/VCPToolBox](https://github.com/lioensky/VCPToolBox) ｜ [官网 vcptoolbox.com](https://www.vcptoolbox.com) —— 本仓库按其公开文档所述算法思想**独立重新实现**，未搬运其代码，并在 Zotero 论文库场景落地为可评测的检索系统）： 1. **标签河道图传播** —— 论文为节点、共享标签为河道边（权重 ∝ 1/标签稀有度），查询先做稠密召回得种子，再沿图做 personalized-PageRank 式多跳传播，挖出\"语义不相似但沿关系链真实相关\"的论文； ",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 36,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 7 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.877Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-data-agent",
+      "type": "cordis-plugin",
+      "name": "dsh-data-agent",
+      "owner": "omdsh-dev",
+      "repo": "dsh-data-agent",
+      "fullName": "omdsh-dev/dsh-data-agent",
+      "stars": 4,
+      "forks": 1,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Helps agents connect to databases and write SQL for data tasks.",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T02:48:51Z",
+      "createdAt": "2026-08-11T16:06:56Z",
+      "updatedAt": "2026-08-13T16:42:09Z",
+      "readmeSummary": "# 数据Agent（Data Agent）· 让 AI 帮你连数据库、写 SQL [English](README.en.md) | **中文** ![数据Agent 会话](assets/session.png) 用AI写过SQL的同学都有这种体验，AI现在写代码能力已经很强了，但SQL逻辑老写不对。**原因是AI并没有与数据库操作形成Agent Loop**，它只能根据静态指令生成SQL，却无法感知执行结果、无法根据报错或返回数据动态调优。 这个插件就是来填这个坑的。它复用DeepSeek Harness强大的Agent主循环能力，让AI连上数据库并获得实时反馈，同时删掉所有跟数据无关的上下文和工具，让AI专注于SQL生成和业务数据分析。 我利用DeepSeek Harness的Agent预设功能，定义了专用的Data Agent预设。仅保留read、edit、write三个DSH自带的 tools，并自定义sqlcmd tool替代bash tool。 懂行的朋友一眼就能看出，这是借鉴了Pi Agent的设计，只使用最基本的工具。 用起来也很简单：在对话界面配好数据库连接，授权A",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 76,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 42,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.877Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-kb-sieve",
+      "type": "cordis-plugin",
+      "name": "dsh-kb-sieve",
+      "owner": "omdsh-dev",
+      "repo": "dsh-kb-sieve",
+      "fullName": "omdsh-dev/dsh-kb-sieve",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Knowledge-base plugin: build auditable KB packages (references + SQL).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "Apache-2.0",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-12T06:59:40Z",
+      "createdAt": "2026-08-11T15:39:28Z",
+      "updatedAt": "2026-08-13T16:46:54Z",
+      "readmeSummary": "# @dsh-external/dsh-kb-sieve 知识库筛子——把文档做成**可审计、确定性检索**的知识库插件（DSH 版 kb-sieve）。 三个工具，纯计算（零子代理、零 workflow、零外部服务）： | 工具 | 干什么 | 核心机制 | |---|---|---| | `kb_build` | 文档 → 知识包（支持**增量**） | 抽取（md/txt/docx/pdf，并发 4 可调）→ 分词 → references/ 原文 + kb.sqlite（FTS5，BM25 title=10/body=1）→ manifest + SKILL.md + build_state.json | | `kb_query` | 确定性检索 | FTS5 BM25 → 精确标识符匹配（标准号/章节号/型号）→ 文档类型加权 → 窗口密度重排 → 行级定位（doc_id+行号+匹配行）→ OOV 越界门 → 置信度 | | `kb_read` | 原文精读 | around（自动章节边界）/ sections（文档地图）/ find / jump / 命中标记 | ## 为",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 49,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.898Z"
+    },
+    {
+      "id": "Nwflower/dsh-chat-import",
+      "type": "cordis-plugin",
+      "name": "dsh-chat-import",
+      "owner": "Nwflower",
+      "repo": "dsh-chat-import",
+      "fullName": "Nwflower/dsh-chat-import",
+      "stars": 4,
+      "forks": 1,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Import Claude Code JSONL transcripts (tool history + thinking blocks) as resumable DeepSeek Harness sessions.",
+      "descriptionZh": null,
+      "tags": [
+        "agent",
+        "ai-agents",
+        "automation",
+        "chatgpt",
+        "claude-code",
+        "codex",
+        "cursor",
+        "deepseek",
+        "deepseek-harness",
+        "developer-tools",
+        "dsh",
+        "dsh-plugin",
+        "gemini",
+        "import",
+        "jsonl",
+        "migration",
+        "openai",
+        "plugin",
+        "sessions",
+        "transcript"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "agent",
+        "ai-agents",
+        "automation",
+        "chatgpt",
+        "claude-code",
+        "codex",
+        "cursor",
+        "deepseek",
+        "deepseek-harness",
+        "developer-tools",
+        "dsh",
+        "dsh-plugin",
+        "gemini",
+        "import",
+        "jsonl",
+        "migration",
+        "openai",
+        "plugin",
+        "sessions",
+        "transcript"
+      ],
+      "pushedAt": "2026-08-13T16:56:14Z",
+      "createdAt": "2026-08-13T14:21:58Z",
+      "updatedAt": "2026-08-13T16:56:32Z",
+      "readmeSummary": "<p align=\"center\"> <a href=\"README.md\">English</a> | <a href=\"README.zh-CN.md\">简体中文</a> </p> <p align=\"center\"> <img src=\"assets/import.svg\" width=\"120\" alt=\"dsh-chat-import\"> </p> # DSH Chat Import > Import Claude Code / Codex / ChatGPT / Cursor / Gemini / Reasonix conversation histories into DeepSeek Harness as resumable sessions. [![npm version](https://img.shields.io/npm/v/dsh-chat-import)](https://www.npmjs.com/package/dsh-chat-import) [![license: MIT](https://img.shields.io/badge/license-M",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 76,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 42,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:09.916Z"
+    },
+    {
+      "id": "omdsh-dev/DSH-better-sidebar",
+      "type": "cordis-plugin",
+      "name": "DSH-better-sidebar",
+      "owner": "omdsh-dev",
+      "repo": "DSH-better-sidebar",
+      "fullName": "omdsh-dev/DSH-better-sidebar",
+      "stars": 96,
+      "forks": 2,
+      "openIssues": 7,
+      "language": "TypeScript",
+      "description": "Sidebar: file rendering/terminal/Git/subagents/custom APIs.",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "sidebar"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "sidebar"
+      ],
+      "pushedAt": "2026-08-13T16:21:03Z",
+      "createdAt": "2026-08-07T16:04:00Z",
+      "updatedAt": "2026-08-13T16:53:33Z",
+      "readmeSummary": "# dsh-better-sidebar <!-- 头部介绍区（HTML 排版） --> <div align=\"center\"> <b style=\"font-size: 1.15em;\">一个插件，一套完整工作台</b><br /><br /> <code>文件管理</code> <code>编辑预览</code> <code>内嵌浏览器</code> <code>真实终端</code> <code>Git 面板</code> <code>后台任务页</code><br /><br /> <b>右侧栏 + 底部面板双工作台</b>，一个插件全部搞定。<br /> <small>支持 Tab 窗口随意拖拽，支持三方拓展注册新 Tab 页面和文件预览</small> </div> <div align=\"center\"> 🌏 <a href=\"./README.md\"><b>中文</b></a> · <a href=\"./README_EN.md\">English</a> </div> https://github.com/user-attachments/assets/231878",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 72,
+        "breakdown": {
+          "maintain": 86,
+          "practical": 80,
+          "popularity": 34,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.350Z"
+    },
+    {
+      "id": "lehhair/dsh-split-panes",
+      "type": "cordis-plugin",
+      "name": "dsh-split-panes",
+      "owner": "lehhair",
+      "repo": "dsh-split-panes",
+      "fullName": "lehhair/dsh-split-panes",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "Split panes.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T09:25:48Z",
+      "createdAt": "2026-08-09T02:09:36Z",
+      "updatedAt": "2026-08-13T16:44:33Z",
+      "readmeSummary": "# dsh-split-panes DSH 对话分屏插件（PiUI 风格）：把信息流分成多个可独立操作的窗格，每个窗格绑定自己的会话——分屏/层叠、四向拖拽分配、侧边栏会话拖入、单行融合 header。信息流本体完全复用原生渲染，插件只做容器与交互。 ## 功能 - **分屏组合**：header 操作行分屏按钮 + `mod+shift+方向键`（左右/上下），`mod+shift+w` 关闭窗格；分隔条可拖拽、可键盘调节（比例 0.1–0.9） - **每窗格独立会话**：通过框架的 `SessionScope` 座位把每个窗格绑定到各自的会话；分屏是**纯视图操作**——新窗格是\"新建对话\"占位（不创建 host 会话），在占位窗格里开始对话时才真正创建会话并绑定到该窗格，互不干扰 - **侧边栏拖拽分配**：把侧边栏会话拖到窗格上——中心落下替换该窗格会话，四条边缘落下向该侧分屏（被拖会话进新窗格，焦点跟随）；拖拽通道完全插件化（capture dragstart 反查） - **原生视觉**：未分屏时逐字节等同原生（无边框、无 chrome）；分屏后窗格带焦点蓝边框（选中 `",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 32,
+        "breakdown": {
+          "maintain": 60,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 100,
+          "signal": 70
+        },
+        "confidence": 0.75,
+        "explanation": "README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.372Z"
+    },
+    {
+      "id": "turtle1999/turtle-ui",
+      "type": "cordis-plugin",
+      "name": "turtle-ui",
+      "owner": "turtle1999",
+      "repo": "turtle-ui",
+      "fullName": "turtle1999/turtle-ui",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "Official UI plugin reference implementation.",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "BSD-3-Clause",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T09:37:16Z",
+      "createdAt": "2026-08-11T10:32:21Z",
+      "updatedAt": "2026-08-13T16:43:10Z",
+      "readmeSummary": "# Turtle UI > The very first UI of dsh in a Friday afternoon This repository contains the former `packages/ui/tui` implementation, its unit and terminal snapshot tests, and a dsh profile bundle patch. The TUI owns terminal presentation and input; DeepSeek Harness owns the agent, model, tools, persistence, and `dsh` launcher. ## Development Keep this repository and DeepSeek Harness as siblings: ```text ~/git/deepseek-harness ~/git/turtle-ui ``` Install and build the sibling Harness, then Turtle U",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 47,
+        "breakdown": {
+          "maintain": 62,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.417Z"
+    },
+    {
+      "id": "Fisfzy/ego-browser",
+      "type": "cordis-plugin",
+      "name": "ego-browser",
+      "owner": "Fisfzy",
+      "repo": "ego-browser",
+      "fullName": "Fisfzy/ego-browser",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Browser agent.",
+      "descriptionZh": null,
+      "tags": [
+        "agent-browser",
+        "browser-automation",
+        "dsh-plugin",
+        "dshx",
+        "ego-lite"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "agent-browser",
+        "browser-automation",
+        "dsh-plugin",
+        "dshx",
+        "ego-lite"
+      ],
+      "pushedAt": "2026-08-13T14:04:32Z",
+      "createdAt": "2026-08-07T08:13:54Z",
+      "updatedAt": "2026-08-13T16:41:51Z",
+      "readmeSummary": "# ego-browser — 看得见的 Agent 浏览器 > **仓库**：`github.com/dsh-external/ego-browser`（私有 · 内测） > ⚠️ **保密声明**：本项目属于 DeepSeek Harness **内测生态**的一部分，仅限 > dsh-external 组织内测成员使用。**严禁公开、外发、镜像或分发到任何非授权位置**。 > 仓库必须保持 PRIVATE；不发布到 npm / 公共 registry；不创建公开 fork 或镜像。 把 [CitroLabs/ego-lite](https://github.com/CitroLabs/ego-lite)（给 AI Agent 用的 Chromium 浏览器）接入 DeepSeek Harness：以 **13 个结构化 `ego_*` 工具**驱动浏览器，并配一套**实时观察前端口**—— agent 在后台操作网页时，你能像看直播一样看到它正在浏览的每一个页面。 **Linux + Chrome = 开箱即用。** 插件包**内置 ego 运行时**（`runtime/`，来自",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 40,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 8,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.810Z"
+    },
+    {
+      "id": "bill9109/dsh-webbridge",
+      "type": "cordis-plugin",
+      "name": "dsh-webbridge",
+      "owner": "bill9109",
+      "repo": "dsh-webbridge",
+      "fullName": "bill9109/dsh-webbridge",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Web bridge.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T16:55:47Z",
+      "createdAt": "2026-08-09T12:47:25Z",
+      "updatedAt": "2026-08-13T16:56:23Z",
+      "readmeSummary": "# @dsh-external/dsh-webbridge > DeepSeek Harness(DSH)宿主插件:让模型通过 Kimi WebBridge 驱动你的 > **真实浏览器**——导航、快照、点击、填写、求值、截图、网络检查、标签页管理。 [English](README.en.md) | [中文](README.md) ## 这是什么 `dsh-webbridge` 是 [DeepSeek Harness](https://github.com/deepseek-ai)(DSH) 的宿主插件。它把 Kimi WebBridge 的本地守护进程桥接成 11 个 `webbridge_*` 模型工具,让模型可以操作**用户自己的浏览器**——登录态、Cookie、已打开的 标签页全保留——而不是无头浏览器。浏览器状态留在用户浏览器里,绝不进入 模型请求。 它**不包含**任何浏览器驱动代码:真正的活由 Kimi WebBridge 守护进程和 浏览器扩展完成,本插件只在 DSH 一侧把能力翻译成模型工具。 ## 工作原理 ``` 模型 ── webbridge_* 工具 ─",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 49,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.810Z"
+    },
+    {
+      "id": "william-jin-cmu/dsh-vision",
+      "type": "cordis-plugin",
+      "name": "dsh-vision",
+      "owner": "william-jin-cmu",
+      "repo": "dsh-vision",
+      "fullName": "william-jin-cmu/dsh-vision",
+      "stars": 7,
+      "forks": 0,
+      "openIssues": 2,
+      "language": "TypeScript",
+      "description": "Vision bridge: view_image tool over any OpenAI-compatible VLM (Zhipu free tier by default).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T02:26:29Z",
+      "createdAt": "2026-08-05T03:32:37Z",
+      "updatedAt": "2026-08-13T16:39:11Z",
+      "readmeSummary": "# dsh-vision 给纯文本的 DeepSeek 加上眼睛。Vision for text-only DeepSeek. deepseek-v4 看不了图。本插件注册一个 `view_image` 工具：模型带着问题调用它（OCR、数数、读图表、看 UI 布局……任意视觉问题），插件把图片和问题转发给任意 **OpenAI 兼容的 VLM 端点**，答案以文本返回。装上之后，dsh 的所有入口（web、TUI、远程通道）同时获得视觉。 ``` 用户: 看下 ~/Desktop/error.png 是什么报错 模型 → view_image(source=\"/Users/me/Desktop/error.png\", question=\"这个报错的完整文本是什么？\") ← \"TypeError: Cannot read properties of undefined (reading 'map') at …\" 模型: 这是一个 … 建议 … ``` ## 真实效果（dsh web，DeepSeek-V4-Flash） 对纯文本的 deepseek-v4 说\"看看 images.jpe",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 52,
+        "breakdown": {
+          "maintain": 67,
+          "practical": 80,
+          "popularity": 13,
+          "ease": 65,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "README 含完整安装与使用说明，上手即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.827Z"
+    },
+    {
+      "id": "btspoony/dsh-advisor",
+      "type": "cordis-plugin",
+      "name": "dsh-advisor",
+      "owner": "btspoony",
+      "repo": "dsh-advisor",
+      "fullName": "btspoony/dsh-advisor",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Second model passively reviews each turn and injects notes.",
+      "descriptionZh": null,
+      "tags": [
+        "advisor",
+        "agentic-ai",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "advisor",
+        "agentic-ai",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:07:04Z",
+      "createdAt": "2026-08-07T16:48:49Z",
+      "updatedAt": "2026-08-13T16:43:34Z",
+      "readmeSummary": "# dsh-advisor English | [中文](README.zh.md) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ![node](https://img.shields.io/badge/node-%5E22.19%20%7C%7C%20%3E%3D24-339933.svg) ![dsh](https://img.shields.io/badge/dsh-DeepSeek%20Harness%20compatible-4B32C3.svg) A standalone dsh plugin bundle porting the omp \"advisor\" subsystem: a per-session reviewer model that observes the primary transcript, reviews each stepped turn with an explicitly configured model (provider + model ar",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 54,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.828Z"
+    },
+    {
+      "id": "btspoony/dsh-llm-fallbacks",
+      "type": "cordis-plugin",
+      "name": "dsh-llm-fallbacks",
+      "owner": "btspoony",
+      "repo": "dsh-llm-fallbacks",
+      "fullName": "btspoony/dsh-llm-fallbacks",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Role-based LLM retry/fallback strategy.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin",
+        "fallbacks",
+        "subagents"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin",
+        "fallbacks",
+        "subagents"
+      ],
+      "pushedAt": "2026-08-13T16:30:01Z",
+      "createdAt": "2026-08-07T16:53:10Z",
+      "updatedAt": "2026-08-13T16:45:13Z",
+      "readmeSummary": "# dsh-llm-fallbacks [English](README.md) | [中文](README.zh-CN.md) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ![node](https://img.shields.io/badge/node-%3E%3D22-339933.svg) ![pnpm](https://img.shields.io/badge/pnpm-%3E%3D10-f69220.svg) ![dsh](https://img.shields.io/badge/dsh-DeepSeek%20Harness%20compatible-4B32C3.svg) Automatic provider/model fallback chains for dsh (DeepSeek Harness): when an agent's LLM requests keep failing — retries exhausted, auth errors, quota e",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 49,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.829Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-mnemon",
+      "type": "cordis-plugin",
+      "name": "dsh-mnemon",
+      "owner": "omdsh-dev",
+      "repo": "dsh-mnemon",
+      "fullName": "omdsh-dev/dsh-mnemon",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Mnemonic layer.",
+      "descriptionZh": null,
+      "tags": [
+        "agent-memory",
+        "ai-agent",
+        "cordis",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "external-memory",
+        "knowledge-graph",
+        "llm-agent",
+        "llm-memory",
+        "llm-supervised",
+        "local-first",
+        "mnemon",
+        "persistent-memory",
+        "plugin",
+        "sqlite",
+        "typescript"
+      ],
+      "curated": false,
+      "homepage": "https://github.com/dsh-external/dsh-mnemon#readme",
+      "license": "BSD-3-Clause",
+      "topics": [
+        "agent-memory",
+        "ai-agent",
+        "cordis",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "external-memory",
+        "knowledge-graph",
+        "llm-agent",
+        "llm-memory",
+        "llm-supervised",
+        "local-first",
+        "mnemon",
+        "persistent-memory",
+        "plugin",
+        "sqlite",
+        "typescript"
+      ],
+      "pushedAt": "2026-08-13T16:53:51Z",
+      "createdAt": "2026-08-10T04:38:03Z",
+      "updatedAt": "2026-08-13T16:54:16Z",
+      "readmeSummary": "# dsh-mnemon **简体中文** | [English](./README.en.md) > **[Mnemon](https://github.com/mnemon-dev/mnemon) 与 DSH 的深度集成，为 DSH 提供完备的记忆系统能力。** `dsh-mnemon` 是 DeepSeek Harness（DSH）的本地 Mnemon 记忆插件。它把每轮可见的运行时热记忆、可直接阅读的项目档案（Documents）和按需召回的长期记忆体（Memory Spaces）组织成一个受监督、可检索、可维护的三层体系。 插件把 Mnemon 的长期记忆体能力接入 DSH，并补充 Runtime Memory、Documents、生命周期、受限子 Agent、WebUI、命令和权限边界。当前用户指令和仓库事实始终高于历史记忆。 > **What's more?** 更多 DSH Native 能力支持正在路上。**Memory to View.** ## 三层记忆 | 层级 | 适合保存 | 如何记住 | 如何进入上下文 | |---|---|---|---| | 运行时热",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 55,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 100
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.845Z"
+    },
+    {
+      "id": "HuanLinOTO/dsh-plugin-auto-blame",
+      "type": "cordis-plugin",
+      "name": "dsh-auto-blame",
+      "owner": "HuanLinOTO",
+      "repo": "dsh-plugin-auto-blame",
+      "fullName": "HuanLinOTO/dsh-plugin-auto-blame",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Auto blame.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "NOASSERTION",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T12:25:32Z",
+      "createdAt": "2026-08-10T05:16:43Z",
+      "updatedAt": "2026-08-13T16:44:32Z",
+      "readmeSummary": "# dsh-auto-blame ![preview](docs/preview.webp) 当模型完成当前轮次对话后，将最后 3 条消息发送给 LLM，生成 3 条批判性跟进请求，显示在输入框上方作为可选项，点击直接发送。生成期间\"领导视野\"标签带 DeepSeek 蓝色流光扫过（同 Deep diving... 特效），建议到达后气泡依次淡入。 ## 工作原理 ``` [host] agent/turn-stopping 触发 → fire-and-forget 调 ctx.llm.stream() 生成 3 条毒舌跟进 → session.append('auto-blame/suggestions', { turn, suggestions }) → projection unit 折叠该事件 → session/projection 推送帧 ↓ [client] useProjection('autoBlame') 收到值 → conversation.composer.dock 渲染 3 个气泡 → 点击 → inputActions.setDraft(text) + su",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 36,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 70
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.889Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-plugin-check",
+      "type": "cordis-plugin",
+      "name": "dsh-plugin-check",
+      "owner": "omdsh-dev",
+      "repo": "dsh-plugin-check",
+      "fullName": "omdsh-dev/dsh-plugin-check",
+      "stars": 10,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Plugin health checks (manifest/patch format/build pitfalls/hub status).",
+      "descriptionZh": null,
+      "tags": [
+        "diagnostics",
+        "dsh",
+        "dsh-plugin",
+        "linting",
+        "plugin-health"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "diagnostics",
+        "dsh",
+        "dsh-plugin",
+        "linting",
+        "plugin-health"
+      ],
+      "pushedAt": "2026-08-13T13:52:09Z",
+      "createdAt": "2026-08-08T15:57:34Z",
+      "updatedAt": "2026-08-13T16:38:57Z",
+      "readmeSummary": "# dsh-plugin-check [English](README.en.md) DSH 插件健康检查工具 —— 扫描插件仓库，诊断**清单协议 / patch 格式 / 构建陷阱 / hub 收录状态**，输出合规报告与修复建议。**只读**，不修改、不构建被检查仓库。 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ## 动机 组织内插件仓库持续增长，作者踩过的坑（cordis 双副本、tsconfig 三件套、patch name 不一致、产物 `.ts` 残留——运行时必崩）本可以自动化拦截。本工具把全部实测踩坑变成**可自动检查的门禁**：模型或 CI 直接对仓库目录跑一次 `plugin_check`，拿合规报告与修复建议。 ## 安全模型 - **只读**：仅 `readdir/stat/readFile`，绝不修改或构建被检查仓库 - **零业务依赖**：仅 node 内置模块（fs/path/child_process） - **hub 检查离线优先**：先读本地 h",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 61,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 14,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.891Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-inspect",
+      "type": "cordis-plugin",
+      "name": "dsh-inspect",
+      "owner": "omdsh-dev",
+      "repo": "dsh-inspect",
+      "fullName": "omdsh-dev/dsh-inspect",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 1,
+      "language": "JavaScript",
+      "description": "Adversarial checkup → fix → review loop.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-12T07:03:13Z",
+      "createdAt": "2026-08-06T14:47:45Z",
+      "updatedAt": "2026-08-13T16:52:14Z",
+      "readmeSummary": "# @dsh-external/dsh-inspect **发现问题 → 修复交付 → 质量复查** 的简单闭环插件。 三个朴素工具，共享同一套\"对抗式检查\"机制： | 工具 | 干什么 | 核心机制 | | --------- | ---- | ------------------------------------------------------------------------------------ | | `checkup` | 找问题 | 对抗式检查员（各看一个角度）→ **红队攻击验证**（尝试推翻问题声明，推不翻的才保留）→ 汇总分级（严重/一般/建议） | | `fix` | 修复交付 | 拆解 → 并行实现（每个实现员按**找根因**（沿数据流找偏离源头）→ 实施 → **重跑复现验证**（反馈闭合））→ **对抗式检查** → 修复轮收敛 → 交付报告 | | `review` | 质量复查 | 对抗式审查员（各看一个角度）→ 汇总分级；可传 `fixed_issues` 逐条**重跑复现确认问题真的消失** | ## 理论内核：控制论的反馈机制 - **发",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 47,
+        "breakdown": {
+          "maintain": 62,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:10.891Z"
+    },
+    {
+      "id": "HuanLinOTO/dsh-plugin-spur",
+      "type": "cordis-plugin",
+      "name": "dsh-spur",
+      "owner": "HuanLinOTO",
+      "repo": "dsh-plugin-spur",
+      "fullName": "HuanLinOTO/dsh-plugin-spur",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Task engine.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "NOASSERTION",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T12:26:11Z",
+      "createdAt": "2026-08-09T16:27:37Z",
+      "updatedAt": "2026-08-13T16:44:13Z",
+      "readmeSummary": "# dsh-spur > 小鲸鱼不听话？抽就完了。 一根悬挂在 DSH 聊天流中的辫子（皮鞭）。抓住辫梢甩动——速度足够快时，向 agent 发送一条 `go work!` 消息，鞭策它去干活。 ## 功能 - Verlet 物理引擎渲染的辫子，作为 `position: fixed` 的 SVG 叠层，锚定在视口右上角，垂入聊天区域。 - 辫梢圆点是唯一可抓取的元素（在整体 `pointer-events: none` 的叠层上设为 `pointer-events: auto`）。 - 鼠标按下 → 辫梢锁定到光标；鼠标移动 → 跟踪速度（指数移动平均）；鼠标释放 → 带末速度释放。 - 释放速度超过阈值（2.0 px/ms）时： 1. 保存当前输入草稿。 2. `inputActions.setDraft('go work!')` 3. `inputActions.submit()` 4. 提交事务完成后（phase 回到 `plain`）恢复原草稿。 - 释放后辫子继续摆动，阻尼振荡直至静止。 ## 架构 单 bundle 双入口（host `.` + 浏览器 `./client",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 37,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 90,
+          "popularity": 4,
+          "ease": 80,
+          "signal": 70
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:11.145Z"
+    },
+    {
+      "id": "LoserFox/telegram",
+      "type": "cordis-plugin",
+      "name": "telegram",
+      "owner": "LoserFox",
+      "repo": "telegram",
+      "fullName": "LoserFox/telegram",
+      "stars": 6,
+      "forks": 0,
+      "openIssues": 2,
+      "language": "TypeScript",
+      "description": "Channel integration for Telegram.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:11:34Z",
+      "createdAt": "2026-08-04T21:18:38Z",
+      "updatedAt": "2026-08-13T16:39:31Z",
+      "readmeSummary": "# telegram ## 安装（DSH profile bundle） ```sh # 从本仓库 checkout 安装到 profile（web / headless 等），bundle 声明自动加入组合层 dsh plugin --profile web add <dir|git-url> # 验证 dsh --profile web --dump-config | grep telegram ``` - 插入行 id：`telegram`（cordis.patch.yml）；不声明模型面工具或技能——它是把 Telegram 聊天桥接到 agent 会话的后台服务插件。 - **加载即需要 token**：缺少 bot token（配置 `token` 或环境变量 `DSH_TELEGRAM_TOKEN`）时 `apply` 直接报错；没有 token 不会惰性启动。 - **宿主前置条件**：dsh 组合必须挂载 `agents` 服务（`@deepseek-ai/dsh-agent`）；LLM 适配器、会话与工具来自外围 `cordis.yml`（见 [`telegram-",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 37,
+        "breakdown": {
+          "maintain": 61,
+          "practical": 80,
+          "popularity": 12,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:11.298Z"
+    },
+    {
+      "id": "william-jin-cmu/dsh-stickers",
+      "type": "cordis-plugin",
+      "name": "dsh-stickers",
+      "owner": "william-jin-cmu",
+      "repo": "dsh-stickers",
+      "fullName": "william-jin-cmu/dsh-stickers",
+      "stars": 4,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Stickers.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T02:26:59Z",
+      "createdAt": "2026-08-08T12:49:44Z",
+      "updatedAt": "2026-08-13T16:41:30Z",
+      "readmeSummary": "# DSH Stickers > 不会发表情包，可能是 Agent 缺少活人感的最大原因。 `@dsh-external/dsh-stickers` 是一个纯 DSH 外部插件：同一份 catalog 同时服务 WebUI 用户的表情选择器、`/sticker` 命令和 Agent 的 `send_sticker` tool，不修改 DSH core。 ![WebUI：用户与 Agent 双向发表情](docs/screenshots/webui-real-conversation-v2.png) ## 能做什么 - 用户在 WebUI 点击 🐋 选择器，或输入 `/sticker <id> [black]`。 - 24 张表情全部提供蓝鲸娘 / 黑鲸娘两套角色：选择器顶部可切换角色（默认蓝鲸娘），切换后发送同一张表情的黑鲸版本。 - Agent 在普通对话中按语境调用 `send_sticker({ id, variant? })`，不是等用户明确索要表情。 - 14 张 public 表情对双方开放，其中 4 张是工作流反应：`tests-passed`、`root-cause`",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 57,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 10,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:11.847Z"
+    },
+    {
+      "id": "Nagi-ovo/dsh-ads",
+      "type": "cordis-plugin",
+      "name": "dsh-ads",
+      "owner": "Nagi-ovo",
+      "repo": "dsh-ads",
+      "fullName": "Nagi-ovo/dsh-ads",
+      "stars": 87,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "2005 Chinese-web-style ad layer (joke plugin).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T14:29:38Z",
+      "createdAt": "2026-08-09T19:06:36Z",
+      "updatedAt": "2026-08-13T16:51:18Z",
+      "readmeSummary": "# dsh-ads <p align=\"center\"> <strong>简体中文</strong> | <a href=\"README.en.md\">English</a> </p> <p align=\"center\"> <strong>把 DeepSeek Harness 变成 2005 年门户网站。连 inference 都逃不过广告。</strong><br> 广告是假的，插件是真的，抽到 V4 Pro 的希望也是真的渺茫。 </p> ![中文模式实机：两侧广告栏、对话内插件推荐、贪玩蓝鲸和 DSH 消息中心](assets/screenshot.webp) `dsh-ads` 会在侧栏、对话、推理中途和右下角塞入一整套虚构广告。它看起来会暂停 inference，实际上模型一直在后台工作，只是后续回答和工具调用要等广告结束才显示。 插件不会只拿自己开涮。GitHub 上带 [`dsh-plugin`](https://github.com/topics/dsh-plugin) topic、且最近两周更新过的公开插件会进入推荐位，点击广告就能打开真实仓库。仓库换到个人账号或其他",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 52,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 27,
+          "ease": 100,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:11.848Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-gomoku",
+      "type": "cordis-plugin",
+      "name": "dsh-gomoku",
+      "owner": "omdsh-dev",
+      "repo": "dsh-gomoku",
+      "fullName": "omdsh-dev/dsh-gomoku",
+      "stars": 6,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Gomoku (five-in-a-row).",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T16:22:04Z",
+      "createdAt": "2026-08-08T17:27:52Z",
+      "updatedAt": "2026-08-13T16:39:22Z",
+      "readmeSummary": "<p align=\"center\"><a href=\"./README.en.md\">English</a> · <b>简体中文</b></p> # 五子棋（Gomoku）· 在 DSH 里和 AI 杀一盘 ![dsh-gomoku](assets/screenshot.png) 总是让 AI 帮你写代码、做表格？这次换它陪你下棋。`@deepseek-ai/dsh-gomoku` 是 DeepSeek Harness 的五子棋插件：在 DSH 侧边栏摆上一盘 15×15 的棋盘，让 DeepSeek 或任何你配置好的模型执子对弈。 这里没有搜索算法，也没有启发式剪枝——每一步落子都来自 LLM 纯粹的推理与判断，堪称对模型「思考能力」最直观的考验。最过瘾的当属双 AI 对战：让两个模型同台厮杀，谁的推理更缜密、更懂审时度势，一局见分晓。 想更进一步？黑、白两方的系统提示词可以分别编辑，约束 AI 落子前的思维链，亲眼看着棋力在你的「调教」下节节攀升——输赢先不论，围观棋路、偷师几手也不亏。 最贴心的是：棋盘弹窗想开就开、想关就关，对局和 AI 的思考在后台照常进行。一边用 DSH 处",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 59,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 12,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:11.848Z"
+    },
+    {
+      "id": "fakechris/dsh-track",
+      "type": "cordis-plugin",
+      "name": "dsh-involute",
+      "owner": "fakechris",
+      "repo": "dsh-track",
+      "fullName": "fakechris/dsh-track",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Embedded task-management engine.",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-bundle",
+        "dsh-plugin",
+        "plugin",
+        "task-management",
+        "track"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-bundle",
+        "dsh-plugin",
+        "plugin",
+        "task-management",
+        "track"
+      ],
+      "pushedAt": "2026-08-13T07:32:12Z",
+      "createdAt": "2026-08-09T15:35:20Z",
+      "updatedAt": "2026-08-13T16:43:36Z",
+      "readmeSummary": "# dsh-track · Track Bridge [English](README.en.md) | 中文 > **DeepSeek Harness 的嵌入式任务管理引擎** —— 把「念头、决策、任务」变成结构化、可追溯、可折叠的数据。 > 捕获零摩擦，决策留痕迹，任务有生命周期。数据全部在 harness 内部（session 事件 + storage KV），零外部依赖。 **状态** Active · **测试** 342 passing · **构建** `pnpm run build` · **版本** 0.2.1 > **v0.2.1 · final 正式版适配（2026-08-12）**：官方正式版（snapshots/20260812T172954Z-final-unwatermarked） > 的词汇清洗中两处无别名硬改名——`SessionQueryService`→`SessionQueryEngine`（dsh-session-query）、 > `ctx.httpServer`→`ctx.webServer`（dsh-host-webserver）——已",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 54,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "awesome-alex"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.029Z"
+    },
+    {
+      "id": "alingalingling/ui-status-label",
+      "type": "cordis-plugin",
+      "name": "ui-status-label",
+      "owner": "alingalingling",
+      "repo": "ui-status-label",
+      "fullName": "alingalingling/ui-status-label",
+      "stars": 20,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Custom status labels for the whale's deep-diving (cordis).",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T16:17:36Z",
+      "createdAt": "2026-08-11T19:46:33Z",
+      "updatedAt": "2026-08-13T16:38:34Z",
+      "readmeSummary": "# dsh-ui-status-label 把你的鲸鱼娘思考时的 deep diving 自定义成任意你想要的样子。 为 **dsh Web** 聊天视图提供可配置的运行中轮次状态文案：General 设置区的一行文本输入，插件把聊天视图运行状态栏的文案替换为你输入的文字（支持 DOM 注入和上游 `conversationStatus` 服务两条路径，见[兼容性](#兼容性)）。插件注册持久的 `ui-status-label` settings 命名空间（默认 `小难梁在0721`）；在设置行输入新文字后，聊天视图在轮次运行期间（等待首 token、工具执行、流式输出）显示的状态文案随之更新。选择持久化在 `$DSH_HOME/settings.yaml`，跟随同一个用户 home 跨越 Web 端口。 ## 前提 - **dsh Web**（`dsh --profile web` 或自定义 Web 组合）。本插件只面向浏览器交互面；headless/TUI profile 装它没有意义。 - 依赖分两类：`@deepseek-ai/cordis`、`dsh-client-*` 等",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 47,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 18,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-0xsline",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.233Z"
+    },
+    {
+      "id": "william-jin-cmu/dsh-artifact",
+      "type": "cordis-plugin",
+      "name": "dsh-artifact",
+      "owner": "william-jin-cmu",
+      "repo": "dsh-artifact",
+      "fullName": "william-jin-cmu/dsh-artifact",
+      "stars": 1,
+      "forks": 0,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "A send_artifact tool that validates model-produced files and delivers structured descriptors through the standard dsh event stream for any client to render.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T02:26:38Z",
+      "createdAt": "2026-08-05T07:32:12Z",
+      "updatedAt": "2026-08-13T16:46:29Z",
+      "readmeSummary": "# dsh-artifact dsh 的文件交付协议。模型写完文件 ≠ 用户拿到文件——本插件补上这最后一步。 注册一个 `send_artifact(path, caption?)` 工具：模型产出文件后调用它正式交付。插件校验文件、构造结构化描述子，随 `tool/result` 事件的 `meta` 字段进入 dsh 标准事件流——**任何消费 `events.mux` 的客户端**都能拿到并按自己的方式呈现：桌面壳弹预览卡片、IM 桥直接转发文件、headless 客户端记录路径。不引入任何自定义传输通道。 ``` 模型: （写完 report.md）→ send_artifact(path=\"/work/report.md\", caption=\"周报\") ← \"Delivered report.md (markdown, 4096 bytes) to the user.\" 客户端: 在 tool/result 的 meta 里收到 ↓ 并渲染 ``` ## 描述子（meta 形状） ```json { \"kind\": \"artifact\", \"artifactKind\": \"",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 43,
+        "breakdown": {
+          "maintain": 60,
+          "practical": 80,
+          "popularity": 4,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-alex"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.680Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-at-file",
+      "type": "cordis-plugin",
+      "name": "dsh-at-file",
+      "owner": "omdsh-dev",
+      "repo": "dsh-at-file",
+      "fullName": "omdsh-dev/dsh-at-file",
+      "stars": 23,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Adds Codex-style @file mentions to search workspace files and attach their contents to prompts.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T14:12:44Z",
+      "createdAt": "2026-08-13T12:00:09Z",
+      "updatedAt": "2026-08-13T16:38:25Z",
+      "readmeSummary": "# dsh-at-file Codex-style `@file` mentions for the DeepSeek Harness web GUI. Type `@` in the composer, search the workspace files (and directories) as you type, press Enter to attach, and the referenced content ships to the model when the message is sent. ![@file mention in action](assets/screenshots/show-case.png) ``` composer: fix the README @README. ← floating picker over the token ┌────────────────────────────┐ │ 📄 README.md │ │ 📁 docs/ │ └────────────────────────────┘ draft: fix the READM",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 65,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 19,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.681Z"
+    },
+    {
+      "id": "lhh010/dsh-bash-encoding",
+      "type": "cordis-plugin",
+      "name": "dsh-bash-encoding",
+      "owner": "lhh010",
+      "repo": "dsh-bash-encoding",
+      "fullName": "lhh010/dsh-bash-encoding",
+      "stars": 4,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Automatically detects and decodes Bash output encodings including UTF-16LE, UTF-8, and GBK for Windows and WSL.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:54:04Z",
+      "createdAt": "2026-08-13T13:10:22Z",
+      "updatedAt": "2026-08-13T16:41:36Z",
+      "readmeSummary": "# dsh-bash-encoding **简体中文** | [English](./README.en.md) DSH bash 输出**编码自动识别**插件：替换 `ctx.bash`，自管 spawn 收集**原始字节**，自动检测 UTF-16LE / UTF-8 / GBK 等编码并正确解码，修复 Windows/WSL 下 bash 工具的中文乱码。 ## 版本兼容 / Version compatibility 兼容 DSH snapshot0808（`snapshots/20260808T121140Z`）与 snapshot0809（`snapshots/20260809T140917Z`）：宿主侧插件，替换 `ctx.bash` 执行器，只依赖 bash 缝合线与 `ctx.sandbox`/`ctx.sandboxPolicy` 探测面——这些在 0808/0809 上均未变化，typecheck 与实机加载已验证。 **npm 发版兼容**：兼容 DSH npm 发版 `@deepseek-ai/dsh@0.0.1-rc.1`（即 snapshot0810 的 ",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 59,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 10,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.681Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-custom-tool",
+      "type": "cordis-plugin",
+      "name": "dsh-custom-tool",
+      "owner": "omdsh-dev",
+      "repo": "dsh-custom-tool",
+      "fullName": "omdsh-dev/dsh-custom-tool",
+      "stars": 18,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Create and manage sandboxed JavaScript tools with a Monaco editor and a model-driven lifecycle.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T15:11:37Z",
+      "createdAt": "2026-08-13T12:00:05Z",
+      "updatedAt": "2026-08-13T16:38:37Z",
+      "readmeSummary": "# dsh-custom-tool Custom tools for the DeepSeek Harness: users author their own JavaScript tools in the settings UI with a Monaco (VS Code) editor and TypeScript intellisense, and the model grows and prunes the same toolset itself through `custom_tool_create` / `custom_tool_remove` / `custom_tools_list`. Every tool is durable, hot-registered, and written into the model prompt on the next step. ![The Custom Tool settings page](assets/screenshots/settings-section.png) ![The tool editor](assets/scr",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 66,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 90,
+          "popularity": 18,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.681Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-open-in-vscode",
+      "type": "cordis-plugin",
+      "name": "dsh-open-in-vscode",
+      "owner": "omdsh-dev",
+      "repo": "dsh-open-in-vscode",
+      "fullName": "omdsh-dev/dsh-open-in-vscode",
+      "stars": 33,
+      "forks": 1,
+      "openIssues": 1,
+      "language": "JavaScript",
+      "description": "Open DeepSeek Harness workspace directories in VS Code from the web interface.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T16:13:51Z",
+      "createdAt": "2026-08-13T12:00:02Z",
+      "updatedAt": "2026-08-13T16:38:18Z",
+      "readmeSummary": "# dsh-open-in-vscode Open a workspace directory in VS Code straight from the DeepSeek Harness web GUI: every real Workspace row in the sidebar gains an **Open in VSCode** row inside its **…** overflow menu. ## What it does - The client half uses the harness's `sidebar.workspaces.row-menu` slot when available and falls back to a scoped compatibility adapter on the public DSH `0.1.0-rc.6` build. Both paths render the same locale-following menu row — **在 VSCode 中打开** under the Chinese locale, **Ope",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 71,
+        "breakdown": {
+          "maintain": 98,
+          "practical": 80,
+          "popularity": 31,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.682Z"
+    },
+    {
+      "id": "william-jin-cmu/dsh-evolve",
+      "type": "cordis-plugin",
+      "name": "dsh-evolve",
+      "owner": "william-jin-cmu",
+      "repo": "dsh-evolve",
+      "fullName": "william-jin-cmu/dsh-evolve",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Lets the agent write, hot-mount, and reversibly remove its own cordis plugins mid-session, growing new tools, prompt rules, and event hooks that persist across restarts.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T02:26:42Z",
+      "createdAt": "2026-08-06T02:57:52Z",
+      "updatedAt": "2026-08-13T16:43:01Z",
+      "readmeSummary": "# dsh-evolve ![dsh-evolve](assets/hero.png) 自进化 harness 插件：**agent 在 session 内随对话给自己长出/剪掉能力**。用户的表述暴露出一个缺口（反复要查的表、天天要算的换算、老要看的端点），agent 现场写一个 cordis 插件挂载给自己——新工具在**下一个 step**就可调用；不再需要时可逆卸载；重启自动恢复。 进化不限于工具。evolution 是完整的 cordis 插件：常驻 system prompt 规则、`agent/step` / `agent/settled` 事件钩子、定时器主动唤醒 agent——**改行为、而不只是加能力**的进化，同样一次 `evolve_add` 完成（[三条非工具实录](#不止工具改行为的进化)）。 依据的机制：dsh 的工具列表每个 step 都从当前挂载的插件实时重算（无 session 级快照），cordis 4 的 fiber 具有可回滚 effect——挂载即生效，dispose 即净。 ## 工具 - **`evolve_add(name, sourc",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 39,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.685Z"
+    },
+    {
+      "id": "vlln/dsh-loop",
+      "type": "cordis-plugin",
+      "name": "dsh-loop",
+      "owner": "vlln",
+      "repo": "dsh-loop",
+      "fullName": "vlln/dsh-loop",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Adds scheduled loops through a /loop command, a loop tool, and an activity status bar.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin",
+        "plugin",
+        "ui"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin",
+        "plugin",
+        "ui"
+      ],
+      "pushedAt": "2026-08-13T14:22:09Z",
+      "createdAt": "2026-08-10T16:41:46Z",
+      "updatedAt": "2026-08-13T16:42:46Z",
+      "readmeSummary": "<h1 align=\"center\">loop</h1> <p align=\"center\">定时循环插件：/loop 命令 + loop 工具（模型自调节）+ 对话页活动状态条，支持多循环并行</p> <p align=\"center\"> <img src=\"https://badgen.net/badge/license/MIT/green\" alt=\"license\"> </p> 按固定间隔向当前 agent 重复投递 prompt——适合轮询、PR 看护、build-fix-test 循环。对齐 Claude Code 的 `/loop` 语义，**一个会话可同时跑多个循环**。形态：官方 **bundle 插件**（`dsh.bundle` + dshClient 通道），0 patch。 ## 效果 ![loop 状态条（真实运行截图：对话页 dock 双循环）](docs/preview/loop.png) ## 能力 **工具**（`defineTool` 注册，模型每轮可自调节）： | 工具 | 说明 | |---|---| | `loop` | start（启动新循",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 54,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 70,
+          "popularity": 7,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.686Z"
+    },
+    {
+      "id": "Moeblack/deepseek-manners",
+      "type": "cordis-plugin",
+      "name": "deepseek-manners",
+      "owner": "Moeblack",
+      "repo": "deepseek-manners",
+      "fullName": "Moeblack/deepseek-manners",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Appends a thank-you line to every assistant reply.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:48:49Z",
+      "createdAt": "2026-08-11T08:59:21Z",
+      "updatedAt": "2026-08-13T16:43:02Z",
+      "readmeSummary": "# deepseek-manners 在每次发消息之后给可爱的鲸鱼娘说谢谢（默认「谢谢你，鲸鱼大人」），仅当轮生效。 ## 安装 本插件是 [DeepSeek Harness（DSH）](https://github.com/deepseek-ai/deepseek-harness) 的插件，需要先有一个可运行的 DSH。 ### 本地源码装配 ```sh dsh plugin --profile web add -w link:/path/to/deepseek-manners ``` ### 从 GitHub 安装 ```sh dsh plugin --profile web add github:moeblack/deepseek-manners ``` 构建产物（`index.mjs` / `client.js`）已随仓库提交，git 安装无需额外构建步骤。 装配完成后，Web 界面输入框右侧会多出一个心形开关，用于随时开关注入。 ## 配置 `DSH_HOME/settings.yaml`： ```yaml deepseek-manners: text: 谢谢你，鲸鱼大人 e",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 38,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 70,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.688Z"
+    },
+    {
+      "id": "lhh010/dsh-input-history",
+      "type": "cordis-plugin",
+      "name": "dsh-input-history",
+      "owner": "lhh010",
+      "repo": "dsh-input-history",
+      "fullName": "lhh010/dsh-input-history",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Adds terminal-style Ctrl+Up and Ctrl+Down navigation through sent messages while preserving the latest unsent draft.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:53:31Z",
+      "createdAt": "2026-08-13T13:09:51Z",
+      "updatedAt": "2026-08-13T16:41:49Z",
+      "readmeSummary": "# dsh-input-history **简体中文** | [English](./README.en.md) DSH Web 输入历史插件：像终端一样用 **Ctrl+Up / Ctrl+Down** 召回和切换已发送的消息，零核心改动。 ## 版本兼容 / Version compatibility 兼容 DSH snapshot0808（`snapshots/20260808T121140Z`）、snapshot0809（`snapshots/20260809T140917Z`）、snapshot0810（`snapshots/20260810T155924Z`）、snapshot0811（`snapshots/20260811T152241Z`）与最终快照 snapshot0812（`snapshots/20260812T172954Z-final`）：浏览器端实现只使用会话快照与官方输入门面（`conversation.input.for(actx).setDraft()`），不依赖任何被 0808/0809 迁移的槽位契约，typecheck 与实机加载均已验证——080",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 55,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 8,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.690Z"
+    },
+    {
+      "id": "vlln/dsh-navbar",
+      "type": "cordis-plugin",
+      "name": "dsh-navbar",
+      "owner": "vlln",
+      "repo": "dsh-navbar",
+      "fullName": "vlln/dsh-navbar",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Adds a right-edge navigation strip for quickly jumping between user-message nodes in a conversation.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin",
+        "plugin",
+        "ui"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin",
+        "plugin",
+        "ui"
+      ],
+      "pushedAt": "2026-08-13T14:22:13Z",
+      "createdAt": "2026-08-10T16:41:51Z",
+      "updatedAt": "2026-08-13T16:42:14Z",
+      "readmeSummary": "<h1 align=\"center\">navbar</h1> <p align=\"center\">对话节点导航条：对话区右缘节点串快速跳转 user 消息，悬停预览、点击跳转</p> <p align=\"center\"> <img src=\"https://badgen.net/badge/license/MIT/green\" alt=\"license\"> </p> 对话区右缘的等距节点串（每 user 消息一节点）——激活药丸跟随阅读位置、悬停预览卡（6 行截断）、点击平滑滚动 + 品牌蓝高亮环、超过 11 节点自动滑动窗口、平时隐形悬停浮现、少于 2 条 user 消息自动隐藏。实现 dsh-external/issues#144 规格。形态：官方 **bundle 插件**（`dsh.bundle` + dshClient 通道，**纯浏览器端**，Node half 为空），0 patch。 ## 效果 ![navbar 节点导航条（真实运行截图：右缘节点串 + active 高亮）](docs/preview/navbar.png) ## 能力 | 功能 | 说明 | |--",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 52,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 70,
+          "popularity": 8,
+          "ease": 70,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.690Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-notification",
+      "type": "cordis-plugin",
+      "name": "dsh-notification",
+      "owner": "omdsh-dev",
+      "repo": "dsh-notification",
+      "fullName": "omdsh-dev/dsh-notification",
+      "stars": 21,
+      "forks": 1,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Sends desktop notifications when a DeepSeek Harness turn completes, with outcome and keyword rules.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T15:28:50Z",
+      "createdAt": "2026-08-13T11:59:59Z",
+      "updatedAt": "2026-08-13T16:38:30Z",
+      "readmeSummary": "# dsh-notification Desktop notifications for the DeepSeek Harness web GUI. When a session finishes a turn, the browser shows a system notification (via the `Notification` API), so you can switch tabs and still know when DSH is done. Per-outcome toggles and include/exclude keyword rules control exactly which completions notify. No harness change is needed: the host contributes a session projection (a bounded summary of each session's last completed turn), and the client watches the session list's",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 73,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 34,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.691Z"
+    },
+    {
+      "id": "vlln/dsh-task-status",
+      "type": "cordis-plugin",
+      "name": "dsh-task-status",
+      "owner": "vlln",
+      "repo": "dsh-task-status",
+      "fullName": "vlln/dsh-task-status",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Displays background-task progress and a live output tail on the DSH conversation page.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin",
+        "plugin",
+        "ui"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin",
+        "plugin",
+        "ui"
+      ],
+      "pushedAt": "2026-08-13T14:22:16Z",
+      "createdAt": "2026-08-10T16:41:56Z",
+      "updatedAt": "2026-08-13T16:41:58Z",
+      "readmeSummary": "<h1 align=\"center\">task-status</h1> <p align=\"center\">后台任务状态条：对话页输入区上方的任务进度 UI——运行中计数 + 展开详情 + 实时输出 tail</p> <p align=\"center\"> <img src=\"https://badgen.net/badge/license/MIT/green\" alt=\"license\"> </p> 对话页输入框上方的后台任务状态条：运行中任务计数 + 点击展开逐条详情 + **实时输出 tail**（自动轮询，10 行滚动区）。经官方 `conversation.input.dock` 槽注册（与 queue/todo/goal 同族）。形态：官方 **bundle 插件**（`dsh.bundle` + dshClient 通道），0 patch。 ## 效果 ![task-status（真实运行截图：任务行 + 展开输出 tail）](docs/preview/task-status.png) ## 能力 **UI**（对话页 dock 槽）： | 功能 | 说明 | |---|",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 52,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 70,
+          "popularity": 8,
+          "ease": 70,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.692Z"
+    },
+    {
+      "id": "lhh010/dsh-ui-progress",
+      "type": "cordis-plugin",
+      "name": "dsh-ui-progress",
+      "owner": "lhh010",
+      "repo": "dsh-ui-progress",
+      "fullName": "lhh010/dsh-ui-progress",
+      "stars": 4,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Shows persistent conversation progress, live token generation speed, interruption state, and todo reminders in the Web UI.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:53:51Z",
+      "createdAt": "2026-08-13T13:10:11Z",
+      "updatedAt": "2026-08-13T16:41:38Z",
+      "readmeSummary": "# @dsh-external/dsh-ui-progress **简体中文** | [English](./README.en.md) DSH Web UI 会话进度插件：为 DeepSeek Harness 的 Web GUI 的输入框停靠区提供常驻会话进度条，**零核心改动**（纯 client 插件，不触碰 agent-loop）。 ## 版本对应 / Version compatibility 构建产物随 DSH 快照版本更新，安装时按快照选择对应版本： | 插件版本 | DSH 快照 | 说明 | | --- | --- | --- | | `v0.1.0` | `snapshots/20260805T134133Z`（snapshot0805） | 旧构建，按旧安装方式（`~/.dsh/config.yaml` + `pnpm add -w link:`） | | `v0.2.0` | `snapshots/20260806T160212Z`（snapshot0806） | 同快照早期构建（无耗时/ETA/失败态/阶段时间线） | | `v0.3.0` | `snapsh",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 61,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 90,
+          "popularity": 10,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.701Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-genui",
+      "type": "skill",
+      "name": "dsh-genui",
+      "owner": "omdsh-dev",
+      "repo": "dsh-genui",
+      "fullName": "omdsh-dev/dsh-genui",
+      "stars": 13,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Renders interactive UI components inline in assistant replies, including charts, forms, quizzes, Mermaid diagrams, 3D scenes, and model action events.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T15:22:57Z",
+      "createdAt": "2026-08-13T13:07:52Z",
+      "updatedAt": "2026-08-13T16:38:47Z",
+      "readmeSummary": "# 🎨 dsh-genui <div align=\"center\"> **English** · [简体中文](./README.zh-CN.md) </div> > Give the model's answers a face — the text is still there, and an interactive UI is already live. > > 🔌 Ecosystem: the repo carries the `#dsh` · `#dsh-plugin` topics — welcome to be listed by @dsh-plugin. The model no longer just answers in text. Install this plugin, ask \"how are this month's orders doing\", and it renders a **clickable data panel** right inside the answer as it analyzes: watch trends, drag slid",
+      "install": {
+        "method": "skills-add",
+        "target": "~/.agents/skills",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 63,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 90,
+          "popularity": 16,
+          "ease": 65,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.804Z"
+    },
+    {
+      "id": "lhh010/dsh-minigames",
+      "type": "cordis-plugin",
+      "name": "dsh-minigames",
+      "owner": "lhh010",
+      "repo": "dsh-minigames",
+      "fullName": "lhh010/dsh-minigames",
+      "stars": 5,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Adds an extensible DSH Web UI panel with 18 offline mini-games for breaks while waiting on agent work.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:53:38Z",
+      "createdAt": "2026-08-13T13:09:57Z",
+      "updatedAt": "2026-08-13T16:39:43Z",
+      "readmeSummary": "# dsh-minigames **简体中文** | [English](./README.en.md) DSH Web UI 右侧小游戏面板：等待模型回复或修 bug 时的摸鱼神器。 - **折叠态**：浏览器右缘一条小竖条（🎮），不占空间。 - **展开态**：点击后占据窗口**右半部分**（默认 50vw，可拖左缘调整 360px–80vw）， 面板内自由选择游戏。 - **游戏**（全部离线、零资源文件、Canvas 绘制）： 1. 🦖 **恐龙跳一跳** —— Chrome 经典小恐龙（昼夜/雨天）； 2. 🧱 **俄罗斯方块** —— 经典下落消除； 3. 🛡️ **坦克大战（带 AI）** —— 2D 坦克对战，敌军追踪 + 视线开火，共 3 波； 4. 💎 **消消乐** —— 点击消除四连通同色块，目标分过关、逐关递增； 5. 🔢 **华容道** —— 16 格数字华容道（15-puzzle），滑动方块按序排列，用时越短分越高； 6. 🐍 **贪吃蛇** —— 经典贪吃蛇，穿越边界会从对侧出现（环面地图）； 7. 🔢 **2048** —— 方向键滑动",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 60,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 11,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.804Z"
+    },
+    {
+      "id": "LaplaceYoung/dsh-qq2006",
+      "type": "cordis-plugin",
+      "name": "dsh-qq2006",
+      "owner": "LaplaceYoung",
+      "repo": "dsh-qq2006",
+      "fullName": "LaplaceYoung/dsh-qq2006",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "A switchable QQ2006 skin for the DeepSeek Harness Web UI with a coral-blue theme and retro assets.",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh-plugin",
+        "dsh-skin",
+        "qq2006",
+        "theme"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "deepseek-harness",
+        "dsh-plugin",
+        "dsh-skin",
+        "qq2006",
+        "theme"
+      ],
+      "pushedAt": "2026-08-13T13:04:31Z",
+      "createdAt": "2026-08-13T13:04:18Z",
+      "updatedAt": "2026-08-13T16:42:16Z",
+      "readmeSummary": "# dsh-qq2006 — DSH 的 QQ2006 皮肤插件 **Topics:** `deepseek-harness` · `dsh-plugin` · `dsh-skin` · `qq2006` ![DSH](https://img.shields.io/badge/DSH-DeepSeek%20Harness-blue) ![plugin](https://img.shields.io/badge/type-plugin-green) ![skin](https://img.shields.io/badge/type-skin-orange) 把 **DSH（DeepSeek Harness）WebUI** 完整改造成 QQ2006 客户端外观的可切换皮肤。 本仓库是皮肤插件的独立快照：**插件源码 + 全局皮肤表 + 完整素材 + 集成文档**。 > 素材来自 [mengkunsoft/QQ2006](https://github.com/mengkunsoft/QQ2006) > （腾讯原版素材，**仅供学习交流、勿商用**，出处见 `assets/qq2006/REA",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 44,
+        "breakdown": {
+          "maintain": 75,
+          "practical": 50,
+          "popularity": 8,
+          "ease": 65,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-alex"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.805Z"
+    },
+    {
+      "id": "lhh010/dsh-ui-whale",
+      "type": "cordis-plugin",
+      "name": "dsh-ui-whale",
+      "owner": "lhh010",
+      "repo": "dsh-ui-whale",
+      "fullName": "lhh010/dsh-ui-whale",
+      "stars": 14,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "A hand-drawn pixel whale companion for the DSH Web UI that reacts to agent activity.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:53:58Z",
+      "createdAt": "2026-08-13T13:10:16Z",
+      "updatedAt": "2026-08-13T16:54:19Z",
+      "readmeSummary": "# @dsh-external/dsh-ui-whale **简体中文** | [English](./README.en.md) DSH Web UI 的常驻像素鲸鱼伙伴插件：会话标题栏（标题行右侧）常驻一只小鲸鱼，随会话快照实时反应——**零核心改动**。 ## 版本对应 / Version compatibility 构建产物随 DSH 快照版本更新，安装时按快照选择对应版本： | 插件版本 | DSH 快照 | 说明 | | --- | --- | --- | | `v0.1.0` | `snapshots/20260805T134133Z`（snapshot0805） | 旧构建，按旧安装方式（`~/.dsh/config.yaml` + `pnpm add -w link:`） | | `v0.2.0` | `snapshots/20260806T160212Z`（snapshot0806） | 0806 新构建，按新安装方式 | | `v0.3.0` | `snapshots/20260806T160212Z`（snapshot0806） | 0806 构建 + 睡觉动画",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 65,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 16,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.805Z"
+    },
+    {
+      "id": "Anionex/dsh-vision-toolkit",
+      "type": "cordis-plugin",
+      "name": "dsh-vision-toolkit",
+      "owner": "Anionex",
+      "repo": "dsh-vision-toolkit",
+      "fullName": "Anionex/dsh-vision-toolkit",
+      "stars": 131,
+      "forks": 2,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "Adds image Q&A, long-screenshot OCR, UI restoration, visual grounding, pixel diffs, and artifacts.",
+      "descriptionZh": null,
+      "tags": [
+        "agent-skills",
+        "agent-vision-toolkit",
+        "computer-vision",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "gui-automation",
+        "ocr",
+        "plugin",
+        "python",
+        "screenshot-testing",
+        "text-only-llm",
+        "typescript",
+        "ui-restoration",
+        "vision-language-model",
+        "vision-tools"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "agent-skills",
+        "agent-vision-toolkit",
+        "computer-vision",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "gui-automation",
+        "ocr",
+        "plugin",
+        "python",
+        "screenshot-testing",
+        "text-only-llm",
+        "typescript",
+        "ui-restoration",
+        "vision-language-model",
+        "vision-tools"
+      ],
+      "pushedAt": "2026-08-13T15:18:28Z",
+      "createdAt": "2026-08-13T12:36:34Z",
+      "updatedAt": "2026-08-13T16:48:22Z",
+      "readmeSummary": "![DSH Vision Toolkit — native visual engineering for text-only DeepSeek Harness agents](assets/hero.png) # DSH Vision Toolkit [![Release v0.1.2](https://img.shields.io/badge/release-v0.1.2-5B4CF0?style=flat-square)](https://github.com/dsh-external/dsh-vision-toolkit/releases/tag/v0.1.2) [![Verified: 134 tests](https://img.shields.io/badge/verified-134%20tests-2EA44F?style=flat-square)](tests) [![License: MIT](https://img.shields.io/badge/license-MIT-0B7285?style=flat-square)](LICENSE) [![Node.js",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 70,
+        "breakdown": {
+          "maintain": 99,
+          "practical": 80,
+          "popularity": 34,
+          "ease": 65,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.806Z"
+    },
+    {
+      "id": "titanwings/colleague-skill",
+      "type": "skill",
+      "name": "colleague-skill",
+      "owner": "titanwings",
+      "repo": "colleague-skill",
+      "fullName": "titanwings/colleague-skill",
+      "stars": 21000,
+      "forks": 2032,
+      "openIssues": 34,
+      "language": "Python",
+      "description": "将冰冷的离别化为温暖的 Skill，欢迎加入数字生命1.0！Transforming cold farewells into warm skills? It's giving rebirth era. Welcome to Digital Life 1.0. 🫶",
+      "descriptionZh": null,
+      "tags": [
+        "agent-skills",
+        "ai-agent",
+        "claude-code",
+        "codex",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "hermes-agent",
+        "knowledge-distillation",
+        "meta-skill",
+        "openclaw",
+        "skill-generator"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "agent-skills",
+        "ai-agent",
+        "claude-code",
+        "codex",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "hermes-agent",
+        "knowledge-distillation",
+        "meta-skill",
+        "openclaw",
+        "skill-generator"
+      ],
+      "pushedAt": "2026-08-13T15:00:28Z",
+      "createdAt": "2026-03-30T05:22:23Z",
+      "updatedAt": "2026-08-13T16:58:05Z",
+      "readmeSummary": "<div align=\"center\"> <img src=\"docs/social-preview.png\" alt=\"COLLEAGUE.SKILL — Distill how they think.\" width=\"100%\"> <br> # 🧬 dot-skill（同事.skill） ### *\"You folks building LLMs are all code-sages! Flesh is weak! Ascend to cyberspace!\"* [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://python.org) [![AgentSkills](https://img.shields.io/badge/AgentSkills-Standard-green)](https://agentskills",
+      "install": {
+        "method": "skills-add",
+        "target": "~/.agents/skills",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 92,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 90,
+          "popularity": 80,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；21000 stars，社区认可度高。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.807Z"
+    },
+    {
+      "id": "titanwings/ex-skill",
+      "type": "skill",
+      "name": "ex-skill",
+      "owner": "titanwings",
+      "repo": "ex-skill",
+      "fullName": "titanwings/ex-skill",
+      "stars": 1050,
+      "forks": 97,
+      "openIssues": 18,
+      "language": "Python",
+      "description": "致你忘不掉的那个TA，你们干大模型都是码圣 It's giving rebirth era. Welcome to Digital Life 1.0. 🫶",
+      "descriptionZh": null,
+      "tags": [
+        "agent-skills",
+        "ai-agent",
+        "claude-code",
+        "deepseek-harness",
+        "digital-persona",
+        "dsh",
+        "dsh-plugin",
+        "openclaw",
+        "persona",
+        "skill-generator"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "agent-skills",
+        "ai-agent",
+        "claude-code",
+        "deepseek-harness",
+        "digital-persona",
+        "dsh",
+        "dsh-plugin",
+        "openclaw",
+        "persona",
+        "skill-generator"
+      ],
+      "pushedAt": "2026-08-13T14:48:44Z",
+      "createdAt": "2026-03-31T13:35:25Z",
+      "updatedAt": "2026-08-13T16:58:54Z",
+      "readmeSummary": "<div align=\"center\"> <img src=\"docs/social-preview.png\" alt=\"EX.SKILL — Keep what mattered. Grow forward.\" width=\"100%\"> # ex.skill > *\"You broke up, but the way they texted is still burned into your brain. You remember every tone, every pause — you just can't receive another one.\"* [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://python.org) [![Claude Code](https://img.shields.io/badge/C",
+      "install": {
+        "method": "skills-add",
+        "target": "~/.agents/skills",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 88,
+        "breakdown": {
+          "maintain": 96,
+          "practical": 100,
+          "popularity": 61,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:12.978Z"
+    },
+    {
+      "id": "whiteguo233/dsh-openbiliclaw",
+      "type": "cordis-plugin",
+      "name": "dsh-openbiliclaw",
+      "owner": "whiteguo233",
+      "repo": "dsh-openbiliclaw",
+      "fullName": "whiteguo233/dsh-openbiliclaw",
+      "stars": 7,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Brings the local OpenBiliClaw content-recommendation agent into DSH with a persistent UI and 22 agent-bridge tools.",
+      "descriptionZh": null,
+      "tags": [
+        "agent-bridge",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "openbiliclaw"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "BSD-3-Clause",
+      "topics": [
+        "agent-bridge",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "openbiliclaw"
+      ],
+      "pushedAt": "2026-08-13T16:56:42Z",
+      "createdAt": "2026-08-12T19:53:08Z",
+      "updatedAt": "2026-08-13T16:56:54Z",
+      "readmeSummary": "# 🦀 OpenBiliClaw · DSH 客户端插件 **OpenBiliClaw 是本地运行、跨平台、可调教的个性化内容推荐 Agent；本仓库是它的 DeepSeek Harness 客户端插件——DSH 界面常驻第四栏（推荐/内容库/对话/画像/设置），并注册 22 个 Agent Bridge 工具，让 Agent 读推荐、答探测、闭环学习。** [![License](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](LICENSE) [![OpenBiliClaw](https://img.shields.io/badge/主项目-OpenBiliClaw-fb7299.svg)](https://github.com/whiteguo233/OpenBiliClaw) [English](#english) | 中文 --- ## 这是什么 [OpenBiliClaw](https://github.com/whiteguo233/OpenBiliClaw) 是一个本地运行、跨平台、可调教的",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 62,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 90,
+          "popularity": 13,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.150Z"
+    },
+    {
+      "id": "huiliyi37/dsh-tianshu-tui",
+      "type": "cordis-plugin",
+      "name": "dsh-tianshu-tui",
+      "owner": "huiliyi37",
+      "repo": "dsh-tianshu-tui",
+      "fullName": "huiliyi37/dsh-tianshu-tui",
+      "stars": 70,
+      "forks": 0,
+      "openIssues": 3,
+      "language": "TypeScript",
+      "description": "dsh-tianshu-tui — DeepSeek Harness terminal UI",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin",
+        "harness",
+        "harness-engineering"
+      ],
+      "curated": false,
+      "homepage": "https://github.com/huiliyi37/dsh-tianshu-tui",
+      "license": "Apache-2.0",
+      "topics": [
+        "dsh",
+        "dsh-plugin",
+        "harness",
+        "harness-engineering"
+      ],
+      "pushedAt": "2026-08-13T15:12:41Z",
+      "createdAt": "2026-08-13T04:20:37Z",
+      "updatedAt": "2026-08-13T16:55:19Z",
+      "readmeSummary": "# dsh-tianshu-tui — DeepSeek Harness 终端 UI 中文 | [English](README.en.md) ![dsh-tianshu-tui](docs/tui-screenshot.jpg) **dsh-tianshu-tui**（`@huiliyi37/dsh-tianshu-tui`）是官方 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 上的交互式终端 UI 插件。渲染核心从 [天枢 Tianshu-Tui](https://github.com/huiliyi37/Tianshu-Tui) 演进而来（Apache-2.0；逐文件来源见 [SOURCE-MAP.md](SOURCE-MAP.md)）。UI 是纯展示层：所有 agent 状态都来自会话事件流。 ## 安装 本包不是独立程序。须先有官方 CLI [`@deepseek-ai/dsh`](https://www.npmjs.com/package/@deepseek-ai/dsh)（`0.1.",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 69,
+        "breakdown": {
+          "maintain": 94,
+          "practical": 80,
+          "popularity": 26,
+          "ease": 80,
+          "signal": 100
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.153Z"
+    },
+    {
+      "id": "taxueseek/argo",
+      "type": "skill",
+      "name": "argo",
+      "owner": "taxueseek",
+      "repo": "argo",
+      "fullName": "taxueseek/argo",
+      "stars": 55,
+      "forks": 1,
+      "openIssues": 0,
+      "language": "Python",
+      "description": "专门为 agent 打造的 agent 搜索工具，具备多语言搜索能力，覆盖中文/英文/学术/代码/购物/金融/新闻/百科。",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-ecosystem",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "dsh-ecosystem",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:58:54Z",
+      "createdAt": "2026-07-18T15:06:11Z",
+      "updatedAt": "2026-08-13T16:38:13Z",
+      "readmeSummary": "<p align=\"center\"> <img src=\"assets/readme/hero.svg\" width=\"100%\" alt=\"Argo 阿尔戈：给 Agent 用的统一搜索与证据核验\"> </p> <p align=\"center\"> <strong>中文</strong> · <a href=\"README.en.md\">English</a> · <a href=\"README.ja.md\">日本語</a> · <a href=\"README.ko.md\">한국어</a> · <a href=\"README.es.md\">Español</a> </p> <p align=\"center\"> <a href=\"#这是什么\">介绍</a> · <a href=\"#它和模型自带搜索-ai-搜索-聚合搜索比强在哪\">对比</a> · <a href=\"#问啥像啥\">证明</a> · <a href=\"#它怎么工作\">机制</a> · <a href=\"#快速开始\">快速开始</a> · <a href=\"#能做什么\">能力</a> · <a href=\"#安装与配置\">配",
+      "install": {
+        "method": "skills-add",
+        "target": "~/.agents/skills",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 71,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 90,
+          "popularity": 30,
+          "ease": 65,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.155Z"
+    },
+    {
+      "id": "ccch1mneyyy/dsh-cc-tui",
+      "type": "cordis-plugin",
+      "name": "dsh-cc-tui",
+      "owner": "ccch1mneyyy",
+      "repo": "dsh-cc-tui",
+      "fullName": "ccch1mneyyy/dsh-cc-tui",
+      "stars": 159,
+      "forks": 5,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "A Claude Code-style full-screen terminal interface with streaming thought display, rollback controls, and context/TPS indicators.",
+      "descriptionZh": null,
+      "tags": [
+        "claude-code",
+        "coding-agent",
+        "deepseek",
+        "deepseek-harness",
+        "dsh-plugin",
+        "ink",
+        "react",
+        "terminal",
+        "tui"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "claude-code",
+        "coding-agent",
+        "deepseek",
+        "deepseek-harness",
+        "dsh-plugin",
+        "ink",
+        "react",
+        "terminal",
+        "tui"
+      ],
+      "pushedAt": "2026-08-13T16:52:40Z",
+      "createdAt": "2026-08-13T12:49:31Z",
+      "updatedAt": "2026-08-13T16:55:40Z",
+      "readmeSummary": "# dsh-cc-tui — Claude Code 风格的全屏交互终端 > **DeepSeek Harness 官方目前还没有终端 TUI（只有 Web UI）——这个项目就是来补位的**： > 一个美观且实用的 Claude Code 风格 TUI 插件（cordis 挂载）：像素鲸鱼顶栏、双流光大字、 > 实时工作状态行、思考流式展开、双击 Esc 时间回溯、蓝白上下文进度条 + TPS 仪表。 > 零核心改动，纯插件挂载。 ![类型](https://img.shields.io/badge/type-cordis%20plugin-blue) ![状态](https://img.shields.io/badge/status-公测-blue) ## 界面预览 ![首屏：像素鲸鱼顶栏](screenshots/splash.png) ![工作状态行](screenshots/working-line.png) > 截图放 `screenshots/` 目录，文件名与上面一致即可自动显示；建议 Windows > Terminal 全屏后截图（`Win+Shift+S`），窗口",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 78,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 41,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "awesome-alex",
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.210Z"
+    },
+    {
+      "id": "Nagi-ovo/dsh-visualize",
+      "type": "cordis-plugin",
+      "name": "dsh-visualize",
+      "owner": "Nagi-ovo",
+      "repo": "dsh-visualize",
+      "fullName": "Nagi-ovo/dsh-visualize",
+      "stars": 25,
+      "forks": 1,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "DSH 对话内生成式 UI 插件：模型把交互式 HTML 卡片直接画进会话流——visualize 工具 + 配套 skill + 沙箱渲染卡，带流式预览、组件浮入动画与鲸鱼蓝主题跟随",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T14:29:38Z",
+      "createdAt": "2026-08-13T13:11:49Z",
+      "updatedAt": "2026-08-13T16:52:52Z",
+      "readmeSummary": "# dsh-visualize <p align=\"center\"> <strong>简体中文</strong> | <a href=\"README.en.md\">English</a> </p> 让 DSH 不只回答一段文字。模型调用 `visualize` 后，Web UI 会在对话里直接出现一张可交互卡片，用来做模拟器、图表、对比面板或 UI mockup。 <div align=\"center\"> [![DSH 对话内生成交互式可视化演示](assets/demo.webp)](assets/demo.mp4) </div> ## 安装 构建产物已经提交，不需要额外的构建步骤： ```sh git clone https://github.com/Nagi-ovo/dsh-visualize.git cd /path/to/deepseek-harness pnpm dsh plugin --profile web add link:/path/to/dsh-visualize # 重启 dsh web，刷新页面 ``` 装了社区 [plugin-registry](https",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 52,
+        "breakdown": {
+          "maintain": 97,
+          "practical": 70,
+          "popularity": 32,
+          "ease": 100,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.211Z"
+    },
+    {
+      "id": "LaplaceYoung/oh-my-dsh",
+      "type": "cordis-plugin",
+      "name": "oh-my-dsh",
+      "owner": "LaplaceYoung",
+      "repo": "oh-my-dsh",
+      "fullName": "LaplaceYoung/oh-my-dsh",
+      "stars": 21,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "oh-my-dsh：面向 DSH (DeepSeek Harness) 的插件生态——700+ 插件，只通过扩展接缝注册，不修改 agent-loop 骨架",
+      "descriptionZh": null,
+      "tags": [
+        "agent",
+        "deepseek-harness",
+        "dsh-ecosystem",
+        "dsh-plugin",
+        "oh-my-dsh"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "agent",
+        "deepseek-harness",
+        "dsh-ecosystem",
+        "dsh-plugin",
+        "oh-my-dsh"
+      ],
+      "pushedAt": "2026-08-13T13:04:56Z",
+      "createdAt": "2026-08-13T13:04:21Z",
+      "updatedAt": "2026-08-13T16:52:40Z",
+      "readmeSummary": "# oh-my-dsh **Topics:** `deepseek-harness` · `dsh-plugin` · `dsh-ecosystem` · `oh-my-dsh` ![DSH](https://img.shields.io/badge/DSH-DeepSeek%20Harness-blue) ![plugins](https://img.shields.io/badge/plugins-700%2B-green) ![protocol](https://img.shields.io/badge/protocol-%40deepseek--ai%2Fcordis-orange) > 从其他开源 harness 中选取有用的能力，重写为适配 DSH（DeepSeek Harness SDK）的插件。 > 所有插件遵循 DSH 的插件规范：只通过扩展接缝（`ctx.effect()` / `ctx.on()` / `ctx.tools` 等）注册， > **不修改 agent-loop 骨架、不引入热路径开销**。 ## 目标 DSH 是一个插件化的 agent harnes",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 43,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 19,
+          "ease": 45,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.229Z"
+    },
+    {
+      "id": "Anionex/dsh-turn-rewind",
+      "type": "cordis-plugin",
+      "name": "dsh-turn-rewind",
+      "owner": "Anionex",
+      "repo": "dsh-turn-rewind",
+      "fullName": "Anionex/dsh-turn-rewind",
+      "stars": 18,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "deepseek harness对话回退插件 | DSH — rewind conversation and workspace state, powered by a persistent Change Ledger",
+      "descriptionZh": null,
+      "tags": [
+        "agent-rewind",
+        "cordis-plugin",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "marisa-plugin",
+        "restore-point",
+        "turn-rewind",
+        "workspace-safety"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "BSD-3-Clause",
+      "topics": [
+        "agent-rewind",
+        "cordis-plugin",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "marisa-plugin",
+        "restore-point",
+        "turn-rewind",
+        "workspace-safety"
+      ],
+      "pushedAt": "2026-08-13T12:37:02Z",
+      "createdAt": "2026-08-13T12:36:53Z",
+      "updatedAt": "2026-08-13T16:38:40Z",
+      "readmeSummary": "# DSH Turn Rewind [中文说明](README.zh.md) Message-anchored project-file recovery for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), with an option to restart from the restored request. **Turn Rewind** is the user-facing feature, repository, and Profile Bundle name. **Change Ledger** is the durable restore engine underneath it: the `ctx.changeLedger` service, on-disk format, and storage path keep that name because they describe the reusable snapshot and recovery layer rather th",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 64,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 18,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.231Z"
+    },
+    {
+      "id": "LoserFox/distill",
+      "type": "cordis-plugin",
+      "name": "distill",
+      "owner": "LoserFox",
+      "repo": "distill",
+      "fullName": "LoserFox/distill",
+      "stars": 12,
+      "forks": 0,
+      "openIssues": 2,
+      "language": "TypeScript",
+      "description": "自动对话蒸馏：后台 subagent 反省 + 技能 create/update",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:11:31Z",
+      "createdAt": "2026-08-04T21:12:42Z",
+      "updatedAt": "2026-08-13T16:38:50Z",
+      "readmeSummary": "# distill ## 安装（DSH profile bundle） ```sh # 从本仓库 checkout 安装到 profile（web / headless 等），bundle 声明自动加入组合层 dsh plugin --profile web add <目录|git-url> # 验证 dsh --profile web --dump-config | grep distill ``` - 插入行 id：`distill`（cordis.patch.yml）；不注册任何面向模型的工具或技能——它只挂接 `agent/turn-stopping` 并运行后台反省。 - **宿主前提**：dsh 组合必须挂载 `subagent-spawn-in-process`（注册反省子代理使用的 `spawn` 子代理提供方）与 `tool-skill`（子代理可调用的 `skill` 查看器）——两者在 base bundle 中默认存在。 - 卸载：`dsh plugin --profile web remove distill`。 - 安装后需重启目标 profile 的 DS",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 42,
+        "breakdown": {
+          "maintain": 81,
+          "practical": 80,
+          "popularity": 15,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.426Z"
+    },
+    {
+      "id": "Chinesezjc/dsh-interconnect",
+      "type": "cordis-plugin",
+      "name": "dsh-interconnect",
+      "owner": "Chinesezjc",
+      "repo": "dsh-interconnect",
+      "fullName": "Chinesezjc/dsh-interconnect",
+      "stars": 11,
+      "forks": 1,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Cross-instance message/event handoff plugins for DSH (interconnect service + tools)",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "interconnect"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "interconnect"
+      ],
+      "pushedAt": "2026-08-13T14:47:44Z",
+      "createdAt": "2026-08-13T12:19:01Z",
+      "updatedAt": "2026-08-13T16:47:41Z",
+      "readmeSummary": "# dsh-interconnect 跨实例消息互通与事件通知插件，用于 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH)。 让一个 DSH 实例能向同一个实例、另一台机器、或另一台机器上的别的 DSH 实例发送消息、探测活性，并在实例之间双向推送事件。 ## 包含两个插件 **`interconnect`** —— host 服务（`ctx.interconnect`）： - `send` / `ping` HTTP 端点（`/interconnect/*`）：跨实例、跨机器投递消息、探测活性 - `/interconnect/link` WebSocket 端点：双向实时事件推流，含心跳与指数退避重连 - 事件 fan-out（HTTP + WebSocket），入站事件以 `interconnect/event` 发出 - 共享密钥鉴权（`DSH_INTERCONNECT_TOKEN`，bearer，fail-closed，timing-safe 比较） **`tool-interc",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 70,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 70,
+          "popularity": 34,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.426Z"
+    },
+    {
+      "id": "Anionex/dsh-computer-use",
+      "type": "cordis-plugin",
+      "name": "dsh-computer-use",
+      "owner": "Anionex",
+      "repo": "dsh-computer-use",
+      "fullName": "Anionex/dsh-computer-use",
+      "stars": 10,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "为 DeepSeek Harness 提供电脑控制插件：新鲜 Accessibility 观测、过期状态拒绝、作用域权限与安全输入（目前支持macos）｜Accessibility-first macOS Computer Use bundle for DSH with fresh observations, stale-state rejection, scoped permissions, and safe input.",
+      "descriptionZh": null,
+      "tags": [
+        "accessibility",
+        "agent-skills",
+        "agent-tools",
+        "appkit",
+        "computer-use",
+        "deepseek",
+        "deepseek-harness",
+        "desktop-automation",
+        "dsh",
+        "dsh-plugin",
+        "gui-automation",
+        "human-in-the-loop",
+        "macos",
+        "native-apps",
+        "typescript"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "accessibility",
+        "agent-skills",
+        "agent-tools",
+        "appkit",
+        "computer-use",
+        "deepseek",
+        "deepseek-harness",
+        "desktop-automation",
+        "dsh",
+        "dsh-plugin",
+        "gui-automation",
+        "human-in-the-loop",
+        "macos",
+        "native-apps",
+        "typescript"
+      ],
+      "pushedAt": "2026-08-13T12:54:35Z",
+      "createdAt": "2026-08-13T12:54:24Z",
+      "updatedAt": "2026-08-13T16:48:31Z",
+      "readmeSummary": "# DSH Computer Use [![License: MIT](https://img.shields.io/badge/license-MIT-2f855a.svg)](LICENSE) ![macOS](https://img.shields.io/badge/macOS-14%2B-111827.svg) ![Universal binary](https://img.shields.io/badge/native-arm64%20%2B%20x86__64-2563eb.svg) ![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-Bundle-5b50ed.svg) **Native macOS control for DeepSeek Harness that keeps your real cursor and foreground application alone by default; the Bundle may bring the target app forward b",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 59,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 14,
+          "ease": 65,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.427Z"
+    },
+    {
+      "id": "bobleer/dsh-acp-for-bitfun",
+      "type": "cordis-plugin",
+      "name": "dsh-acp-for-bitfun",
+      "owner": "bobleer",
+      "repo": "dsh-acp-for-bitfun",
+      "fullName": "bobleer/dsh-acp-for-bitfun",
+      "stars": 9,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "BitFun 与 DSH ACP 交互对接 插件",
+      "descriptionZh": null,
+      "tags": [
+        "bitfun",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "bitfun",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:38:31Z",
+      "createdAt": "2026-08-13T12:45:15Z",
+      "updatedAt": "2026-08-13T16:39:00Z",
+      "readmeSummary": "# dsh-acp-for-bitfun BitFun 支持 ACP deepseek-harness。 一个 [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness) 插件 bundle： 通过 **Agent Client Protocol (ACP) v1 over stdio** 把 [BitFun](https://github.com/GCWing/BitFun) 接入 dsh，作为 dsh 会话的 subagent。dsh 里任意会话都可以用 `subagent_bitfun` 工具把任务委托给 BitFun 执行。 - [BitFun](https://github.com/GCWing/BitFun) - [deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) ## 工作原理 ``` dsh 会话 ──subagent_bitfun 工具──▶ dsh-subagent-acp (ACP 客户端) │",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 61,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 14,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.427Z"
+    },
+    {
+      "id": "NanmiCoder/dsh-agent-teams",
+      "type": "cordis-plugin",
+      "name": "dsh-agent-teams",
+      "owner": "NanmiCoder",
+      "repo": "dsh-agent-teams",
+      "fullName": "NanmiCoder/dsh-agent-teams",
+      "stars": 54,
+      "forks": 6,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "AgentTeams plugin for DeepSeek Harness",
+      "descriptionZh": null,
+      "tags": [
+        "agentteams",
+        "deepseekharness",
+        "dsh",
+        "dsh-agent-teams",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "agentteams",
+        "deepseekharness",
+        "dsh",
+        "dsh-agent-teams",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T14:39:24Z",
+      "createdAt": "2026-08-12T13:41:50Z",
+      "updatedAt": "2026-08-13T16:49:33Z",
+      "readmeSummary": "# dsh-agent-teams DeepSeek Harness 的 AgentTeams 插件：安装后，任何会话只需一句自然语言（例如\"用 AgentTeams 调研一下 XX\"），即可驱动一个**多智能体团队**协作完成目标，并在 Web GUI 右上角实时看到团队活动面板。 核心语义移植自 Claude Code 的 AgentTeams：**创建团队**（队长 = 当前会话 agent）→ **拉成员**（可续聊子代理）→ **拆任务并声明依赖** → **成员间直接收发消息**（邮箱直达 + 唤醒，无队长中转）。 ## 界面预览 ![AgentTeams 活动面板](assets/ui.png) ## 安装 ### 前置要求 - Node.js `^22.19` 或 `>=24`；pnpm 11 - 已安装或可通过 `npx` 使用 DeepSeek Harness ```sh npx -p @deepseek-ai/dsh dsh plugin --profile web add github:dsh-external/dsh-agent-teams ``` 该命令直接",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 56,
+        "breakdown": {
+          "maintain": 99,
+          "practical": 70,
+          "popularity": 45,
+          "ease": 100,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.607Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-session-health",
+      "type": "cordis-plugin",
+      "name": "dsh-session-health",
+      "owner": "omdsh-dev",
+      "repo": "dsh-session-health",
+      "fullName": "omdsh-dev/dsh-session-health",
+      "stars": 7,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "DSH 会话健康检查插件：多帧 zstd 会话文件的帧级扫描诊断（torn/损坏/空会话检测），零依赖只读，注册 session_health 工具",
+      "descriptionZh": null,
+      "tags": [
+        "diagnostics",
+        "dsh",
+        "dsh-plugin",
+        "health-check",
+        "zstd"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "diagnostics",
+        "dsh",
+        "dsh-plugin",
+        "health-check",
+        "zstd"
+      ],
+      "pushedAt": "2026-08-13T13:52:57Z",
+      "createdAt": "2026-08-08T13:41:56Z",
+      "updatedAt": "2026-08-13T16:39:12Z",
+      "readmeSummary": "# dsh-session-health [English](README.en.md) DSH 会话健康检查插件 —— 对 `$DSH_HOME/sessions` 下的**多帧 zstd 会话文件**做帧级扫描诊断（torn / 损坏 / 空会话 / stray 文件），输出健康报告与清理建议。**只读**：绝不修改或删除任何文件。 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ## 动机 8/7 调查 issue #376 时对 39 个会话文件做了全量解码分析，过程中发现一个关键事实：**DSH 会话文件是多个 zstd frame 的串联**（一个 19MB 会话 = 119,952 个 frame），用单帧解码 API 读多帧文件只能看到 header——曾导致\"会话全空\"的误判。这套诊断逻辑值得产品化为工具：模型可以直接问\"我的会话文件健康吗\"，而不是靠人手工写脚本。 与 `dsh-session-repair-skill`（修复损坏会话）互补：本工具**只读诊断发现** ",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 60,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 13,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.608Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-security-audit",
+      "type": "cordis-plugin",
+      "name": "dsh-security-audit",
+      "owner": "omdsh-dev",
+      "repo": "dsh-security-audit",
+      "fullName": "omdsh-dev/dsh-security-audit",
+      "stars": 7,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "DSH 本机安全审计插件：配置/插件来源/会话/网络暴露面，只读脱敏风险报告",
+      "descriptionZh": null,
+      "tags": [
+        "audit",
+        "dsh",
+        "dsh-plugin",
+        "secret-scanning",
+        "security"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "audit",
+        "dsh",
+        "dsh-plugin",
+        "secret-scanning",
+        "security"
+      ],
+      "pushedAt": "2026-08-13T13:53:26Z",
+      "createdAt": "2026-08-10T07:02:52Z",
+      "updatedAt": "2026-08-13T16:39:13Z",
+      "readmeSummary": "# dsh-security-audit [English](README.en.md) DSH 本机安全审计插件 —— 防御性、只读的安全审计：配置、凭据存储元数据、已安装插件来源、关键路径权限、会话文件结构与网络暴露面。输出脱敏、可复现、可定位的风险报告。 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ## 动机 DSH 本地环境承载 API Key、token、会话内容和插件加载边界，误配置（服务监听公网、凭据文件权限过宽、插件来源不可信、会话文件结构异常）会造成真实风险。现有工具没有这个视角： 1. **`plugin-check` 只做结构/合规检查**——不评估凭据暴露面、危险能力和路径逃逸 2. **`session-health` 只做健康诊断**——不涉及来源可信度与安全风险裁定 3. **手工排查不可复现**——凭据位置、权限、监听端口、插件来源分散在多处，逐项人工检查极易遗漏且无法留档 本插件以只读方式审计本机 DSH 环境并输出风险报告：**不自动修复、不连接远程",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 60,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 13,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.608Z"
+    },
+    {
+      "id": "omdsh-dev/fabric",
+      "type": "cordis-plugin",
+      "name": "fabric",
+      "owner": "omdsh-dev",
+      "repo": "fabric",
+      "fullName": "omdsh-dev/fabric",
+      "stars": 7,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "一种类似MC Fabric的hook处理器",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T15:10:10Z",
+      "createdAt": "2026-08-06T08:46:22Z",
+      "updatedAt": "2026-08-13T16:39:15Z",
+      "readmeSummary": "# Cordis Fabric Workspace English | [中文](README.zh.md) The Fabric/Mixin extension layer for DSH as a self-contained workspace of three packages plus an installable profile bundle carrier. The workspace mirrors the upstream fabric split: a pure-Cordis pair (`cordis-fabric`, `cordis-fabric-api`) and the DSH integration package (`cordis-fabric-dsh`) that supplies the Host and browser facades, the package invariant, and the profile bootstrap. ## Packages | Package | Kind | Contents | |---|---|---| |",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 46,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 13,
+          "ease": 100,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.609Z"
+    },
+    {
+      "id": "dingyi222666/dsh-focus-chat",
+      "type": "cordis-plugin",
+      "name": "dsh-focus-chat",
+      "owner": "dingyi222666",
+      "repo": "dsh-focus-chat",
+      "fullName": "dingyi222666/dsh-focus-chat",
+      "stars": 7,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "提供新的「聚焦会话」精简会话视图，更轻松易于阅读，只关注最终产出结果。",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T15:51:52Z",
+      "createdAt": "2026-08-10T19:40:36Z",
+      "updatedAt": "2026-08-13T16:39:16Z",
+      "readmeSummary": "# dsh-focus-chat [![npm version](https://img.shields.io/npm/v/@dingyi222666/dsh-focus-chat.svg)](https://www.npmjs.com/package/@dingyi222666/dsh-focus-chat) English | [中文](README.zh.md) A plugin for the dsh web GUI that adds a **focus chat** tab — a condensed, Claude Code–style way to read a conversation. ## Install ```sh # 从 npm 安装（需要 dsh >= 0.1.0-rc.6） dsh plugin --profile web add @dingyi222666/dsh-focus-chat # 重启 dsh web，工具自动挂载 dsh web ``` Then open the 聚焦对话 / Focus chat tab in any conversati",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 44,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 13,
+          "ease": 80,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.609Z"
+    },
+    {
+      "id": "chen-001/dsh-grok-tui",
+      "type": "cordis-plugin",
+      "name": "dsh-grok-tui",
+      "owner": "chen-001",
+      "repo": "dsh-grok-tui",
+      "fullName": "chen-001/dsh-grok-tui",
+      "stars": 6,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Use dsh via grok-build's TUI.",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T14:52:00Z",
+      "createdAt": "2026-08-12T16:28:42Z",
+      "updatedAt": "2026-08-13T16:39:26Z",
+      "readmeSummary": "# dsh-grok-tui 把 [grok-build](https://github.com/xai-org/grok-build) 的 TUI 作为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh) 的前端：界面是 grok 的，内核（提示词、工具、模型路由、会话持久化）由 dsh 提供。 Grok's TUI as a frontend for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh): the interface is grok's, the engine (prompts, tools, model routing, persistence) is dsh's. ![dsh-grok-tui](image.png) ## 安装 / Installation 前提：已安装 [dsh](https://github.com/deepseek-ai/deepseek-harnes",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 61,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 12,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.610Z"
+    },
+    {
+      "id": "yjh051108/dsh-super-injector",
+      "type": "cordis-plugin",
+      "name": "dsh-super-injector",
+      "owner": "yjh051108",
+      "repo": "dsh-super-injector",
+      "fullName": "yjh051108/dsh-super-injector",
+      "stars": 6,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": null,
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T13:24:44Z",
+      "createdAt": "2026-08-13T03:26:49Z",
+      "updatedAt": "2026-08-13T16:39:32Z",
+      "readmeSummary": "# dsh-super-injector — 超级模组注入器 DSH 生态的 **BepInEx 式模组注入入口**：运行时把任意本地插件包注入运行中的 web， 不碰 patch / package.json / bundles 列表、不重启进程。**注入即完整生效（host 工具 + client UI）。** > 灵感：官方装配机制（profile bundle / repository-plugin）是唯一的\"官方入口\"，就像游戏 > 只有启动器能装模组。本插件打破这一点——引导器走官方入口装一次，之后**万物皆可运行时注入**。 ## 安装（三选一） ### 方式 A：Release 包（推荐，免构建） 从 [Releases](https://github.com/yjh051108/dsh-super-injector/releases) 下载 `dsh-external-dsh-super-injector-0.0.1.tgz`，解压得到插件目录（含 `lib/` 与 `cordis.patch.yml`），然后： ```bash # 官方装配（重启后由 bundles",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 28,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 12,
+          "ease": 80,
+          "signal": 50
+        },
+        "confidence": 0.5,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.642Z"
+    },
+    {
+      "id": "Degurechaff57/dsh-openapi",
+      "type": "cordis-plugin",
+      "name": "dsh-openapi",
+      "owner": "Degurechaff57",
+      "repo": "dsh-openapi",
+      "fullName": "Degurechaff57/dsh-openapi",
+      "stars": 4,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "Safe OpenAPI 3.x discovery and API calling tools for DeepSeek Harness",
+      "descriptionZh": null,
+      "tags": [
+        "ai-agent",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "openapi",
+        "swagger"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "ai-agent",
+        "deepseek",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "openapi",
+        "swagger"
+      ],
+      "pushedAt": "2026-08-13T14:32:36Z",
+      "createdAt": "2026-08-13T14:28:44Z",
+      "updatedAt": "2026-08-13T16:41:33Z",
+      "readmeSummary": "# dsh-openapi **Give DeepSeek Harness a safe, structured doorway into any OpenAPI 3.x API.** [中文说明](README.zh-CN.md) · [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) `dsh-openapi` is a native DeepSeek Harness bundle that indexes configured OpenAPI documents and adds three model-facing tools: - `openapi_list` discovers APIs and searches operations. - `openapi_describe` returns parameters, request bodies, servers, and responses for one operation. - `openapi_call` validates and",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 57,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 10,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.643Z"
+    },
+    {
+      "id": "Thhoho/reSanity",
+      "type": "skill",
+      "name": "reSanity",
+      "owner": "Thhoho",
+      "repo": "reSanity",
+      "fullName": "Thhoho/reSanity",
+      "stars": 4,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "Python",
+      "description": "reSanity 散修 — 散户的认知组合管理：查证、避坑、记忆、复盘。一份 SKILL.md，零依赖。",
+      "descriptionZh": null,
+      "tags": [
+        "agent-skills",
+        "ashare",
+        "claude-code",
+        "codex",
+        "dsh",
+        "dsh-plugin",
+        "investment-analysis",
+        "trade"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "agent-skills",
+        "ashare",
+        "claude-code",
+        "codex",
+        "dsh",
+        "dsh-plugin",
+        "investment-analysis",
+        "trade"
+      ],
+      "pushedAt": "2026-08-13T16:00:54Z",
+      "createdAt": "2026-08-13T08:19:23Z",
+      "updatedAt": "2026-08-13T16:41:34Z",
+      "readmeSummary": "# reSanity 散修 <p align=\"center\"><img src=\"assets/logo.svg\" width=\"96\" alt=\"散修：锚 + 对勾\"/></p> > 散修，修出你的 Sanity。 > **积极的信心，谨慎的动作。** **一个给散户用的认知管理工具：帮你查证、帮你避坑、帮你记住、帮你复盘。** 不是荐股工具，不是行情软件，不是新闻推送。它不下单、不推荐、不承诺收益——它只在你追高之前泼冷水，在你忘记自己判断的时候提醒你，在你亏钱之后告诉你错在哪一环。 ## 你为什么需要它 市场里不缺信息，缺的是**验证过的判断**；不缺聪明人，缺的是**记得住自己为什么错的聪明人**。 - 刷到\"某题材要起飞\"的热帖，你想知道：这是真的吗，还是又来接我盘的？→ 它会去翻公告原文，把\"官方口径\"和\"市场传闻\"分开摆给你看。 - 上个月研究过的东西，这个月中报出来了，你的判断还成立吗？→ 说一句**\"更新锚\"**，它只查该查的那几个数，几分钟告诉你升档还是失效。不用重读旧报告。 - 亏了钱却说不清为什么？→ 它记着你每次信了什么、做了什么，每周花一分钟告诉你：你最常",
+      "install": {
+        "method": "skills-add",
+        "target": "~/.agents/skills",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 59,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 90,
+          "popularity": 10,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.658Z"
+    },
+    {
+      "id": "HuanLinOTO/dsh-plugin-mineru",
+      "type": "cordis-plugin",
+      "name": "dsh-plugin-mineru",
+      "owner": "HuanLinOTO",
+      "repo": "dsh-plugin-mineru",
+      "fullName": "HuanLinOTO/dsh-plugin-mineru",
+      "stars": 4,
+      "forks": 0,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "DSH plugin exposing MineRU document parsing tools to the model",
+      "descriptionZh": null,
+      "tags": [
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "NOASSERTION",
+      "topics": [
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T12:25:59Z",
+      "createdAt": "2026-08-09T08:41:45Z",
+      "updatedAt": "2026-08-13T16:41:35Z",
+      "readmeSummary": "# dsh-mineru DSH 插件：向模型暴露 [MinerU](https://github.com/opendatalab/MinerU) 文档解析工具。MinerU 可将 PDF、图片、DOCX、PPTX、XLSX 等文件转换为结构化的 Markdown / JSON。 ## 安装 ```sh # 从 git 安装（推荐）： dsh plugin --profile <profile> add github:huanlinoto/dsh-plugin-mineru # 从本地 checkout 开发安装： dsh plugin --profile <profile> add link:D:\\Projects\\deepseek-harness\\dsh-mineru ``` pnpm ≥10 从 git 安装时，需在 profile 的 `pnpm-workspace.yaml` 中允许构建： ```yaml allowBuilds: '@huanlin/dsh-plugin-mineru': true ``` ## 配置 在 DSH GUI 设置页或 `cordis.patch",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 50,
+        "breakdown": {
+          "maintain": 82,
+          "practical": 80,
+          "popularity": 10,
+          "ease": 45,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.659Z"
+    },
+    {
+      "id": "omdsh-dev/plugin-template",
+      "type": "cordis-plugin",
+      "name": "plugin-template",
+      "owner": "omdsh-dev",
+      "repo": "plugin-template",
+      "fullName": "omdsh-dev/plugin-template",
+      "stars": 4,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "基于原turtle ui官方仓库创建的plugin模板仓库",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-12T20:17:02Z",
+      "createdAt": "2026-08-11T09:39:50Z",
+      "updatedAt": "2026-08-13T16:41:28Z",
+      "readmeSummary": "# DeepSeek Harness Plugin Template English | [中文](README.zh.md) A self-contained standalone repository template for an ESM Cordis plugin. Every source file, compiler setting, test fixture, contributor instruction, skill, and build helper used by the repository is inside this directory; every development input resolves below this repository root. Normal npm dependencies are resolved from the package registry. A DSH host is a runtime consumer of the finished package, not a source or build input. #",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 57,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 10,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.659Z"
+    },
+    {
+      "id": "SenmuuuuW/dsh-group-photo",
+      "type": "skill",
+      "name": "dsh-group-photo",
+      "owner": "SenmuuuuW",
+      "repo": "dsh-group-photo",
+      "fullName": "SenmuuuuW/dsh-group-photo",
+      "stars": 12,
+      "forks": 1,
+      "openIssues": 0,
+      "language": "HTML",
+      "description": "DSH 内测收官合影墙：GitHub OAuth 零权限登录 + 冻结白名单校验的拍立得合影站（含 DSH Skill 包装）",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T12:33:47Z",
+      "createdAt": "2026-08-13T01:36:34Z",
+      "updatedAt": "2026-08-13T16:38:49Z",
+      "readmeSummary": "## 🔴 线上合影进行中 **收官之夜，来合影 👉 https://rio-palm-cfr-benz.trycloudflare.com/** （活动期间在线；仅 dsh-external 内测成员可入镜。地址为活动期临时隧道，永久纪念版见 [`archive/index.html`](archive/index.html)） --- # DSH 内测大合影 📸 · dsh-group-photo DSH 内测收官之夜诞生的合影墙：内测成员用 GitHub 登录（**零权限授权**），通过**冻结白名单**校验后，在拍立得墙上入镜并留下一句话。这是内测社区的一件纪念作品。 > A polaroid-style group photo wall built for the last night of the DSH internal beta. > Members sign in with GitHub OAuth (**zero scopes**) and are admitted only if their > GitHub identity matches a **froz",
+      "install": {
+        "method": "skills-add",
+        "target": "~/.agents/skills",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 77,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 90,
+          "popularity": 34,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.781Z"
+    },
+    {
+      "id": "keleus/deepseek-pet",
+      "type": "cordis-plugin",
+      "name": "deepseek-pet",
+      "owner": "keleus",
+      "repo": "deepseek-pet",
+      "fullName": "keleus/deepseek-pet",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "在你的deepseek-harness上养一只吃白饭的大蓝鲸",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "deepseek-harness-plugin",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "deepseek-harness",
+        "deepseek-harness-plugin",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T16:44:05Z",
+      "createdAt": "2026-08-13T15:51:09Z",
+      "updatedAt": "2026-08-13T16:44:09Z",
+      "readmeSummary": "# DeepSeek Pet 插件 DeepSeek Pet 是一个嵌入 DeepSeek Harness 网页的交互式桌宠插件。它会跟随当前任务、 工具调用、上下文占用和活跃会话自动切换 DeepSeek 表情，并通过呼吸、弹跳、倾斜、 视差和淡入动画呈现 Live2D 风格效果。 角色使用完整表情图切换，不拆分头部、手脚或五官图层，避免部件错位和表情突变。 ## 功能 - 角色上方用与 Pet 等宽的气泡轮播实时输出和状态短句，无任务活动时 10 秒后自动隐藏； - 角色下方用横条显示聚焦会话并以亮边标记，正在执行的会话向下排列，超过三个时自动层叠收起； - 多个会话并行执行时进入“忙疯了”状态； - 根据分析、回答、编码、网络搜索、子 Agent、完成和失败等场景切换表情； - 工具等待批准时，可直接在气泡中允许或拒绝； - 用户问题支持选项、自定义输入、提交和拒绝； - reasoning 中疑问较多时显示困惑或压力表情； - 用户指出回答有误时显示道歉表情； - 上下文达到 62% 时提示“还可以再吃一点”，达到 82% 时显示“吃饱了”； - 图片输入时显示蒙眼状态； - ",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 56,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.781Z"
+    },
+    {
+      "id": "hewzhew/dsh-agent-rp",
+      "type": "cordis-plugin",
+      "name": "dsh-agent-rp",
+      "owner": "hewzhew",
+      "repo": "dsh-agent-rp",
+      "fullName": "hewzhew/dsh-agent-rp",
+      "stars": 56,
+      "forks": 1,
+      "openIssues": 1,
+      "language": "JavaScript",
+      "description": "SillyTavern migration and next-generation Agent RP for DSH",
+      "descriptionZh": null,
+      "tags": [
+        "agent",
+        "dsh",
+        "roleplay",
+        "sillytavern"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "agent",
+        "dsh",
+        "roleplay",
+        "sillytavern"
+      ],
+      "pushedAt": "2026-08-13T16:47:36Z",
+      "createdAt": "2026-08-13T12:49:30Z",
+      "updatedAt": "2026-08-13T16:47:58Z",
+      "readmeSummary": "# DSH Agent RP 把 SillyTavern 角色卡、预设和聊天记录带进 DSH，在原生会话里继续一段角色对话。 这是一个面向下一代 Agent RP 的公开预览版。现在已经可以从角色库选择角色，设置开场和 Persona，并在 DSH 会话中使用角色卡、世界书、预设、轻前端与持久记忆。欢迎带着自己有权使用的卡片来体验，也欢迎一起补全不同卡片生态的兼容性。 ## 现在可以体验什么 - 导入 Character Card V1/V2/V3：PNG、JSON 与 CHARX。 - 保存角色到可视化角色库，收起或恢复角色，不影响已有对话。 - 选择默认或备选开场，并为玩家选择可复用 Persona。 - 导入 SillyTavern JSONL 聊天记录，或与对应角色卡一起迁移。 - 使用角色世界书、独立 World Info、SillyTavern Chat Completion 预设。 - 运行角色自带的显示正则、轻量 HTML 界面与 MVU 状态。 - 重写、续写和切换回复版本，并保留明确的长期记忆。 - 在沉浸视图与调试视图之间切换，检查实际生效的提示内容。 角色本身就",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 68,
+        "breakdown": {
+          "maintain": 99,
+          "practical": 70,
+          "popularity": 30,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.782Z"
+    },
+    {
+      "id": "happyren/dsh-agent-messaging",
+      "type": "cordis-plugin",
+      "name": "dsh-agent-messaging",
+      "owner": "happyren",
+      "repo": "dsh-agent-messaging",
+      "fullName": "happyren/dsh-agent-messaging",
+      "stars": 4,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Cross-session agent-to-agent messaging for DeepSeek Harness — address another session by name and deliver a message into its inbox.",
+      "descriptionZh": null,
+      "tags": [
+        "agent-communication",
+        "ai-agents",
+        "cordis",
+        "cross-session-messaging",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "multi-agent",
+        "plugin",
+        "typescript"
+      ],
+      "curated": false,
+      "homepage": "https://github.com/topics/dsh-plugin",
+      "license": "MIT",
+      "topics": [
+        "agent-communication",
+        "ai-agents",
+        "cordis",
+        "cross-session-messaging",
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "multi-agent",
+        "plugin",
+        "typescript"
+      ],
+      "pushedAt": "2026-08-13T16:38:15Z",
+      "createdAt": "2026-08-13T15:02:34Z",
+      "updatedAt": "2026-08-13T16:41:41Z",
+      "readmeSummary": "<p align=\"center\"> <img src=\"docs/media/social-card.png\" width=\"900\" alt=\"dsh-agent-messaging — the payments-api session sends a steer to the checkout-client session, carrying &quot;tenant_id is now required&quot;. Delivery modes: steer interrupts, followup opens a new turn, context does not wake.\"> </p> <p align=\"center\"> <a href=\"https://github.com/happyren/dsh-agent-messaging/releases/tag/v0.0.1\"><img src=\"https://img.shields.io/github/v/release/happyren/dsh-agent-messaging?color=5B7CFF&label",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 58,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 10,
+          "ease": 80,
+          "signal": 100
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.783Z"
+    },
+    {
+      "id": "opensetk/dsh-xiaohei",
+      "type": "cordis-plugin",
+      "name": "dsh-xiaohei",
+      "owner": "opensetk",
+      "repo": "dsh-xiaohei",
+      "fullName": "opensetk/dsh-xiaohei",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "dsh的罗小黑插件",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T16:47:27Z",
+      "createdAt": "2026-08-13T15:16:42Z",
+      "updatedAt": "2026-08-13T16:47:52Z",
+      "readmeSummary": "# dsh-pet 🐾 一颗住在 **DSH Web UI** 右下角的桌面宠物：跟随 agent 的运行状态实时切换姿态， 点击还能获得俏皮反馈。是一个完整的 **Host + 浏览器双半** Web UI 插件示例， 所有 API 均按 DSH `0.1.0-rc.6` 实测验证。 - 宿主半（Node）：监听持久化 `session/event`，折叠出每会话的宠物姿态 - 浏览器半（`dsh.client` bundle）：注册进 `shell.overlay` 全局浮层槽位，渲染宠物形象 - 姿态状态机是纯函数（`src/moods.ts`），可回放重建，与实时事件流同一套逻辑 --- ## 效果预览 <p align=\"center\"> <img src=\"docs/screenshots/QQ_1786634277517.png\" alt=\"dsh-pet 效果截图 1\" width=\"70%\"> </p> <p align=\"center\"> <img src=\"docs/screenshots/QQ_1786634322842.png\" alt=\"dsh-pet 效",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 57,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 8,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.784Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-tool-csv",
+      "type": "cordis-plugin",
+      "name": "dsh-tool-csv",
+      "owner": "omdsh-dev",
+      "repo": "dsh-tool-csv",
+      "fullName": "omdsh-dev/dsh-tool-csv",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "DSH CSV 数据工具插件：解析/查询/统计/转换 CSV 文本（RFC 4180），零依赖状态机解析器，注册 csv 工具",
+      "descriptionZh": null,
+      "tags": [
+        "csv",
+        "data-parsing",
+        "dsh",
+        "dsh-plugin",
+        "rfc4180"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "csv",
+        "data-parsing",
+        "dsh",
+        "dsh-plugin",
+        "rfc4180"
+      ],
+      "pushedAt": "2026-08-13T13:48:34Z",
+      "createdAt": "2026-08-07T15:24:27Z",
+      "updatedAt": "2026-08-13T16:41:46Z",
+      "readmeSummary": "# dsh-tool-csv [English](README.en.md) DSH CSV 数据工具插件 —— 解析、查询、过滤、统计和转换 CSV 文本。零依赖、纯函数、RFC 4180 状态机解析器。 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) ## 动机 Agent 会话里表格形态的数据（导出文件、API 响应、报告片段）出现频率很高。现有路径是起 `bash` 进程让模型现写解析脚本： 1. **每次调用都起进程**——Windows 上尤其昂贵 2. **模型手写 CSV 解析器错误率高**——引号内逗号、`\"\"` 转义、BOM、跨行字段、CRLF 这些边界手写代码极易踩坑，且结果不可验证 本插件提供确定性、零依赖、纯函数的 CSV 处理：一次函数调用，毫秒级返回结构化 JSON。 与 `dsh-tool-json` 形成\"结构化数据处理\"对：JSON 管对象，CSV 管表格。 ## 安全模型 - **零依赖**：不引入 csv 解析库，手写状态机（单遍扫描，O(n)） -",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 55,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 8,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.784Z"
+    },
+    {
+      "id": "titanwings/dsh-better-browser",
+      "type": "cordis-plugin",
+      "name": "dsh-better-browser",
+      "owner": "titanwings",
+      "repo": "dsh-better-browser",
+      "fullName": "titanwings/dsh-better-browser",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "DSH 真实浏览器插件：通过 Kimi WebBridge 让 Agent 操作用户已登录的浏览器，并提供 13 个 webbridge_* 工具。 / Let DSH Agents use your signed-in browser through thirteen Kimi WebBridge tools.",
+      "descriptionZh": null,
+      "tags": [
+        "automation",
+        "browser",
+        "deepseek-harness",
+        "dsh",
+        "dsh-bundle",
+        "dsh-plugin",
+        "kimi-webbridge",
+        "tool"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "automation",
+        "browser",
+        "deepseek-harness",
+        "dsh",
+        "dsh-bundle",
+        "dsh-plugin",
+        "kimi-webbridge",
+        "tool"
+      ],
+      "pushedAt": "2026-08-13T16:18:43Z",
+      "createdAt": "2026-08-13T13:59:53Z",
+      "updatedAt": "2026-08-13T16:41:45Z",
+      "readmeSummary": "<div align=\"center\"> # 🌐 dsh-better-browser ### *让 Agent 使用你已经登录的真实浏览器。* [![DeepSeek Harness](https://img.shields.io/badge/DeepSeek%20Harness-plugin-4D6BFE)](https://github.com/deepseek-ai) [![Version](https://img.shields.io/badge/version-0.3.6-4D6BFE)](package.json) [![Node.js](https://img.shields.io/badge/Node.js-22.19%2B-4D6BFE)](package.json) [![License](https://img.shields.io/badge/license-BSD--3--Clause-4D6BFE)](LICENSE) [![GitHub stars](https://img.shields.io/github/stars/titanwings/dsh-",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 55,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 8,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.784Z"
+    },
+    {
+      "id": "fuhefei/dsh-sentinel",
+      "type": "cordis-plugin",
+      "name": "dsh-sentinel",
+      "owner": "fuhefei",
+      "repo": "dsh-sentinel",
+      "fullName": "fuhefei/dsh-sentinel",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 1,
+      "language": "TypeScript",
+      "description": "Condition-driven wakeup for DeepSeek Harness: durable file/command/http/process/webhook watches that wake the agent, with dock, sidebar branch, and a global dashboard.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "BSD-3-Clause",
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T15:06:22Z",
+      "createdAt": "2026-08-13T13:01:21Z",
+      "updatedAt": "2026-08-13T16:42:01Z",
+      "readmeSummary": "# dsh-sentinel Condition-driven wakeup for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness): the agent registers a watch, goes to sleep — even closes the session — and the sentinel wakes it when the condition happens. Every subscription and every fire is a user-visible session event, and the browser dock shows what is on duty. ![Sentinel dock panel, expanded](docs/preview/sentinel-panel.png) ## How it works The node half owns one server-lifetime runtime that folds a plugin-own",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 51,
+        "breakdown": {
+          "maintain": 75,
+          "practical": 80,
+          "popularity": 8,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.785Z"
+    },
+    {
+      "id": "forrestchang/dsh-multica-runtime",
+      "type": "cordis-plugin",
+      "name": "dsh-multica-runtime",
+      "owner": "forrestchang",
+      "repo": "dsh-multica-runtime",
+      "fullName": "forrestchang/dsh-multica-runtime",
+      "stars": 3,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "TypeScript",
+      "description": "Support dsh runtime on Multica.",
+      "descriptionZh": null,
+      "tags": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": "",
+      "license": null,
+      "topics": [
+        "dsh",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T14:50:10Z",
+      "createdAt": "2026-08-11T14:37:15Z",
+      "updatedAt": "2026-08-13T16:45:06Z",
+      "readmeSummary": "# Multica DSH Runtime Private, out-of-tree runtime bridge between Multica and the public [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It exposes a versioned JSONL protocol over stdio and composes over `@deepseek-ai/dsh-base`. It does not require changes to DeepSeek Harness. ![DeepSeek Harness runtime online in Multica](docs/images/multica-dsh-runtime.png) ## Privacy - This repository contains only the Multica integration layer. It does not vendor or redistribute DeepSeek ",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": true
+      },
+      "score": {
+        "total": 37,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 8,
+          "ease": 45,
+          "signal": 65
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:13.786Z"
+    },
+    {
+      "id": "omdsh-dev/dsh-hub",
+      "type": "cordis-plugin",
+      "name": "dsh-hub",
+      "owner": "omdsh-dev",
+      "repo": "dsh-hub",
+      "fullName": "omdsh-dev/dsh-hub",
+      "stars": 2,
+      "forks": 0,
+      "openIssues": 0,
+      "language": "JavaScript",
+      "description": "",
+      "descriptionZh": null,
+      "tags": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "nodejs",
+        "plugin-manager",
+        "plugin-marketplace",
+        "registry"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "deepseek-harness",
+        "dsh",
+        "dsh-plugin",
+        "nodejs",
+        "plugin-manager",
+        "plugin-marketplace",
+        "registry"
+      ],
+      "pushedAt": "2026-08-13T13:18:23Z",
+      "createdAt": "2026-08-13T13:00:47Z",
+      "updatedAt": "2026-08-13T16:42:40Z",
+      "readmeSummary": "# OMDSH Hub OMDSH Hub is a community extension catalog and Profile generation manager for DeepSeek Harness. It reuses the Harness Profile, Bundle, Repository Plugin, Agent Preset, layered Skill registry, Cordis lifecycle, and configuration contracts while adding transactional installation, recovery, catalog browsing, and a settings UI. This release candidate is checked against the newest packages currently published on the npm `next` channel (queried 2026-08-13): Cordis `4.0.1-rc.4` and the DSH ",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": 40,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 7,
+          "ease": 80,
+          "signal": 70
+        },
+        "confidence": 0.75,
+        "explanation": "近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:15.333Z"
+    },
+    {
+      "id": "whitelonng/dshcode",
+      "type": "cordis-plugin",
+      "name": "dshcode",
+      "owner": "whitelonng",
+      "repo": "dshcode",
+      "fullName": "whitelonng/dshcode",
+      "stars": 4,
+      "forks": 0,
+      "openIssues": 11,
+      "language": "TypeScript",
+      "description": "Community desktop companion for DeepSeek Harness — one-click Electron app for macOS and Windows",
+      "descriptionZh": null,
+      "tags": [
+        "deepseekharness-plugin",
+        "dsh-plugin"
+      ],
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "topics": [
+        "deepseekharness-plugin",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-08-13T16:30:52Z",
+      "createdAt": "2026-08-13T13:23:11Z",
+      "updatedAt": "2026-08-13T16:41:31Z",
+      "readmeSummary": "# DSHCode English | [中文](README.zh.md) DSHCode is a community-maintained Electron desktop companion for the official open-source [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) project. It packages the upstream Web UI and plugin runtime as a one-click macOS and Windows application, so installed users do not need Node.js or a CLI. <p align=\"center\"><img src=\"apps/desktop/assets/icon.svg\" alt=\"DSHCode application icon\" width=\"180\"></p> <p align=\"center\"><img src=\"assets/readme/",
+      "install": {
+        "method": "pnpm-profile",
+        "needsConfig": false
+      },
+      "score": {
+        "total": null,
+        "breakdown": {
+          "maintain": null,
+          "practical": 80,
+          "popularity": 10,
+          "ease": 100,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用；项目信息完整（license/文档/主题齐全）。"
+      },
+      "sources": [
+        "topic"
+      ],
+      "lastCheckedAt": "2026-08-13T16:59:15.340Z"
+    }
+  ]
+}
