@@ -6,7 +6,7 @@
  * 输出：data/plugins.json（市场数据）、data/report.json（统计报告）
  */
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { DshPlugin, MarketData } from "@dsh-market/schema";
@@ -24,6 +24,7 @@ import { detectPlugin, isCordisPackageJson, detectNeedsConfig } from "./detect.j
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached } from "./cache.js";
 import { runPool } from "./pool.js";
+import { translateWithDeepSeek } from "./llm.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, "../../data");
@@ -47,6 +48,22 @@ interface Detected {
   repo: GithubRepo;
   readmeContent: string | null;
   hasSkillMd: boolean;
+}
+
+/** 读取上次生成的中文数据（增量：只翻译缺失的插件） */
+function loadPreviousZh(): Map<string, { descriptionZh: string | null; tagsZh: string[] }> {
+  try {
+    const raw = readFileSync(join(DATA_DIR, "plugins.json"), "utf-8");
+    const prev = JSON.parse(raw) as MarketData;
+    return new Map(
+      prev.plugins.map((p) => [
+        p.id,
+        { descriptionZh: p.descriptionZh ?? null, tagsZh: (p.tags ?? []).filter((t) => /[\u4e00-\u9fff]/.test(t)) },
+      ])
+    );
+  } catch {
+    return new Map();
+  }
 }
 
 async function main() {
@@ -284,6 +301,59 @@ async function main() {
     );
   }
   console.log(`  p99 stars = ${p99}`);
+
+  console.log("[3.5/5] 中文化（DeepSeek 增量翻译）...");
+  const prevZh = loadPreviousZh();
+  let translated = 0;
+  let skipped = 0;
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  const baseURL = process.env.DEEPSEEK_API_BASE ?? "https://api.deepseek.com";
+  const model = process.env.DEEPSEEK_MODEL ?? "deepseek-chat";
+
+  if (apiKey) {
+    const pending = detected.filter((d) => {
+      const prev = prevZh.get(d.plugin.id);
+      if (d.plugin.descriptionZh) return false; // 本次已有
+      if (prev?.descriptionZh) {
+        // 复用上次结果
+        d.plugin.descriptionZh = prev.descriptionZh;
+        for (const t of prev.tagsZh) {
+          if (!d.plugin.tags.includes(t)) d.plugin.tags.push(t);
+        }
+        skipped++;
+        return false;
+      }
+      return true;
+    });
+    console.log(`  pending translate: ${pending.length}, reused: ${skipped}`);
+
+    await runPool(
+      pending,
+      async (d) => {
+        const result = await translateWithDeepSeek(
+          {
+            name: d.plugin.name,
+            description: d.plugin.description,
+            readmeSummary: d.plugin.readmeSummary,
+            topics: d.plugin.topics,
+          },
+          { apiKey, baseURL, model }
+        );
+        if (result) {
+          d.plugin.descriptionZh = result.descriptionZh;
+          for (const t of result.tagsZh) {
+            if (!d.plugin.tags.includes(t)) d.plugin.tags.push(t);
+          }
+          translated++;
+          console.log(`    ✓ ${d.plugin.id} -> ${result.descriptionZh.slice(0, 40)}`);
+        }
+      },
+      5 // LLM 并发保守
+    );
+    console.log(`  translated: ${translated}, failed: ${pending.length - translated}`);
+  } else {
+    console.log("  未配置 DEEPSEEK_API_KEY，跳过中文化（仅保留英文）");
+  }
 
   console.log("[4/5] 生成数据文件...");
   const market: MarketData = {

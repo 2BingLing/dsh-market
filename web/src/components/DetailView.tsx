@@ -59,7 +59,7 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
             {favorite ? "★ 已收藏" : "☆ 收藏"}
           </button>
         </div>
-        <p className="detail-desc">{plugin.description}</p>
+        <p className="detail-desc">{plugin.descriptionZh || plugin.description}</p>
         <div className="tags">
           {plugin.tags.map((t) => (
             <span className="tag-mini" key={t}>{t}</span>

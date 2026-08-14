@@ -46,7 +46,7 @@ export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen 
         </span>
       </div>
       <h4>{plugin.name}</h4>
-      <div className="desc">{plugin.description}</div>
+      <div className="desc">{plugin.descriptionZh || plugin.description}</div>
       <div className="tags">
         {plugin.tags.slice(0, 3).map((t) => (
           <span className="tag-mini" key={t}>{t}</span>

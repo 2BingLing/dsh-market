@@ -224,7 +224,7 @@ export default function App() {
             <div className="feature-card" onClick={() => openDetail(weeklyPick)}>
               <div className="tag">WEEKLY PICK · 本周精选</div>
               <h3>{weeklyPick.name}</h3>
-              <p>{(weeklyPick.description || "").slice(0, 70)}…</p>
+              <p>{(weeklyPick.descriptionZh || weeklyPick.description || "").slice(0, 70)}…</p>
               <div className="score-line">
                 <span className="score-big">{weeklyPick.score.total}</span>
                 <span className="score-total">实用分 / 100<br />本周最佳</span>
