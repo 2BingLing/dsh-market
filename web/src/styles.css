@@ -67,12 +67,13 @@ body::before {
 .nav-links a { font-size: 13px; color: var(--ds-text); text-decoration: none; transition: color 0.2s; cursor: pointer; }
 .nav-links a:hover { color: var(--ds-blue-700); }
 .nav-links a.on { color: var(--ds-blue-700); font-weight: 500; }
-.nav-cta {
-  font-size: 13px; color: #fff; background: var(--ds-blue-700);
+/* 优先级必须高于 .nav-links a，否则白字被覆盖成深灰看不清 */
+.nav-links a.nav-cta {
+  font-size: 13px; color: #fff !important; background: var(--ds-blue-700);
   padding: 8px 18px; border-radius: 10px; text-decoration: none;
   box-shadow: 0 6px 16px rgba(40, 100, 169, 0.28); transition: background 0.2s; cursor: pointer;
 }
-.nav-cta:hover { background: var(--ds-blue-800); }
+.nav-links a.nav-cta:hover { background: var(--ds-blue-800); color: #fff !important; }
 
 /* ---------- Hero ---------- */
 .hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; padding: 44px 0 30px; }
