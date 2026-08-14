@@ -17,8 +17,16 @@ import { matchesTags } from "./lib/tags";
 type SortKey = "score" | "stars" | "newest";
 type View = "home" | "detail" | "guide" | "quiz";
 type NavKey = "market" | "favorites";
+type SectionKey = "all" | "elite" | "friendly" | "fresh";
 
 const SORT_LABEL: Record<SortKey, string> = { score: "实用分", stars: "热度", newest: "最新" };
+const SECTION_LABEL: Record<SectionKey, string> = {
+  all: "全部插件",
+  elite: "高分精选",
+  friendly: "新手友好",
+  fresh: "最新上架",
+};
+const FRESH_COUNT = 24;
 const FAV_KEY = "dsh-market:favorites";
 
 function loadFavorites(): string[] {
@@ -40,6 +48,8 @@ export default function App() {
   const [view, setView] = useState<View>("home");
   const [selected, setSelected] = useState<DshPlugin | null>(null);
   const [favorites, setFavorites] = useState<string[]>(loadFavorites);
+  // 分区（小按钮 Tab）
+  const [section, setSection] = useState<SectionKey>("all");
   // 多维筛选
   const [fType, setFType] = useState<TypeFilter>("");
   const [fScore, setFScore] = useState<ScoreRange>("");
@@ -103,10 +113,18 @@ export default function App() {
 
   const hasActiveFilter = Boolean(query.trim() || tags.length || fType || fScore || fConfig || fStars);
 
+  // 分区候选集
+  const sectionList = useMemo((): DshPlugin[] => {
+    if (section === "elite") return plugins.filter((p) => p.score.total >= 80);
+    if (section === "friendly") return plugins.filter((p) => p.score.total >= 60 && !p.install.needsConfig);
+    if (section === "fresh") return [...plugins].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, FRESH_COUNT);
+    return plugins;
+  }, [plugins, section]);
+
   const visible = useMemo(() => {
     let list = query.trim()
       ? fuse.search(query.trim()).map((r) => r.item)
-      : [...plugins];
+      : [...sectionList];
     if (nav === "favorites") list = list.filter((p) => favorites.includes(p.id));
     // 标签多选 AND
     if (tags.length) list = list.filter((p) => matchesTags(p, tags));
@@ -126,17 +144,7 @@ export default function App() {
     else if (sort === "stars") list.sort((a, b) => b.stars - a.stars);
     else list.sort((a, b) => b.pushedAt.localeCompare(a.pushedAt));
     return list;
-  }, [plugins, fuse, query, tags, nav, favorites, fType, fScore, fConfig, fStars, sort]);
-
-  // 推荐分区数据
-  const sections = useMemo(() => {
-    const byScore = (list: DshPlugin[]) => [...list].sort((a, b) => b.score.total - a.score.total);
-    return {
-      elite: byScore(plugins.filter((p) => p.score.total >= 80)).slice(0, 4),
-      friendly: byScore(plugins.filter((p) => p.score.total >= 60 && !p.install.needsConfig)).slice(0, 4),
-      fresh: [...plugins].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 4),
-    };
-  }, [plugins]);
+  }, [sectionList, fuse, query, tags, nav, favorites, fType, fScore, fConfig, fStars, sort]);
 
   const weeklyPick = useMemo(
     () => [...plugins].sort((a, b) => b.score.total - a.score.total)[0],
@@ -215,68 +223,33 @@ export default function App() {
     ));
   }
 
-  const Section = ({ title, note, list }: { title: string; note: string; list: DshPlugin[] }) =>
-    list.length > 0 ? (
-      <section className="home-section">
-        <div className="section-head">
-          <h3>{title}</h3>
-          <span className="section-note">{note}</span>
-        </div>
-        <div className="grid">
-          {list.map((p) => (
-            <PluginCard key={p.id} plugin={p} favorite={favorites.includes(p.id)} onToggleFavorite={toggleFavorite} onOpen={openDetail} />
-          ))}
-        </div>
-      </section>
-    ) : null;
-
   return shell(nav === "favorites" ? "favorites" : "market", (
     <>
       {/* Hero + 精选卡（仅市场首页、无筛选时） */}
       {nav === "market" && !hasActiveFilter && (
         <>
-          <section className="hero">
-            <div>
-              <span className="hero-eyebrow">持续收录 · 每日更新</span>
-              <h1>
-                发现<span style={{ letterSpacing: "0.12em" }}>「</span>
-                <strong>实用、便捷</strong>
-                <span style={{ letterSpacing: "0.12em" }}>」</span>
-                <br />的 DSH 插件
-              </h1>
-              <p className="lead">
-                DeepSeek Harness 插件市场，已收录 {plugins.length} 个插件。每日自动扫描 GitHub 生态，用「实用五维评分」帮你判断每个插件值不值得装。
-              </p>
+          {/* 紧凑 Hero 条 */}
+          <section className="hero-compact">
+            <div className="hc-left">
+              <span className="hero-eyebrow">持续收录 · 每日更新 · 已收录 {plugins.length} 个插件</span>
+              <h1>发现「<strong>实用、便捷</strong>」的 DSH 插件</h1>
               <div className="hero-actions">
-                <a className="btn btn-primary" href="#market">浏览插件市场</a>
                 <button className="btn btn-ghost" onClick={openQuiz}>不知道选什么？帮我推荐</button>
               </div>
             </div>
             {weeklyPick && (
-              <div className="feature-card" onClick={() => openDetail(weeklyPick)}>
-                <div className="tag">WEEKLY PICK · 本周精选</div>
-                <h3>{weeklyPick.name}</h3>
-                <p>{(weeklyPick.descriptionZh || weeklyPick.description || "").slice(0, 70)}…</p>
-                <div className="score-line">
-                  <span className="score-big">{weeklyPick.score.total}</span>
-                  <span className="score-total">实用分 / 100<br />本周最佳</span>
-                </div>
-                <div className="meta">
-                  <span>★ {weeklyPick.stars.toLocaleString()} stars</span>
-                  <span>{weeklyPick.type === "skill" ? "SKILL 技能" : "CORDIS 插件"}</span>
-                </div>
+              <div className="pick-mini" onClick={() => openDetail(weeklyPick)}>
+                <span className="pick-mini-tag">WEEKLY PICK</span>
+                <span className="pick-mini-name">{weeklyPick.name}</span>
+                <span className="pick-mini-score">{weeklyPick.score.total}<small> 实用分</small></span>
+                <span className="pick-mini-go">查看 ↗</span>
               </div>
             )}
           </section>
-
-          {/* 推荐分区 */}
-          <Section title="高分精选" note="实用分 80+ · 各维度均衡优秀" list={sections.elite} />
-          <Section title="新手友好" note="实用分 60+ · 开箱即用无需配置" list={sections.friendly} />
-          <Section title="最新上架" note="本周新收录 · 先睹为快" list={sections.fresh} />
         </>
       )}
 
-      {/* 全部插件区 */}
+      {/* 搜索区 */}
       <div className="search-zone" id="market">
         <form className="search-row" onSubmit={(e) => e.preventDefault()}>
           <div className="search-box">
@@ -310,16 +283,29 @@ export default function App() {
         />
       </div>
 
-      {/* 排序 + 网格 */}
-      <div className="tabs">
-        {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
-          <button key={k} className={`tab ${sort === k ? "on" : ""}`} onClick={() => setSort(k)}>
-            {SORT_LABEL[k]}
-          </button>
-        ))}
-        <span style={{ marginLeft: "auto", fontSize: 12, color: "#8CA3BB", alignSelf: "center" }}>
-          {nav === "favorites" ? `收藏 ${visible.length} / ${favorites.length}` : `共 ${visible.length} 个插件`}
-        </span>
+      {/* 分区小按钮 + 排序 */}
+      <div className="toolbar-row">
+        <div className="section-pills">
+          {(Object.keys(SECTION_LABEL) as SectionKey[]).map((k) => (
+            <button
+              key={k}
+              className={`pill-btn ${section === k ? "on" : ""}`}
+              onClick={() => setSection(k)}
+            >
+              {SECTION_LABEL[k]}
+            </button>
+          ))}
+        </div>
+        <div className="tabs">
+          {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
+            <button key={k} className={`tab ${sort === k ? "on" : ""}`} onClick={() => setSort(k)}>
+              {SORT_LABEL[k]}
+            </button>
+          ))}
+          <span className="tab-count">
+            {nav === "favorites" ? `收藏 ${visible.length} / ${favorites.length}` : `共 ${visible.length} 个插件`}
+          </span>
+        </div>
       </div>
 
       {loading ? (

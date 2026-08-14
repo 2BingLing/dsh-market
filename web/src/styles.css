@@ -346,18 +346,65 @@ body::before {
   .rank-item { grid-template-columns: 70px 70px 1fr; }
 }
 
+/* ---------- 紧凑 Hero 条 ---------- */
+.hero-compact {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 26px 0 8px; flex-wrap: wrap;
+}
+.hc-left h1 {
+  font-size: 24px; font-weight: 400; letter-spacing: 0.06em; color: var(--ds-title);
+  margin: 10px 0 12px;
+}
+.hc-left h1 strong { font-weight: 600; color: var(--ds-blue-800); }
+.hero-actions { display: flex; gap: 12px; }
+.pick-mini {
+  display: flex; align-items: center; gap: 14px; cursor: pointer;
+  background: linear-gradient(150deg, var(--ds-blue-800) 0%, var(--ds-blue-900) 68%);
+  color: #fff; border-radius: 14px; padding: 14px 22px;
+  box-shadow: 0 12px 30px rgba(23, 63, 115, 0.28); transition: transform 0.2s;
+  flex: none; max-width: 460px;
+}
+.pick-mini:hover { transform: translateY(-2px); }
+.pick-mini-tag {
+  font-size: 10px; letter-spacing: 0.16em; color: var(--ds-blue-300);
+  border: 1px solid rgba(191, 213, 240, 0.4); border-radius: 999px; padding: 3px 9px; flex: none;
+}
+.pick-mini-name { font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pick-mini-score { font-size: 20px; font-weight: 600; flex: none; }
+.pick-mini-score small { font-size: 10px; color: rgba(255, 255, 255, 0.55); font-weight: 400; }
+.pick-mini-go { font-size: 11px; color: var(--ds-blue-300); flex: none; }
+
+/* ---------- 分区小按钮 + 排序行 ---------- */
+.toolbar-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin-bottom: 18px; flex-wrap: wrap;
+}
+.section-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill-btn {
+  font-size: 12.5px; color: var(--ds-text); background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--ds-line); border-radius: 9px; padding: 7px 16px; cursor: pointer;
+  font-family: inherit; transition: all 0.18s;
+}
+.pill-btn:hover { border-color: var(--ds-blue-500); color: var(--ds-blue-700); }
+.pill-btn.on {
+  background: var(--ds-blue-700); border-color: var(--ds-blue-700); color: #fff;
+  box-shadow: 0 6px 14px rgba(40, 100, 169, 0.25); font-weight: 500;
+}
+.tabs { display: flex; gap: 6px; margin-bottom: 0; align-items: center; }
+.tab-count { margin-left: 10px; font-size: 12px; color: var(--ds-weak); white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .toolbar-row { flex-direction: column; align-items: flex-start; }
+  .hero-compact { flex-direction: column; align-items: flex-start; }
+  .pick-mini { max-width: 100%; }
+}
+
 /* ---------- 页脚 ---------- */
 .footer {
   border-top: 1px solid rgba(211, 224, 238, 0.6); padding: 26px 0 34px;
   display: flex; justify-content: space-between; font-size: 12px; color: var(--ds-weak);
 }
 .footer a { color: var(--ds-blue-600); text-decoration: none; cursor: pointer; }
-
-/* ---------- 推荐分区 ---------- */
-.home-section { margin: 26px 0 10px; }
-.section-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
-.section-head h3 { font-size: 17px; font-weight: 600; color: var(--ds-title); letter-spacing: 0.02em; }
-.section-note { font-size: 12px; color: var(--ds-weak); }
 
 /* ---------- 标签面板 ---------- */
 .tag-panel { margin-top: 16px; }
