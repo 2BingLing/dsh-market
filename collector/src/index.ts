@@ -25,6 +25,7 @@ import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached } from "./cache.js";
 import { runPool } from "./pool.js";
 import { translateWithDeepSeek } from "./llm.js";
+import { parseInstallCommands } from "./install-parse.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, "../../data");
@@ -226,6 +227,12 @@ async function main() {
           ? summarizeReadme(skillMd)
           : null;
 
+      // 解析 README 真实安装命令（精确命令优先于类型模板）
+      const installParsed = parseInstallCommands(readmeContent);
+      const installCommands =
+        installParsed.commands.length > 0 ? installParsed.commands : undefined;
+      const installMethod = detection.installMethod!;
+
       const plugin: DshPlugin = {
         id: repo!.full_name,
         type: detection.type!,
@@ -249,9 +256,11 @@ async function main() {
         updatedAt: repo!.updated_at,
         readmeSummary,
         install: {
-          method: detection.installMethod!,
+          method: installMethod,
           target: detection.type === "skill" ? "~/.agents/skills" : undefined,
           needsConfig,
+          commands: installCommands,
+          commandSource: installParsed.source === "template" ? undefined : installParsed.source,
         },
         score: undefined as unknown as DshPlugin["score"],
         sources: candidate.sources,

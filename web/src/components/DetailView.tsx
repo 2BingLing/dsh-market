@@ -33,8 +33,11 @@ interface Props {
   onBack: () => void;
 }
 
-/** 生成具体安装命令（按插件类型） */
+/** 生成具体安装命令：README 解析出的真实命令优先，类型模板兜底 */
 export function buildInstallCommand(p: DshPlugin): string {
+  if (p.install.commands && p.install.commands.length > 0) {
+    return p.install.commands[0];
+  }
   const repoUrl = `https://github.com/${p.fullName}`;
   if (p.install.method === "skills-add") {
     return `git clone ${repoUrl}.git ~/.agents/skills/${p.repo}`;

@@ -112,8 +112,14 @@ export function isCordisPackageJson(content: string | null): boolean {
 
 /** 检测 README/SKILL 内容中的"需要配置"信号（具体环境变量名） */
 const CONFIG_KEY_RE =
-  /(?:^|[^A-Za-z])(GITHUB_TOKEN|GH_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|DEEPSEEK_API_KEY|LLM_API_KEY|API_KEY|CLAUDE_API_KEY|AZURE_OPENAI|AWS_ACCESS_KEY|STRIPE_API_KEY)(?:[^A-Za-z]|$)/i;
+  /(?:^|[^A-Za-z])(GITHUB_TOKEN|GH_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|DEEPSEEK_API_KEY|LLM_API_KEY|API_KEY|CLAUDE_API_KEY|AZURE_OPENAI|AWS_ACCESS_KEY|STRIPE_API_KEY|WEBHOOK_SECRET|SESSION_KEY)(?:[^A-Za-z]|$)/i;
+
+/** 否定语境（"不需要 API key"等）——命中则先摘除，避免误报 */
+const NEGATION_RE =
+  /(?:不需要|无需|不用|免[^。；\n]{0,10}(?:配置|token|key)|no (?:api ?key|token|config|setup|configuration)|without (?:any )?(?:api ?key|token|config)|no configuration required|zero-?config|works (?:out of the box|without))/i;
 
 export function detectNeedsConfig(readmeContent: string | null): boolean {
-  return readmeContent !== null && CONFIG_KEY_RE.test(readmeContent);
+  if (!readmeContent) return false;
+  const text = readmeContent.replace(NEGATION_RE, " ");
+  return CONFIG_KEY_RE.test(text);
 }

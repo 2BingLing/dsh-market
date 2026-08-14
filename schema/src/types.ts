@@ -42,6 +42,10 @@ export interface InstallInfo {
   target?: string;
   /** 是否需要 token / API key 等额外配置 */
   needsConfig: boolean;
+  /** 从 README 安装章节解析出的真实安装命令（精确命令优先于模板） */
+  commands?: string[];
+  /** 命令来源（README 安装章节 / 模板兜底） */
+  commandSource?: string;
 }
 
 export interface DshPlugin {
