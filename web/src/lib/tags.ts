@@ -18,10 +18,14 @@ export interface TagStat {
   count: number;
 }
 
-/** 聚合所有插件的细分中文标签（过滤宽泛标签） */
-export function aggregateTags(plugins: DshPlugin[]): TagStat[] {
+/** 聚合所有插件的细分中文标签（过滤宽泛标签）
+ * activeDays > 0 时只统计最近 N 天有更新的插件（生态动态适应：老标签自动淡出，新标签自动浮现） */
+export function aggregateTags(plugins: DshPlugin[], opts?: { activeDays?: number }): TagStat[] {
+  const activeDays = opts?.activeDays ?? 0; // 默认不过滤（当前生态几乎全部活跃）
+  const cutoff = activeDays > 0 ? Date.now() - activeDays * 86_400_000 : 0;
   const counts = new Map<string, number>();
   for (const p of plugins) {
+    if (cutoff > 0 && new Date(p.pushedAt).getTime() < cutoff) continue;
     for (const t of p.tags) {
       if (!/[\u4e00-\u9fff]/.test(t)) continue; // 只收中文功能标签
       if (GENERIC_TAGS.has(t)) continue;

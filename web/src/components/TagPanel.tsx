@@ -19,12 +19,14 @@ export default function TagPanel({ plugins, selected, onToggle }: Props) {
 
   const all = useMemo(() => aggregateTags(plugins), [plugins]);
   const hot = all.slice(0, HOT_COUNT);
+  // 面板只展示 count>=2 的标签（单插件标签无筛选价值，用搜索框找）；搜索时不过滤
+  const panelTags = useMemo(() => all.filter((t) => t.count >= 2), [all]);
 
   const visible = useMemo(() => {
-    if (!tagQuery.trim()) return all.slice(0, PANEL_COUNT);
+    if (!tagQuery.trim()) return panelTags.slice(0, PANEL_COUNT);
     const q = tagQuery.trim().toLowerCase();
     return all.filter((t) => t.tag.toLowerCase().includes(q)).slice(0, 30);
-  }, [all, tagQuery]);
+  }, [all, panelTags, tagQuery]);
 
   const chip = (t: TagStat) => {
     const on = selected.includes(t.tag);

@@ -238,7 +238,7 @@ function veteranGuess(
     plugin: p,
     score: 300 + similarity * 300 + novelty * 100,
     relevance: similarity,
-    reasons: buildGuessReasons(p, profile),
+    reasons: buildGuessReasons(p),
     origin: "guess",
   }));
 }
@@ -251,21 +251,12 @@ function tagSimilarity(a: string[], b: string[]): number {
   return inter / new Set([...a, ...b]).size;
 }
 
-/** 理由：基于画像的规则生成 */
-function buildGuessReasons(p: DshPlugin, profile: UserProfile): string[] {
+/** 理由：基于画像的规则生成（短理由，避免拉长卡片） */
+function buildGuessReasons(p: DshPlugin): string[] {
   const reasons: string[] = [];
-  const pTags = usableTags(p);
-  const hitTags = pTags.filter((t) => profile.tags[t] != null);
-  if (hitTags.length) {
-    const top = [...hitTags]
-      .sort((a, b) => (profile.tags[b] ?? 0) - (profile.tags[a] ?? 0))
-      .slice(0, 3);
-    reasons.push(`与你关注的「${top.join("」「")}」相关`);
-  }
   const recent = Date.now() - new Date(p.pushedAt).getTime() <= NOVEL_DAYS * 86400000;
   if (recent) reasons.push("近 30 天更新活跃");
-  if (!p.install.needsConfig) reasons.push("开箱即用，无需额外配置");
-  reasons.push(`实用分 ${p.score.total}`);
+  if (!p.install.needsConfig) reasons.push("开箱即用");
   return reasons;
 }
 

@@ -43,8 +43,55 @@ window.__ModuleLoader__.load({
 			setOpen(!panelOpen);
 		}
 		//#endregion
+		//#region src/client/logo.tsx
+		/**
+		* DSH Market 插件端 Logo（方向 A：纯黑剪影 + 眼睛镂空点，适配侧边栏）
+		* - 单色剪影：fill 用 currentColor（由使用处设置颜色）
+		* - 眼睛点：fill 用背景色（eyeColor，默认侧边栏背景 token），形成镂空感
+		* - 深色/浅色底自适应：使用处控制 color 与 eyeColor
+		*/
+		function MarketLogo(props) {
+			const { size = 22, color = "currentColor", eyeColor = "var(--dsw-specific-sidebar-fill, #EDEDF0)" } = props;
+			return (0, react.createElement)("svg", {
+				width: size,
+				height: size,
+				viewBox: "0 0 120 120",
+				"aria-label": "DSH Market",
+				style: { display: "block" }
+			}, (0, react.createElement)("g", { transform: "translate(60 62) scale(1.35) translate(-60 -62)" }, (0, react.createElement)("path", {
+				d: "M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z",
+				fill: color
+			}), (0, react.createElement)("path", {
+				d: "M83 62 C87 57 93 55 97 56 C94 59 91 61 88 62 C91 65 91 69 88 70 C90 66 87 63 83 62 Z",
+				fill: color
+			}), (0, react.createElement)("g", { fill: color }, (0, react.createElement)("path", { d: "M38 42 h44 a6 6 0 0 1 6 6 v8 h-14 a8 8 0 1 0 -16 0 h-20 a6 6 0 0 1 -6 -6 v-2 a6 6 0 0 1 6 -6 z" }), (0, react.createElement)("rect", {
+				x: "38",
+				y: "60",
+				width: "8",
+				height: "14",
+				rx: "4"
+			}), (0, react.createElement)("rect", {
+				x: "50",
+				y: "66",
+				width: "8",
+				height: "18",
+				rx: "4"
+			}), (0, react.createElement)("rect", {
+				x: "62",
+				y: "60",
+				width: "8",
+				height: "14",
+				rx: "4"
+			})), (0, react.createElement)("circle", {
+				cx: "60",
+				cy: "46",
+				r: "2.8",
+				fill: eyeColor
+			})));
+		}
+		//#endregion
 		//#region \0dsh-css:E:\wm\tool\lader\plugin\ui\src\client\styles.module.css.mjs
-		const css = "._LI32q_trigger{height:100%;color:var(--dsw-alias-label-secondary,#5f6670);cursor:pointer;background:0 0;border:none;border-radius:6px;align-items:center;gap:8px;padding:0 10px;font-size:14px;display:flex}._LI32q_trigger:hover{color:var(--dsw-alias-label-primary,#252525);background:var(--dsw-alias-bg-layer-2,#edeef1)}._LI32q_trigger[data-active]{color:var(--dsw-alias-brand-primary,#2864a9)}._LI32q_triggerIcon{font-size:16px;line-height:1}._LI32q_triggerLabel{white-space:nowrap}._LI32q_backdrop{z-index:100;pointer-events:auto;background:#00000040;position:fixed;inset:0}._LI32q_panel{background:var(--dsw-alias-bg-overlay,#fff);border-right:1px solid var(--dsw-alias-border-l1,#e9eaed);pointer-events:auto;width:400px;max-width:92vw;color:var(--dsw-alias-label-primary,#252525);flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,PingFang SC,Noto Sans SC,Microsoft YaHei,Helvetica Neue,Arial,sans-serif;font-size:13px;display:flex;position:fixed;top:0;bottom:0;left:0;box-shadow:8px 0 32px #0000001f}._LI32q_header{border-bottom:1px solid var(--dsw-alias-border-l1,#e9eaed);align-items:center;gap:8px;padding:12px 14px;display:flex}._LI32q_title{font-size:15px;font-weight:600}._LI32q_subtitle{color:var(--dsw-alias-label-secondary,#9299a3);flex:1;font-size:12px}._LI32q_tabs{border-bottom:1px solid var(--dsw-alias-border-l1,#e9eaed);gap:2px;padding:6px 10px 0;display:flex}._LI32q_tab{color:var(--dsw-alias-label-secondary,#5f6670);cursor:pointer;background:0 0;border:none;border-bottom:2px solid #0000;border-radius:6px 6px 0 0;padding:7px 14px;font-size:13px}._LI32q_tab:hover{color:var(--dsw-alias-label-primary,#252525);background:var(--dsw-alias-bg-layer-2,#f7f8fa)}._LI32q_tabOn{color:var(--dsw-alias-brand-primary,#2864a9);border-bottom-color:var(--dsw-alias-brand-primary,#2864a9);font-weight:600}._LI32q_body{flex:1;padding:12px 14px;overflow-y:auto}._LI32q_tabBody{flex-direction:column;gap:14px;display:flex}._LI32q_section{flex-direction:column;gap:8px;display:flex}._LI32q_sectionTitle{color:var(--dsw-alias-label-secondary,#5f6670);margin:4px 0 0;font-size:13px;font-weight:600}._LI32q_stageBadge{background:var(--dsw-alias-bg-layer-2,#eaf2fb);color:var(--dsw-alias-brand-primary,#2864a9);border-radius:999px;align-self:flex-start;padding:3px 10px;font-size:12px}._LI32q_stateHint{text-align:center;color:var(--dsw-alias-label-secondary,#9299a3);padding:24px 12px;font-size:12px}._LI32q_installedNote{color:var(--dsw-alias-label-secondary,#9299a3);font-size:11px}._LI32q_card{background:var(--dsw-alias-bg-layer-1,#fff);border:1px solid var(--dsw-alias-border-l1,#e9eaed);border-radius:10px;flex-direction:column;gap:6px;padding:10px 12px;transition:border-color .15s;display:flex}._LI32q_card:hover{border-color:var(--dsw-alias-border-l2,#d9dde3)}._LI32q_cardHead{align-items:baseline;gap:8px;display:flex}._LI32q_cardName{text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:600;overflow:hidden}._LI32q_cardMeta{color:var(--dsw-alias-label-secondary,#9299a3);white-space:nowrap;flex:1;font-size:11px}._LI32q_cardDesc{color:var(--dsw-alias-label-secondary,#5f6670);-webkit-line-clamp:2;-webkit-box-orient:vertical;margin:0;font-size:12px;line-height:1.5;display:-webkit-box;overflow:hidden}._LI32q_cardTags,._LI32q_cardReasons{flex-wrap:wrap;gap:4px;display:flex}._LI32q_reason{color:var(--dsw-alias-brand-primary,#2864a9);background:var(--dsw-alias-bg-layer-2,#eaf2fb);border-radius:999px;padding:1px 6px;font-size:11px}._LI32q_cardActions{justify-content:flex-end;align-items:center;gap:8px;display:flex}._LI32q_needConfig{color:var(--dsw-alias-state-warn-primary,#b7791f);font-size:11px}._LI32q_btnPrimary{background:var(--dsw-alias-brand-primary,#2864a9);color:#fff;cursor:pointer;border:none;border-radius:6px;padding:4px 14px;font-size:12px;font-weight:600}._LI32q_btnPrimary:hover{opacity:.9}._LI32q_btnPrimary:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnGhost{border:1px solid var(--dsw-alias-border-l2,#d9dde3);color:var(--dsw-alias-label-secondary,#5f6670);cursor:pointer;background:0 0;border-radius:6px;padding:4px 10px;font-size:12px}._LI32q_btnGhost:hover{color:var(--dsw-alias-label-primary,#252525);border-color:var(--dsw-alias-label-secondary,#9299a3)}._LI32q_btnDanger{border:1px solid var(--dsw-alias-state-error-primary,#c0392b);color:var(--dsw-alias-state-error-primary,#c0392b);cursor:pointer;background:0 0;border-radius:6px;padding:4px 10px;font-size:12px}._LI32q_tag{background:var(--dsw-alias-bg-layer-2,#f7f8fa);border:1px solid var(--dsw-alias-border-l1,#e9eaed);color:var(--dsw-alias-label-secondary,#5f6670);cursor:pointer;user-select:none;border-radius:999px;padding:1px 8px;font-size:11px;display:inline-block}._LI32q_tag:hover{color:var(--dsw-alias-brand-primary,#2864a9);border-color:var(--dsw-alias-brand-primary,#2864a9)}._LI32q_tagOn{color:var(--dsw-alias-brand-primary,#2864a9);border-color:var(--dsw-alias-brand-primary,#2864a9);background:var(--dsw-alias-bg-layer-2,#eaf2fb)}._LI32q_input,._LI32q_select{border:1px solid var(--dsw-alias-border-l2,#d9dde3);background:var(--dsw-alias-bg-layer-1,#fff);color:var(--dsw-alias-label-primary,#252525);border-radius:6px;outline:none;padding:5px 9px;font-size:12px}._LI32q_input:focus,._LI32q_select:focus{border-color:var(--dsw-alias-brand-primary,#2864a9)}._LI32q_searchRow{gap:8px;display:flex}._LI32q_searchInput{border:1px solid var(--dsw-alias-border-l2,#d9dde3);background:var(--dsw-alias-bg-layer-1,#fff);color:var(--dsw-alias-label-primary,#252525);border-radius:8px;outline:none;flex:1;padding:7px 11px;font-size:13px}._LI32q_searchInput:focus{border-color:var(--dsw-alias-brand-primary,#2864a9)}._LI32q_searchInput::placeholder{color:var(--dsw-alias-label-secondary,#9299a3)}._LI32q_filterRow{align-items:center;display:flex}._LI32q_tagCloud{flex-wrap:wrap;gap:5px;padding:2px 0;display:flex}._LI32q_results{flex-direction:column;gap:8px;display:flex}._LI32q_resultCount{color:var(--dsw-alias-label-secondary,#9299a3);font-size:11px}._LI32q_installedRow{border:1px solid var(--dsw-alias-border-l1,#e9eaed);background:var(--dsw-alias-bg-layer-1,#fff);border-radius:8px;align-items:center;gap:8px;padding:8px 10px;display:flex}._LI32q_installedInfo{flex:1;min-width:0}._LI32q_installedName{text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:600;overflow:hidden}._LI32q_installedMeta{color:var(--dsw-alias-label-secondary,#9299a3);font-size:11px}._LI32q_installedActions{flex-shrink:0;gap:6px;display:flex}._LI32q_unmatched{flex-wrap:wrap;gap:4px;display:flex}._LI32q_unmatchedChip{background:var(--dsw-alias-bg-layer-2,#f7f8fa);color:var(--dsw-alias-label-secondary,#9299a3);border-radius:999px;padding:1px 7px;font-size:11px}._LI32q_unmatchedMore{color:var(--dsw-alias-label-secondary,#9299a3);align-self:center;font-size:11px}._LI32q_ghCard{border:1px solid var(--dsw-alias-border-l1,#e9eaed);background:var(--dsw-alias-bg-layer-1,#fff);border-radius:10px;flex-direction:column;gap:8px;padding:10px 12px;display:flex}._LI32q_ghRow{align-items:center;gap:8px;display:flex}._LI32q_ghLogin{flex:1;font-weight:600}._LI32q_ghTip{color:var(--dsw-alias-label-secondary,#9299a3);margin:0;font-size:11px;line-height:1.5}._LI32q_deviceFlow{background:var(--dsw-alias-bg-layer-2,#eaf2fb);border-radius:8px;flex-direction:column;gap:6px;padding:8px;display:flex}._LI32q_deviceCode{letter-spacing:2px;color:var(--dsw-alias-brand-primary,#2864a9);font-size:18px;font-weight:700}._LI32q_deviceFlow a{color:var(--dsw-alias-brand-primary,#2864a9)}._LI32q_settingsRow{align-items:center;gap:8px;display:flex}._LI32q_settingsLabel{color:var(--dsw-alias-label-secondary,#5f6670);white-space:nowrap;font-size:12px}._LI32q_error{color:var(--dsw-alias-state-error-primary,#c0392b);margin:0;font-size:12px}._LI32q_warn{color:var(--dsw-alias-state-warn-primary,#b7791f);margin:0;font-size:12px}._LI32q_modalBackdrop{z-index:120;background:#0000004d;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_modal{background:var(--dsw-alias-bg-overlay,#fff);border:1px solid var(--dsw-alias-border-l1,#e9eaed);border-radius:12px;flex-direction:column;width:360px;max-width:90vw;display:flex;overflow:hidden;box-shadow:0 12px 40px #0003}._LI32q_modalHead{border-bottom:1px solid var(--dsw-alias-border-l1,#e9eaed);justify-content:space-between;align-items:center;padding:10px 14px;display:flex}._LI32q_modalTitle{font-size:14px;font-weight:600}._LI32q_modalDesc{color:var(--dsw-alias-label-secondary,#5f6670);margin:0;font-size:12px;line-height:1.6}._LI32q_advanced{margin-top:2px}._LI32q_advanced summary{cursor:pointer;color:var(--dsw-alias-label-secondary,#9299a3);user-select:none;font-size:11px}._LI32q_advancedCmd{background:var(--dsw-alias-bg-layer-2,#f7f8fa);white-space:pre-wrap;word-break:break-all;border-radius:6px;margin-top:6px;padding:6px 8px;font-size:11px;display:block}._LI32q_modalBody{flex-direction:column;gap:10px;padding:14px;display:flex}._LI32q_cmdBox{background:var(--dsw-alias-bg-layer-2,#f7f8fa);border-radius:6px;padding:8px 10px;overflow-x:auto}._LI32q_cmdBox code{white-space:pre-wrap;word-break:break-all;font-size:11px}._LI32q_modalActions{justify-content:flex-end;gap:8px;margin-top:4px;display:flex}._LI32q_loading{text-align:center;color:var(--dsw-alias-label-secondary,#9299a3);padding:20px}._LI32q_modalSuccess{color:var(--dsw-alias-state-success-primary,#2f9e6e);font-weight:600}._LI32q_modalError{color:var(--dsw-alias-state-error-primary,#c0392b);word-break:break-all;font-weight:600}._LI32q_steps{flex-direction:column;gap:4px;display:flex}._LI32q_stepRow{align-items:center;gap:6px;font-size:12px;display:flex}._LI32q_stepLabel{flex:1}._LI32q_stepDetail{color:var(--dsw-alias-label-secondary,#9299a3);font-size:11px}";
+		const css = "*{box-sizing:border-box}._LI32q_trigger{color:#5f6670;cursor:pointer;background:0 0;border:none;border-radius:6px;align-items:center;gap:8px;height:100%;padding:0 12px;font-size:14px;display:flex}._LI32q_trigger:hover{color:#252525;background:#edeef1}._LI32q_trigger[data-active]{color:#4d6bfe;background:#edeef1}._LI32q_triggerIcon{align-items:center;line-height:1;display:flex}._LI32q_triggerLabel{white-space:nowrap}._LI32q_backdrop{z-index:100;pointer-events:auto;background:0 0;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_panel{pointer-events:auto;color:#252525;-webkit-font-smoothing:antialiased;background:#fff;border:1px solid #e5e7eb;border-radius:14px;flex-direction:column;width:560px;max-width:94vw;height:720px;max-height:92vh;font-family:-apple-system,BlinkMacSystemFont,PingFang SC,Noto Sans SC,Microsoft YaHei,Helvetica Neue,Arial,sans-serif;font-size:13px;display:flex;position:relative;overflow:hidden;box-shadow:0 8px 40px #00000024,0 2px 8px #00000014}._LI32q_header{border-bottom:1px solid #eef0f2;flex:none;align-items:center;gap:10px;padding:14px 16px 12px;display:flex}._LI32q_titleIcon{align-items:center;display:flex}._LI32q_titleIcon>svg{color:#4d6bfe;width:24px;height:24px}._LI32q_title{font-size:15px;font-weight:600}._LI32q_subtitle{color:#2e4bd8;background:#eaf2fb;border-radius:10px;padding:2px 8px;font-size:11.5px;font-weight:500}._LI32q_headerClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;margin-left:auto;transition:background-color .14s;display:flex}._LI32q_headerClose:hover{color:#252525;background:#f3f4f6}._LI32q_headerClose svg{width:16px;height:16px}._LI32q_tabs{border-bottom:1px solid #eef0f2;flex:none;gap:2px;padding:0 12px;display:flex}._LI32q_tab{color:#5f6670;cursor:pointer;white-space:nowrap;background:0 0;border:none;margin:0 8px;padding:10px 4px;font-size:13px;position:relative}._LI32q_tab:hover{color:#252525}._LI32q_tabOn{color:#252525;font-weight:600}._LI32q_tabOn:after{content:\"\";background:#4d6bfe;border-radius:2px;height:2px;position:absolute;bottom:-1px;left:0;right:0}._LI32q_body{scrollbar-width:thin;scrollbar-color:#d4d7dc transparent;flex:1;min-height:0;padding:16px 16px 20px;overflow-y:auto}._LI32q_body::-webkit-scrollbar{width:6px}._LI32q_body::-webkit-scrollbar-thumb{background:#d4d7dc;border-radius:3px}._LI32q_body::-webkit-scrollbar-track{background:0 0}._LI32q_tabBody,._LI32q_section{flex-direction:column;display:flex}._LI32q_sectionHead{align-items:center;gap:7px;margin:20px 0 10px;display:flex}._LI32q_section:first-child>._LI32q_sectionHead{margin-top:2px}._LI32q_sectionIcon{color:#8a919f;flex:none;align-items:center;display:flex}._LI32q_sectionIcon>svg{width:14px;height:14px}._LI32q_sectionTitle{color:#252525;margin:0;font-size:14px;font-weight:600}._LI32q_sectionNote{color:#8a919f;margin-left:auto;font-size:12px}._LI32q_btn{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s,box-shadow .14s;box-shadow:0 1px 3px #0000000f}._LI32q_btn:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_btn:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnPrimary{color:#fff;background:#4d6bfe;border-color:#4d6bfe;box-shadow:0 1px 3px #4d6bfe59}._LI32q_btnPrimary:hover{background:#3652e6;border-color:#3652e6}._LI32q_btnPrimary:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnGhost{box-shadow:none;color:#5f6670;border-color:#0000}._LI32q_btnGhost:hover{color:#252525;background:#f3f4f6}._LI32q_btnSm{padding:4px 11px;font-size:12px}._LI32q_btnDanger{color:#ef4444;border-color:#f3c8c8}._LI32q_btnDanger:hover{background:#fdeeee;border-color:#f3c8c8}._LI32q_card{cursor:default;background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;min-width:0;padding:14px;transition:box-shadow .15s,transform .15s,border-color .15s;display:flex;overflow:hidden;box-shadow:0 1px 3px #0000000f}._LI32q_card:hover{border-color:#dadde3;transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_cardHead{align-items:center;gap:8px;display:flex}._LI32q_cardName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_cardBadge{color:#2e4bd8;background:#eaf2fb;border-radius:10px;flex:none;padding:1px 7px;font-size:11.5px;font-weight:500}._LI32q_cardStars{color:#5f6670;flex:none;align-items:center;gap:4px;margin-left:auto;font-size:12px;display:flex}._LI32q_cardStars>svg{color:#f59e0b;width:13px;height:13px}._LI32q_cardDesc{color:#5f6670;-webkit-line-clamp:2;-webkit-box-orient:vertical;margin:8px 0 9px;font-size:13px;line-height:1.55;display:-webkit-box;overflow:hidden}._LI32q_cardTags,._LI32q_cardReasons{flex-wrap:wrap;gap:6px;margin-bottom:10px;display:flex}._LI32q_reason{color:#15803d;background:#eef8f3;border-radius:10px;padding:3px 8px;font-size:11.5px}._LI32q_reasonAi{color:#2e4bd8;background:#eaf2fb;border-radius:10px;padding:3px 8px;font-size:11.5px}._LI32q_cardActions{align-items:center;gap:6px;display:flex}._LI32q_spacer{margin-left:auto}._LI32q_needConfig{color:#a97f1f;font-size:11px}._LI32q_cardActionHint{color:#8a919f;text-align:right;margin-top:6px;font-size:11px}._LI32q_iconBtn{cursor:pointer;color:#8a919f;background:#fff;border:1px solid #d1d5db;border-radius:7px;flex:none;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_iconBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_iconBtn:disabled{opacity:.5;cursor:not-allowed}._LI32q_iconBtn svg{width:15px;height:15px}._LI32q_iconBtnOn{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtn{color:#5f6670;cursor:pointer;background:#fff;border:1px solid #d1d5db;border-radius:7px;align-items:center;gap:4px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_favBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtnOn{color:#4d6bfe;background:#eaf2fb;border-color:#c9d4f5}._LI32q_repoBtn{color:#5f6670;cursor:pointer;background:#fff;border:1px solid #d1d5db;border-radius:7px;align-items:center;gap:5px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_repoBtn svg{width:13px;height:13px}._LI32q_repoBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_tag{color:#4a5460;cursor:pointer;user-select:none;background:#f3f4f6;border:none;border-radius:10px;padding:3px 8px;font-size:11.5px;transition:background-color .12s,color .12s}._LI32q_tag:hover{color:#2e4bd8;background:#eaf2fb}._LI32q_tagOn{color:#2e4bd8;background:#eaf2fb;font-weight:500}._LI32q_recommendToolbar{background:#eaf2fb;border:1px solid #d6e4f8;border-radius:11px;align-items:center;gap:8px;margin-bottom:4px;padding:9px 12px;display:flex}._LI32q_recommendToolbarIcon{color:#4d6bfe;flex:none;align-items:center;display:flex}._LI32q_recommendToolbarIcon>svg{width:14px;height:14px}._LI32q_recommendHint{color:#5f6670;flex:1;font-size:12px;line-height:1.5}._LI32q_modeSwitchRow{margin-bottom:4px;display:flex}._LI32q_quizCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;margin-bottom:4px;padding:15px;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_quizHead{align-items:center;gap:8px;margin-bottom:4px;display:flex}._LI32q_quizHeadIcon{color:#4d6bfe;align-items:center;display:flex}._LI32q_quizHeadIcon>svg{width:16px;height:16px}._LI32q_quizTitle{flex:1;font-size:14px;font-weight:600}._LI32q_quizDesc{color:#5f6670;margin:0 0 12px;font-size:12px}._LI32q_quizTags{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_quizChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_quizChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_quizChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_quizActions{align-items:center;gap:8px;display:flex}._LI32q_quizCount{color:#8a919f;font-size:12px}._LI32q_quizCta{align-items:center;margin-left:auto;display:flex}._LI32q_quizCta ._LI32q_btnPrimary{padding:9px 14px;font-size:13px;font-weight:600}._LI32q_sceneList{flex-direction:column;gap:0;display:flex}._LI32q_sceneRow{border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:10px;margin-bottom:9px;padding:12px 13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_sceneRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_sceneInfo{flex:1;min-width:0}._LI32q_sceneName{margin-bottom:3px;font-size:13.5px;font-weight:600}._LI32q_sceneDesc{color:#5f6670;font-size:12px;line-height:1.5}._LI32q_sceneHint{color:#8a919f;font-size:12px}._LI32q_sceneEmpty{color:#8a919f;border:1px solid #e5e7eb;border-radius:11px;margin:0;padding:12px 13px;font-size:12px}._LI32q_stateHint{text-align:center;color:#8a919f;padding:24px 12px;font-size:12px}._LI32q_installedNote{color:#8a919f;margin-top:8px;font-size:11px}._LI32q_grid2{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_grid2>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_grid2{grid-template-columns:1fr}}._LI32q_searchWrap{margin-bottom:14px;position:relative}._LI32q_searchWrapIcon{color:#8a919f;pointer-events:none;align-items:center;width:15px;height:15px;display:flex;position:absolute;top:50%;left:11px;transform:translateY(-50%)}._LI32q_searchWrapIcon>svg{width:15px;height:15px}._LI32q_searchInput{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:10px;outline:none;width:100%;height:38px;padding:0 34px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_searchInput::placeholder{color:#9299a3}._LI32q_searchInput:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_searchClear{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:5px;justify-content:center;align-items:center;width:20px;height:20px;padding:0;display:flex;position:absolute;top:50%;right:9px;transform:translateY(-50%)}._LI32q_searchClear:hover{background:#f3f4f6}._LI32q_searchClear svg{width:13px;height:13px}._LI32q_filterRow{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_filterChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:13px;padding:4px 11px;font-size:12px;transition:all .14s}._LI32q_filterChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_filterChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_semanticToggle{background:#fff;border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:9px;margin-bottom:14px;padding:9px 12px;display:flex}._LI32q_semanticInfo{flex:1}._LI32q_semanticTitle{align-items:center;gap:6px;font-size:13px;font-weight:600;display:flex}._LI32q_semanticPill{color:#8a919f;border:1px solid #e5e7eb;border-radius:9px;padding:0 6px;font-size:10px;font-weight:500}._LI32q_semanticDesc{color:#8a919f;margin-top:2px;font-size:12px}._LI32q_semanticSwitch{cursor:not-allowed;opacity:.7;background:#d4d7dc;border-radius:10px;flex:none;width:34px;height:20px;position:relative}._LI32q_semanticSwitch:after{content:\"\";background:#fff;border-radius:50%;width:16px;height:16px;position:absolute;top:2px;left:2px;box-shadow:0 1px 2px #0003}._LI32q_hotTagsTitle{color:#8a919f;margin-bottom:8px;font-size:12px}._LI32q_tagCloud{flex-wrap:wrap;gap:6px;padding:0;display:flex}._LI32q_hotTag{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_hotTag:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_hotTagOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_tagMoreRow{margin:2px 0 4px}._LI32q_results{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_results>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_results{grid-template-columns:1fr}}._LI32q_resultCount{color:#5f6670;margin:2px 0 10px;font-size:12px}._LI32q_resultCount b{color:#252525}._LI32q_loadMoreRow{text-align:center;margin:14px 0 6px}._LI32q_loadMore{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s;box-shadow:0 1px 3px #0000000f}._LI32q_loadMore:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_semanticResult{color:#8a919f;flex-wrap:wrap;align-items:center;gap:5px;font-size:12px;display:flex}._LI32q_emptyState{text-align:center;padding:56px 20px}._LI32q_emptyIcon{color:#d4d7dc;justify-content:center;margin-bottom:12px;display:flex}._LI32q_emptyIcon>svg{width:44px;height:44px}._LI32q_emptyTitle{color:#252525;margin-bottom:5px;font-size:14px;font-weight:600}._LI32q_emptyDesc{color:#8a919f;margin-bottom:16px;font-size:12px}._LI32q_installedRow{border:1px solid #e5e7eb;border-radius:11px;align-items:flex-start;gap:11px;margin-bottom:9px;padding:13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_installedRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_installedInfo{flex:1;min-width:0}._LI32q_installedHead{align-items:center;gap:8px;display:flex}._LI32q_installedName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_installedMeta{color:#8a919f;margin-top:3px;font-size:12px}._LI32q_installedActions{flex-direction:column;flex:none;gap:6px;display:flex}._LI32q_unmatched{flex-wrap:wrap;gap:5px;margin-top:8px;display:flex}._LI32q_unmatchedChip{color:#a97f1f;background:#fef7e7;border:1px dashed #e3c997;border-radius:10px;padding:3px 8px;font-size:11.5px}._LI32q_unmatchedMore{color:#8a919f;align-self:center;font-size:11px}._LI32q_settingCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;margin-bottom:12px;padding:15px;box-shadow:0 1px 3px #0000000f}._LI32q_settingHead{align-items:center;gap:8px;margin-bottom:10px;display:flex}._LI32q_settingIc{color:#4d6bfe;background:#f3f4f6;border-radius:8px;flex:none;justify-content:center;align-items:center;width:26px;height:26px;display:flex}._LI32q_settingIc>svg{width:15px;height:15px}._LI32q_settingTitle{font-size:14px;font-weight:600}._LI32q_settingStatus{border-radius:9px;margin-left:auto;padding:2px 8px;font-size:11.5px}._LI32q_statusOk{color:#22c55e;background:#eef8f3}._LI32q_statusOff{color:#8a919f;background:#f3f4f6}._LI32q_statusWarn{color:#a97f1f;background:#fef7e7}._LI32q_settingsRow{align-items:center;gap:8px;display:flex}._LI32q_settingsLabel{color:#5f6670;white-space:nowrap;font-size:12px}._LI32q_ghTip{color:#5f6670;margin:0;font-size:12px;line-height:1.7}._LI32q_ghLink{color:#4d6bfe;align-items:center;gap:2px;text-decoration:none;display:inline-flex}._LI32q_ghLink:hover{text-decoration:underline}._LI32q_ghLogin{flex:1;font-size:13px;font-weight:600}._LI32q_ghRow{align-items:center;gap:8px;display:flex}._LI32q_deviceFlow{color:#5f6670;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;flex-direction:column;gap:6px;padding:9px 11px;font-size:12px;display:flex}._LI32q_deviceCode{letter-spacing:2px;color:#4d6bfe;background:#fff;border-radius:6px;align-self:flex-start;padding:4px 8px;font-family:ui-monospace,Menlo,monospace;font-size:18px;font-weight:700}._LI32q_ghPollState{color:#5f6670;margin:0;font-size:12px}._LI32q_deviceFlow a{color:#4d6bfe}._LI32q_deviceFlowTip{color:#8a919f;margin:0;font-size:11.5px;line-height:1.6}._LI32q_ghDone{color:#22c55e;align-items:center;font-weight:500;display:inline-flex}._LI32q_field{margin-bottom:11px}._LI32q_fieldRow{gap:8px;display:flex}._LI32q_fieldRow>._LI32q_field{flex:1;margin-bottom:0}._LI32q_fieldLabel{color:#5f6670;margin-bottom:5px;font-size:12px;display:block}._LI32q_input,._LI32q_select{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:9px;outline:none;width:100%;height:34px;padding:0 10px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_input:focus,._LI32q_select:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_input::placeholder{color:#9299a3}._LI32q_error{color:#ef4444;margin:0;font-size:12px}._LI32q_warn{color:#a97f1f;align-items:center;margin:0;font-size:12px;display:flex}._LI32q_dividerLine{background:#eef0f2;height:1px;margin:13px 0}._LI32q_inlineIcon{vertical-align:-2px;flex:none;margin-right:4px;display:inline-block}._LI32q_modalBackdrop{z-index:120;background:#14161c6b;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_modal{background:#fff;border-radius:14px;flex-direction:column;width:420px;max-width:92vw;padding:20px 22px;display:flex;overflow:hidden;box-shadow:0 12px 50px #0000003d}._LI32q_modalHead{justify-content:space-between;align-items:center;margin-bottom:12px;display:flex}._LI32q_modalTitle{font-size:15px;font-weight:600}._LI32q_modalClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:background-color .14s;display:flex}._LI32q_modalClose:hover{color:#252525;background:#f3f4f6}._LI32q_modalClose svg{width:16px;height:16px}._LI32q_modalBody{flex-direction:column;gap:10px;display:flex}._LI32q_modalDesc{color:#5f6670;margin:0;font-size:12.5px;line-height:1.6}._LI32q_modalActions{justify-content:flex-end;gap:8px;margin-top:8px;display:flex}._LI32q_modalSuccess{text-align:center;flex-direction:column;justify-content:center;align-items:center;gap:10px;display:flex}._LI32q_modalSuccessIcon{color:#22c55e;background:#eef8f3;border-radius:50%;justify-content:center;align-items:center;width:44px;height:44px;margin:0 auto;display:flex}._LI32q_modalSuccessIcon>svg{width:22px;height:22px}._LI32q_modalSuccessTitle{color:#252525;font-size:14px;font-weight:600}._LI32q_modalError{color:#ef4444;word-break:break-all;align-items:center;font-size:13px;font-weight:600;display:flex}._LI32q_loading{text-align:center;color:#8a919f;padding:20px;font-size:12px}._LI32q_advanced{margin-top:2px}._LI32q_advanced summary{cursor:pointer;color:#8a919f;user-select:none;font-size:11px}._LI32q_advancedTip{color:#8a919f;margin:6px 0 0;font-size:11px;line-height:1.5}._LI32q_advancedCmd{color:#5f6670;white-space:pre-wrap;word-break:break-all;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;margin-top:6px;padding:9px 11px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.6;display:block}._LI32q_steps{align-items:center;margin-bottom:18px;display:flex}._LI32q_step{color:#8a919f;flex:1;align-items:center;gap:7px;font-size:12px;display:flex;position:relative}._LI32q_stepDot{color:#8a919f;background:#fff;border:1.5px solid #d4d7dc;border-radius:50%;flex:none;justify-content:center;align-items:center;width:20px;height:20px;font-size:11.5px;transition:all .2s;display:flex}._LI32q_stepActive{color:#252525}._LI32q_stepActive ._LI32q_stepDot{color:#4d6bfe;border-color:#4d6bfe}._LI32q_stepDone{color:#252525}._LI32q_stepDone ._LI32q_stepDot{color:#fff;background:#4d6bfe;border-color:#4d6bfe}._LI32q_stepBar{background:#e7e9ed;border-radius:1px;flex:1;height:1.5px;margin:0 6px}._LI32q_stepBarDone{background:#4d6bfe}._LI32q_toast{color:#fff;z-index:200;pointer-events:none;background:#252525;border-radius:8px;padding:8px 16px;font-size:12.5px;animation:.22s _LI32q_toastIn;position:fixed;bottom:24px;left:50%;transform:translate(-50%);box-shadow:0 4px 16px #0003}@keyframes _LI32q_toastIn{0%{opacity:0;transform:translate(-50%)translateY(10px)}to{opacity:1;transform:translate(-50%)translateY(0)}}";
 		const tagId = "@dsh-market/plugin/styles.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -54,97 +101,234 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var styles_module_css_default = {
+			"tabOn": "_LI32q_tabOn",
+			"installedHead": "_LI32q_installedHead",
+			"sceneDesc": "_LI32q_sceneDesc",
+			"dividerLine": "_LI32q_dividerLine",
+			"btnDanger": "_LI32q_btnDanger",
 			"modalSuccess": "_LI32q_modalSuccess",
+			"stateHint": "_LI32q_stateHint",
+			"settingsLabel": "_LI32q_settingsLabel",
+			"semanticResult": "_LI32q_semanticResult",
+			"hotTagsTitle": "_LI32q_hotTagsTitle",
+			"sectionTitle": "_LI32q_sectionTitle",
+			"tagMoreRow": "_LI32q_tagMoreRow",
+			"statusWarn": "_LI32q_statusWarn",
+			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
+			"installedInfo": "_LI32q_installedInfo",
+			"modalActions": "_LI32q_modalActions",
+			"quizCta": "_LI32q_quizCta",
+			"needConfig": "_LI32q_needConfig",
+			"installedActions": "_LI32q_installedActions",
+			"ghDone": "_LI32q_ghDone",
+			"advancedTip": "_LI32q_advancedTip",
+			"title": "_LI32q_title",
+			"cardStars": "_LI32q_cardStars",
+			"hotTag": "_LI32q_hotTag",
+			"grid2": "_LI32q_grid2",
+			"panel": "_LI32q_panel",
+			"ghPollState": "_LI32q_ghPollState",
+			"tabs": "_LI32q_tabs",
+			"quizHead": "_LI32q_quizHead",
+			"stepDot": "_LI32q_stepDot",
+			"tagOn": "_LI32q_tagOn",
+			"loadMoreRow": "_LI32q_loadMoreRow",
+			"subtitle": "_LI32q_subtitle",
+			"tab": "_LI32q_tab",
+			"settingTitle": "_LI32q_settingTitle",
+			"hotTagOn": "_LI32q_hotTagOn",
+			"searchWrap": "_LI32q_searchWrap",
+			"unmatched": "_LI32q_unmatched",
+			"step": "_LI32q_step",
+			"loading": "_LI32q_loading",
+			"titleIcon": "_LI32q_titleIcon",
+			"semanticTitle": "_LI32q_semanticTitle",
+			"reasonAi": "_LI32q_reasonAi",
+			"btnSm": "_LI32q_btnSm",
+			"semanticToggle": "_LI32q_semanticToggle",
+			"sceneName": "_LI32q_sceneName",
+			"modal": "_LI32q_modal",
+			"advancedCmd": "_LI32q_advancedCmd",
+			"fieldLabel": "_LI32q_fieldLabel",
+			"cardReasons": "_LI32q_cardReasons",
+			"installedMeta": "_LI32q_installedMeta",
+			"settingIc": "_LI32q_settingIc",
+			"stepBarDone": "_LI32q_stepBarDone",
+			"sectionIcon": "_LI32q_sectionIcon",
+			"btnGhost": "_LI32q_btnGhost",
+			"quizCount": "_LI32q_quizCount",
+			"cardActionHint": "_LI32q_cardActionHint",
+			"emptyTitle": "_LI32q_emptyTitle",
+			"ghLink": "_LI32q_ghLink",
+			"statusOff": "_LI32q_statusOff",
+			"modalHead": "_LI32q_modalHead",
+			"favBtnOn": "_LI32q_favBtnOn",
+			"input": "_LI32q_input",
+			"installedName": "_LI32q_installedName",
+			"btnPrimary": "_LI32q_btnPrimary",
+			"triggerIcon": "_LI32q_triggerIcon",
+			"recommendHint": "_LI32q_recommendHint",
+			"settingStatus": "_LI32q_settingStatus",
+			"sectionNote": "_LI32q_sectionNote",
+			"triggerLabel": "_LI32q_triggerLabel",
+			"cardActions": "_LI32q_cardActions",
+			"filterChipOn": "_LI32q_filterChipOn",
+			"semanticSwitch": "_LI32q_semanticSwitch",
+			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
 			"reason": "_LI32q_reason",
 			"searchInput": "_LI32q_searchInput",
-			"ghTip": "_LI32q_ghTip",
-			"settingsLabel": "_LI32q_settingsLabel",
-			"settingsRow": "_LI32q_settingsRow",
-			"stepDetail": "_LI32q_stepDetail",
-			"triggerIcon": "_LI32q_triggerIcon",
-			"header": "_LI32q_header",
-			"cardHead": "_LI32q_cardHead",
+			"stepBar": "_LI32q_stepBar",
 			"cardDesc": "_LI32q_cardDesc",
-			"advancedCmd": "_LI32q_advancedCmd",
-			"error": "_LI32q_error",
-			"ghCard": "_LI32q_ghCard",
-			"title": "_LI32q_title",
-			"tabs": "_LI32q_tabs",
-			"stageBadge": "_LI32q_stageBadge",
-			"filterRow": "_LI32q_filterRow",
+			"repoBtn": "_LI32q_repoBtn",
 			"unmatchedMore": "_LI32q_unmatchedMore",
-			"modal": "_LI32q_modal",
-			"modalHead": "_LI32q_modalHead",
-			"warn": "_LI32q_warn",
-			"modalBody": "_LI32q_modalBody",
-			"card": "_LI32q_card",
-			"stepLabel": "_LI32q_stepLabel",
-			"triggerLabel": "_LI32q_triggerLabel",
-			"modalTitle": "_LI32q_modalTitle",
-			"cardMeta": "_LI32q_cardMeta",
-			"installedMeta": "_LI32q_installedMeta",
-			"cardReasons": "_LI32q_cardReasons",
-			"loading": "_LI32q_loading",
-			"btnDanger": "_LI32q_btnDanger",
-			"tab": "_LI32q_tab",
-			"btnPrimary": "_LI32q_btnPrimary",
+			"error": "_LI32q_error",
+			"quizHeadIcon": "_LI32q_quizHeadIcon",
+			"modalClose": "_LI32q_modalClose",
 			"resultCount": "_LI32q_resultCount",
-			"select": "_LI32q_select",
-			"deviceFlow": "_LI32q_deviceFlow",
-			"needConfig": "_LI32q_needConfig",
-			"installedName": "_LI32q_installedName",
-			"section": "_LI32q_section",
-			"stepRow": "_LI32q_stepRow",
-			"installedRow": "_LI32q_installedRow",
-			"installedInfo": "_LI32q_installedInfo",
-			"stateHint": "_LI32q_stateHint",
-			"body": "_LI32q_body",
-			"btnGhost": "_LI32q_btnGhost",
-			"unmatchedChip": "_LI32q_unmatchedChip",
-			"results": "_LI32q_results",
-			"input": "_LI32q_input",
-			"cardName": "_LI32q_cardName",
+			"modalBody": "_LI32q_modalBody",
+			"searchClear": "_LI32q_searchClear",
 			"cardTags": "_LI32q_cardTags",
-			"trigger": "_LI32q_trigger",
-			"tag": "_LI32q_tag",
-			"modalActions": "_LI32q_modalActions",
-			"cardActions": "_LI32q_cardActions",
-			"searchRow": "_LI32q_searchRow",
-			"sectionTitle": "_LI32q_sectionTitle",
-			"subtitle": "_LI32q_subtitle",
-			"tagCloud": "_LI32q_tagCloud",
-			"installedActions": "_LI32q_installedActions",
-			"tabOn": "_LI32q_tabOn",
-			"deviceCode": "_LI32q_deviceCode",
-			"unmatched": "_LI32q_unmatched",
-			"panel": "_LI32q_panel",
-			"ghRow": "_LI32q_ghRow",
-			"advanced": "_LI32q_advanced",
-			"cmdBox": "_LI32q_cmdBox",
-			"modalError": "_LI32q_modalError",
-			"steps": "_LI32q_steps",
-			"tabBody": "_LI32q_tabBody",
-			"installedNote": "_LI32q_installedNote",
-			"ghLogin": "_LI32q_ghLogin",
-			"modalBackdrop": "_LI32q_modalBackdrop",
-			"modalDesc": "_LI32q_modalDesc",
+			"sceneRow": "_LI32q_sceneRow",
+			"statusOk": "_LI32q_statusOk",
+			"recommendToolbar": "_LI32q_recommendToolbar",
+			"section": "_LI32q_section",
+			"quizTitle": "_LI32q_quizTitle",
+			"modalTitle": "_LI32q_modalTitle",
+			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
 			"backdrop": "_LI32q_backdrop",
-			"tagOn": "_LI32q_tagOn"
+			"favBtn": "_LI32q_favBtn",
+			"sectionHead": "_LI32q_sectionHead",
+			"emptyState": "_LI32q_emptyState",
+			"stepDone": "_LI32q_stepDone",
+			"quizChip": "_LI32q_quizChip",
+			"semanticPill": "_LI32q_semanticPill",
+			"modalBackdrop": "_LI32q_modalBackdrop",
+			"quizActions": "_LI32q_quizActions",
+			"ghRow": "_LI32q_ghRow",
+			"select": "_LI32q_select",
+			"iconBtn": "_LI32q_iconBtn",
+			"installedNote": "_LI32q_installedNote",
+			"deviceFlowTip": "_LI32q_deviceFlowTip",
+			"quizDesc": "_LI32q_quizDesc",
+			"sceneList": "_LI32q_sceneList",
+			"semanticInfo": "_LI32q_semanticInfo",
+			"emptyDesc": "_LI32q_emptyDesc",
+			"advanced": "_LI32q_advanced",
+			"headerClose": "_LI32q_headerClose",
+			"toastIn": "_LI32q_toastIn",
+			"iconBtnOn": "_LI32q_iconBtnOn",
+			"field": "_LI32q_field",
+			"tagCloud": "_LI32q_tagCloud",
+			"deviceCode": "_LI32q_deviceCode",
+			"btn": "_LI32q_btn",
+			"emptyIcon": "_LI32q_emptyIcon",
+			"cardBadge": "_LI32q_cardBadge",
+			"installedRow": "_LI32q_installedRow",
+			"filterChip": "_LI32q_filterChip",
+			"filterRow": "_LI32q_filterRow",
+			"sceneInfo": "_LI32q_sceneInfo",
+			"tag": "_LI32q_tag",
+			"settingHead": "_LI32q_settingHead",
+			"cardName": "_LI32q_cardName",
+			"ghTip": "_LI32q_ghTip",
+			"ghLogin": "_LI32q_ghLogin",
+			"tabBody": "_LI32q_tabBody",
+			"inlineIcon": "_LI32q_inlineIcon",
+			"trigger": "_LI32q_trigger",
+			"modalDesc": "_LI32q_modalDesc",
+			"steps": "_LI32q_steps",
+			"cardHead": "_LI32q_cardHead",
+			"results": "_LI32q_results",
+			"settingCard": "_LI32q_settingCard",
+			"loadMore": "_LI32q_loadMore",
+			"fieldRow": "_LI32q_fieldRow",
+			"body": "_LI32q_body",
+			"quizChipOn": "_LI32q_quizChipOn",
+			"sceneEmpty": "_LI32q_sceneEmpty",
+			"modeSwitchRow": "_LI32q_modeSwitchRow",
+			"modalError": "_LI32q_modalError",
+			"stepActive": "_LI32q_stepActive",
+			"toast": "_LI32q_toast",
+			"deviceFlow": "_LI32q_deviceFlow",
+			"quizTags": "_LI32q_quizTags",
+			"warn": "_LI32q_warn",
+			"header": "_LI32q_header",
+			"spacer": "_LI32q_spacer",
+			"card": "_LI32q_card",
+			"sceneHint": "_LI32q_sceneHint",
+			"searchWrapIcon": "_LI32q_searchWrapIcon",
+			"settingsRow": "_LI32q_settingsRow",
+			"semanticDesc": "_LI32q_semanticDesc",
+			"quizCard": "_LI32q_quizCard",
+			"unmatchedChip": "_LI32q_unmatchedChip"
 		};
 		//#endregion
 		//#region src/client/panel.tsx
 		/**
-		* 插件市场面板（4-tab：推荐 / 搜索 / 已装 / 设置）
+		* 插件市场面板（5-tab：推荐 / 搜索 / 收藏 / 已装 / 设置）
 		* 数据全部来自 Host RPC（api.ts）。纯 React.createElement（无 JSX）。
 		*/
 		/** GitHub 设备流 client_id（dsh-market GitHub App，公开值非机密） */
 		const GH_CLIENT_ID = "Iv23liYFieChYuBJklZp";
 		const GH_TOKEN_KEY = "dsh-market:gh_token";
 		const GH_LOGIN_KEY = "dsh-market:gh_login";
+		const GH_METHOD_KEY = "dsh-market:gh_method";
+		const FAVORITES_KEY = "dsh-market:favorites";
+		/** 收藏列表（localStorage） */
+		function readFavorites() {
+			try {
+				const raw = localStorage.getItem(FAVORITES_KEY);
+				return raw ? JSON.parse(raw) : [];
+			} catch {
+				return [];
+			}
+		}
+		function writeFavorites(list) {
+			localStorage.setItem(FAVORITES_KEY, JSON.stringify(list));
+		}
+		function isFavorite(id) {
+			return readFavorites().includes(id);
+		}
+		function toggleFavorite(id) {
+			const list = readFavorites();
+			const next = list.includes(id) ? list.filter((x) => x !== id) : [...list, id];
+			writeFavorites(next);
+			return next.includes(id);
+		}
+		/** 当前 GitHub token（浏览器 localStorage；设备流或 PAT） */
+		function ghToken() {
+			return localStorage.getItem(GH_TOKEN_KEY);
+		}
+		/** 绑定方式：device（GitHub App，不能 star）/ pat */
+		function ghMethod() {
+			return localStorage.getItem(GH_METHOD_KEY) ?? null;
+		}
 		/** 跨 tab 搜索词（标签点击 → 搜索 tab） */
 		let searchSeed = "";
 		function setSearchSeed(t) {
 			searchSeed = t;
+		}
+		/** 聚合热门中文标签（问卷/搜索快捷入口共用） */
+		function aggregateHotTags(plugins, n = 14) {
+			const counts = /* @__PURE__ */ new Map();
+			for (const p of plugins) for (const t of p.tags) {
+				if (!/[\u4e00-\u9fff]/.test(t)) continue;
+				if ([
+					"效率工具",
+					"开发辅助",
+					"AI 增强",
+					"AI增强"
+				].includes(t)) continue;
+				counts.set(t, (counts.get(t) ?? 0) + 1);
+			}
+			return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([t]) => t);
+		}
+		let quizTriggered = false;
+		function markQuizSubmitted() {
+			quizTriggered = false;
+		}
+		function markQuizTriggered() {
+			quizTriggered = true;
 		}
 		function fmtStars(n) {
 			return n >= 1e3 ? `${(n / 1e3).toFixed(1)}k` : String(n);
@@ -152,26 +336,131 @@ window.__ModuleLoader__.load({
 		function El(tag, props, ...children) {
 			return (0, react.createElement)(tag, props ?? {}, ...children);
 		}
+		let toastTimer = null;
+		function toast(msg) {
+			if (typeof document === "undefined") return;
+			document.querySelectorAll("[data-dshm-toast]").forEach((n) => n.remove());
+			if (toastTimer) clearTimeout(toastTimer);
+			const el = document.createElement("div");
+			el.setAttribute("data-dshm-toast", "");
+			el.className = styles_module_css_default.toast;
+			el.textContent = msg;
+			document.body.appendChild(el);
+			toastTimer = setTimeout(() => el.remove(), 2200);
+		}
+		/** 通用线性图标：dangerouslySetInnerHTML 承载 path/circle 内容 */
+		function Icon(props) {
+			return El("svg", {
+				viewBox: "0 0 24 24",
+				fill: "none",
+				stroke: "currentColor",
+				strokeWidth: 1.5,
+				strokeLinecap: "round",
+				strokeLinejoin: "round",
+				width: props.size ?? 14,
+				height: props.size ?? 14,
+				className: props.className,
+				dangerouslySetInnerHTML: { __html: props.d }
+			});
+		}
+		/** 图标 path 集（与 design-ref/ui-redesign/direction-B-克制增强.html 一致） */
+		const ICON_SCENE = "<path d=\"M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8\"/>";
+		const ICON_HEART = "<path d=\"M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z\"/>";
+		const ICON_AWARD = "<path d=\"M6 3h12l3 6-9 12L3 9l3-6z\"/><path d=\"M3 9h18M9 21l3-3 3 3\"/>";
+		const ICON_CLOCK = "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/>";
+		const ICON_LINK = "<path d=\"M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6v6\"/><path d=\"M10 14 20 4\"/>";
+		const ICON_STAR = "<path d=\"M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z\"/>";
+		const ICON_STAR_OUTLINE = "<path d=\"M12 3l2.4 5.6 6.1.5-4.6 4 1.4 6-5.3-3.3L6.7 19l1.4-6-4.6-4 6.1-.5z\"/>";
+		const ICON_CLOSE = "<path d=\"M18 6 6 18M6 6l12 12\"/>";
+		const ICON_CHECK = "<path d=\"M20 6 9 17l-5-5\"/>";
+		const ICON_WARN = "<path d=\"M12 3l10 18H2z\"/><path d=\"M12 10v4M12 17h.01\"/>";
+		const ICON_EXTERNAL = "<path d=\"M7 17 17 7M7 7h10v10\"/>";
+		const ICON_HELP = "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9 10a3 3 0 0 1 6 0c0 2-3 2.5-3 4\"/><path d=\"M12 17h.01\"/>";
+		const ICON_MODE = "<path d=\"M12 3a9 9 0 1 0 9 9\"/><path d=\"M12 3a9 9 0 0 1 9 9\"/><path d=\"M12 12 21 3\"/>";
+		const ICON_SEARCH = "<circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m21 21-4.3-4.3\"/>";
+		const ICON_GITHUB = "<path d=\"M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-5.7 0-1.3-.5-2.4-1.3-3.2.1-.3.6-1.6-.1-3.3 0 0-1-.3-3.4 1.2a11.6 11.6 0 0 0-6.2 0C6.5 2.5 5.5 2.8 5.5 2.8 4.8 4.5 5.3 5.8 5.4 6.1 4.6 6.9 4.1 8 4.1 9.3c0 4.3 2.7 5.4 5.5 5.7-.6.6-.6 1.2-.5 2V21\"/><path d=\"M9 9v4M9 9H7.5M9 20h3\"/>";
+		const ICON_PACKAGE = "<path d=\"M22 7.5 12 2 2 7.5v9L12 22l10-5.5v-9z\"/><path d=\"M2 7.5 12 13l10-5.5M12 22v-9\"/>";
 		function PluginCard(props) {
 			const { plugin, reasons, onInstall, onTagClick } = props;
 			const tags = (plugin.tags ?? []).filter((t) => /[\u4e00-\u9fff]/.test(t)).slice(0, 4);
+			const [fav, setFav] = (0, react.useState)(() => isFavorite(plugin.id));
+			const [starring, setStarring] = (0, react.useState)(false);
+			const [starErr, setStarErr] = (0, react.useState)("");
+			const toggleFav = () => {
+				const now = toggleFavorite(plugin.id);
+				setFav(now);
+				toast(now ? `已收藏「${plugin.name}」` : `已取消收藏「${plugin.name}」`);
+			};
+			const toggleStar = async () => {
+				const token = ghToken();
+				if (!token) {
+					toast("未绑定 GitHub，请到「设置」绑定后可加星");
+					return;
+				}
+				if (ghMethod() === "device") {
+					setStarErr("设备流授权不支持加星，请在设置里改用 PAT（个人令牌）绑定");
+					return;
+				}
+				setStarring(true);
+				setStarErr("");
+				try {
+					const [owner, repo] = plugin.fullName.split("/");
+					await api("gh:star", {
+						token,
+						owner,
+						repo,
+						action: "star"
+					});
+					setStarErr("");
+					toast(`已加星「${plugin.name}」`);
+				} catch (e) {
+					setStarErr(e.message.includes("403") || e.message.includes("404") ? "当前授权方式不支持加星，请改用 PAT（个人令牌）绑定" : `加星失败：${e.message}`);
+				} finally {
+					setStarring(false);
+				}
+			};
 			return El("div", {
 				className: styles_module_css_default.card,
 				"data-type": plugin.type
 			}, El("div", { className: styles_module_css_default.cardHead }, El("span", {
 				className: styles_module_css_default.cardName,
 				title: plugin.fullName
-			}, plugin.name), El("span", { className: styles_module_css_default.cardMeta }, plugin.type === "skill" ? "SKILL" : "插件", " · ", fmtStars(plugin.stars), "★ · ", plugin.scoreTotal, "分")), plugin.descriptionZh ? El("p", { className: styles_module_css_default.cardDesc }, plugin.descriptionZh) : null, El("div", { className: styles_module_css_default.cardTags }, ...tags.map((t) => El("span", {
+			}, plugin.name), El("span", { className: styles_module_css_default.cardBadge }, plugin.type === "skill" ? "技能" : "插件"), El("span", { className: styles_module_css_default.cardStars }, El(Icon, {
+				d: ICON_STAR,
+				size: 13
+			}), fmtStars(plugin.stars))), plugin.descriptionZh ? El("div", { className: styles_module_css_default.cardDesc }, plugin.descriptionZh) : null, El("div", { className: styles_module_css_default.cardTags }, ...tags.map((t) => El("span", {
 				key: t,
 				className: styles_module_css_default.tag,
 				onClick: () => onTagClick(t)
-			}, t))), reasons && reasons.length > 0 ? El("div", { className: styles_module_css_default.cardReasons }, ...reasons.map((r, i) => El("span", {
-				key: i,
-				className: styles_module_css_default.reason
-			}, r))) : null, El("div", { className: styles_module_css_default.cardActions }, plugin.needsConfig ? El("span", { className: styles_module_css_default.needConfig }, "需配置") : null, El("button", {
-				className: styles_module_css_default.btnPrimary,
+			}, t)), reasons && reasons.length > 0 ? reasons.map((r, i) => El("span", {
+				key: `r${i}`,
+				className: r.startsWith("AI：") ? styles_module_css_default.reasonAi : styles_module_css_default.reason
+			}, r)) : null), El("div", { className: styles_module_css_default.cardActions }, El("button", {
+				className: styles_module_css_default.repoBtn,
+				title: `打开 GitHub 仓库：${plugin.fullName}`,
+				onClick: () => window.open(`https://github.com/${plugin.fullName}`, "_blank", "noopener noreferrer")
+			}, El(Icon, {
+				d: ICON_LINK,
+				size: 13
+			}), "仓库"), El("span", { className: styles_module_css_default.spacer }), El("button", {
+				className: `${styles_module_css_default.favBtn} ${fav ? styles_module_css_default.favBtnOn : ""}`,
+				title: fav ? "取消收藏" : "收藏（稍后安装）",
+				onClick: toggleFav
+			}, El(Icon, {
+				d: fav ? ICON_STAR : ICON_STAR_OUTLINE,
+				size: 12
+			}), fav ? "已收藏" : "收藏"), El("button", {
+				className: `${styles_module_css_default.iconBtn} ${starring ? styles_module_css_default.iconBtnOn : ""}`,
+				title: ghToken() ? "在 GitHub 加星这个仓库（PAT 绑定支持）" : "未绑定 GitHub，点击查看绑定方式",
+				disabled: starring,
+				onClick: () => void toggleStar()
+			}, starring ? "…" : El(Icon, {
+				d: ICON_STAR,
+				size: 15
+			})), El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary} ${styles_module_css_default.btnSm}`,
 				onClick: () => onInstall(plugin)
-			}, "安装")));
+			}, "安装")), starErr ? El("div", { className: styles_module_css_default.cardActionHint }, starErr) : null);
 		}
 		function InstallModal(props) {
 			const { plugin, onDone, onClose } = props;
@@ -196,63 +485,143 @@ window.__ModuleLoader__.load({
 			}, El("div", {
 				className: styles_module_css_default.modal,
 				onClick: (e) => e.stopPropagation()
-			}, El("div", { className: styles_module_css_default.modalHead }, El("span", { className: styles_module_css_default.modalTitle }, `安装 ${plugin.name}`), El("button", {
-				className: styles_module_css_default.btnGhost,
-				onClick: onClose
-			}, "✕")), phase === "confirm" ? El("div", { className: styles_module_css_default.modalBody }, El("p", { className: styles_module_css_default.modalDesc }, `将交由 AI 助手阅读 ${plugin.fullName} 的文档后自动安装，需要配置（API Key / Token）时会先向你确认。`), plugin.needsConfig ? El("p", { className: styles_module_css_default.warn }, "⚠️ 该插件需要额外配置（API Key / Token），AI 会向你询问。") : null, plugin.type === "skill" ? El("p", { className: styles_module_css_default.ghTip }, "目标：技能目录（~/.agents/skills）") : El("p", { className: styles_module_css_default.ghTip }, "目标：web profile（装完需重启 harness 生效）"), El("div", { className: styles_module_css_default.modalActions }, El("button", {
-				className: styles_module_css_default.btnGhost,
+			}, El("div", { className: styles_module_css_default.steps }, El("div", { className: `${styles_module_css_default.step} ${styles_module_css_default.stepActive}` }, El("span", { className: styles_module_css_default.stepDot }, "1"), "确认", El("span", { className: phase === "confirm" ? styles_module_css_default.stepBar : `${styles_module_css_default.stepBar} ${styles_module_css_default.stepBarDone}` })), El("div", { className: phase === "confirm" ? styles_module_css_default.step : `${styles_module_css_default.step} ${phase === "handedOff" ? styles_module_css_default.stepDone : styles_module_css_default.stepActive}` }, El("span", { className: styles_module_css_default.stepDot }, phase === "handedOff" ? El(Icon, {
+				d: ICON_CHECK,
+				size: 11
+			}) : "2"), "运行中", El("span", { className: phase === "handedOff" ? `${styles_module_css_default.stepBar} ${styles_module_css_default.stepBarDone}` : styles_module_css_default.stepBar })), El("div", { className: phase === "handedOff" ? `${styles_module_css_default.step} ${styles_module_css_default.stepDone}` : styles_module_css_default.step }, El("span", { className: styles_module_css_default.stepDot }, phase === "handedOff" ? El(Icon, {
+				d: ICON_CHECK,
+				size: 11
+			}) : "3"), "完成")), phase === "confirm" ? El("div", null, El("div", { className: styles_module_css_default.modalTitle }, `确认安装「${plugin.name}」`), El("div", { className: styles_module_css_default.modalDesc }, `将交给一个话题子代理去阅读 ${plugin.fullName} 的文档后自动安装；需要配置（API Key / Token）时会先向你确认。`), plugin.needsConfig ? El("p", { className: styles_module_css_default.warn }, El(Icon, {
+				d: ICON_WARN,
+				size: 13,
+				className: styles_module_css_default.inlineIcon
+			}), "该插件需要额外配置（API Key / Token），AI 会向你询问。") : null, El("p", { className: styles_module_css_default.ghTip }, plugin.type === "skill" ? "目标：装到技能目录（~/.agents/skills），装完即可用。" : "目标：装进 web profile，装完需重启 harness 生效。"), El("details", { className: styles_module_css_default.advanced }, El("summary", null, "高级：查看/复制手动命令"), El("code", { className: styles_module_css_default.advancedCmd }, cmd), El("p", { className: styles_module_css_default.advancedTip }, "提示：手动命令仅供参考，不一定正确，请以该项目 README 为准。")), El("div", { className: styles_module_css_default.modalActions }, El("button", {
+				className: styles_module_css_default.btn,
 				onClick: onClose
 			}, "取消"), El("button", {
-				className: styles_module_css_default.btnPrimary,
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary}`,
 				onClick: () => void startAi()
-			}, "确认，交给 AI 安装")), El("details", { className: styles_module_css_default.advanced }, El("summary", null, "高级：查看/复制手动命令"), El("code", { className: styles_module_css_default.advancedCmd }, cmd))) : phase === "running" ? El("div", { className: styles_module_css_default.modalBody }, El("div", { className: styles_module_css_default.loading }, "正在唤起 AI 助手…")) : phase === "handedOff" ? El("div", { className: styles_module_css_default.modalBody }, El("div", { className: styles_module_css_default.modalSuccess }, "✅ 已交给 AI 助手安装"), El("p", { className: styles_module_css_default.modalDesc }, childSessionId ? `AI 助手已开始工作（子会话 ${childSessionId.slice(0, 8)}…），请到会话中查看进度；需要配置时 AI 会向你确认。` : "AI 助手已开始工作，请到会话中查看进度；需要配置时 AI 会向你确认。"), El("div", { className: styles_module_css_default.modalActions }, El("button", {
-				className: styles_module_css_default.btnPrimary,
+			}, "确认安装"))) : phase === "running" ? El("div", null, El("div", { className: styles_module_css_default.modalTitle }, "正在安装"), El("div", { className: styles_module_css_default.loading }, "正在唤起 AI 助手…")) : phase === "handedOff" ? El("div", { className: styles_module_css_default.modalSuccess }, El("div", { className: styles_module_css_default.modalSuccessIcon }, El(Icon, {
+				d: ICON_CHECK,
+				size: 22
+			})), El("div", { className: styles_module_css_default.modalSuccessTitle }, "已交给 AI 助手安装"), El("p", { className: styles_module_css_default.modalDesc }, childSessionId ? `AI 助手已开始工作（子会话 ${childSessionId.slice(0, 8)}…），请到会话中查看进度；需要配置时 AI 会向你确认。` : "AI 助手已开始工作，请到会话中查看进度；需要配置时 AI 会向你确认。"), El("div", { className: styles_module_css_default.modalActions }, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary}`,
 				onClick: () => {
 					onDone();
 					onClose();
 				}
-			}, "知道了"))) : El("div", { className: styles_module_css_default.modalBody }, El("div", { className: styles_module_css_default.modalError }, `❌ 启动失败：${error}`), El("div", { className: styles_module_css_default.modalActions }, El("button", {
-				className: styles_module_css_default.btnGhost,
+			}, "知道了"))) : El("div", null, El("div", { className: styles_module_css_default.modalError }, El(Icon, {
+				d: ICON_CLOSE,
+				size: 14,
+				className: styles_module_css_default.inlineIcon
+			}), `启动失败：${error}`), El("div", { className: styles_module_css_default.modalActions }, El("button", {
+				className: styles_module_css_default.btn,
 				onClick: () => setPhase("confirm")
 			}, "重试"), El("button", {
-				className: styles_module_css_default.btnPrimary,
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary}`,
 				onClick: onClose
 			}, "关闭")))));
 		}
 		function RecommendTab(props) {
-			const { profile, recs, loading, installedIds, onInstall, onTagClick } = props;
-			if (loading) return El("div", { className: styles_module_css_default.stateHint }, "加载推荐中…");
-			if (recs.length === 0) return El("div", { className: styles_module_css_default.stateHint }, "暂无推荐，先去搜索或完成问卷吧");
-			const stage = !profile ? "新手" : profile.modeOverride !== "auto" ? profile.modeOverride : profile.confidence >= .4 ? "老手" : "新手";
+			const { plugins, profile, recs, loading, installedIds, onInstall, onTagClick, onSwitchMode, onQuizSubmit, sceneState, onFetchScene } = props;
+			const [quizOpen, setQuizOpen] = (0, react.useState)(true);
+			const [picked, setPicked] = (0, react.useState)([]);
+			if (loading && recs.length === 0) return El("div", { className: styles_module_css_default.stateHint }, "加载推荐中…");
+			if (recs.length === 0 && !loading) return El("div", { className: styles_module_css_default.stateHint }, "暂无推荐，先去搜索或完成问卷吧");
+			const isNovice = !profile || profile.modeOverride === "novice" || profile.modeOverride === "auto" && profile.confidence < .4;
 			const groups = [
 				{
-					title: "🎯 适合当前场景",
-					items: recs.filter((r) => r.origin === "scene")
-				},
-				{
-					title: "🤔 猜你喜欢",
+					title: "猜你喜欢",
+					icon: ICON_HEART,
 					items: recs.filter((r) => r.origin === "guess")
 				},
 				{
-					title: "⭐ 精选",
+					title: "精选",
+					icon: ICON_AWARD,
 					items: recs.filter((r) => r.origin === "curated")
 				},
 				{
-					title: "🆕 最近更新",
+					title: "最近更新",
+					icon: ICON_CLOCK,
 					items: recs.filter((r) => r.origin === "trending")
 				}
 			].filter((g) => g.items.length > 0);
-			return El("div", { className: styles_module_css_default.tabBody }, profile ? El("div", { className: styles_module_css_default.stageBadge }, `阶段：${stage} · 画像置信度 ${Math.round((profile.confidence ?? 0) * 100)}%`) : null, ...groups.map((g) => El("div", {
+			const quizTags = aggregateHotTags(plugins, 20);
+			const togglePick = (t) => {
+				setPicked((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : prev.length >= 6 ? prev : [...prev, t]);
+			};
+			const submitQuiz = () => {
+				if (picked.length === 0) return;
+				onQuizSubmit(picked).then(() => {
+					markQuizSubmitted();
+					setQuizOpen(false);
+					toast("已根据偏好重新生成推荐");
+				});
+			};
+			const skipQuiz = () => {
+				setQuizOpen(false);
+				toast("已跳过，推荐将按默认偏好生成");
+			};
+			const quizSubmitted = !profile || profile.sources.quiz.length > 0;
+			const showQuiz = isNovice && quizOpen && (quizSubmitted ? quizTriggered : true);
+			return El("div", { className: styles_module_css_default.tabBody }, showQuiz ? El("div", { className: styles_module_css_default.quizCard }, El("div", { className: styles_module_css_default.quizHead }, El("span", { className: styles_module_css_default.quizHeadIcon }, El(Icon, {
+				d: ICON_HELP,
+				size: 16
+			})), El("span", { className: styles_module_css_default.quizTitle }, "先了解你的偏好"), El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnGhost} ${styles_module_css_default.btnSm}`,
+				onClick: skipQuiz
+			}, "跳过")), El("div", { className: styles_module_css_default.quizDesc }, "告诉我你想用插件做什么，给我更准的推荐（可多选，可跳过）。"), El("div", { className: styles_module_css_default.quizTags }, ...quizTags.map((t) => El("span", {
+				key: t,
+				className: `${styles_module_css_default.quizChip} ${picked.includes(t) ? styles_module_css_default.quizChipOn : ""}`,
+				onClick: () => togglePick(t)
+			}, t))), El("div", { className: styles_module_css_default.quizActions }, El("span", { className: styles_module_css_default.quizCount }, `已选 ${picked.length} / 6`), El("div", { className: styles_module_css_default.quizCta }, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary}`,
+				disabled: picked.length === 0,
+				onClick: submitQuiz
+			}, "为我推荐")))) : null, El("div", { className: styles_module_css_default.recommendToolbar }, El("span", { className: styles_module_css_default.recommendToolbarIcon }, El(Icon, {
+				d: ICON_MODE,
+				size: 14
+			})), El("span", { className: styles_module_css_default.recommendHint }, isNovice ? [
+				"当前为",
+				El("b", { key: "b1" }, "新手模式"),
+				"，推荐更稳妥通用。可切换到",
+				El("b", { key: "b2" }, "个性化模式"),
+				"获取贴合你工作流的建议。"
+			] : [
+				"当前为",
+				El("b", { key: "b1" }, "个性化模式"),
+				"，推荐将贴合你的工作流与偏好持续调整。"
+			])), El("div", { className: styles_module_css_default.modeSwitchRow }, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
+				onClick: () => void onSwitchMode()
+			}, isNovice ? "切换到 · 个性化模式" : "切换到 · 新手模式")), El("div", { className: styles_module_css_default.section }, El("div", { className: styles_module_css_default.sectionHead }, El(Icon, {
+				d: ICON_SCENE,
+				size: 14,
+				className: styles_module_css_default.sectionIcon
+			}), El("h3", { className: styles_module_css_default.sectionTitle }, "适合当前场景"), El("span", { className: styles_module_css_default.sectionNote }, sceneState.loading ? "读取会话上下文…" : sceneState.recs.length > 0 ? `基于「${sceneState.sceneTags.slice(0, 3).join(" / ")}」` : "基于你的工作区"), sceneState.loading ? null : El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
+				onClick: () => void onFetchScene()
+			}, sceneState.recs.length > 0 ? "刷新" : "获取场景推荐")), sceneState.loading ? El("div", { className: styles_module_css_default.stateHint }, "读取中…") : sceneState.recs.length > 0 ? El("div", { className: styles_module_css_default.sceneList }, ...sceneState.recs.slice(0, 4).map((r) => El("div", {
+				key: r.plugin.id,
+				className: styles_module_css_default.sceneRow
+			}, El("div", { className: styles_module_css_default.sceneInfo }, El("div", { className: styles_module_css_default.sceneName }, r.plugin.name), El("div", { className: styles_module_css_default.sceneDesc }, r.plugin.descriptionZh)), El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary} ${styles_module_css_default.btnSm}`,
+				onClick: () => onInstall(r.plugin)
+			}, "获取")))) : El("p", { className: styles_module_css_default.sceneEmpty }, "根据你当前正在做的事推荐插件（点击获取，基于会话内容）")), ...groups.map((g) => El("div", {
 				key: g.title,
 				className: styles_module_css_default.section
-			}, El("h3", { className: styles_module_css_default.sectionTitle }, g.title), ...g.items.map((r) => El(PluginCard, {
+			}, El("div", { className: styles_module_css_default.sectionHead }, El(Icon, {
+				d: g.icon,
+				size: 14,
+				className: styles_module_css_default.sectionIcon
+			}), El("h3", { className: styles_module_css_default.sectionTitle }, g.title), g.title === "精选" ? El("span", { className: styles_module_css_default.sectionNote }, "编辑推荐") : null), El("div", { className: styles_module_css_default.grid2 }, ...g.items.map((r) => El(PluginCard, {
 				key: r.plugin.id,
 				plugin: r.plugin,
 				reasons: r.reasons,
 				origin: r.origin,
 				onInstall,
 				onTagClick
-			})))), installedIds.size > 0 ? El("div", { className: styles_module_css_default.installedNote }, `已排除 ${installedIds.size} 个已安装插件`) : null);
+			}))))), installedIds.size > 0 ? El("div", { className: styles_module_css_default.installedNote }, `已排除 ${installedIds.size} 个已安装插件`) : null);
 		}
 		function SearchTab(props) {
 			const { plugins, onInstall, onTagClick } = props;
@@ -261,6 +630,11 @@ window.__ModuleLoader__.load({
 			const [type, setType] = (0, react.useState)("all");
 			const [results, setResults] = (0, react.useState)([]);
 			const [searching, setSearching] = (0, react.useState)(false);
+			const [semanticOn, setSemanticOn] = (0, react.useState)(false);
+			const [semanticNotice, setSemanticNotice] = (0, react.useState)("");
+			const [semanticTags, setSemanticTags] = (0, react.useState)([]);
+			const [hotExpanded, setHotExpanded] = (0, react.useState)(false);
+			const [visible, setVisible] = (0, react.useState)(50);
 			const debounceRef = (0, react.useRef)(null);
 			(0, react.useEffect)(() => {
 				if (searchSeed) {
@@ -268,37 +642,36 @@ window.__ModuleLoader__.load({
 					setSearchSeed("");
 				}
 			}, []);
-			const hot = (0, react.useMemo)(() => {
-				const counts = /* @__PURE__ */ new Map();
-				for (const p of plugins) for (const t of p.tags) {
-					if (!/[\u4e00-\u9fff]/.test(t)) continue;
-					if ([
-						"效率工具",
-						"开发辅助",
-						"AI 增强",
-						"AI增强"
-					].includes(t)) continue;
-					counts.set(t, (counts.get(t) ?? 0) + 1);
-				}
-				return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12).map(([t]) => t);
-			}, [plugins]);
+			const hotAll = (0, react.useMemo)(() => aggregateHotTags(plugins, 40), [plugins]);
+			const hot = hotExpanded ? hotAll : hotAll.slice(0, 8);
 			(0, react.useEffect)(() => {
 				if (debounceRef.current) clearTimeout(debounceRef.current);
 				debounceRef.current = setTimeout(() => {
 					runSearch();
-				}, 300);
+				}, semanticOn && query.trim().length >= 2 ? 700 : 300);
 				return () => {
 					if (debounceRef.current) clearTimeout(debounceRef.current);
 				};
 			}, [
 				query,
 				tags,
-				type
+				type,
+				semanticOn
 			]);
 			const runSearch = async () => {
 				setSearching(true);
+				setVisible(50);
 				try {
-					const opts = { limit: 50 };
+					if (semanticOn && query.trim().length >= 2) {
+						const r = await api("search:semantic", { query });
+						setSemanticTags(r.tags);
+						if (r.results.length > 0) {
+							setResults(r.results);
+							return;
+						}
+					}
+					setSemanticTags([]);
+					const opts = { limit: 0 };
 					if (tags.length) opts.tags = tags;
 					if (type !== "all") opts.type = type;
 					const r = await api("search", {
@@ -315,26 +688,56 @@ window.__ModuleLoader__.load({
 			const toggleTag = (t) => {
 				setTags((prev) => prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]);
 			};
-			return El("div", { className: styles_module_css_default.tabBody }, El("div", { className: styles_module_css_default.searchRow }, El("input", {
+			return El("div", { className: styles_module_css_default.tabBody }, El("div", { className: styles_module_css_default.searchWrap }, El("span", { className: styles_module_css_default.searchWrapIcon }, El(Icon, {
+				d: ICON_SEARCH,
+				size: 15
+			})), El("input", {
 				className: styles_module_css_default.searchInput,
-				placeholder: "搜索插件：名称 / 功能 / 用途…",
+				placeholder: "搜索插件名称、标签或描述…",
 				value: query,
 				onChange: (e) => setQuery(e.target.value)
-			})), El("div", { className: styles_module_css_default.filterRow }, El("select", {
-				className: styles_module_css_default.select,
-				value: type,
-				onChange: (e) => setType(e.target.value)
-			}, El("option", { value: "all" }, "全部类型"), El("option", { value: "cordis-plugin" }, "cordis 插件"), El("option", { value: "skill" }, "skill"))), El("div", { className: styles_module_css_default.tagCloud }, ...hot.map((t) => El("span", {
+			}), query.length > 0 ? El("button", {
+				className: styles_module_css_default.searchClear,
+				"aria-label": "清除",
+				onClick: () => setQuery("")
+			}, El(Icon, {
+				d: ICON_CLOSE,
+				size: 13
+			})) : null), El("div", { className: styles_module_css_default.filterRow }, ...[
+				["all", "全部"],
+				["cordis-plugin", "cordis 插件"],
+				["skill", "skill"]
+			].map(([v, label]) => El("span", {
+				key: v,
+				className: `${styles_module_css_default.filterChip} ${type === v ? styles_module_css_default.filterChipOn : ""}`,
+				onClick: () => setType(v)
+			}, label))), El("div", { className: styles_module_css_default.semanticToggle }, El("div", { className: styles_module_css_default.semanticInfo }, El("div", { className: styles_module_css_default.semanticTitle }, "AI 语义搜索", El("span", { className: styles_module_css_default.semanticPill }, "待开发")), El("div", { className: styles_module_css_default.semanticDesc }, "用自然语言理解意图，帮你找到「最贴近需求」的插件。")), El("div", {
+				className: styles_module_css_default.semanticSwitch,
+				title: "功能待开发，暂不可用"
+			})), El("div", { className: styles_module_css_default.hotTagsTitle }, "热门标签"), El("div", { className: styles_module_css_default.tagCloud }, ...hot.map((t) => El("span", {
 				key: t,
-				className: `${styles_module_css_default.tag} ${tags.includes(t) ? styles_module_css_default.tagOn : ""}`,
+				className: `${styles_module_css_default.hotTag} ${tags.includes(t) ? styles_module_css_default.hotTagOn : ""}`,
 				onClick: () => toggleTag(t)
-			}, t))), searching && results.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "搜索中…") : results.length === 0 && query === "" && tags.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "输入关键词或选择标签开始搜索") : results.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "没有匹配的插件") : El("div", { className: styles_module_css_default.results }, El("div", { className: styles_module_css_default.resultCount }, `共 ${results.length} 个结果`), ...results.slice(0, 30).map((r) => El(PluginCard, {
+			}, t))), hotAll.length > 8 ? El("div", { className: styles_module_css_default.tagMoreRow }, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnGhost} ${styles_module_css_default.btnSm}`,
+				onClick: () => setHotExpanded((v) => !v)
+			}, hotExpanded ? "收起标签" : "展开全部标签")) : null, semanticNotice ? El("p", { className: styles_module_css_default.sceneEmpty }, semanticNotice) : null, semanticTags.length > 0 ? El("div", { className: styles_module_css_default.semanticResult }, `AI 理解为你想要：`, ...semanticTags.map((t) => El("span", {
+				key: t,
+				className: `${styles_module_css_default.hotTag} ${tags.includes(t) ? styles_module_css_default.hotTagOn : ""}`,
+				onClick: () => toggleTag(t)
+			}, t))) : null, searching && results.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "搜索中…") : results.length === 0 && query === "" && tags.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "输入关键词或选择标签开始搜索") : results.length === 0 ? El("div", { className: styles_module_css_default.emptyState }, El("div", { className: styles_module_css_default.emptyIcon }, El(Icon, {
+				d: ICON_SEARCH,
+				size: 44
+			})), El("div", { className: styles_module_css_default.emptyTitle }, "没有找到匹配的插件"), El("div", { className: styles_module_css_default.emptyDesc }, "换个关键词或标签试试。")) : El("div", null, El("div", { className: styles_module_css_default.resultCount }, "共 ", El("b", null, String(results.length)), " 个结果"), El("div", { className: styles_module_css_default.results }, ...results.slice(0, visible).map((r) => El(PluginCard, {
 				key: r.plugin.id,
 				plugin: r.plugin,
-				reasons: r.tagHits > 0 ? [`标签命中 ${r.tagHits} 项`] : void 0,
+				reasons: r.aiReason ? [`AI：${r.aiReason}`] : r.tagHits > 0 ? [`标签命中 ${r.tagHits} 项`] : void 0,
 				onInstall,
 				onTagClick
-			}))));
+			}))), visible < results.length ? El("div", { className: styles_module_css_default.loadMoreRow }, El("button", {
+				className: styles_module_css_default.loadMore,
+				onClick: () => setVisible((v) => v + 50)
+			}, `加载更多（还有 ${results.length - visible} 个）`)) : null));
 		}
 		function InstalledTab(props) {
 			const { installed, loading, onChanged } = props;
@@ -356,21 +759,29 @@ window.__ModuleLoader__.load({
 			if (loading) return El("div", { className: styles_module_css_default.stateHint }, "扫描已装插件…");
 			const matched = installed.filter((i) => i.pluginId);
 			const unmatched = installed.filter((i) => !i.pluginId);
-			return El("div", { className: styles_module_css_default.tabBody }, El("div", { className: styles_module_css_default.section }, El("h3", { className: styles_module_css_default.sectionTitle }, `已装插件（${installed.length}）`), matched.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "未检测到市场收录的已装插件") : null, ...matched.map((i) => El("div", {
+			return El("div", { className: styles_module_css_default.tabBody }, El("div", { className: styles_module_css_default.section }, El("div", { className: styles_module_css_default.sectionHead }, El(Icon, {
+				d: ICON_PACKAGE,
+				size: 14,
+				className: styles_module_css_default.sectionIcon
+			}), El("h3", { className: styles_module_css_default.sectionTitle }, "已安装"), El("span", { className: styles_module_css_default.sectionNote }, `${installed.length} 个`)), matched.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "未检测到市场收录的已装插件") : null, ...matched.map((i) => El("div", {
 				key: i.localName,
 				className: styles_module_css_default.installedRow
-			}, El("div", { className: styles_module_css_default.installedInfo }, El("div", { className: styles_module_css_default.installedName }, i.plugin?.name ?? i.localName), El("div", { className: styles_module_css_default.installedMeta }, `${i.version ?? "未知版本"} · ${i.source === "skills" ? "skill" : "profile"}`)), confirming === i.localName ? El("div", { className: styles_module_css_default.installedActions }, El("button", {
-				className: styles_module_css_default.btnGhost,
+			}, El("div", { className: styles_module_css_default.installedInfo }, El("div", { className: styles_module_css_default.installedHead }, El("span", { className: styles_module_css_default.installedName }, i.plugin?.name ?? i.localName), El("span", { className: styles_module_css_default.cardBadge }, i.source === "skills" ? "技能" : "插件")), El("div", { className: styles_module_css_default.installedMeta }, `${i.version ?? "未知版本"} · ${i.source === "skills" ? "skill" : "profile"}`)), confirming === i.localName ? El("div", { className: styles_module_css_default.installedActions }, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
 				onClick: () => setConfirming(null)
 			}, "取消"), El("button", {
-				className: styles_module_css_default.btnDanger,
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm} ${styles_module_css_default.btnDanger}`,
 				disabled: busy,
 				onClick: () => void uninstall(i)
 			}, "确认卸载")) : El("div", { className: styles_module_css_default.installedActions }, El("button", {
-				className: styles_module_css_default.btnGhost,
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
 				disabled: !i.pluginId,
 				onClick: () => setConfirming(i.localName)
-			}, "卸载"))))), unmatched.length > 0 ? El("div", { className: styles_module_css_default.section }, El("h3", { className: styles_module_css_default.sectionTitle }, `其他已装（${unmatched.length}，未收录市场）`), El("div", { className: styles_module_css_default.unmatched }, ...unmatched.slice(0, 30).map((i) => El("span", {
+			}, "卸载"))))), unmatched.length > 0 ? El("div", { className: styles_module_css_default.section }, El("div", { className: styles_module_css_default.sectionHead }, El(Icon, {
+				d: ICON_PACKAGE,
+				size: 14,
+				className: styles_module_css_default.sectionIcon
+			}), El("h3", { className: styles_module_css_default.sectionTitle }, "其他已装"), El("span", { className: styles_module_css_default.sectionNote }, `${unmatched.length} 个 · 未收录市场`)), El("div", { className: styles_module_css_default.unmatched }, ...unmatched.slice(0, 30).map((i) => El("span", {
 				key: i.localName,
 				className: styles_module_css_default.unmatchedChip
 			}, i.localName)), unmatched.length > 30 ? El("span", { className: styles_module_css_default.unmatchedMore }, `+${unmatched.length - 30}`) : null)) : null);
@@ -395,10 +806,23 @@ window.__ModuleLoader__.load({
 					alert(`保存失败：${e.message}`);
 				}
 			};
+			const [ghPoll, setGhPoll] = (0, react.useState)("idle");
+			const [pollDetail, setPollDetail] = (0, react.useState)("");
+			const [pollCount, setPollCount] = (0, react.useState)(0);
+			const pollIntervalRef = (0, react.useRef)(null);
+			const clearPoll = () => {
+				if (pollIntervalRef.current !== null) {
+					window.clearInterval(pollIntervalRef.current);
+					pollIntervalRef.current = null;
+				}
+			};
+			(0, react.useEffect)(() => clearPoll, []);
 			const startDeviceFlow = async () => {
+				clearPoll();
 				setGhBusy(true);
 				setGhError("");
 				setDeviceInfo(null);
+				setGhPoll("waiting");
 				try {
 					const d = await api("gh:deviceCode", { body: {
 						client_id: GH_CLIENT_ID,
@@ -406,6 +830,7 @@ window.__ModuleLoader__.load({
 					} });
 					if (!d.device_code) {
 						setGhError(`设备流不可用：${d.error_description ?? d.error ?? "未知错误"}`);
+						setGhPoll("idle");
 						setGhBusy(false);
 						return;
 					}
@@ -413,24 +838,37 @@ window.__ModuleLoader__.load({
 						verification_uri: d.verification_uri ?? "",
 						user_code: d.user_code ?? ""
 					});
-					const interval = window.setInterval(async () => {
+					setGhPoll("polling");
+					setPollCount(0);
+					setPollDetail("第 1 次轮询…");
+					let localCount = 0;
+					pollIntervalRef.current = window.setInterval(async () => {
 						try {
 							const t = await api("gh:token", { body: {
 								client_id: GH_CLIENT_ID,
 								device_code: d.device_code,
 								grant_type: "urn:ietf:params:oauth:grant-type:device_code"
 							} });
+							localCount++;
+							setPollCount(localCount);
 							if (t.access_token) {
-								window.clearInterval(interval);
-								await finishBind(t.access_token);
-							} else if (t.error === "authorization_pending") {} else if (t.error === "slow_down") {} else {
-								window.clearInterval(interval);
+								clearPoll();
+								setGhPoll("finishing");
+								setPollDetail("拿到 token，正在同步加星…");
+								await finishBind(t.access_token, "device");
+								setGhPoll("done");
+							} else if (t.error === "authorization_pending") setPollDetail(`第 ${localCount} 次：GitHub 尚未确认授权（继续等待…）`);
+							else if (t.error === "slow_down") setPollDetail(`第 ${localCount} 次：GitHub 要求放慢轮询（继续等待…）`);
+							else {
+								clearPoll();
 								setGhError(t.error_description ?? t.error ?? "授权失败");
+								setGhPoll("idle");
 								setGhBusy(false);
 							}
 						} catch (e) {
-							window.clearInterval(interval);
+							clearPoll();
 							setGhError(e.message);
+							setGhPoll("idle");
 							setGhBusy(false);
 						}
 					}, (d.interval ?? 5) * 1e3);
@@ -439,11 +877,12 @@ window.__ModuleLoader__.load({
 					setGhBusy(false);
 				}
 			};
-			const finishBind = async (token) => {
+			const finishBind = async (token, method) => {
 				try {
 					const user = await api("gh:user", { token });
 					localStorage.setItem(GH_TOKEN_KEY, token);
 					localStorage.setItem(GH_LOGIN_KEY, user.login);
+					localStorage.setItem(GH_METHOD_KEY, method);
 					setGhLogin(user.login);
 					setGhBusy(false);
 					setDeviceInfo(null);
@@ -459,7 +898,7 @@ window.__ModuleLoader__.load({
 				setGhBusy(true);
 				setGhError("");
 				try {
-					await finishBind(patInput.trim());
+					await finishBind(patInput.trim(), "pat");
 					setPatInput("");
 				} catch (e) {
 					setGhError(e.message);
@@ -469,47 +908,100 @@ window.__ModuleLoader__.load({
 			const unbind = () => {
 				localStorage.removeItem(GH_TOKEN_KEY);
 				localStorage.removeItem(GH_LOGIN_KEY);
+				localStorage.removeItem(GH_METHOD_KEY);
 				setGhLogin(null);
 				onChanged();
 			};
-			return El("div", { className: styles_module_css_default.tabBody }, El("div", { className: styles_module_css_default.section }, El("h3", { className: styles_module_css_default.sectionTitle }, "GitHub 绑定（加星 → 推荐画像）"), ghLogin ? El("div", { className: styles_module_css_default.ghCard }, El("div", { className: styles_module_css_default.ghRow }, El("span", { className: styles_module_css_default.ghLogin }, `已绑定 @${ghLogin}`), El("button", {
-				className: styles_module_css_default.btnGhost,
+			return El("div", { className: styles_module_css_default.tabBody }, El("div", { className: styles_module_css_default.settingCard }, El("div", { className: styles_module_css_default.settingHead }, El("span", { className: styles_module_css_default.settingIc }, El(Icon, {
+				d: ICON_GITHUB,
+				size: 15
+			})), El("span", { className: styles_module_css_default.settingTitle }, "GitHub 账户"), El("span", { className: `${styles_module_css_default.settingStatus} ${ghLogin ? styles_module_css_default.statusOk : styles_module_css_default.statusOff}` }, ghLogin ? "已绑定" : "未绑定")), ghLogin ? El("div", null, El("p", { className: styles_module_css_default.ghTip }, `已绑定 @${ghLogin}，读取公开加星用于个性化推荐（token 仅存本机浏览器）。`), El("div", { className: styles_module_css_default.settingsRow }, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
 				onClick: unbind
-			}, "解除绑定")), El("p", { className: styles_module_css_default.ghTip }, "已读取你的公开加星用于个性化推荐（token 仅存本机浏览器）")) : El("div", { className: styles_module_css_default.ghCard }, El("div", { className: styles_module_css_default.ghRow }, El("button", {
-				className: styles_module_css_default.btnPrimary,
-				disabled: ghBusy,
-				onClick: () => void startDeviceFlow()
-			}, "通过 GitHub 授权绑定"), El("button", {
-				className: styles_module_css_default.btnGhost,
+			}, "解除绑定"))) : El("div", null, El("div", { className: styles_module_css_default.fieldRow }, El("div", { className: styles_module_css_default.field }, El("label", { className: styles_module_css_default.fieldLabel }, "Token（Personal Access Token）"), El("input", {
+				className: styles_module_css_default.input,
+				type: "password",
+				placeholder: "ghp_…",
+				value: patInput,
+				onChange: (e) => setPatInput(e.target.value)
+			}))), El("div", { className: styles_module_css_default.settingsRow }, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary}`,
 				disabled: ghBusy,
 				onClick: () => void bindWithPat()
-			}, "使用 Token")), deviceInfo ? El("div", { className: styles_module_css_default.deviceFlow }, El("p", null, "在 GitHub 输入授权码："), El("code", { className: styles_module_css_default.deviceCode }, deviceInfo.user_code), El("p", null, El("a", {
+			}, "Token 绑定（完整功能）"), El("button", {
+				className: styles_module_css_default.btn,
+				disabled: ghBusy,
+				onClick: () => void startDeviceFlow()
+			}, "快速授权（仅推荐）")), El("p", { className: styles_module_css_default.ghTip }, "Token 绑定 = 完整功能（读取加星推荐 + 一键加星）；快速授权只能读取公开加星做推荐。", " ", El("a", {
+				href: "https://github.com/settings/tokens/new?scopes=public_repo,read:user&description=dsh-market",
+				target: "_blank",
+				rel: "noopener noreferrer",
+				className: styles_module_css_default.ghLink
+			}, "生成 Token（public_repo + read:user）", El(Icon, {
+				d: ICON_EXTERNAL,
+				size: 11,
+				className: styles_module_css_default.inlineIcon
+			}))), deviceInfo ? El("div", { className: styles_module_css_default.deviceFlow }, El("p", null, "在 GitHub 输入授权码："), El("code", { className: styles_module_css_default.deviceCode }, deviceInfo.user_code), El("p", null, El("a", {
 				href: deviceInfo.verification_uri,
 				target: "_blank",
 				rel: "noopener noreferrer"
-			}, "前往 GitHub 授权 ↗"))) : null, El("div", { className: styles_module_css_default.settingsRow }, El("input", {
-				className: styles_module_css_default.input,
-				placeholder: "或粘贴 Personal Access Token（read:user）",
-				value: patInput,
-				onChange: (e) => setPatInput(e.target.value)
-			})), ghError ? El("p", { className: styles_module_css_default.error }, ghError) : null)), El("div", { className: styles_module_css_default.section }, El("h3", { className: styles_module_css_default.sectionTitle }, "推荐模式"), El("div", { className: styles_module_css_default.settingsRow }, El("select", {
+			}, "前往 GitHub 授权", El(Icon, {
+				d: ICON_EXTERNAL,
+				size: 11,
+				className: styles_module_css_default.inlineIcon
+			}))), El("p", { className: styles_module_css_default.deviceFlowTip }, "输入授权码后，请点击 GitHub 页面上的「Authorize / 授权」按钮完成确认，然后回到这里等待自动绑定。"), El("p", { className: styles_module_css_default.ghPollState }, ghPoll === "polling" ? pollDetail || "等待授权…（授权完成后自动绑定）" : ghPoll === "finishing" ? pollDetail || "授权成功，正在同步加星…" : ghPoll === "done" ? El("span", { className: styles_module_css_default.ghDone }, El(Icon, {
+				d: ICON_CHECK,
+				size: 13,
+				className: styles_module_css_default.inlineIcon
+			}), "绑定完成") : ""), ghPoll === "polling" && pollCount >= 36 ? El("p", { className: styles_module_css_default.deviceFlowTip }, "已等待较久：请确认 GitHub 页面已完成「Authorize」确认；若授权码已过期（15 分钟），点「重新获取授权码」。") : null, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
+				disabled: ghBusy,
+				onClick: () => void startDeviceFlow()
+			}, "重新获取授权码")) : null, ghError ? El("p", { className: styles_module_css_default.error }, ghError) : null)), El("div", { className: styles_module_css_default.settingCard }, El("div", { className: styles_module_css_default.settingHead }, El("span", { className: styles_module_css_default.settingIc }, El(Icon, {
+				d: ICON_MODE,
+				size: 15
+			})), El("span", { className: styles_module_css_default.settingTitle }, "推荐偏好")), El("div", { className: styles_module_css_default.field }, El("label", { className: styles_module_css_default.fieldLabel }, "推荐模式"), El("select", {
 				className: styles_module_css_default.select,
 				value: mode,
 				onChange: (e) => {
 					setMode(e.target.value);
 					saveSettings({ modeOverride: e.target.value });
 				}
-			}, El("option", { value: "auto" }, "自动（按画像置信度）"), El("option", { value: "novice" }, "新手（高分精选 + 引导）"), El("option", { value: "veteran" }, "老手（新颖 + 领域精准）")))), El("div", { className: styles_module_css_default.section }, El("h3", { className: styles_module_css_default.sectionTitle }, "安装设置"), El("div", { className: styles_module_css_default.settingsRow }, El("label", { className: styles_module_css_default.settingsLabel }, "目标 profile"), El("input", {
+			}, El("option", { value: "auto" }, "自动（按画像判断）"), El("option", { value: "novice" }, "新手模式"), El("option", { value: "veteran" }, "个性化模式"))), El("div", { className: styles_module_css_default.field }, El("label", { className: styles_module_css_default.fieldLabel }, "目标 Profile"), El("input", {
 				className: styles_module_css_default.input,
 				value: profileName,
 				onChange: (e) => {
 					setProfileName(e.target.value);
 					saveSettings({ profile: e.target.value });
 				}
-			})), El("p", { className: styles_module_css_default.ghTip }, `已装 skill 目录：从本机 skills 目录 自动检测`)), El("div", { className: styles_module_css_default.section }, El("h3", { className: styles_module_css_default.sectionTitle }, "数据"), El("button", {
-				className: styles_module_css_default.btnGhost,
+			})), El("p", { className: styles_module_css_default.ghTip }, `已装 skill 目录：从本机 skills 目录自动检测`), El("div", { className: styles_module_css_default.dividerLine }), El("button", {
+				className: styles_module_css_default.btn,
 				onClick: onChanged
-			}, "刷新市场数据")));
+			}, "刷新推荐数据")), El("div", { className: styles_module_css_default.settingCard }, El("div", { className: styles_module_css_default.settingHead }, El("span", { className: styles_module_css_default.settingIc }, El(Icon, {
+				d: ICON_CLOCK,
+				size: 15
+			})), El("span", { className: styles_module_css_default.settingTitle }, "关于")), El("p", { className: styles_module_css_default.ghTip }, "插件市场 · 方向 B「克制增强」", El("br"), "数据缓存于本地（GitHub Actions 每日抓取）。")));
+		}
+		function FavoritesTab(props) {
+			const { plugins, onInstall, onTagClick, refreshTick, onGotoRecommend } = props;
+			const favIds = (0, react.useMemo)(() => readFavorites(), [refreshTick]);
+			const items = plugins.filter((p) => favIds.includes(p.id));
+			return El("div", { className: styles_module_css_default.tabBody }, El("div", { className: styles_module_css_default.sectionHead }, El(Icon, {
+				d: ICON_STAR_OUTLINE,
+				size: 14,
+				className: styles_module_css_default.sectionIcon
+			}), El("h3", { className: styles_module_css_default.sectionTitle }, "我的收藏"), El("span", { className: styles_module_css_default.sectionNote }, `${items.length} 个`)), items.length === 0 ? El("div", { className: styles_module_css_default.emptyState }, El("div", { className: styles_module_css_default.emptyIcon }, El(Icon, {
+				d: ICON_STAR_OUTLINE,
+				size: 44
+			})), El("div", { className: styles_module_css_default.emptyTitle }, "还没有收藏任何插件"), El("div", { className: styles_module_css_default.emptyDesc }, "在推荐或搜索页点击星标，把喜欢的插件收藏到这里。"), El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary}`,
+				onClick: onGotoRecommend
+			}, "去逛逛")) : El("div", { className: styles_module_css_default.grid2 }, ...items.map((p) => El(PluginCard, {
+				key: p.id,
+				plugin: p,
+				onInstall,
+				onTagClick
+			}))));
 		}
 		function MarketPanel(props) {
 			const { onClose } = props;
@@ -522,6 +1014,11 @@ window.__ModuleLoader__.load({
 			const [loading, setLoading] = (0, react.useState)(false);
 			const [installTarget, setInstallTarget] = (0, react.useState)(null);
 			const [refreshKey, setRefreshKey] = (0, react.useState)(0);
+			const [sceneState, setSceneState] = (0, react.useState)({
+				loading: false,
+				recs: [],
+				sceneTags: []
+			});
 			const loadAll = async () => {
 				setLoading(true);
 				try {
@@ -533,7 +1030,6 @@ window.__ModuleLoader__.load({
 					setPlugins(pl);
 					setProfile(prof);
 					setInstalled(inst);
-					const sceneTags = [];
 					const counts = /* @__PURE__ */ new Map();
 					for (const i of inst) {
 						if (!i.plugin) continue;
@@ -548,7 +1044,7 @@ window.__ModuleLoader__.load({
 							counts.set(t, (counts.get(t) ?? 0) + 1);
 						}
 					}
-					for (const [t, c] of [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5)) sceneTags.push(t);
+					const sceneTags = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([t]) => t);
 					const r = await api("recommend", { options: {
 						limit: 24,
 						excludeIds: inst.filter((i) => i.pluginId).map((i) => i.pluginId),
@@ -571,16 +1067,70 @@ window.__ModuleLoader__.load({
 				setTab("search");
 			};
 			const onInstalledChanged = () => setRefreshKey((k) => k + 1);
+			const onFetchScene = async () => {
+				setSceneState({
+					loading: true,
+					recs: [],
+					sceneTags: []
+				});
+				try {
+					const tags = (await api("scene:context")).sceneTags ?? [];
+					if (tags.length === 0) {
+						setSceneState({
+							loading: false,
+							recs: [],
+							sceneTags: []
+						});
+						return;
+					}
+					const r = await api("recommend", { options: {
+						limit: 24,
+						excludeIds: installed.filter((i) => i.pluginId).map((i) => i.pluginId),
+						sceneTags: tags
+					} });
+					setSceneState({
+						loading: false,
+						recs: r.filter((x) => x.origin === "scene"),
+						sceneTags: tags
+					});
+				} catch (e) {
+					console.error("fetch scene failed:", e);
+					setSceneState({
+						loading: false,
+						recs: [],
+						sceneTags: []
+					});
+				}
+			};
+			const onSwitchMode = async () => {
+				const cur = profile?.modeOverride ?? "auto";
+				const next = cur === "novice" || cur === "auto" && (profile?.confidence ?? 0) < .4 ? "auto" : "novice";
+				try {
+					await api("settings:update", { patch: { modeOverride: next } });
+					if (next === "novice") markQuizTriggered();
+					onInstalledChanged();
+				} catch (e) {
+					console.error("switch mode failed:", e);
+				}
+			};
 			return El("div", {
 				className: styles_module_css_default.backdrop,
 				onClick: onClose
 			}, El("div", {
 				className: styles_module_css_default.panel,
 				onClick: (e) => e.stopPropagation()
-			}, El("div", { className: styles_module_css_default.header }, El("span", { className: styles_module_css_default.title }, "🧩 插件市场"), El("span", { className: styles_module_css_default.subtitle }, `${plugins.length} 个插件`), El("button", {
-				className: styles_module_css_default.btnGhost,
-				onClick: onClose
-			}, "✕")), El("div", { className: styles_module_css_default.tabs }, ...[
+			}, El("div", { className: styles_module_css_default.header }, El("span", { className: styles_module_css_default.titleIcon }, El(MarketLogo, {
+				size: 24,
+				color: "#4D6BFE",
+				eyeColor: "#FFFFFF"
+			})), El("span", { className: styles_module_css_default.title }, "插件市场"), El("span", { className: styles_module_css_default.subtitle }, `${plugins.length} 个插件`), El("button", {
+				className: styles_module_css_default.headerClose,
+				onClick: onClose,
+				"aria-label": "关闭"
+			}, El(Icon, {
+				d: ICON_CLOSE,
+				size: 14
+			}))), El("div", { className: styles_module_css_default.tabs }, ...[
 				{
 					id: "recommend",
 					label: "推荐"
@@ -588,6 +1138,10 @@ window.__ModuleLoader__.load({
 				{
 					id: "search",
 					label: "搜索"
+				},
+				{
+					id: "favorites",
+					label: "收藏"
 				},
 				{
 					id: "installed",
@@ -608,11 +1162,24 @@ window.__ModuleLoader__.load({
 				loading,
 				installedIds,
 				onInstall: setInstallTarget,
-				onTagClick
+				onTagClick,
+				onSwitchMode,
+				onQuizSubmit: async (tags) => {
+					await api("profile:update", { quizTags: tags });
+					onInstalledChanged();
+				},
+				sceneState,
+				onFetchScene
 			}) : tab === "search" ? El(SearchTab, {
 				plugins,
 				onInstall: setInstallTarget,
 				onTagClick
+			}) : tab === "favorites" ? El(FavoritesTab, {
+				plugins,
+				onInstall: setInstallTarget,
+				onTagClick,
+				refreshTick: refreshKey,
+				onGotoRecommend: () => setTab("recommend")
 			}) : tab === "installed" ? El(InstalledTab, {
 				installed,
 				loading,
@@ -643,10 +1210,10 @@ window.__ModuleLoader__.load({
 				title: "插件市场",
 				"aria-label": "插件市场",
 				"data-active": open || void 0
-			}, (0, react.createElement)("span", {
-				className: styles_module_css_default.triggerIcon,
-				"aria-hidden": true
-			}, "🧩"), props.wide ? (0, react.createElement)("span", { className: styles_module_css_default.triggerLabel }, "插件市场") : null);
+			}, (0, react.createElement)("span", { className: styles_module_css_default.triggerIcon }, (0, react.createElement)(MarketLogo, {
+				size: 24,
+				color: open ? "var(--dsw-alias-brand-primary, #2864A9)" : "var(--dsw-alias-label-secondary, #5F6670)"
+			})), props.wide ? (0, react.createElement)("span", { className: styles_module_css_default.triggerLabel }, "插件市场") : null);
 		}
 		const inject = ["slots"];
 		function apply(ctx) {

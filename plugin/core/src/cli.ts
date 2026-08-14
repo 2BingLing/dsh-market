@@ -80,6 +80,13 @@ function lite(p: any) {
 
 const litePlugin = (p: any) => lite(p);
 
+/** 用 settings.json 的 modeOverride 覆盖画像（settings 是用户覆盖的单一来源） */
+function withSettingsMode(profile: ReturnType<typeof readProfile>) {
+  if (!profile) return null
+  const s = readSettings(cfg)
+  return { ...profile, modeOverride: s.modeOverride ?? profile.modeOverride }
+}
+
 const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
   // ---------- 配置 ----------
   config: () => ({
@@ -118,7 +125,7 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
     ),
 
   // ---------- 画像 ----------
-  "profile:read": () => readProfile(cfg),
+  "profile:read": () => withSettingsMode(readProfile(cfg)),
   "profile:update": async (args) => {
     const data = await market();
     const prev = readProfile(cfg);
@@ -128,7 +135,7 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
       quizTags: args.quizTags,
     });
     writeProfile(cfg, profile);
-    return profile;
+    return withSettingsMode(readProfile(cfg));
   },
   "profile:reset": () => {
     writeProfile(cfg, {
@@ -138,7 +145,7 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
       modeOverride: "auto",
       updatedAt: new Date().toISOString(),
     });
-    return readProfile(cfg);
+    return withSettingsMode(readProfile(cfg));
   },
 
   // ---------- 搜索 / 标签 ----------
@@ -156,7 +163,7 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
   // ---------- 推荐 ----------
   recommend: async (args) => {
     const data = await market();
-    const profile = readProfile(cfg) ?? updateProfile(null, data.plugins, {});
+    const profile = withSettingsMode(readProfile(cfg)) ?? updateProfile(null, data.plugins, {});
     return recommend(data.plugins, profile, args.options).map((r) => ({
       plugin: litePlugin(r.plugin),
       score: r.score,

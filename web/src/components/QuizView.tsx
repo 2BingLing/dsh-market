@@ -22,7 +22,10 @@ export default function QuizView({ plugins, favorites, onToggleFavorite, onOpen,
   const [picked, setPicked] = useState<string[]>([]);
   const [done, setDone] = useState(false);
 
-  const tagStats = useMemo(() => aggregateTags(plugins).slice(0, 40), [plugins]);
+  const tagStats = useMemo(
+    () => aggregateTags(plugins).filter((t) => t.count >= 2).slice(0, 40),
+    [plugins]
+  );
 
   const toggle = (t: string) => {
     setPicked((prev) => {

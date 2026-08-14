@@ -26,6 +26,7 @@ import { cached } from "./cache.js";
 import { runPool } from "./pool.js";
 import { translateWithDeepSeek } from "./llm.js";
 import { parseInstallCommands } from "./install-parse.js";
+import { normalizeTags } from "./tag-normalize.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, "../../data");
@@ -335,6 +336,15 @@ async function main() {
   const model = process.env.DEEPSEEK_MODEL ?? "deepseek-chat";
 
   if (apiKey) {
+    // 已知标签清单（约束新翻译优先复用，抑制同义异名）：从已收录插件聚合细分中文标签 top 40
+    const knownTags = [
+      ...new Set(
+        detected
+          .filter((d) => d.plugin.descriptionZh) // 已翻译的（含复用）
+          .flatMap((d) => d.plugin.tags.filter((t) => /[\u4e00-\u9fff]/.test(t)))
+      ),
+    ].slice(0, 40);
+
     const pending = detected.filter((d) => {
       const prev = prevZh.get(d.plugin.id);
       if (d.plugin.descriptionZh) return false; // 本次已有
@@ -360,6 +370,7 @@ async function main() {
             description: d.plugin.description,
             readmeSummary: d.plugin.readmeSummary,
             topics: d.plugin.topics,
+            knownTags,
           },
           { apiKey, baseURL, model }
         );
@@ -377,6 +388,48 @@ async function main() {
     console.log(`  translated: ${translated}, failed: ${pending.length - translated}`);
   } else {
     console.log("  未配置 DEEPSEEK_API_KEY，跳过中文化（仅保留英文）");
+  }
+
+  console.log("[3.6/5] 标签归一化（合并同义词 + 移除宽泛标签）...");
+  if (apiKey) {
+    // 读取历史 alias（持久化复用，避免 LLM 输出波动导致合并丢失）
+    let prevAlias: Record<string, string> = {};
+    try {
+      prevAlias = JSON.parse(readFileSync(join(DATA_DIR, "tag-alias.json"), "utf-8")).alias ?? {};
+    } catch {
+      prevAlias = {};
+    }
+    // 1) 先应用历史 alias
+    const allPlugins = detected.map((d) => d.plugin);
+    let histMerged = 0;
+    for (const p of allPlugins) {
+      const next: string[] = [];
+      for (const t of p.tags) {
+        const target = prevAlias[t];
+        if (target && target !== t) {
+          histMerged++;
+          if (!next.includes(target)) next.push(target);
+        } else {
+          next.push(t);
+        }
+      }
+      p.tags = next;
+    }
+    // 2) 再跑 LLM 归一化（针对剩余标签，含宽泛移除）
+    const norm = await normalizeTags(allPlugins, { apiKey, baseURL, model });
+    const aliasEntries = Object.entries(norm.alias);
+    console.log(
+      `  历史 alias 应用 ${histMerged} 处 · 新 LLM 合并 ${aliasEntries.length} 组（${norm.mergedCount} 处）· 移除宽泛标签 ${norm.removedGeneric} 处`
+    );
+    // 3) 持久化合并后的 alias
+    const mergedAlias = { ...prevAlias, ...norm.alias };
+    writeFileSync(
+      join(DATA_DIR, "tag-alias.json"),
+      JSON.stringify({ updatedAt: new Date().toISOString(), alias: mergedAlias }, null, 2),
+      "utf-8"
+    );
+  } else {
+    console.log("  跳过（无 API key）");
   }
 
   console.log("[4/5] 生成数据文件...");

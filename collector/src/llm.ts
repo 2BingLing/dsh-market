@@ -13,21 +13,26 @@ interface Input {
   description: string;
   readmeSummary: string | null;
   topics: string[];
+  /** 已存在的细分标签清单（约束生成：优先复用，抑制同义异名） */
+  knownTags?: string[];
 }
 
 const MAX_DESC = 220;
 
 function buildPrompt(input: Input): string {
+  const known = input.knownTags?.length
+    ? `已存在的细分标签（优先从中选用，只有确实无法表达时才创建新标签）：\n${input.knownTags.slice(0, 40).join("、")}\n`
+    : "";
   return `你是 DeepSeek Harness 插件市场的编辑。为下面这个 DSH 插件生成中文简介和中文功能标签。
 
 插件名：${input.name}
 英文描述：${(input.description || "").slice(0, 200) || "（无）"}
 README 摘要：${(input.readmeSummary || "").slice(0, MAX_DESC) || "（无）"}
 GitHub topics：${input.topics.join(", ") || "（无）"}
-
+${known}
 要求：
 1. descriptionZh：一句话中文简介（不超过 60 字），突出「能做什么、有什么用」，口语化自然，不要翻译腔
-2. tagsZh：3-5 个中文功能标签，用于分类筛选。可选方向示例：浏览器自动化、数据处理、角色扮演、界面美化、安全审计、测试辅助、命令行工具、AI 增强、效率工具、开发辅助、内容创作、通知提醒、数据库、网络爬取、桌面控制、语音处理、图片视觉、代码生成、文档工具、娱乐互动（根据插件实际功能选择，不要照抄示例）
+2. tagsZh：3-5 个中文功能标签，用于分类筛选${known ? "，**优先复用上面已存在的标签**（用词一致），只有新功能类型才创建新标签" : ""}
 
 只输出 JSON，不要任何其他文字：
 {"descriptionZh": "...", "tagsZh": ["...", "..."]}`;

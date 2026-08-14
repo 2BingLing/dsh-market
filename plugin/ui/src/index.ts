@@ -73,6 +73,13 @@ export function apply(ctx: {
   const cfg = resolveConfig()
   let cached: Awaited<ReturnType<typeof fetchMarketData>> | null = null
 
+  /** 用 settings.json 的 modeOverride 覆盖画像（settings 是用户覆盖的单一来源） */
+  function withSettingsMode(profile: ReturnType<typeof readProfile>) {
+    if (!profile) return null
+    const s = readSettings(cfg)
+    return { ...profile, modeOverride: s.modeOverride ?? profile.modeOverride }
+  }
+
   async function market() {
     if (!cached) cached = await fetchMarketData(cfg)
     return cached.data
@@ -113,7 +120,7 @@ export function apply(ctx: {
         }))
 
       case 'profile:read':
-        return readProfile(cfg)
+        return withSettingsMode(readProfile(cfg))
       case 'profile:update': {
         const data = await market()
         const prev = readProfile(cfg)
@@ -123,7 +130,7 @@ export function apply(ctx: {
           quizTags: args.quizTags as string[] | undefined,
         })
         writeProfile(cfg, profile)
-        return profile
+        return withSettingsMode(readProfile(cfg))
       }
       case 'profile:reset': {
         writeProfile(cfg, {
@@ -149,9 +156,107 @@ export function apply(ctx: {
       case 'tags:all':
         return aggregateTags((await market()).plugins)
 
+      // 场景推荐信号：当前会话标题 + 最近用户消息 + 最近工具调用 → 匹配插件标签（零 token）
+      case 'scene:context': {
+        const agents = ctx.get('agents') as
+          | { list?: () => Array<{ sessionId?: string; id?: string }> }
+          | undefined
+        const agent = agents?.list?.()?.[0]
+        const sessionId = agent?.sessionId ?? agent?.id
+        const sq = ctx.get('sessionQuery') as
+          | {
+              readTitle?(id: string): Promise<{ title?: string } | undefined>
+              readSession?(id: string): Promise<{ events?: Array<Record<string, any>> }>
+            }
+          | undefined
+        if (!sessionId || !sq) return { sceneTags: [], sceneText: '' }
+        let title = ''
+        const msgs: string[] = []
+        const tools: string[] = []
+        try {
+          const t = await sq.readTitle?.(sessionId)
+          title = t?.title ?? ''
+          const s = await sq.readSession?.(sessionId)
+          const evts = s?.events ?? []
+          for (const e of evts.slice(-60)) {
+            if (e.type === 'user/message') {
+              const txt = (e.data?.content ?? [])
+                .filter((c: { type?: string }) => c.type === 'text')
+                .map((c: { text?: string }) => c.text ?? '')
+                .join(' ')
+              if (txt) msgs.push(txt)
+            } else if (e.type === 'tool/call') {
+              const n = e.data?.name
+              if (typeof n === 'string') tools.push(n)
+            }
+          }
+        } catch {
+          /* 会话读取失败 → 空场景 */
+        }
+        const text = [title, ...msgs.slice(-4), ...tools.slice(-8)].join(' ')
+        const data = await market()
+        const sceneTags = extractSceneTags(text, data.plugins)
+        return { sceneTags, sceneText: text.slice(0, 200) }
+      }
+
+      // 语义搜索：本地宽松召回候选 → LLM 理解用户需求直接选品精排（带理由）
+      // harness 独有能力：搜索"我想干嘛"而非"标签/关键词"
+      case 'search:semantic': {
+        const query = String(args.query ?? '').trim()
+        if (!query) return { picks: [], results: [] }
+        const llm = ctx.get('llm') as
+          | { stream(opts: Record<string, unknown>): AsyncIterable<{ text?: string; delta?: string }> }
+          | undefined
+        if (!llm) throw new Error('LLM 服务不可用')
+        const data = await market()
+        // 1. 本地宽松预召回（Fuse + 子串，候选池固定 60，token 预算不随插件量增长）
+        const candidates = search(data.plugins, query, { limit: 60 })
+        if (candidates.length === 0) return { picks: [], results: [] }
+        // 2. LLM 精排：理解自然语言需求，从候选里挑最匹配的
+        const lines = candidates.map((c, i) => {
+          const zhTags = c.plugin.tags.filter((t) => /[\u4e00-\u9fff]/.test(t)).slice(0, 4).join('/')
+          return `${i}. ${c.plugin.name}｜${(c.plugin.descriptionZh ?? '').slice(0, 60)}｜${zhTags}`
+        })
+        const prompt = [
+          '你是 DSH 插件市场的选品助手。用户的需求描述：「' + query + '」',
+          '候选插件（编号. 名称｜中文简介｜中文标签）：',
+          ...lines,
+          '任务：从候选中选出最符合用户需求的插件（最多 20 个，按匹配度从高到低排序）。',
+          '只输出 JSON：{"picks":[{"i":编号,"reason":"为什么适合（20 字内）"}]}，不要输出其他文字。',
+        ].join('\n')
+        let text = ''
+        try {
+          const stream = llm.stream({
+            provider: 'opencode-go',
+            model: 'deepseek-v4-flash',
+            messages: [{ role: 'user', content: [{ type: 'text', text: prompt }] }],
+          })
+          for await (const chunk of stream) {
+            const t = chunk && (chunk.text ?? chunk.delta ?? null)
+            if (typeof t === 'string') text += t
+          }
+        } catch (e) {
+          console.error('semantic search llm failed:', e)
+        }
+        const picks = parsePicks(text)
+        const results = (picks.length > 0 ? picks : candidates.slice(0, 20).map((c, i) => ({ i, reason: '' })))
+          .map((p) => {
+            const c = candidates[p.i]
+            if (!c) return null
+            return {
+              plugin: lite(c.plugin),
+              relevance: c.relevance,
+              tagHits: c.tagHits,
+              aiReason: p.reason,
+            }
+          })
+          .filter((x): x is NonNullable<typeof x> => x !== null)
+        return { picks, results }
+      }
+
       case 'recommend': {
         const data = await market()
-        const profile = readProfile(cfg) ?? updateProfile(null, data.plugins, {})
+        const profile = withSettingsMode(readProfile(cfg)) ?? updateProfile(null, data.plugins, {})
         return recommend(data.plugins, profile, args.options as never).map((r) => ({
           plugin: lite(r.plugin),
           score: r.score,
@@ -249,6 +354,35 @@ export function apply(ctx: {
           token: args.token as string | undefined,
           username: args.username as string | undefined,
         })
+      // 加星/取消加星（需 PAT 类 token；GitHub App 设备流 token 不支持此端点）
+      case 'gh:star': {
+        const { token, owner, repo, action } = args as {
+          token?: string
+          owner?: string
+          repo?: string
+          action?: string
+        }
+        if (!token) throw new Error('未绑定 GitHub')
+        if (!owner || !repo) throw new Error('缺少 owner/repo')
+        const method = action === 'unstar' ? 'DELETE' : 'PUT'
+        const r = await fetch(
+          `https://api.github.com/user/starred/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`,
+          {
+            method,
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'User-Agent': 'dsh-market',
+              'Content-Length': '0',
+            },
+            signal: AbortSignal.timeout(15000),
+          },
+        )
+        if (!r.ok) {
+          const body = await r.text().catch(() => '')
+          throw new Error(`GitHub star ${r.status}: ${body.slice(0, 200)}`)
+        }
+        return { ok: true }
+      }
 
       default:
         throw new Error(`未知方法: ${method}`)
@@ -301,6 +435,43 @@ function readJsonBody(req: IncomingMessage): Promise<unknown> {
     })
     req.on('error', reject)
   })
+}
+
+/** 从会话文本提取场景标签（零 token：子串匹配插件标签/插件名） */
+function extractSceneTags(text: string, plugins: Array<{ name: string; tags: string[] }>): string[] {
+  const lower = text.toLowerCase()
+  const hits = new Map<string, number>()
+  for (const p of plugins) {
+    // 插件名命中（工具名/skill 名/仓库名出现在会话中）→ 该插件的中文标签加权
+    const nameHit = p.name && lower.includes(p.name.toLowerCase())
+    for (const t of p.tags) {
+      if (t.length < 2) continue
+      if (lower.includes(t.toLowerCase())) {
+        hits.set(t, (hits.get(t) ?? 0) + (nameHit ? 2 : 1))
+      }
+    }
+  }
+  return [...hits.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([t]) => t)
+}
+
+/** 容错解析 LLM 输出的选品 JSON：{"picks":[{"i":编号,"reason":"..."}]} */
+function parsePicks(text: string): Array<{ i: number; reason: string }> {
+  const m = text.match(/\{[\s\S]*\}/)
+  if (!m) return []
+  try {
+    const obj = JSON.parse(m[0]) as { picks?: unknown }
+    if (!Array.isArray(obj.picks)) return []
+    return obj.picks
+      .filter((p): p is { i?: unknown; reason?: unknown } => typeof p === 'object' && p !== null)
+      .map((p) => ({ i: Number(p.i), reason: typeof p.reason === 'string' ? p.reason.slice(0, 30) : '' }))
+      .filter((p) => Number.isInteger(p.i) && p.i >= 0)
+      .slice(0, 20)
+  } catch {
+    return []
+  }
 }
 
 /** 生成 AI 安装任务的子代理提示词（Codex 式：读文档 → 确认 → 执行 → 验证） */

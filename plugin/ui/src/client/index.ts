@@ -7,6 +7,7 @@
 import { createElement, useSyncExternalStore } from 'react'
 import { MarketPanel } from './panel.tsx'
 import { getOpen, setOpen, subscribe, toggle } from './store.ts'
+import { MarketLogo } from './logo.tsx'
 import styles from './styles.module.css'
 
 /** 入口按钮：侧边栏底部「设置」旁的图标按钮 */
@@ -23,8 +24,13 @@ function MarketTrigger(props: { wide: boolean }): React.ReactNode {
     },
     createElement(
       'span',
-      { className: styles.triggerIcon, 'aria-hidden': true },
-      '🧩',
+      { className: styles.triggerIcon },
+      createElement(MarketLogo, {
+        size: 24,
+        color: open
+          ? 'var(--dsw-alias-brand-primary, #2864A9)'
+          : 'var(--dsw-alias-label-secondary, #5F6670)',
+      }),
     ),
     props.wide ? createElement('span', { className: styles.triggerLabel }, '插件市场') : null,
   )
