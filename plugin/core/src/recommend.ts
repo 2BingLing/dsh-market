@@ -155,12 +155,7 @@ function noviceGuess(pool: DshPlugin[], now: Date): Recommendation[] {
     plugin: p,
     score: s,
     relevance: 0,
-    reasons: [
-      p.install.needsConfig
-        ? "高分实用插件（需要配置 API Key）"
-        : "高分实用插件，开箱即用",
-      ...buildGenericReasons(p, now),
-    ],
+    reasons: buildGenericReasons(p, now),
     origin: "guess",
   }));
 }
@@ -251,20 +246,18 @@ function tagSimilarity(a: string[], b: string[]): number {
   return inter / new Set([...a, ...b]).size;
 }
 
-/** 理由：基于画像的规则生成（短理由，避免拉长卡片） */
+/** 理由：基于画像的规则生成（仅保留时间类短理由，避免占用卡片空间） */
 function buildGuessReasons(p: DshPlugin): string[] {
   const reasons: string[] = [];
   const recent = Date.now() - new Date(p.pushedAt).getTime() <= NOVEL_DAYS * 86400000;
   if (recent) reasons.push("近 30 天更新活跃");
-  if (!p.install.needsConfig) reasons.push("开箱即用");
   return reasons;
 }
 
-/** 通用理由 */
+/** 通用理由（仅保留时间类，去掉配置类，避免占用卡片空间） */
 function buildGenericReasons(p: DshPlugin, now: Date): string[] {
   const reasons: string[] = [];
   const recent = now.getTime() - new Date(p.pushedAt).getTime() <= NOVEL_DAYS * 86400000;
   if (recent) reasons.push("近 30 天更新活跃");
-  if (!p.install.needsConfig) reasons.push("无需额外配置");
   return reasons;
 }

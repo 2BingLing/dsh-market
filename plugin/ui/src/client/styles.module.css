@@ -344,7 +344,7 @@
   line-height: 1.55;
   margin: 8px 0 9px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -362,18 +362,18 @@
 }
 /* 推荐理由（语义色：规则理由浅绿，AI 理由浅蓝） */
 .reason {
-  font-size: 11.5px;
+  font-size: 11px;
   color: #15803d;
   background: #eef8f3;
-  padding: 3px 8px;
-  border-radius: 10px;
+  padding: 2px 6px;
+  border-radius: 8px;
 }
 .reasonAi {
-  font-size: 11.5px;
+  font-size: 11px;
   color: #2e4bd8;
   background: #eaf2fb;
-  padding: 3px 8px;
-  border-radius: 10px;
+  padding: 2px 6px;
+  border-radius: 8px;
 }
 .cardActions {
   display: flex;
@@ -479,11 +479,11 @@
 
 /* ---------- 标签（B：.tag 灰底深字；tagOn 选中态） ---------- */
 .tag {
-  font-size: 11.5px;
+  font-size: 11px;
   color: #4a5460;
   background: #f3f4f6;
-  padding: 3px 8px;
-  border-radius: 10px;
+  padding: 2px 6px;
+  border-radius: 8px;
   cursor: pointer;
   user-select: none;
   border: none;

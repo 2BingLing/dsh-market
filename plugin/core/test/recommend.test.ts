@@ -25,8 +25,12 @@ describe("recommend", () => {
     // 最高分插件应该在前
     const scores = r.map((x) => x.plugin.score.total);
     expect(scores[0]).toBeGreaterThanOrEqual(scores[1]);
-    // 有理由
-    expect(r[0].reasons.length).toBeGreaterThan(0);
+    // 理由已精简：不再有配置类文案，时间类理由允许为空
+    for (const x of r) {
+      for (const reason of x.reasons) {
+        expect(reason).not.toMatch(/高分|开箱即用|无需额外配置|实用分/);
+      }
+    }
   });
 
   it("老手模式：画像标签相关优先", () => {
@@ -38,8 +42,12 @@ describe("recommend", () => {
       (x) => x.plugin.tags.includes("飞书") && x.relevance > 0,
     );
     expect(feishuHits.length).toBeGreaterThan(0);
-    // 每个推荐都有理由
-    expect(r.every((x) => x.reasons.length > 0)).toBe(true);
+    // 理由已精简：配置类文案全部移除，时间类允许为空
+    for (const x of r) {
+      for (const reason of x.reasons) {
+        expect(reason).not.toMatch(/高分|开箱即用|无需额外配置|实用分|与你关注/);
+      }
+    }
   });
 
   it("老手模式：MMR 多样性（避免同质连排）", () => {
