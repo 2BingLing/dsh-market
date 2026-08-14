@@ -15,8 +15,8 @@ export default function Logo({ size = 30 }: { size?: number }) {
         </linearGradient>
       </defs>
       <rect width="120" height="120" rx="28" fill={`url(#${grad})`} />
-      {/* 白色图形整体放大 1.2 倍（围绕中心 60,62 缩放） */}
-      <g transform="translate(60 62) scale(1.2) translate(-60 -62)">
+      {/* 白色图形整体放大 1.35 倍（围绕中心 60,62 缩放） */}
+      <g transform="translate(60 62) scale(1.35) translate(-60 -62)">
         {/* 小背鳍（圆润驼峰） */}
         <path d="M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z" fill="#fff" />
         {/* 小分叉尾鳍 */}
