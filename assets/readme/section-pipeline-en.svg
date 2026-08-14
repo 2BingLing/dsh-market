@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="160" viewBox="0 0 1200 160" role="img" aria-labelledby="pipe-en-title pipe-en-desc">
+  <title id="pipe-en-title">Data Pipeline: Daily Automatic Collection</title>
+  <desc id="pipe-en-desc">Four-step pipeline banner: Collect → Scoring &amp; DeepSeek i18n → plugins.json → Web and plugin editions synced.</desc>
+
+  <defs>
+    <linearGradient id="pipeEnBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FCFDFE"/>
+      <stop offset="1" stop-color="#F0F6FC"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="160" rx="20" fill="url(#pipeEnBg)"/>
+  <rect x="1.5" y="1.5" width="1197" height="157" rx="18.5" fill="none" stroke="#D9E4F0" stroke-width="3"/>
+
+  <!-- 顶行：标题 + 元信息 -->
+  <text x="56" y="52" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="40" font-weight="800" letter-spacing="-0.5" fill="#101418">Data Pipeline</text>
+  <text x="1144" y="52" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#8CA3BB" text-anchor="end">Daily 06:00 · GitHub Actions collection</text>
+
+  <!-- 流程节点 -->
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif">
+    <!-- 节点 1 -->
+    <rect x="56" y="82" width="220" height="60" rx="12" fill="#FFFFFF" stroke="#DCE7F2" stroke-width="2"/>
+    <text x="166" y="104" font-size="19" font-weight="700" fill="#1F2328" text-anchor="middle">Collect</text>
+    <text x="166" y="128" font-size="13" fill="#8CA3BB" text-anchor="middle">topics + awesome lists</text>
+    <!-- 箭头 1 -->
+    <path d="M284 112 h34" stroke="#B9C9DC" stroke-width="2.5" fill="none"/>
+    <path d="M316 106 l10 6 l-10 6 z" fill="#B9C9DC"/>
+
+    <!-- 节点 2 -->
+    <rect x="332" y="82" width="220" height="60" rx="12" fill="#FFFFFF" stroke="#DCE7F2" stroke-width="2"/>
+    <text x="442" y="104" font-size="19" font-weight="700" fill="#1F2328" text-anchor="middle">Scoring</text>
+    <text x="442" y="128" font-size="13" fill="#8CA3BB" text-anchor="middle">DeepSeek i18n</text>
+    <!-- 箭头 2 -->
+    <path d="M560 112 h34" stroke="#B9C9DC" stroke-width="2.5" fill="none"/>
+    <path d="M592 106 l10 6 l-10 6 z" fill="#B9C9DC"/>
+
+    <!-- 节点 3 -->
+    <rect x="608" y="82" width="220" height="60" rx="12" fill="#FFFFFF" stroke="#DCE7F2" stroke-width="2"/>
+    <text x="718" y="104" font-size="19" font-weight="700" fill="#1F2328" text-anchor="middle">plugins.json</text>
+    <text x="718" y="128" font-size="13" fill="#8CA3BB" text-anchor="middle">commit · build · deploy</text>
+    <!-- 箭头 3 -->
+    <path d="M836 112 h34" stroke="#B9C9DC" stroke-width="2.5" fill="none"/>
+    <path d="M868 106 l10 6 l-10 6 z" fill="#B9C9DC"/>
+
+    <!-- 节点 4：双形态 -->
+    <rect x="884" y="82" width="220" height="60" rx="12" fill="#FFFFFF" stroke="#DCE7F2" stroke-width="2"/>
+    <text x="994" y="104" font-size="19" font-weight="700" fill="#1F2328" text-anchor="middle">Web + Plugin</text>
+    <text x="994" y="128" font-size="13" fill="#8CA3BB" text-anchor="middle">synced daily</text>
+  </g>
+</svg>

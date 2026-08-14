@@ -1,13 +1,17 @@
 <p align="center">
+  <b>中文</b> · <b><a href="./README.en.md">English</a></b>
+</p>
+
+<p align="center">
   <img src="./assets/readme/banner.webp" width="100%" alt="DSH Market —— DeepSeek Harness 插件市场：左侧 Web 版（蓝）与 DSH 插件版（黑灰）双 Logo 斜线强对照，右侧插件版功能（一键安装/猜你喜欢/场景推荐/已装管理/GitHub 加星/AI 代理安装）与在线体验入口">
 </p>
 
 <div align="center">
 
-[![在线体验](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://2bingling.github.io/dsh-market/)
+[![在线体验](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://dsh.market/)
 [![提交插件](https://img.shields.io/badge/Contribute-%E6%8F%90%E4%BA%A4%E6%8F%92%E4%BB%B6-2EA043?style=flat-square)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/2BingLing/dsh-market/blob/main/LICENSE)
-[![收录](https://img.shields.io/badge/%E6%94%B6%E5%BD%95-536%20%E6%8F%92%E4%BB%B6-4D6BFE?style=flat-square)](https://2bingling.github.io/dsh-market/)
+[![收录](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2F2BingLing%2Fdsh-market%2Fmain%2Fdata%2Fplugins.json&query=plugins.length&label=%E6%94%B6%E5%BD%95&color=4D6BFE&cacheSeconds=3600)](https://dsh.market/)
 [![更新](https://img.shields.io/badge/%E6%AF%8F%E6%97%A5%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0-06%3A00-1a7f37?style=flat-square)](https://github.com/2BingLing/dsh-market/actions)
 
 </div>
@@ -44,7 +48,7 @@ DSH 生态增长极快，插件散落在 GitHub 各处 —— **不知道哪个�
 
 无需安装，直接访问：
 
-<https://2bingling.github.io/dsh-market/>
+<https://dsh.market/>
 
 ### DSH 插件版
 
@@ -56,7 +60,7 @@ dsh plugin --profile web add dsh-market
 
 ## 特性
 
-- **持续收录** — 每天自动扫描 `dsh-plugin` / `dsh` 等 GitHub topic、社区精选列表，全量收录（当前 536 个）
+- **持续收录** — 每天自动扫描 `dsh-plugin` / `dsh` 等 GitHub topic、社区精选列表，全量收录（当前 575 个）
 - **实用五维评分** — 维护活跃 / 实用度 / 生态热度 / 便捷度 / 信号质量，加权几何平均融合，每个插件附「为什么推荐」解释
 - **中文体验** — 所有插件自动生成中文简介与中文功能标签，中文搜索、中文筛选
 - **一键安装** — 插件版确定性脚本路由：skill 型 `git clone`，cordis 型 `dsh plugin add`；失败可重试、可回滚
@@ -96,7 +100,7 @@ dsh plugin --profile web add dsh-market
 | 便捷度 | 15% | 安装步骤清晰 + 无需额外配置 |
 | 信号质量 | 10% | license / topics / description / README 完备度 |
 
-每个插件附 `explanation`（一句话解释评分理由）。详见 [评分体系说明](https://2bingling.github.io/dsh-market/)。
+每个插件附 `explanation`（一句话解释评分理由）。详见 [评分体系说明](https://dsh.market/)。
 
 ## 数据管道
 

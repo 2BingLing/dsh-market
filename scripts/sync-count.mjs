@@ -2,8 +2,9 @@
  * 同步实时收录数量到 README 静态资产
  *
  * 读取 data/plugins.json 的 plugins 数量，更新：
- *   - assets/readme/hero.svg    "持续收录 NNN+ 插件"
- *   - README.md                 "当前 NNN 个"
+ *   - scripts/compose-banner.mjs  "持续收录 NNN 个插件"（banner 文案源）
+ *   - README.md                   "当前 NNN 个"
+ *   - assets/readme/hero.svg      "持续收录 NNN+ 插件"（备用 SVG hero）
  * 只在数量变化时写文件（避免无谓提交）。
  *
  * 用法：node scripts/sync-count.mjs
@@ -22,14 +23,29 @@ if (!count) {
 
 const targets = [
   {
-    file: "assets/readme/hero.svg",
-    re: /持续收录 \d+\+ 插件/,
-    to: `持续收录 ${count}+ 插件`,
+    file: "scripts/compose-banner.mjs",
+    re: /持续收录 \d+ 个插件/,
+    to: `持续收录 ${count} 个插件`,
+  },
+  {
+    file: "scripts/compose-banner.mjs",
+    re: /(\d+)\+ plugins daily/,
+    to: `${count}+ plugins daily`,
   },
   {
     file: "README.md",
     re: /当前 \d+ 个/,
     to: `当前 ${count} 个`,
+  },
+  {
+    file: "README.en.md",
+    re: /currently \d+/,
+    to: `currently ${count}`,
+  },
+  {
+    file: "assets/readme/hero.svg",
+    re: /持续收录 \d+\+ 插件/,
+    to: `持续收录 ${count}+ 插件`,
   },
 ];
 
