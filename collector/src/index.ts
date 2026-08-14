@@ -107,7 +107,7 @@ async function main() {
   console.log(`  awesome lists -> ${awesomeByFullName.size} entries`);
 
   // 2. topic 搜索 + 组织
-  const topicRepos = await scanByTopics(100);
+  const topicRepos = await scanByTopics();
   const orgRepos = await scanOrg();
 
   // 3. 合并去重
