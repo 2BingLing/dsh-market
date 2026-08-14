@@ -259,7 +259,29 @@ body::before {
 .info-block dd { color: var(--ds-text); overflow: hidden; text-overflow: ellipsis; }
 .info-block dd a { color: var(--ds-blue-700); text-decoration: none; }
 .info-block dd a:hover { text-decoration: underline; }
-.install-box { font-size: 13px; color: var(--ds-text); display: flex; flex-direction: column; gap: 8px; }
+.install-box { font-size: 13px; color: var(--ds-text); display: flex; flex-direction: column; gap: 10px; }
+.install-desc { font-size: 12.5px; }
+.cmd-box {
+  display: flex; align-items: center; gap: 10px; background: #0f2a4d; border-radius: 10px;
+  padding: 10px 14px; border: 1px solid #1d3f6d;
+}
+.cmd-box code {
+  flex: 1; font-size: 12px; color: #cfe3ff; font-family: ui-monospace, Consolas, monospace;
+  white-space: nowrap; overflow-x: auto; overflow-y: hidden;
+}
+.copy-btn {
+  flex: none; border: 1px solid rgba(191, 213, 240, 0.4); background: rgba(191, 213, 240, 0.12);
+  color: var(--ds-blue-300); border-radius: 8px; padding: 5px 12px; font-size: 11.5px;
+  cursor: pointer; font-family: inherit; transition: all 0.18s; white-space: nowrap;
+}
+.copy-btn:hover { background: rgba(191, 213, 240, 0.25); }
+.copy-btn.ok { background: #1f5f46; border-color: #2d7a5a; color: #a7e3c3; }
+.prompt-box {
+  border: 1px dashed var(--ds-line); border-radius: 12px; padding: 12px 14px; background: rgba(255, 255, 255, 0.45);
+}
+.prompt-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.prompt-head span { font-size: 12.5px; font-weight: 500; color: var(--ds-title); }
+.prompt-text { font-size: 12px; color: var(--ds-text); line-height: 1.8; }
 .install-state { font-size: 12px; padding: 6px 12px; border-radius: 8px; display: inline-block; width: fit-content; }
 .install-state.ok { background: var(--ds-green-bg); color: var(--ds-green); border: 1px solid var(--ds-green-line); }
 .install-state.warn { background: #fff7e8; color: #c8943d; border: 1px solid #f0d9a7; }

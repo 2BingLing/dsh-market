@@ -1,6 +1,7 @@
 /**
  * 插件详情页：五维大雷达图 + 档案元数据 + README 摘要 + 安装信息
  */
+import { useMemo, useState } from "react";
 import type { DshPlugin } from "@dsh-market/schema";
 import RadarChart, { RADAR_ORDER, RADAR_LABELS } from "./RadarChart";
 
@@ -32,13 +33,58 @@ interface Props {
   onBack: () => void;
 }
 
+/** 生成具体安装命令（按插件类型） */
+export function buildInstallCommand(p: DshPlugin): string {
+  const repoUrl = `https://github.com/${p.fullName}`;
+  if (p.install.method === "skills-add") {
+    return `git clone ${repoUrl}.git ~/.agents/skills/${p.repo}`;
+  }
+  if (p.install.method === "pnpm-profile") {
+    return `dsh plugin --profile web add ${repoUrl}`;
+  }
+  return `git clone ${repoUrl}.git`;
+}
+
+/** 生成「让 Harness AI 安装」的提示词 */
+export function buildInstallPrompt(p: DshPlugin): string {
+  const typeDesc = p.type === "skill" ? "skill（技能，装到 ~/.agents/skills 目录）" : "cordis 插件（装到 DSH profile）";
+  const configNote = p.install.needsConfig
+    ? "注意：该插件可能需要额外配置（API Key / Token 等），装完后请告诉我如何配置。"
+    : "该插件开箱即用，无需额外配置。";
+  return [
+    `请帮我安装 DeepSeek Harness 插件「${p.name}」：`,
+    `- GitHub 仓库：${p.fullName}（${`https://github.com/${p.fullName}`}）`,
+    `- 类型：${typeDesc}`,
+    `- ${configNote}`,
+    ``,
+    `请先查看仓库 README 确认安装步骤，然后按官方方式安装（skill 型克隆到 ~/.agents/skills，cordis 型用 dsh plugin 装到我的 profile）。装完后告诉我怎么使用。`,
+  ].join("\n");
+}
+
 export default function DetailView({ plugin, favorite, onToggleFavorite, onBack }: Props) {
   const b = plugin.score.breakdown;
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const installCmd = buildInstallCommand(plugin);
+  const installPrompt = buildInstallPrompt(plugin);
+
+  const copy = async (key: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(key);
+      setTimeout(() => setCopied(null), 1800);
+    } catch {
+      // 降级：选中文本
+      setCopied(key);
+      setTimeout(() => setCopied(null), 1800);
+    }
+  };
+
   const installText =
     plugin.install.method === "skills-add"
       ? "克隆到 ~/.agents/skills（skill 型）"
       : plugin.install.method === "pnpm-profile"
-        ? "在目标 profile 中 pnpm add + patch（cordis 型）"
+        ? "安装到 DSH profile（cordis 型）"
         : "通用 git clone";
 
   return (
@@ -114,11 +160,28 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
           <section className="info-block">
             <h4>安装</h4>
             <div className="install-box">
-              <p>{installText}</p>
-              <p className={`install-state ${plugin.install.needsConfig ? "warn" : "ok"}`}>
-                {plugin.install.needsConfig ? "需要额外配置（API Key / Token 等）" : "开箱即用，无需额外配置"}
-              </p>
-              {plugin.install.target && <p className="install-target">目标位置：{plugin.install.target}</p>}
+              <p className="install-desc">{installText} · {plugin.install.needsConfig ? "需额外配置" : "开箱即用"}</p>
+
+              {/* 安装命令 + 复制 */}
+              <div className="cmd-box">
+                <code>{installCmd}</code>
+                <button className={`copy-btn ${copied === "cmd" ? "ok" : ""}`} onClick={() => copy("cmd", installCmd)}>
+                  {copied === "cmd" ? "✓ 已复制" : "复制命令"}
+                </button>
+              </div>
+
+              {/* 安装提示词（给 Harness AI） */}
+              <div className="prompt-box">
+                <div className="prompt-head">
+                  <span>🤖 让 DSH 的 AI 帮你安装（网页版方案）</span>
+                  <button className={`copy-btn ${copied === "prompt" ? "ok" : ""}`} onClick={() => copy("prompt", installPrompt)}>
+                    {copied === "prompt" ? "✓ 已复制" : "复制安装提示词"}
+                  </button>
+                </div>
+                <p className="prompt-text">
+                  复制这段提示词，粘贴到 DeepSeek Harness 的对话里，AI 会自动完成安装。如果你已经装了 DSH 插件端（M4 开发中），以后可以真正一键安装。
+                </p>
+              </div>
             </div>
           </section>
 

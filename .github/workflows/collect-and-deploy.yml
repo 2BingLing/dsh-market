@@ -1,0 +1,62 @@
+name: collect-and-deploy
+
+on:
+  schedule:
+    # 每天 UTC 22:00（北京时间 06:00）自动收录 + 发布
+    - cron: "0 22 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  collect-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install deps
+        run: npm ci
+
+      - name: 运行数据管道（扫描/检测/评分/中文化）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: npm run collect
+
+      - name: 同步数据到 Web
+        run: cp data/plugins.json web/public/plugins.json
+
+      - name: 提交并推送数据更新
+        run: |
+          git config user.name "dsh-market-bot"
+          git config user.email "dsh-market-bot@users.noreply.github.com"
+          git add data/plugins.json web/public/plugins.json
+          git commit -m "data: 每日自动收录更新" || echo "no data changes"
+          git push
+
+      - name: 构建 Web
+        run: npm run build -w web
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
