@@ -280,6 +280,7 @@ body::before {
 .prompt-row .copy-btn:hover { background: #fff; }
 .prompt-row .copy-btn.ok { color: #a7e3c3; background: #1f5f46; border-color: #2d7a5a; }
 .prompt-note { font-size: 11.5px; color: var(--ds-weak); }
+.prompt-note.warn { color: #c8943d; }
 .install-state { font-size: 12px; padding: 6px 12px; border-radius: 8px; display: inline-block; width: fit-content; }
 .install-state.ok { background: var(--ds-green-bg); color: var(--ds-green); border: 1px solid var(--ds-green-line); }
 .install-state.warn { background: #fff7e8; color: #c8943d; border: 1px solid #f0d9a7; }

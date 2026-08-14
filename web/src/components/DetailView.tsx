@@ -33,6 +33,9 @@ interface Props {
   onBack: () => void;
 }
 
+/** 命令是否含占位符（<profile>/path/to 等示例写法） */
+const PLACEHOLDER_RE = /<[^>]+>|\/path\/to\/|\/absolute\/|C:\\|\.\.\/|YOUR_|your-/i;
+
 /** 生成具体安装命令：README 解析出的真实命令优先，类型模板兜底 */
 export function buildInstallCommand(p: DshPlugin): string {
   if (p.install.commands && p.install.commands.length > 0) {
@@ -70,6 +73,7 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
 
   const installCmd = buildInstallCommand(plugin);
   const installPrompt = buildInstallPrompt(plugin);
+  const hasPlaceholder = PLACEHOLDER_RE.test(installCmd);
 
   const copy = async (key: string, text: string) => {
     try {
@@ -169,7 +173,11 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                 <button className={`copy-btn ${copied === "prompt" ? "ok" : ""}`} onClick={() => copy("prompt", installPrompt)}>
                   {copied === "prompt" ? "✓ 已复制" : "复制安装提示词"}
                 </button>
-                <span className="prompt-note">如已装 DSH 插件端（开发中），以后可一键安装</span>
+                <span className={`prompt-note ${hasPlaceholder ? "warn" : ""}`}>
+                  {hasPlaceholder
+                    ? "命令含占位符（<profile>/路径等），请按你的环境替换"
+                    : "如已装 DSH 插件端（开发中），以后可一键安装"}
+                </span>
               </div>
             </div>
           </section>

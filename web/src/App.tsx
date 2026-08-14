@@ -12,6 +12,7 @@ import ScoringGuide from "./components/ScoringGuide";
 import QuizView from "./components/QuizView";
 import TagPanel from "./components/TagPanel";
 import FilterBar, { type ScoreRange, type StarRange, type ConfigFilter, type TypeFilter } from "./components/FilterBar";
+import Logo from "./components/Logo";
 import { matchesTags } from "./lib/tags";
 
 type SortKey = "score" | "stars" | "newest";
@@ -172,7 +173,7 @@ export default function App() {
     <div className="wrap">
       <header className="nav">
         <a className="logo" href="#" onClick={(e) => { e.preventDefault(); gotoNav("market"); }}>
-          <span className="logo-mark"><span>DSH</span></span>
+          <Logo size={30} />
           <span className="logo-text">DSH <em>Market</em></span>
         </a>
         <nav className="nav-links">
