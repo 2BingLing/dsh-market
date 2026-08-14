@@ -30,7 +30,7 @@ The DSH ecosystem is growing fast, and plugins are scattered across GitHub — *
 |---|---|---|
 | **Where** | Browser · GitHub Pages static site | DSH sidebar · cordis plugin |
 | **Role** | Discover & evaluate | Install & manage |
-| **Core** | Chinese search · 5-dimension radar chart · Curated/New sections · Cold-start quiz · Real install commands on detail pages | 5-tab panel · **One-click install** (skill/cordis routing, retry + rollback) · **For-you picks** (profile-based) · **Scene recommendations** (reads session context) · **Installed management** (detect/uninstall) · **GitHub starring** (PAT) · **AI-assisted install** (subagent verifies README, then installs) |
+| **Core** | Chinese search · 5-dimension radar chart · Curated/New sections · Cold-start quiz · Real install commands on detail pages | 5-tab panel · one-click install · beginner-friendly picks · personalized & scene recommendations · AI-assisted install (see [DSH Plugin Edition](#dsh-plugin-edition)) |
 | **Install** | Zero install, open in your browser | `dsh plugin --profile web add dsh-market` |
 | **Resources** | — | Zero-token passive, never in daily conversations |
 
@@ -50,13 +50,40 @@ No install needed, just visit:
 
 <https://dsh.market/>
 
-### DSH plugin edition
+### Install the plugin edition
 
 ```bash
 dsh plugin --profile web add dsh-market
 ```
 
 **Restart the harness** after installing — the "Plugin Market" entry appears at the bottom of the sidebar.
+
+## DSH Plugin Edition
+
+The plugin market lives in your DSH sidebar: **up and running in 3 minutes, and it learns what you like over time**.
+
+**Beginner-friendly · zero learning curve**
+
+- A **cold-start quiz** on first open (pick your common scenarios & plugin types) → instantly get curated picks + for-you recommendations
+- No commands to memorize — **one-click install** on every card (skill/cordis auto-routing, retry & rollback on failure)
+- **Zero-token passive**: no panel open, no resources consumed, never in daily conversations
+
+**Personalized recommendations · the more you use, the smarter it gets**
+
+- Your profile comes from quiz answers / favorites / GitHub stars / installed plugins — **all stored locally**
+- "For You" updates dynamically as you use it (EMA decay); every recommendation carries a "why" line
+
+**Scene recommendations · reads your session**
+
+- Manually triggered, reads the current session title & messages (**zero token**) → suggests what fits "right now"
+
+**AI semantic search · coming soon**
+
+- Local recall of 60 candidates → LLM re-ranks the top 20 with reasons; fixed candidate pool that doesn't grow with the plugin count, off by default to save tokens
+
+**AI-assisted install**
+
+- Not sure whether to install? Hand it to a DSH subagent: read the README → verify → install; asks you first when configuration is needed
 
 ## Features
 
@@ -65,7 +92,7 @@ dsh plugin --profile web add dsh-market
 - **Chinese experience** — auto-generated Chinese summaries and feature tags; Chinese search & filters
 - **One-click install** — deterministic routing in the plugin edition: `git clone` for skill plugins, `dsh plugin add` for cordis plugins; retry & rollback on failure
 - **AI install** — hand it to a DSH subagent that reads the README, verifies, then installs; asks you first when configuration is needed
-- **Recommendation system** — curated picks / beginner-friendly / for-you / scene recommendations (reads the current session context) + cold-start quiz
+- **Recommendation system** — cold-start quiz / beginner-friendly / for-you (profile-based) / scene recommendations (reads the current session context; see [DSH Plugin Edition](#dsh-plugin-edition))
 - **Zero-token resident** — the plugin runs purely passively; no panel open, no resources consumed
 
 ## Usage

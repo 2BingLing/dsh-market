@@ -23,8 +23,9 @@ const H = {
 };
 
 // About 描述（homepage 单独设）
+// 中英双语：GitHub About 为单字段，中文为主、英文附后
 const description =
-  "DeepSeek Harness 插件市场 · 持续收录 500+ DSH 插件，中文搜索 + 实用五维评分 + 一键安装。Web 版在线体验 + DSH 侧边栏插件双形态。";
+  "DeepSeek Harness 插件市场 · 持续收录 500+ DSH 插件：中文搜索 + 实用五维评分 + 一键安装。Web 版与 DSH 侧边栏插件双形态。Plugin marketplace for DeepSeek Harness: 500+ plugins, Chinese search, 5-dim scoring, one-click install.";
 
 // Topics（GitHub 限制 ≤20 个，小写字母数字连字符）
 // 数据源 topic（collector/src/sources/github-search.ts TOPIC_SOURCES）优先：
@@ -55,7 +56,7 @@ async function main() {
   const r1 = await fetch(BASE, {
     method: "PATCH",
     headers: H,
-    body: JSON.stringify({ description, homepage: "https://2bingling.github.io/dsh-market/" }),
+    body: JSON.stringify({ description, homepage: "https://dsh.market/" }),
   });
   console.log("PATCH repo:", r1.status, r1.ok ? "ok" : await r1.text());
 
