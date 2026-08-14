@@ -166,7 +166,9 @@ body::before {
 .card h4 { font-size: 15px; font-weight: 600; color: var(--ds-title); margin-bottom: 6px; }
 .card .desc {
   font-size: 12.5px; color: var(--ds-text); line-height: 1.7; margin-bottom: 12px;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 72%, transparent 100%);
 }
 .card .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
 .tag-mini { font-size: 11px; color: var(--ds-blue-600); background: var(--ds-blue-50); padding: 2px 8px; border-radius: 6px; border: 1px solid #dce8f4; }
