@@ -19,7 +19,9 @@
     "node": ">=20"
   },
   "devDependencies": {
+    "blakejs": "^1.2.1",
     "playwright-core": "^1.62.1",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.3",
+    "tweetnacl": "^1.0.3"
   }
 }
