@@ -31,7 +31,7 @@ The DSH ecosystem is growing fast, and plugins are scattered across GitHub — *
 | **Where** | Browser · GitHub Pages static site | DSH sidebar · cordis plugin |
 | **Role** | Discover & evaluate | Install & manage |
 | **Core** | Chinese search · 5-dimension radar chart · Curated/New sections · Cold-start quiz · Real install commands on detail pages | 5-tab panel · one-click install · beginner-friendly picks · personalized & scene recommendations · AI-assisted install (see [DSH Plugin Edition](#dsh-plugin-edition)) |
-| **Install** | Zero install, open in your browser | `dsh plugin --profile web add dsh-market` |
+| **Install** | Zero install, open in your browser | `npx @deepseek-ai/dsh plugin --profile web add @dsh-market/plugin` |
 | **Resources** | — | Zero-token passive, never in daily conversations |
 
 > **The two editions share only the same `plugins.json` data** (refreshed daily at 06:00 with stars & descriptions) — nothing else. The Web site is a standalone browsing site; the plugin is a standalone cordis plugin. They are independent and optional: **you don't need the plugin to use the Web edition, and installing the plugin doesn't affect the Web site**.
@@ -53,8 +53,11 @@ No install needed, just visit:
 ### Install the plugin edition
 
 ```bash
-dsh plugin --profile web add dsh-market
+# Official way (npx, no install needed — requires Node.js)
+npx @deepseek-ai/dsh plugin --profile web add @dsh-market/plugin
 ```
+
+> Environments with a global `dsh` command can use `dsh plugin --profile web add @dsh-market/plugin` directly (equivalent; `npx @deepseek-ai/dsh` is the official standard form).
 
 **Restart the harness** after installing — the "Plugin Market" entry appears at the bottom of the sidebar.
 

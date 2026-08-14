@@ -1,7 +1,6 @@
 {
   "name": "@dsh-market/core",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "description": "DSH Market 插件端核心层：纯 Node 模块，零 DSH API 依赖（数据/搜索/画像/推荐/安装），可独立测试",
   "main": "dist/index.js",
@@ -13,10 +12,12 @@
     },
     "./package.json": "./package.json"
   },
+  "files": ["dist", "README.md"],
   "scripts": {
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "build": "tsc -p tsconfig.build.json"
+    "build": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@dsh-market/schema": "*",
@@ -28,5 +29,6 @@
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
   },
+  "keywords": ["dsh", "deepseek-harness", "plugin", "market"],
   "license": "MIT"
 }

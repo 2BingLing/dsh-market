@@ -1,11 +1,16 @@
 {
   "name": "@dsh-market/schema",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
-  "main": "src/types.ts",
+  "types": "src/types.ts",
   "exports": {
     ".": "./src/types.ts"
   },
-  "license": "MIT"
+  "files": ["src"],
+  "license": "MIT",
+  "description": "DSH Market shared types (DshPlugin / MarketData / PracticalScore)",
+  "keywords": ["dsh", "deepseek-harness", "plugin", "types"],
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
 }
