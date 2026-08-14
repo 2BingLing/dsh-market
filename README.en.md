@@ -185,6 +185,7 @@ npm run build -w @dsh-market/plugin  # plugin package (lib/index.js + lib/client
 
 - **Submit a plugin**: use the [issue template](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md); the daily pipeline picks it up automatically
 - **Fix data**: wrong scores / descriptions / install commands — open an issue or PR
+- **Add the listing badge**: listed plugin authors can add the [DSH Market badge](./PLUGIN-BADGE.md) (Listed / Top Rated) to their README
 
 ## Roadmap
 

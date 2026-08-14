@@ -185,6 +185,7 @@ npm run build -w @dsh-market/plugin  # 插件包（lib/index.js + lib/client.js�
 
 - **提交插件**：通过 [issue 模板](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md) 提交，每日管道自动收录
 - **修正数据**：评分 / 描述 / 安装命令有误，提 issue 或 PR
+- **挂收录徽章**：被收录的插件作者可在 README 顶部挂 [DSH Market 徽章](./PLUGIN-BADGE.md)（已收录 / 高分精选两档）
 
 ## 路线图
 
