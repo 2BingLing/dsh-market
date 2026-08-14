@@ -74,6 +74,14 @@ body::before {
   box-shadow: 0 6px 16px rgba(40, 100, 169, 0.28); transition: background 0.2s; cursor: pointer;
 }
 .nav-links a.nav-cta:hover { background: var(--ds-blue-800); color: #fff !important; }
+/* GitHub 仓库跳转图标按钮 */
+.nav-links a.gh-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--ds-line); background: rgba(255, 255, 255, 0.7);
+  color: var(--ds-text); transition: all 0.2s;
+}
+.nav-links a.gh-link:hover { color: var(--ds-blue-700); border-color: var(--ds-blue-300); background: #fff; }
 
 /* ---------- Hero ---------- */
 .hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; padding: 44px 0 30px; }

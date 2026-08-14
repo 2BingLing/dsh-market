@@ -1,10 +1,10 @@
+<p align="center">
+  <img src="./assets/readme/banner.webp" width="100%" alt="DSH Market —— DeepSeek Harness 插件市场：左侧 Web 版（蓝）与 DSH 插件版（黑灰）双 Logo 斜线强对照，右侧插件版功能（一键安装/猜你喜欢/场景推荐/已装管理/GitHub 加星/AI 代理安装）与在线体验入口">
+</p>
+
 <div align="center">
 
-# DSH Market
-
-**DeepSeek Harness 插件市场** —— 持续收录 540+ 插件，中文搜索，实用五维评分，一键安装。
-
-[![在线体验 Web 版](https://img.shields.io/badge/Web-%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://2bingling.github.io/dsh-market/)
+[![在线体验](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://2bingling.github.io/dsh-market/)
 [![提交插件](https://img.shields.io/badge/Contribute-%E6%8F%90%E4%BA%A4%E6%8F%92%E4%BB%B6-2EA043?style=flat-square)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/2BingLing/dsh-market/blob/main/LICENSE)
 [![收录](https://img.shields.io/badge/%E6%94%B6%E5%BD%95-536%20%E6%8F%92%E4%BB%B6-4D6BFE?style=flat-square)](https://2bingling.github.io/dsh-market/)
@@ -16,27 +16,21 @@
 
 ## 两种形态
 
+<p align="center">
+  <img src="./assets/readme/section-forms.svg" width="100%" alt="两种形态横幅：Web 版与插件版两个 Logo 通过同一份 plugins.json 数据相连">
+</p>
+
 DSH 生态增长极快，插件散落在 GitHub 各处 —— **不知道哪个好用、怎么装**。DSH Market 用一个平台收齐它们，并提供两种消费入口：
 
-| | **Web 版**（已上线） | **DSH 插件版**（开发完成） |
+| | <img src="./assets/readme/logo-web.svg" width="26" alt="Web 版 Logo"> **Web 版**（已上线） | <img src="./assets/readme/logo-plugin.svg" width="26" alt="插件版 Logo"> **DSH 插件版**（开发完成） |
 |---|---|---|
 | **位置** | 浏览器 · GitHub Pages 纯静态站 | DSH 侧边栏 · cordis 插件 |
 | **定位** | 发现与评估 | 安装与管理 |
-| **核心能力** | 中文搜索 · 五维评分雷达图 · 精选/最新分区 · 冷启动问卷 · 详情页安装命令 | 5-Tab 面板 · 一键安装（skill/cordis 双路由）· 猜你喜欢 · 场景推荐 · 已装管理 · GitHub 加星 |
+| **核心能力** | 中文搜索 · 五维评分雷达图 · 精选/最新分区 · 冷启动问卷 · 详情页安装命令 | 5-Tab 面板 · **一键安装**（skill/cordis 双路由，失败重试+回滚）· **猜你喜欢**（画像推荐）· **场景推荐**（读会话上下文）· **已装管理**（检测/卸载）· **GitHub 加星**（PAT）· **AI 代理安装**（子代理读 README 验证后装） |
 | **安装** | 零安装，浏览器打开即用 | `dsh plugin --profile web add dsh-market` |
 | **资源消耗** | — | 零 token 被动运行，不参与日常对话 |
 
-> 两者读取**同一份** `plugins.json`（每日 06:00 自动刷新星星与描述），始终同步。
-
-## 特性
-
-- **持续收录** — 每天自动扫描 `dsh-plugin` / `dsh` 等 GitHub topic、社区精选列表，全量收录（当前 536 个）
-- **实用五维评分** — 维护活跃 / 实用度 / 生态热度 / 便捷度 / 信号质量，加权几何平均融合，每个插件附「为什么推荐」解释
-- **中文体验** — 所有插件自动生成中文简介与中文功能标签，中文搜索、中文筛选
-- **一键安装** — 插件版确定性脚本路由：skill 型 `git clone`，cordis 型 `dsh plugin add`；失败可重试、可回滚
-- **AI 安装** — 插件版可交给 DSH 子代理读 README 验证后安装，需要配置时先向你确认
-- **推荐体系** — 高分精选 / 新手友好 / 猜你喜欢 / 场景推荐（读当前会话上下文），冷启动问卷
-- **零 token 常驻** — 插件版纯被动运行，不打开面板不消耗任何资源
+> **两者的关系：仅共享同一份 `plugins.json` 数据**（每日 06:00 自动刷新星星与描述），除此之外没有直接关联——Web 版是独立的浏览站，插件版是独立的 cordis 插件，可分别使用、互不依赖：**用 Web 版不一定要装插件，装插件也不影响 Web 站**。
 
 ## 演示
 
@@ -59,6 +53,16 @@ dsh plugin --profile web add dsh-market
 ```
 
 装完**重启 harness**，侧边栏底部出现「插件市场」入口。
+
+## 特性
+
+- **持续收录** — 每天自动扫描 `dsh-plugin` / `dsh` 等 GitHub topic、社区精选列表，全量收录（当前 536 个）
+- **实用五维评分** — 维护活跃 / 实用度 / 生态热度 / 便捷度 / 信号质量，加权几何平均融合，每个插件附「为什么推荐」解释
+- **中文体验** — 所有插件自动生成中文简介与中文功能标签，中文搜索、中文筛选
+- **一键安装** — 插件版确定性脚本路由：skill 型 `git clone`，cordis 型 `dsh plugin add`；失败可重试、可回滚
+- **AI 安装** — 插件版可交给 DSH 子代理读 README 验证后安装，需要配置时先向你确认
+- **推荐体系** — 高分精选 / 新手友好 / 猜你喜欢 / 场景推荐（读当前会话上下文），冷启动问卷
+- **零 token 常驻** — 插件版纯被动运行，不打开面板不消耗任何资源
 
 ## 使用
 
@@ -95,6 +99,10 @@ dsh plugin --profile web add dsh-market
 每个插件附 `explanation`（一句话解释评分理由）。详见 [评分体系说明](https://2bingling.github.io/dsh-market/)。
 
 ## 数据管道
+
+<p align="center">
+  <img src="./assets/readme/section-pipeline.svg" width="100%" alt="数据管道横幅：每日 06:00 自动收录扫描 → 五维评分与 DeepSeek 中文化 → plugins.json → Web 与插件双形态同步">
+</p>
 
 ```text
 GitHub Actions（每日 06:00 自动收录 + 部署）
@@ -146,7 +154,6 @@ npm run build -w @dsh-market/plugin  # 插件包（lib/index.js + lib/client.js�
 
 - **提交插件**：通过 [issue 模板](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md) 提交，每日管道自动收录
 - **修正数据**：评分 / 描述 / 安装命令有误，提 issue 或 PR
-- **开发**：见上方「本地开发」；设计决策记录见 `docs/`
 
 ## 路线图
 
@@ -158,20 +165,6 @@ npm run build -w @dsh-market/plugin  # 插件包（lib/index.js + lib/client.js�
 - [x] M4 DSH 插件端（cordis 侧边栏 + 一键安装）
 - [ ] 语义搜索（LLM 选品精排，候选 60 → 精排 20，省 token 设计）
 - [ ] 国内镜像（Vercel / Gitee Pages）
-
-## FAQ
-
-**Q：插件版会消耗 token 吗？**
-不会。纯被动运行——不打开面板不消耗任何资源、不参与日常对话。唯一花费 token 的操作（AI 语义搜索、AI 代理安装）均为手动触发。
-
-**Q：每日更新会刷新已收录插件的星星和描述吗？**
-会。每日 06:00 管道重新抓取全部 repo 元数据（stars / 描述 / README / 安装命令），大改次日即反映。
-
-**Q：插件版会下载 Web 端吗？**
-不会。插件只拉取 `plugins.json`（约 1.3MB 纯数据），安装的是插件本体。
-
-**Q：Web 和插件版数据一致吗？**
-完全一致。两者读取同一份 `plugins.json`。
 
 ## License
 

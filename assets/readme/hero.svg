@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="hero-title hero-desc">
+  <title id="hero-title">DSH Market —— DeepSeek Harness 插件市场</title>
+  <desc id="hero-desc">虎鲸插头双形态：左侧为品牌标题与价值主张，右侧并置 Web 版（蓝）与 DSH 插件版（黑灰）两个 Logo 卡片，底部注明两者读取同一份 plugins.json。</desc>
+
+  <defs>
+    <linearGradient id="heroBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FCFDFE"/>
+      <stop offset="1" stop-color="#EDF4FB"/>
+    </linearGradient>
+    <linearGradient id="webLogo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4C7FC4"/>
+      <stop offset="1" stop-color="#173F73"/>
+    </linearGradient>
+    <linearGradient id="plugLogo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3E444D"/>
+      <stop offset="1" stop-color="#17191D"/>
+    </linearGradient>
+    <linearGradient id="marketWord" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4C7FC4"/>
+      <stop offset="1" stop-color="#173F73"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 画布 -->
+  <rect width="1200" height="420" rx="26" fill="url(#heroBg)"/>
+  <rect x="1.5" y="1.5" width="1197" height="417" rx="24.5" fill="none" stroke="#D9E4F0" stroke-width="3"/>
+
+  <!-- ===== 左侧：标题区 ===== -->
+  <g transform="translate(56 44) scale(0.2)">
+    <!-- 眉题小虎鲸（蓝色剪影） -->
+    <path d="M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z" fill="#4C7FC4"/>
+    <path d="M83 62 C87 57 93 55 97 56 C94 59 91 61 88 62 C91 65 91 69 88 70 C90 66 87 63 83 62 Z" fill="#4C7FC4"/>
+    <g fill="#4C7FC4">
+      <path d="M38 42 h44 a6 6 0 0 1 6 6 v8 h-14 a8 8 0 1 0 -16 0 h-20 a6 6 0 0 1 -6 -6 v-2 a6 6 0 0 1 6 -6 z"/>
+      <rect x="38" y="60" width="8" height="14" rx="4"/>
+      <rect x="50" y="66" width="8" height="18" rx="4"/>
+      <rect x="62" y="60" width="8" height="14" rx="4"/>
+    </g>
+  </g>
+  <text x="84" y="64" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="19" font-weight="600" letter-spacing="1.5" fill="#4C7FC4">DEEPSEEK HARNESS 插件市场</text>
+
+  <text x="56" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="76" font-weight="800" letter-spacing="-1.5" fill="#101418">DSH <tspan fill="url(#marketWord)">Market</tspan></text>
+
+  <text x="57" y="184" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="26" font-weight="600" fill="#1F2328">持续收录 540+ 插件 · 中文搜索</text>
+  <text x="57" y="216" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="26" font-weight="600" fill="#1F2328">实用五维评分 · 一键安装</text>
+
+  <text x="57" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="19" fill="#59636E">DSH 生态的插件散落在 GitHub 各处，</text>
+  <text x="57" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="19" fill="#59636E">DSH Market 用一个平台收齐，提供两种消费入口。</text>
+
+  <text x="57" y="338" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16.5" fill="#8CA3BB">每日 06:00 自动更新 · GitHub Actions · MIT</text>
+
+  <!-- ===== 右侧：双形态卡片 ===== -->
+  <!-- Web 版卡片 -->
+  <g>
+    <rect x="672" y="48" width="228" height="324" rx="16" fill="#FFFFFF" stroke="#DCE7F2" stroke-width="2"/>
+    <!-- Web Logo 蓝底白图 -->
+    <g transform="translate(696 72)">
+      <rect width="52" height="52" rx="13" fill="url(#webLogo)"/>
+      <g transform="translate(26 26.9) scale(0.4333) translate(-60 -62)">
+        <path d="M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z" fill="#fff"/>
+        <path d="M83 62 C87 57 93 55 97 56 C94 59 91 61 88 62 C91 65 91 69 88 70 C90 66 87 63 83 62 Z" fill="#fff"/>
+        <g fill="#fff">
+          <path d="M38 42 h44 a6 6 0 0 1 6 6 v8 h-14 a8 8 0 1 0 -16 0 h-20 a6 6 0 0 1 -6 -6 v-2 a6 6 0 0 1 6 -6 z"/>
+          <rect x="38" y="60" width="8" height="14" rx="4"/>
+          <rect x="50" y="66" width="8" height="18" rx="4"/>
+          <rect x="62" y="60" width="8" height="14" rx="4"/>
+        </g>
+        <circle cx="60" cy="46" r="2.8" fill="#173F73"/>
+      </g>
+    </g>
+    <text x="696" y="156" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="24" font-weight="700" fill="#101418">Web 版</text>
+    <rect x="786" y="137" width="56" height="24" rx="12" fill="#E6F4EA"/>
+    <text x="814" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="13.5" font-weight="700" fill="#1A7F37" text-anchor="middle">已上线</text>
+    <text x="696" y="188" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="17" fill="#59636E">浏览器 · 发现与评估</text>
+    <line x1="696" y1="206" x2="876" y2="206" stroke="#EDF1F6" stroke-width="2"/>
+    <circle cx="703" cy="232" r="4" fill="#4C7FC4"/>
+    <text x="718" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="17" fill="#33393F">中文搜索 · 标签多选</text>
+    <circle cx="703" cy="260" r="4" fill="#4C7FC4"/>
+    <text x="718" y="265" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="17" fill="#33393F">五维评分雷达图</text>
+    <circle cx="703" cy="288" r="4" fill="#4C7FC4"/>
+    <text x="718" y="293" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="17" fill="#33393F">详情页真实安装命令</text>
+    <text x="696" y="344" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600" fill="#4C7FC4">github.io/dsh-market</text>
+  </g>
+
+  <!-- DSH 插件版卡片 -->
+  <g>
+    <rect x="924" y="48" width="228" height="324" rx="16" fill="#FFFFFF" stroke="#DCE7F2" stroke-width="2"/>
+    <!-- 插件 Logo 黑灰剪影 -->
+    <g transform="translate(948 72)">
+      <rect width="52" height="52" rx="13" fill="#F4F6F8" stroke="#DFE4EA" stroke-width="2"/>
+      <g transform="translate(26 26.9) scale(0.4333) translate(-60 -62)">
+        <path d="M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z" fill="url(#plugLogo)"/>
+        <path d="M83 62 C87 57 93 55 97 56 C94 59 91 61 88 62 C91 65 91 69 88 70 C90 66 87 63 83 62 Z" fill="url(#plugLogo)"/>
+        <g fill="url(#plugLogo)">
+          <path d="M38 42 h44 a6 6 0 0 1 6 6 v8 h-14 a8 8 0 1 0 -16 0 h-20 a6 6 0 0 1 -6 -6 v-2 a6 6 0 0 1 6 -6 z"/>
+          <rect x="38" y="60" width="8" height="14" rx="4"/>
+          <rect x="50" y="66" width="8" height="18" rx="4"/>
+          <rect x="62" y="60" width="8" height="14" rx="4"/>
+        </g>
+        <circle cx="60" cy="46" r="2.8" fill="#F4F6F8"/>
+      </g>
+    </g>
+    <text x="948" y="156" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="24" font-weight="700" fill="#101418">插件版</text>
+    <rect x="1044" y="137" width="64" height="24" rx="12" fill="#252525"/>
+    <text x="1076" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="13.5" font-weight="700" fill="#FFFFFF" text-anchor="middle">开发完成</text>
+    <text x="948" y="188" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="17" fill="#59636E">侧边栏 · 安装与管理</text>
+    <line x1="948" y1="206" x2="1128" y2="206" stroke="#EDF1F6" stroke-width="2"/>
+    <circle cx="955" cy="232" r="4" fill="#252525"/>
+    <text x="970" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="17" fill="#33393F">5-Tab · 一键安装</text>
+    <circle cx="955" cy="260" r="4" fill="#252525"/>
+    <text x="970" y="265" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="17" fill="#33393F">猜你喜欢 · 场景推荐</text>
+    <circle cx="955" cy="288" r="4" fill="#252525"/>
+    <text x="970" y="293" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="17" fill="#33393F">已装 · GitHub 加星</text>
+    <text x="948" y="344" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600" fill="#252525">零 token · 被动运行</text>
+  </g>
+
+  <!-- 底部：同一份数据 -->
+  <text x="600" y="398" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#59636E" text-anchor="middle">Web 版与插件版读取同一份 plugins.json —— 每日 06:00 自动刷新，始终同步</text>
+</svg>

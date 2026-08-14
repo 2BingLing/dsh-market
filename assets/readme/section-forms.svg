@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="140" viewBox="0 0 1200 140" role="img" aria-labelledby="forms-title forms-desc">
+  <title id="forms-title">两种形态，同一份数据</title>
+  <desc id="forms-desc">Web 版（蓝）与 DSH 插件版（黑灰）两个虎鲸插头 Logo 之间以虚线相连，标注 plugins.json，表示两种形态共享同一份数据。</desc>
+
+  <defs>
+    <linearGradient id="formsBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FCFDFE"/>
+      <stop offset="1" stop-color="#F0F6FC"/>
+    </linearGradient>
+    <linearGradient id="formsWebLogo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4C7FC4"/>
+      <stop offset="1" stop-color="#173F73"/>
+    </linearGradient>
+    <linearGradient id="formsPlugLogo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3E444D"/>
+      <stop offset="1" stop-color="#17191D"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="140" rx="20" fill="url(#formsBg)"/>
+  <rect x="1.5" y="1.5" width="1197" height="137" rx="18.5" fill="none" stroke="#D9E4F0" stroke-width="3"/>
+
+  <!-- 左侧：标题区 -->
+  <g transform="translate(56 52) scale(0.25)">
+    <path d="M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z" fill="#4C7FC4"/>
+    <path d="M83 62 C87 57 93 55 97 56 C94 59 91 61 88 62 C91 65 91 69 88 70 C90 66 87 63 83 62 Z" fill="#4C7FC4"/>
+    <g fill="#4C7FC4">
+      <path d="M38 42 h44 a6 6 0 0 1 6 6 v8 h-14 a8 8 0 1 0 -16 0 h-20 a6 6 0 0 1 -6 -6 v-2 a6 6 0 0 1 6 -6 z"/>
+      <rect x="38" y="60" width="8" height="14" rx="4"/>
+      <rect x="50" y="66" width="8" height="18" rx="4"/>
+      <rect x="62" y="60" width="8" height="14" rx="4"/>
+    </g>
+  </g>
+  <text x="100" y="66" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="42" font-weight="800" letter-spacing="-0.5" fill="#101418">两种形态</text>
+  <text x="100" y="99" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="20" fill="#59636E">同一份数据，两个消费入口</text>
+
+  <!-- 右侧：双 Logo + 共享数据连线 -->
+  <!-- Web Logo -->
+  <g transform="translate(716 34)">
+    <rect width="60" height="60" rx="15" fill="url(#formsWebLogo)"/>
+    <g transform="translate(30 31) scale(0.5) translate(-60 -62)">
+      <path d="M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z" fill="#fff"/>
+      <path d="M83 62 C87 57 93 55 97 56 C94 59 91 61 88 62 C91 65 91 69 88 70 C90 66 87 63 83 62 Z" fill="#fff"/>
+      <g fill="#fff">
+        <path d="M38 42 h44 a6 6 0 0 1 6 6 v8 h-14 a8 8 0 1 0 -16 0 h-20 a6 6 0 0 1 -6 -6 v-2 a6 6 0 0 1 6 -6 z"/>
+        <rect x="38" y="60" width="8" height="14" rx="4"/>
+        <rect x="50" y="66" width="8" height="18" rx="4"/>
+        <rect x="62" y="60" width="8" height="14" rx="4"/>
+      </g>
+      <circle cx="60" cy="46" r="2.8" fill="#173F73"/>
+    </g>
+  </g>
+  <text x="746" y="116" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="14.5" font-weight="600" fill="#59636E" text-anchor="middle">Web 版</text>
+  <!-- 虚线连线 + 数据标签 -->
+  <line x1="788" y1="64" x2="844" y2="64" stroke="#B9C9DC" stroke-width="2.5" stroke-dasharray="6 6"/>
+  <circle cx="816" cy="64" r="4.5" fill="#4C7FC4"/>
+  <text x="816" y="38" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="600" fill="#4C7FC4" text-anchor="middle">plugins.json</text>
+  <!-- 插件 Logo -->
+  <g transform="translate(856 34)">
+    <rect width="60" height="60" rx="15" fill="#F4F6F8" stroke="#DFE4EA" stroke-width="2"/>
+    <g transform="translate(30 31) scale(0.5) translate(-60 -62)">
+      <path d="M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z" fill="url(#formsPlugLogo)"/>
+      <path d="M83 62 C87 57 93 55 97 56 C94 59 91 61 88 62 C91 65 91 69 88 70 C90 66 87 63 83 62 Z" fill="url(#formsPlugLogo)"/>
+      <g fill="url(#formsPlugLogo)">
+        <path d="M38 42 h44 a6 6 0 0 1 6 6 v8 h-14 a8 8 0 1 0 -16 0 h-20 a6 6 0 0 1 -6 -6 v-2 a6 6 0 0 1 6 -6 z"/>
+        <rect x="38" y="60" width="8" height="14" rx="4"/>
+        <rect x="50" y="66" width="8" height="18" rx="4"/>
+        <rect x="62" y="60" width="8" height="14" rx="4"/>
+      </g>
+      <circle cx="60" cy="46" r="2.8" fill="#F4F6F8"/>
+    </g>
+  </g>
+  <text x="886" y="116" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="14.5" font-weight="600" fill="#59636E" text-anchor="middle">插件版</text>
+</svg>
