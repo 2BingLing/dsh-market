@@ -43,7 +43,8 @@ jobs:
         run: |
           git config user.name "dsh-market-bot"
           git config user.email "dsh-market-bot@users.noreply.github.com"
-          git add data/plugins.json web/public/plugins.json
+          # data/ 在 .gitignore 中，用 -f 强制提交数据快照
+          git add -f data/plugins.json web/public/plugins.json
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
           git push
 
