@@ -12,6 +12,19 @@ function fmtDate(iso: string): string {
   return iso.slice(0, 10);
 }
 
+/** 清洗 markdown/HTML 源码 → 可读纯文本 */
+export function cleanMarkdown(md: string): string {
+  return md
+    .replace(/```[\s\S]*?```/g, " ") // 代码块
+    .replace(/<[^>]+>/g, " ") // HTML 标签
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // 图片
+    .replace(/\[\]\([^)]*\)/g, " ") // 空文本链接
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // 链接 → 文本
+    .replace(/[#>*_`~|]{1,}/g, " ") // markdown 标记
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 interface Props {
   plugin: DshPlugin;
   favorite: boolean;
@@ -112,7 +125,7 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
           {plugin.readmeSummary && (
             <section className="info-block">
               <h4>README 摘要</h4>
-              <p className="readme-summary">{plugin.readmeSummary}</p>
+              <p className="readme-summary">{cleanMarkdown(plugin.readmeSummary)}</p>
             </section>
           )}
         </div>

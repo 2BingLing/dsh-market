@@ -7,9 +7,10 @@ import Fuse from "fuse.js";
 import type { DshPlugin, MarketData } from "@dsh-market/schema";
 import PluginCard from "./components/PluginCard";
 import DetailView from "./components/DetailView";
+import ScoringGuide from "./components/ScoringGuide";
 
 type SortKey = "score" | "stars" | "newest";
-type View = "home" | "detail";
+type View = "home" | "detail" | "guide";
 type NavKey = "market" | "favorites";
 
 const SORT_LABEL: Record<SortKey, string> = { score: "实用分", stars: "热度", newest: "最新" };
@@ -78,6 +79,11 @@ export default function App() {
     setSelected(null);
   }, []);
 
+  const openGuide = useCallback(() => {
+    setView("guide");
+    window.scrollTo({ top: 0 });
+  }, []);
+
   const fuse = useMemo(
     () =>
       new Fuse(plugins, {
@@ -131,6 +137,7 @@ export default function App() {
           <nav className="nav-links">
             <a onClick={() => gotoNav("market")}>市场</a>
             <a onClick={() => gotoNav("favorites")} className={nav === "favorites" ? "on" : ""}>收藏</a>
+            <a onClick={openGuide}>评分体系</a>
             <a className="nav-cta" href="https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md" target="_blank" rel="noreferrer">提交插件</a>
           </nav>
         </header>
@@ -144,7 +151,34 @@ export default function App() {
           <span>DSH Market · 数据更新于 {generatedAt ? generatedAt.slice(0, 10) : "—"}</span>
           <span>
             <a href="https://github.com/2BingLing/dsh-market" target="_blank" rel="noreferrer">GitHub</a>
-            {" · "}<a href="#" onClick={(e) => e.preventDefault()}>评分说明</a>
+            {" · "}<a onClick={openGuide}>评分说明</a>
+          </span>
+        </footer>
+      </div>
+    );
+  }
+
+  if (view === "guide") {
+    return (
+      <div className="wrap">
+        <header className="nav">
+          <a className="logo" href="#" onClick={(e) => { e.preventDefault(); backHome(); }}>
+            <span className="logo-mark"><span>DSH</span></span>
+            <span className="logo-text">DSH <em>Market</em></span>
+          </a>
+          <nav className="nav-links">
+            <a onClick={() => gotoNav("market")}>市场</a>
+            <a onClick={() => gotoNav("favorites")} className={nav === "favorites" ? "on" : ""}>收藏{favorites.length > 0 ? ` (${favorites.length})` : ""}</a>
+            <a onClick={openGuide} className="on">评分体系</a>
+            <a className="nav-cta" href="https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md" target="_blank" rel="noreferrer">提交插件</a>
+          </nav>
+        </header>
+        <ScoringGuide plugins={plugins} onBack={backHome} />
+        <footer className="footer">
+          <span>DSH Market · 数据更新于 {generatedAt ? generatedAt.slice(0, 10) : "—"}</span>
+          <span>
+            <a href="https://github.com/2BingLing/dsh-market" target="_blank" rel="noreferrer">GitHub</a>
+            {" · "}<a onClick={openGuide}>评分说明</a>
           </span>
         </footer>
       </div>
@@ -162,6 +196,7 @@ export default function App() {
         <nav className="nav-links">
           <a onClick={() => gotoNav("market")} className={nav === "market" ? "on" : ""}>市场</a>
           <a onClick={() => gotoNav("favorites")} className={nav === "favorites" ? "on" : ""}>收藏{favorites.length > 0 ? ` (${favorites.length})` : ""}</a>
+          <a onClick={openGuide}>评分体系</a>
           <a className="nav-cta" href="https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md" target="_blank" rel="noreferrer">提交插件</a>
         </nav>
       </header>
@@ -182,7 +217,7 @@ export default function App() {
             </p>
             <div className="hero-actions">
               <a className="btn btn-primary" href="#market">浏览插件市场</a>
-              <a className="btn btn-ghost" href="#market">了解评分体系</a>
+              <a className="btn btn-ghost" onClick={openGuide}>了解评分体系</a>
             </div>
           </div>
           {weeklyPick && (
@@ -291,7 +326,7 @@ export default function App() {
           {" · "}
           <a href="https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md" target="_blank" rel="noreferrer">提交收录</a>
           {" · "}
-          <a href="#" onClick={(e) => e.preventDefault()}>评分说明</a>
+          <a onClick={openGuide}>评分说明</a>
         </span>
       </footer>
     </div>
