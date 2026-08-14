@@ -10,6 +10,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  issues: write
 
 concurrency:
   group: pages
@@ -52,9 +53,14 @@ jobs:
           git config user.name "dsh-market-bot"
           git config user.email "dsh-market-bot@users.noreply.github.com"
           # data/ 在 .gitignore 中，用 -f 强制提交数据快照
-          git add -f data/plugins.json web/public/plugins.json assets/readme/banner.png assets/readme/banner.webp assets/readme/banner-en.png assets/readme/banner-en.webp assets/readme/hero.svg scripts/compose-banner.mjs scripts/sync-count.mjs README.md README.en.md
+          git add -f data/plugins.json data/issue-replies.json web/public/plugins.json assets/readme/banner.png assets/readme/banner.webp assets/readme/banner-en.png assets/readme/banner-en.webp assets/readme/hero.svg scripts/compose-banner.mjs scripts/sync-count.mjs README.md README.en.md
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
           git push
+
+      - name: 自动回复提交插件 issue（已收录确认 + 徽章指引 + 关闭）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/reply-issues.mjs
 
       - name: 构建 Web
         run: npm run build -w web

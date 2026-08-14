@@ -20,6 +20,7 @@ import {
 } from "./github.js";
 import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
+import { fetchSubmissionRepos } from "./sources/issues.js";
 import { detectPlugin, isCordisPackageJson, detectNeedsConfig } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached } from "./cache.js";
@@ -42,6 +43,8 @@ interface Candidate {
   sources: string[];
   awesomeName?: string;
   awesomeDescription?: string;
+  /** 提交插件 issue 号（issue-submission 来源；收录成功后自动回复用） */
+  issueNumbers?: number[];
 }
 
 interface Detected {
@@ -112,13 +115,17 @@ async function main() {
   const topicRepos = await scanByTopics();
   const orgRepos = await scanOrg();
 
+  // 2.5 提交插件 issue（人工提交的仓库，并入候选池走相同检测流程）
+  // fullName(lower) -> issue 号列表（收录成功后用于自动回复）
+  const issueRepos = await fetchSubmissionRepos();
+
   // 3. 合并去重
   const candidates = new Map<string, Candidate>();
   const addCandidate = (
     fullName: string,
     repo: GithubRepo | null,
     source: string,
-    meta?: { name?: string; description?: string }
+    meta?: { name?: string; description?: string; issueNumbers?: number[] }
   ) => {
     const key = fullName.toLowerCase();
     if (EXCLUDED_REPOS.has(key)) return;
@@ -126,6 +133,11 @@ async function main() {
     if (existing) {
       if (!existing.sources.includes(source)) existing.sources.push(source);
       if (!existing.repo && repo) existing.repo = repo;
+      if (meta?.issueNumbers) {
+        existing.issueNumbers = [
+          ...new Set([...(existing.issueNumbers ?? []), ...meta.issueNumbers]),
+        ];
+      }
       return;
     }
     candidates.set(key, {
@@ -134,6 +146,7 @@ async function main() {
       sources: [source],
       awesomeName: meta?.name,
       awesomeDescription: meta?.description,
+      issueNumbers: meta?.issueNumbers,
     });
   };
   for (const fn of awesomeByFullName.keys()) {
@@ -142,6 +155,9 @@ async function main() {
   }
   for (const r of topicRepos) addCandidate(r.full_name, r, "topic");
   for (const r of orgRepos) addCandidate(r.full_name, r, "org");
+  for (const [fn, issueNumbers] of issueRepos) {
+    addCandidate(fn, null, "issue-submission", { issueNumbers });
+  }
 
   const all = [...candidates.values()];
   console.log(`  candidates: ${all.length}`);
@@ -474,6 +490,28 @@ async function main() {
     ),
     "utf-8"
   );
+
+  // 提交插件 issue 自动回复清单：收录成功的 issue-submission 来源插件
+  // workflow 的回复步骤读取本文件，对每个 issue 评论"已收录"并关闭
+  const issueReplies = detected
+    .filter((d) => d.candidate.issueNumbers?.length)
+    .map((d) => ({
+      issueNumbers: d.candidate.issueNumbers!,
+      fullName: d.plugin.fullName,
+      type: d.plugin.type,
+      stars: d.plugin.stars,
+      score: d.plugin.score?.total ?? null,
+    }));
+  if (issueReplies.length > 0) {
+    writeFileSync(
+      join(DATA_DIR, "issue-replies.json"),
+      JSON.stringify({ generatedAt: market.generatedAt, replies: issueReplies }, null, 2),
+      "utf-8"
+    );
+    console.log(`  issue-replies: ${issueReplies.length} 条（待 workflow 自动回复）`);
+  } else {
+    console.log("  issue-replies: 无（无待回复的 issue 收录）");
+  }
 
   console.log("[5/5] 完成");
   const top5 = [...market.plugins]
