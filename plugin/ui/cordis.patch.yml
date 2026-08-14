@@ -1,0 +1,7 @@
+# dsh-market plugin bundle patch: one browser plugin row added to the web
+# profile composition. The row joins the dshClient roster, so the modules
+# node half serves lib/client.js into the boot graph and the browser shows
+# the 插件市场 sidebar button + panel.
+- insert:
+    - id: dsh-market
+      name: '@dsh-market/plugin'

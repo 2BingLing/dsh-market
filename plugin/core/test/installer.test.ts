@@ -1,0 +1,139 @@
+import { describe, expect, it, vi } from "vitest";
+import { mkdtempSync, existsSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { resolveConfig } from "../src/config.js";
+import { installPlugin, uninstallPlugin } from "../src/installer.js";
+import type { CommandRunner, InstallStep } from "../src/types.js";
+import { makeMarket } from "./fixture.js";
+
+const market = makeMarket();
+const skillPlugin = market.plugins.find((p) => p.type === "skill" && p.id === "acme/web-scraper")!;
+const cordisPlugin = market.plugins.find((p) => p.type === "cordis-plugin" && p.id === "feishu/feishu-doc")!;
+
+function makeCfg() {
+  const dir = mkdtempSync(join(tmpdir(), "dshm-install-"));
+  // 显式指定所有路径到临时目录，防止探测到真实用户目录（.agents/skills 等）
+  return resolveConfig({
+    dshHome: dir,
+    skillsDir: join(dir, "skills"),
+    profilesDir: join(dir, "profiles"),
+    dataDir: join(dir, "data"),
+  });
+}
+
+function runnerMock(opts?: { fail?: boolean }): CommandRunner {
+  return {
+    run: vi.fn(async () => {
+      if (opts?.fail) return { exitCode: 1, stdout: "", stderr: "simulated failure" };
+      return { exitCode: 0, stdout: "ok", stderr: "" };
+    }),
+  };
+}
+
+describe("installPlugin · skill 型", () => {
+  it("dry-run 全流程步骤（不执行命令）", async () => {
+    const cfg = makeCfg();
+    const steps: InstallStep[] = [];
+    const r = await installPlugin(cfg, skillPlugin, {
+      dryRun: true,
+      runner: runnerMock(),
+      onStep: (s) => steps.push(s),
+    });
+    expect(r.ok).toBe(true);
+    expect(steps.map((s) => s.id)).toContain("clone");
+    // onStep 是状态变更通知流（running → done），取该步骤最后一条状态
+    expect(steps.filter((s) => s.id === "clone").at(-1)?.status).toBe("done");
+  });
+
+  it("已装检测：目录存在 → alreadyInstalled 跳过", async () => {
+    const cfg = makeCfg();
+    const { mkdirSync } = await import("node:fs");
+    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
+    const r = await installPlugin(cfg, skillPlugin, { runner: runnerMock() });
+    expect(r.alreadyInstalled).toBe(true);
+  });
+
+  it("命令失败重试 2 次后失败并回滚", async () => {
+    const cfg = makeCfg();
+    const runner = runnerMock({ fail: true });
+    const r = await installPlugin(cfg, skillPlugin, { runner });
+    expect(r.ok).toBe(false);
+    expect(r.error).toBeTruthy();
+    // 重试次数 = MAX_RETRY + 1 次调用
+    expect(runner.run).toHaveBeenCalledTimes(3);
+    // 回滚：目标目录不存在
+    expect(existsSync(join(cfg.skillsDir, "web-scraper-latest"))).toBe(false);
+  });
+});
+
+describe("installPlugin · cordis 型", () => {
+  it("dry-run 全流程：dsh plugin add 命令 + requiresRestart", async () => {
+    const cfg = makeCfg();
+    const runner = runnerMock();
+    const r = await installPlugin(cfg, cordisPlugin, {
+      dryRun: true,
+      runner,
+      targetProfile: "web",
+    });
+    expect(r.ok).toBe(true);
+    expect(r.requiresRestart).toBe(true);
+    expect(r.snapshot?.target).toBe("web");
+  });
+
+  it("已装检测：profile package.json 依赖存在 → 跳过", async () => {
+    const cfg = makeCfg();
+    const { mkdirSync, writeFileSync } = await import("node:fs");
+    const profileDir = join(cfg.profilesDir, "web");
+    mkdirSync(profileDir, { recursive: true });
+    writeFileSync(
+      join(profileDir, "package.json"),
+      JSON.stringify({ dependencies: { "feishu-doc": "^1.0.0" } }),
+    );
+    const r = await installPlugin(cfg, cordisPlugin, {
+      runner: runnerMock(),
+      targetProfile: "web",
+    });
+    expect(r.alreadyInstalled).toBe(true);
+  });
+
+  it("命令失败 → 回滚调用 remove", async () => {
+    const cfg = makeCfg();
+    const runner = runnerMock({ fail: true });
+    const r = await installPlugin(cfg, cordisPlugin, {
+      runner,
+      targetProfile: "web",
+    });
+    expect(r.ok).toBe(false);
+    // remove 命令也被调用（回滚）
+    const calls = (runner.run as ReturnType<typeof vi.fn>).mock.calls.map(
+      (c) => c[0] as string,
+    );
+    expect(calls.some((c) => c.includes("remove"))).toBe(true);
+  });
+});
+
+describe("uninstallPlugin", () => {
+  it("skill 型：删除目录", async () => {
+    const cfg = makeCfg();
+    const { mkdirSync } = await import("node:fs");
+    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
+    const r = await uninstallPlugin(cfg, skillPlugin, { runner: runnerMock() });
+    expect(r.ok).toBe(true);
+    expect(existsSync(join(cfg.skillsDir, "web-scraper-latest"))).toBe(false);
+  });
+
+  it("cordis 型：调用 dsh plugin remove", async () => {
+    const cfg = makeCfg();
+    const runner = runnerMock();
+    const r = await uninstallPlugin(cfg, cordisPlugin, {
+      runner,
+      targetProfile: "web",
+    });
+    expect(r.ok).toBe(true);
+    const calls = (runner.run as ReturnType<typeof vi.fn>).mock.calls.map(
+      (c) => c[0] as string,
+    );
+    expect(calls.some((c) => c.includes("remove"))).toBe(true);
+  });
+});

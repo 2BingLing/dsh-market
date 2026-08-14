@@ -36,19 +36,20 @@ interface Props {
 /** 命令是否含占位符（<profile>/path/to 等示例写法） */
 const PLACEHOLDER_RE = /<[^>]+>|\/path\/to\/|\/absolute\/|C:\\|\.\.\/|YOUR_|your-/i;
 
-/** 生成具体安装命令：README 解析出的真实命令优先，类型模板兜底 */
+/** 是否为「可靠单条命令」：恰好一条且无占位符（如 npm install xxx），可直接执行 */
+export function isReliableSingleCommand(p: DshPlugin): boolean {
+  const cmds = p.install.commands;
+  return Boolean(cmds && cmds.length === 1 && !PLACEHOLDER_RE.test(cmds[0]));
+}
+
+/** 生成展示的安装命令：
+ * 可靠单条（README 解析出的一条可执行命令）→ 显示真实命令；
+ * 其他（多条/占位符/未解析）→ 统一显示 git clone（永远正确，不误导），安装以 README 或 AI 为准 */
 export function buildInstallCommand(p: DshPlugin): string {
-  if (p.install.commands && p.install.commands.length > 0) {
-    return p.install.commands[0];
+  if (isReliableSingleCommand(p)) {
+    return p.install.commands![0];
   }
-  const repoUrl = `https://github.com/${p.fullName}`;
-  if (p.install.method === "skills-add") {
-    return `git clone ${repoUrl}.git ~/.agents/skills/${p.repo}`;
-  }
-  if (p.install.method === "pnpm-profile") {
-    return `dsh plugin --profile web add ${repoUrl}`;
-  }
-  return `git clone ${repoUrl}.git`;
+  return `git clone https://github.com/${p.fullName}.git`;
 }
 
 /** 生成「让 Harness AI 安装」的提示词 */
@@ -73,7 +74,8 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
 
   const installCmd = buildInstallCommand(plugin);
   const installPrompt = buildInstallPrompt(plugin);
-  const hasPlaceholder = PLACEHOLDER_RE.test(installCmd);
+  // 是否走了 clone 兜底（需要提示阅读 README / 对话安装）
+  const isCloneFallback = !isReliableSingleCommand(plugin);
 
   const copy = async (key: string, text: string) => {
     try {
@@ -173,10 +175,18 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                 <button className={`copy-btn ${copied === "prompt" ? "ok" : ""}`} onClick={() => copy("prompt", installPrompt)}>
                   {copied === "prompt" ? "✓ 已复制" : "复制安装提示词"}
                 </button>
-                <span className={`prompt-note ${hasPlaceholder ? "warn" : ""}`}>
-                  {hasPlaceholder
-                    ? "命令含占位符（<profile>/路径等），请按你的环境替换"
-                    : "如已装 DSH 插件端（开发中），以后可一键安装"}
+                <span className={`prompt-note ${isCloneFallback ? "warn" : ""}`}>
+                  {isCloneFallback ? (
+                    <>
+                      安装步骤因插件而异，请
+                      <a href={`https://github.com/${plugin.fullName}`} target="_blank" rel="noreferrer" className="note-link">
+                        查看 README ↗
+                      </a>
+                      或复制提示词让 AI 安装
+                    </>
+                  ) : (
+                    "如已装 DSH 插件端（开发中），以后可一键安装"
+                  )}
                 </span>
               </div>
             </div>
