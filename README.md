@@ -129,17 +129,30 @@ dsh plugin --profile web add dsh-market
 
 每个插件附 `explanation`（一句话解释评分理由）。详见 [评分体系说明](https://dsh.market/)。
 
-## 数据管道
+## 收录机制
 
-<p align="center">
-  <img src="./assets/readme/section-pipeline.svg" width="100%" alt="数据管道横幅：每日 06:00 自动收录扫描 → 五维评分与 DeepSeek 中文化 → plugins.json → Web 与插件双形态同步">
-</p>
+**定位**：DSH Market 是 **DeepSeek Harness 生态**的插件收录与发现平台——只收 DSH 专属生态的插件，不做通用项目收录。
+
+每日 06:00 自动管道扫描以下数据源：
 
 ```text
 GitHub Actions（每日 06:00 自动收录 + 部署）
   └─ collector（Node，并发 10，24h 缓存）
-       ├─ 扫描：dsh-plugin / dsh topic + awesome 列表 + dsh-external 组织
-       ├─ 特征检测：SKILL.md / skills 目录 / cordis package.json
+       ├─ 扫描数据源：
+       │    ├─ topic 扫描：dsh-plugin / dsh / deepseek-harness-plugin / dsh-bundle / dsh-skill
+       │    │    └─ 多路排序并集（stars + updated + created 各取前 1000，去重合并）
+       │    │    └─ GitHub Search API 单查询硬上限 1000 条，多路并集覆盖长尾（~72%+）
+       │    │    └─ 限流：Search API 30 次/分钟 → 每页间隔 2.3s，防 403
+       │    ├─ awesome 列表 ×2（人工策展社区列表）
+       │    ├─ dsh-external 组织
+       │    └─ 本仓库提交插件 issue（label: submission / 标题「[提交插件]」）
+       ├─ 收录条件（全部满足才收录）：
+       │    1. 不是 fork / archived / 官方本体（deepseek-ai/deepseek-harness）
+       │    2. 特征检测通过：根目录有 SKILL.md（skill 型）
+       │       或 skills/ 目录含 SKILL.md（技能集合）
+       │       或 dsh.profile / cordis.patch.yml 等 cordis 标记
+       │       或 package.json 依赖含 cordis 关键字（二次确认）
+       │    3. 无 stars / 评分门槛——检测通过即收录
        ├─ 元数据 + README：GitHub API（stars / 描述 / 安装命令解析）
        ├─ 实用五维评分 + 解释层
        └─ DeepSeek 增量中文化（只翻译新插件，省 API 费用）
@@ -147,6 +160,8 @@ GitHub Actions（每日 06:00 自动收录 + 部署）
                  ├─ 同步到 web/public/plugins.json（Web 站 + 插件版共用）
                  └─ 提交 → 构建 → 部署 GitHub Pages
 ```
+
+**说明**：打了 `dsh-plugin` topic 只是进入候选池的入场券——收录还需要仓库**确实是 DSH 插件**（有 SKILL.md 或 cordis 标记）。topic 2000+ 仓库中大量并非 DSH 插件（随手打 tag / fork），特征检测会自动过滤。
 
 ## 目录结构
 
@@ -183,9 +198,22 @@ npm run build -w @dsh-market/plugin  # 插件包（lib/index.js + lib/client.js�
 
 ## 贡献
 
-- **提交插件**：通过 [issue 模板](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md) 提交，每日管道自动收录
+### 提交插件（两种方式均可）
+
+1. **给仓库打 `dsh-plugin` topic** —— 最快，每日管道扫描直接命中
+2. **通过 [提交插件 issue 模板](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md) 提交** —— 填写仓库地址 / 插件类型 / 一句话简介即可
+
+**提交后会发生什么**：
+
+```
+提交 issue → 次日 06:00 自动管道提取仓库 → 特征检测
+  ├─ 通过（是 DSH 插件）→ 收录进市场 → 自动回复 issue：
+  │     ✅ 已收录确认 + 次日更新说明 + 徽章指引 → 自动关闭 issue
+  └─ 未通过（非插件）→ 不收录（可重新打开 issue 询问原因）
+```
+
 - **修正数据**：评分 / 描述 / 安装命令有误，提 issue 或 PR
-- **挂收录徽章**：被收录的插件作者可在 README 顶部挂 [DSH Market 徽章](./PLUGIN-BADGE.md)（已收录 / 高分精选两档）
+- **挂收录徽章**：被收录的插件作者可在 README 顶部挂 [DSH Market 徽章](./PLUGIN-BADGE.md)（已收录 / 高分精选两档），自动回复里也会附指引
 
 ## 路线图
 

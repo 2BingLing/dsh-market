@@ -129,17 +129,30 @@ Practical five dimensions (weighted geometric mean, inspired by the StarRadar fu
 
 Every plugin carries an `explanation` (one sentence on why it was scored that way). See the [scoring guide](https://dsh.market/).
 
-## Data Pipeline
+## Listing Mechanism
 
-<p align="center">
-  <img src="./assets/readme/section-pipeline-en.svg" width="100%" alt="Data pipeline banner: daily 06:00 collection → scoring & DeepSeek i18n → plugins.json → synced to Web and plugin editions">
-</p>
+**Positioning**: DSH Market is the plugin listing & discovery platform for the **DeepSeek Harness ecosystem** — it lists only DSH-specific plugins, not generic projects.
+
+The daily 06:00 pipeline scans these sources:
 
 ```text
 GitHub Actions (daily 06:00 collection + deploy)
   └─ collector (Node, concurrency 10, 24h cache)
-       ├─ Scan: dsh-plugin / dsh topics + awesome lists + dsh-external org
-       ├─ Feature detection: SKILL.md / skills dir / cordis package.json
+       ├─ Sources:
+       │    ├─ Topic scan: dsh-plugin / dsh / deepseek-harness-plugin / dsh-bundle / dsh-skill
+       │    │    └─ Multi-sort union (stars + updated + created, 1000 each, deduped)
+       │    │    └─ GitHub Search API caps a single query at 1000 → union covers long tail (~72%+)
+       │    │    └─ Rate limit: Search API 30 req/min → 2.3s pause per page to avoid 403
+       │    ├─ Awesome lists ×2 (community-curated)
+       │    ├─ dsh-external org
+       │    └─ Submission issues in this repo (label: submission / title "[提交插件]")
+       ├─ Listing criteria (all must hold):
+       │    1. Not fork / archived / official (deepseek-ai/deepseek-harness)
+       │    2. Feature detection passes: root SKILL.md (skill type)
+       │       or skills/ dir with SKILL.md (skill collection)
+       │       or cordis markers (dsh.profile / cordis.patch.yml)
+       │       or package.json deps contain cordis keywords (double-checked)
+       │    3. No stars / score threshold — passes detection, gets listed
        ├─ Metadata + README: GitHub API (stars / descriptions / install command parsing)
        ├─ Practical 5-dimension scoring + explanation layer
        └─ DeepSeek incremental i18n (only new plugins, saves API cost)
@@ -147,6 +160,8 @@ GitHub Actions (daily 06:00 collection + deploy)
                  ├─ synced to web/public/plugins.json (shared by Web site & plugin)
                  └─ commit → build → deploy GitHub Pages
 ```
+
+**Note**: adding the `dsh-plugin` topic only gets you into the candidate pool — the repo must actually **be a DSH plugin** (SKILL.md or cordis markers) to be listed. Many of the 2000+ topic repos are not DSH plugins (casual tagging / forks); feature detection filters them out automatically.
 
 ## Directory Structure
 
@@ -183,9 +198,22 @@ npm run build -w @dsh-market/plugin  # plugin package (lib/index.js + lib/client
 
 ## Contributing
 
-- **Submit a plugin**: use the [issue template](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md); the daily pipeline picks it up automatically
+### Submit a plugin (either way works)
+
+1. **Add the `dsh-plugin` topic** to your repo — fastest; the daily scan picks it up directly.
+2. **Open an issue via the [submit template](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)** — fill in the repo URL / type / one-line description.
+
+**What happens after you submit**:
+
+```
+Submit issue → next day 06:00 the pipeline extracts the repo → plugin detection
+  ├─ Passed (it is a DSH plugin) → listed → the bot auto-replies:
+  │     ✅ confirmation + "live next update" note + badge guide → issue auto-closed
+  └─ Rejected (not a plugin) → not listed (reopen the issue to ask why)
+```
+
 - **Fix data**: wrong scores / descriptions / install commands — open an issue or PR
-- **Add the listing badge**: listed plugin authors can add the [DSH Market badge](./PLUGIN-BADGE.md) (Listed / Top Rated) to their README
+- **Add the listing badge**: listed plugin authors can add the [DSH Market badge](./PLUGIN-BADGE.md) (Listed / Top Rated) to their README (the auto-reply includes the guide)
 
 ## Roadmap
 
