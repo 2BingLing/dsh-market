@@ -80,13 +80,6 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
     }
   };
 
-  const installText =
-    plugin.install.method === "skills-add"
-      ? "克隆到 ~/.agents/skills（skill 型）"
-      : plugin.install.method === "pnpm-profile"
-        ? "安装到 DSH profile（cordis 型）"
-        : "通用 git clone";
-
   return (
     <div className="detail">
       {/* 顶部条 */}
@@ -160,8 +153,6 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
           <section className="info-block">
             <h4>安装</h4>
             <div className="install-box">
-              <p className="install-desc">{installText} · {plugin.install.needsConfig ? "需额外配置" : "开箱即用"}</p>
-
               {/* 安装命令 + 复制 */}
               <div className="cmd-box">
                 <code>{installCmd}</code>
@@ -170,17 +161,12 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                 </button>
               </div>
 
-              {/* 安装提示词（给 Harness AI） */}
-              <div className="prompt-box">
-                <div className="prompt-head">
-                  <span>🤖 让 DSH 的 AI 帮你安装（网页版方案）</span>
-                  <button className={`copy-btn ${copied === "prompt" ? "ok" : ""}`} onClick={() => copy("prompt", installPrompt)}>
-                    {copied === "prompt" ? "✓ 已复制" : "复制安装提示词"}
-                  </button>
-                </div>
-                <p className="prompt-text">
-                  复制这段提示词，粘贴到 DeepSeek Harness 的对话里，AI 会自动完成安装。如果你已经装了 DSH 插件端（M4 开发中），以后可以真正一键安装。
-                </p>
+              {/* 复制提示词 + 说明（同行） */}
+              <div className="prompt-row">
+                <button className={`copy-btn ${copied === "prompt" ? "ok" : ""}`} onClick={() => copy("prompt", installPrompt)}>
+                  {copied === "prompt" ? "✓ 已复制" : "复制安装提示词"}
+                </button>
+                <span className="prompt-note">如已装 DSH 插件端（开发中），以后可一键安装</span>
               </div>
             </div>
           </section>
