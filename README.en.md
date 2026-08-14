@@ -10,8 +10,8 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://dsh.market/)
 [![Contribute](https://img.shields.io/badge/Contribute-Submit%20a%20plugin-2EA043?style=flat-square)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/2BingLing/dsh-market/blob/main/LICENSE)
-[![Tracked](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2F2BingLing%2Fdsh-market%2Fmain%2Fdata%2Fplugins.json&query=plugins.length&label=Tracked&color=4D6BFE&cacheSeconds=3600)](https://dsh.market/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/2BingLing/dsh-market/blob/master/LICENSE)
+[![Tracked](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2F2BingLing%2Fdsh-market%2Fmaster%2Fdata%2Fplugins.json&query=plugins.length&label=Tracked&color=4D6BFE&cacheSeconds=3600)](https://dsh.market/)
 [![Daily update](https://img.shields.io/badge/Daily%20update-06%3A00-1a7f37?style=flat-square)](https://github.com/2BingLing/dsh-market/actions)
 
 </div>
@@ -40,7 +40,7 @@ The DSH ecosystem is growing fast, and plugins are scattered across GitHub — *
 
 | Web edition | DSH plugin edition |
 |---|---|
-| ![Web edition screenshot](https://raw.githubusercontent.com/2BingLing/dsh-market/main/web/public/screenshot-web.jpg) | ![Plugin edition screenshot](https://raw.githubusercontent.com/2BingLing/dsh-market/main/web/public/screenshot-plugin.jpg) |
+| ![Web edition screenshot](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-web.jpg) | ![Plugin edition screenshot](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-plugin.jpg) |
 
 ## Quick Start
 
@@ -172,4 +172,4 @@ npm run build -w @dsh-market/plugin  # plugin package (lib/index.js + lib/client
 
 ## License
 
-[MIT](https://github.com/2BingLing/dsh-market/blob/main/LICENSE)
+[MIT](https://github.com/2BingLing/dsh-market/blob/master/LICENSE)

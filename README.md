@@ -10,8 +10,8 @@
 
 [![在线体验](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://dsh.market/)
 [![提交插件](https://img.shields.io/badge/Contribute-%E6%8F%90%E4%BA%A4%E6%8F%92%E4%BB%B6-2EA043?style=flat-square)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/2BingLing/dsh-market/blob/main/LICENSE)
-[![收录](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2F2BingLing%2Fdsh-market%2Fmain%2Fdata%2Fplugins.json&query=plugins.length&label=%E6%94%B6%E5%BD%95&color=4D6BFE&cacheSeconds=3600)](https://dsh.market/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/2BingLing/dsh-market/blob/master/LICENSE)
+[![收录](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2F2BingLing%2Fdsh-market%2Fmaster%2Fdata%2Fplugins.json&query=plugins.length&label=%E6%94%B6%E5%BD%95&color=4D6BFE&cacheSeconds=3600)](https://dsh.market/)
 [![更新](https://img.shields.io/badge/%E6%AF%8F%E6%97%A5%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0-06%3A00-1a7f37?style=flat-square)](https://github.com/2BingLing/dsh-market/actions)
 
 </div>
@@ -40,7 +40,7 @@ DSH 生态增长极快，插件散落在 GitHub 各处 —— **不知道哪个�
 
 | Web 版 | DSH 插件版 |
 |---|---|
-| ![Web 版截图](https://raw.githubusercontent.com/2BingLing/dsh-market/main/web/public/screenshot-web.jpg) | ![插件版截图](https://raw.githubusercontent.com/2BingLing/dsh-market/main/web/public/screenshot-plugin.jpg) |
+| ![Web 版截图](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-web.jpg) | ![插件版截图](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-plugin.jpg) |
 
 ## 快速开始
 
@@ -172,4 +172,4 @@ npm run build -w @dsh-market/plugin  # 插件包（lib/index.js + lib/client.js�
 
 ## License
 
-[MIT](https://github.com/2BingLing/dsh-market/blob/main/LICENSE)
+[MIT](https://github.com/2BingLing/dsh-market/blob/master/LICENSE)
