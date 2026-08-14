@@ -346,34 +346,6 @@ body::before {
   .rank-item { grid-template-columns: 70px 70px 1fr; }
 }
 
-/* ---------- 紧凑 Hero 条 ---------- */
-.hero-compact {
-  display: flex; align-items: center; justify-content: space-between; gap: 24px;
-  padding: 26px 0 8px; flex-wrap: wrap;
-}
-.hc-left h1 {
-  font-size: 24px; font-weight: 400; letter-spacing: 0.06em; color: var(--ds-title);
-  margin: 10px 0 12px;
-}
-.hc-left h1 strong { font-weight: 600; color: var(--ds-blue-800); }
-.hero-actions { display: flex; gap: 12px; }
-.pick-mini {
-  display: flex; align-items: center; gap: 14px; cursor: pointer;
-  background: linear-gradient(150deg, var(--ds-blue-800) 0%, var(--ds-blue-900) 68%);
-  color: #fff; border-radius: 14px; padding: 14px 22px;
-  box-shadow: 0 12px 30px rgba(23, 63, 115, 0.28); transition: transform 0.2s;
-  flex: none; max-width: 460px;
-}
-.pick-mini:hover { transform: translateY(-2px); }
-.pick-mini-tag {
-  font-size: 10px; letter-spacing: 0.16em; color: var(--ds-blue-300);
-  border: 1px solid rgba(191, 213, 240, 0.4); border-radius: 999px; padding: 3px 9px; flex: none;
-}
-.pick-mini-name { font-size: 15px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.pick-mini-score { font-size: 20px; font-weight: 600; flex: none; }
-.pick-mini-score small { font-size: 10px; color: rgba(255, 255, 255, 0.55); font-weight: 400; }
-.pick-mini-go { font-size: 11px; color: var(--ds-blue-300); flex: none; }
-
 /* ---------- 分区小按钮 + 排序行 ---------- */
 .toolbar-row {
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
@@ -395,8 +367,6 @@ body::before {
 
 @media (max-width: 900px) {
   .toolbar-row { flex-direction: column; align-items: flex-start; }
-  .hero-compact { flex-direction: column; align-items: flex-start; }
-  .pick-mini { max-width: 100%; }
 }
 
 /* ---------- 页脚 ---------- */
