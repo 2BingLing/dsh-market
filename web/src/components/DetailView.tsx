@@ -125,7 +125,18 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
           {plugin.readmeSummary && (
             <section className="info-block">
               <h4>README 摘要</h4>
-              <p className="readme-summary">{cleanMarkdown(plugin.readmeSummary)}</p>
+              <p className="readme-summary">
+                {cleanMarkdown(plugin.readmeSummary)}
+                {plugin.readmeSummary.trimEnd().endsWith("…") && "（摘要节选）"}
+              </p>
+              <a
+                className="readme-link"
+                href={`https://github.com/${plugin.fullName}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                查看完整 README ↗
+              </a>
             </section>
           )}
         </div>

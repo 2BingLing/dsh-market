@@ -66,6 +66,21 @@ function loadPreviousZh(): Map<string, { descriptionZh: string | null; tagsZh: s
   }
 }
 
+/** 智能摘要：在句子边界截断，不切断句子，截断处加省略号 */
+export function summarizeReadme(text: string, maxLen = 420): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= maxLen) return clean;
+  const cut = clean.slice(0, maxLen);
+  const boundary = Math.max(
+    cut.lastIndexOf("。"), cut.lastIndexOf("！"), cut.lastIndexOf("？"),
+    cut.lastIndexOf("；"), cut.lastIndexOf(". "), cut.lastIndexOf("! "),
+    cut.lastIndexOf("? "), cut.lastIndexOf("; "), cut.lastIndexOf("："),
+    cut.lastIndexOf(": ")
+  );
+  const end = boundary > maxLen * 0.45 ? boundary + 1 : maxLen;
+  return clean.slice(0, end) + "…";
+}
+
 async function main() {
   if (!process.env.GITHUB_TOKEN) {
     console.error("缺少 GITHUB_TOKEN 环境变量");
@@ -206,9 +221,9 @@ async function main() {
 
       const needsConfig = detectNeedsConfig(readmeContent);
       const readmeSummary = readmeContent
-        ? readmeContent.replace(/\s+/g, " ").slice(0, 500)
+        ? summarizeReadme(readmeContent)
         : skillMd
-          ? skillMd.replace(/\s+/g, " ").slice(0, 500)
+          ? summarizeReadme(skillMd)
           : null;
 
       const plugin: DshPlugin = {
