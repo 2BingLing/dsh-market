@@ -27,7 +27,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
+
+      - name: 恢复检测缓存（增量收集关键：roots/SKILL 内容缓存 + 标签别名）
+        uses: actions/cache@v4
+        with:
+          path: |
+            data/cache
+            data/tag-alias.json
+          key: detect-cache-${{ github.run_id }}
+          restore-keys: detect-cache-
 
       - name: Install deps
         run: npm ci
@@ -44,10 +53,11 @@ jobs:
       - name: 同步收录数量到 README 与 banner 数字
         run: |
           node scripts/sync-count.mjs
-          # banner 数字叠加：base 图为本地生成的静态资产（中文已渲染），此处只叠加 ASCII 数字
           COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('data/plugins.json','utf8')).plugins.length)")
+          # 中文 banner：base 图为本地生成的静态资产（中文已渲染），此处只叠加 ASCII 数字（Ubuntu 无中文字体）
           node scripts/overlay-count.mjs zh "$COUNT"
-          node scripts/overlay-count.mjs en "$COUNT"
+          # 英文 banner：纯 ASCII，workflow 直接合成（无字体问题）
+          node scripts/compose-banner.mjs en --count="$COUNT"
 
       - name: 提交并推送数据更新
         run: |
@@ -55,8 +65,8 @@ jobs:
           git config user.email "dsh-market-bot@users.noreply.github.com"
           # data/ 在 .gitignore 中，用 -f 强制提交数据快照
           # issue-replies.json 只在有 issue 收录时生成，不加入 add 清单（reply 步骤读不到会优雅跳过）
-          # banner-base*.webp 与 banner-count-pos*.json 为本地生成的静态资产，不随 workflow 变化
-          git add -f data/plugins.json web/public/plugins.json assets/readme/banner.png assets/readme/banner.webp assets/readme/banner-en.png assets/readme/banner-en.webp assets/readme/hero.svg scripts/sync-count.mjs scripts/overlay-count.mjs README.md README.en.md
+          # banner-base-zh.webp 与 banner-count-pos-zh.json 为本地生成的静态资产（中文），不随 workflow 变化
+          git add -f data/plugins.json web/public/plugins.json assets/readme/banner.png assets/readme/banner.webp assets/readme/banner-en.png assets/readme/banner-en.webp assets/readme/hero.svg scripts/sync-count.mjs scripts/overlay-count.mjs scripts/compose-banner.mjs README.md README.en.md
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
           git push
 
