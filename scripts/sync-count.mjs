@@ -23,16 +23,6 @@ if (!count) {
 
 const targets = [
   {
-    file: "scripts/compose-banner.mjs",
-    re: /持续收录 \d+ 个插件/,
-    to: `持续收录 ${count} 个插件`,
-  },
-  {
-    file: "scripts/compose-banner.mjs",
-    re: /(\d+)\+ plugins daily/,
-    to: `${count}+ plugins daily`,
-  },
-  {
     file: "README.md",
     re: /当前 \d+ 个/,
     to: `当前 ${count} 个`,

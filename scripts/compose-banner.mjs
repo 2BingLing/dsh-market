@@ -23,7 +23,7 @@ const xml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, 
 const COPY = {
   zh: {
     out: "assets/readme/banner",
-    sub: "DeepSeek Harness 插件市场 · 持续收录 1481 个插件",
+    sub: "DeepSeek Harness 插件市场 · 每日自动收录",
     subSize: 21,
     block: "DSH 插件版 · 装进侧边栏",
     feat1: "一键安装 · 猜你喜欢 · 场景推荐",
@@ -37,7 +37,7 @@ const COPY = {
   },
   en: {
     out: "assets/readme/banner-en",
-    sub: "DeepSeek Harness plugin market · 1481+ plugins daily",
+    sub: "DeepSeek Harness plugin market · daily auto-collection",
     subSize: 18,
     block: "DSH Plugin · in your sidebar",
     feat1: "One-click install · Recommendations · Scene-aware",
