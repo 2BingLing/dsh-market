@@ -39,8 +39,8 @@ const COPY = {
   },
   en: {
     out: "assets/readme/banner-en",
-    // 英文整串（全 ASCII，workflow 直接生成无字体问题）；数字由 sync-count 更新
-    sub: "DeepSeek Harness plugin market · 1481+ plugins daily",
+    subPre: "DeepSeek Harness plugin market · ",
+    subPost: "+ plugins daily",
     subSize: 18,
     block: "DSH Plugin · in your sidebar",
     feat1: "One-click install · Recommendations · Scene-aware",
@@ -67,6 +67,7 @@ const FONT_CJK =
 const FONT_MONO = "ui-monospace, 'Noto Sans Mono CJK SC', SFMono-Regular, Menlo, Consolas, monospace";
 
 // 数字占位区位置：通过测量 subPre 文本实际渲染宽度精确计算（不再手工估算）
+const NUM_Y = 192;
 
 async function measureTextWidth(text, size, weight = "500") {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="80" viewBox="0 0 2000 80">
@@ -89,18 +90,17 @@ async function measureTextWidth(text, size, weight = "500") {
   return maxX;
 }
 
-// 中文数字间隙：subPre 渲染宽度 + 4px 间距（数字紧贴「持续收录」）；数字区宽度容纳 4-5 位
-// 英文整串渲染不需要测量
-const subPreW = LANG === "en" ? 0 : await measureTextWidth(COPY.subPre, COPY.subSize);
-const NUM_GAP_START = TEXT_X + subPreW + 4;
-const NUM_GAP_W = 52;
+// 数字间隙：subPre 渲染宽度 + 8px 间距；数字宽度约 5 位 × size×0.6
+const subPreW = await measureTextWidth(COPY.subPre, COPY.subSize);
+const NUM_GAP_START = TEXT_X + subPreW + 8;
+const NUM_GAP_W = 66; // 数字区宽度（容纳 5 位数字，如 1481/14812）
 
-// 数字垂直：中文 baseline 与数字不同，y 下移 3px 对齐
-const NUM_Y = 192;
+// 副标题：subPre + （占位块或数字）+ subPost
+// 占位块用背景同色矩形（本地 base 版），workflow 叠加数字时覆盖它
 const numCenter = NUM_GAP_START + NUM_GAP_W / 2;
 const subMiddle =
   COUNT !== null
-    ? `<text x="${numCenter}" y="${NUM_Y + 3}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="600" fill="#101418" text-anchor="middle">${COUNT}</text>`
+    ? `<text x="${numCenter}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="600" fill="#101418" text-anchor="middle">${COUNT}</text>`
     : `<rect x="${NUM_GAP_START - 2}" y="${NUM_Y - COPY.subSize + 6}" width="${NUM_GAP_W}" height="${COPY.subSize + 4}" rx="4" fill="#F6F7FC"/>`;
 
 // 文字层 SVG（与生图右侧背景 #F6F7FC 协调；文字深炭/品牌蓝）
@@ -114,14 +114,10 @@ const textSvg = `
   </defs>
   <!-- 标题 -->
   <text x="${TEXT_X}" y="150" font-family="${FONT_CJK}" font-size="58" font-weight="800" letter-spacing="-1" fill="#101418">DSH <tspan fill="url(#brandGrad)">Market</tspan></text>
-  <!-- 副标题：中文三段式（前段本地渲染 + 数字 overlay），英文整串（全 ASCII） -->
-  ${
-    LANG === "en"
-      ? `<text x="${TEXT_X}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.sub)}</text>`
-      : `<text x="${TEXT_X}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.subPre)}</text>
+  <!-- 副标题三段式：前段中文（本地渲染）+ 数字（workflow 叠加 ASCII）+ 后段 -->
+  <text x="${TEXT_X}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.subPre)}</text>
   ${subMiddle}
-  <text x="${NUM_GAP_START + NUM_GAP_W}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.subPost)}</text>`
-  }
+  <text x="${NUM_GAP_START + NUM_GAP_W}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.subPost)}</text>
 
   <!-- 分隔线 -->
   <line x1="${TEXT_X}" y1="218" x2="${TEXT_X + TEXT_W}" y2="218" stroke="#D9E4F0" stroke-width="2"/>
@@ -178,9 +174,8 @@ await sharp({
 const outWebp = `${COPY.out}.webp`;
 await sharp(outPng).webp({ quality: 80 }).toFile(outWebp);
 
-if (COUNT === null && LANG === "zh") {
-  // 中文 base 版：额外输出 banner-base-zh.webp + 数字位置文件（供 overlay-count.mjs 叠加）
-  // 英文整串渲染，无需 base/overlay
+if (COUNT === null) {
+  // base 版：额外输出 banner-base-{lang}.webp + 数字位置文件（供 overlay-count.mjs 叠加）
   const baseWebp = `assets/readme/banner-base-${LANG}.webp`;
   await sharp(outPng).webp({ quality: 80 }).toFile(baseWebp);
   const posFile = `assets/readme/banner-count-pos-${LANG}.json`;
