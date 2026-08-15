@@ -25,30 +25,27 @@ const H = {
 // About 描述（homepage 单独设）
 // 中英双语：GitHub About 为单字段，中文为主、英文附后
 const description =
-  "DeepSeek Harness 插件市场 · 持续收录 500+ DSH 插件：中文搜索 + 实用五维评分 + 一键安装。Web 版与 DSH 侧边栏插件双形态。Plugin marketplace for DeepSeek Harness: 500+ plugins, Chinese search, 5-dim scoring, one-click install.";
+  "DeepSeek Harness 插件市场 · 持续收录 1500+ DSH 插件：中文搜索 + 实用五维评分 + 一键安装。Web 版与 DSH 侧边栏插件双形态。Plugin marketplace for DeepSeek Harness: 1500+ plugins, Chinese search, 5-dim scoring, one-click install.";
 
 // Topics（GitHub 限制 ≤20 个，小写字母数字连字符）
-// 数据源 topic（collector/src/sources/github-search.ts TOPIC_SOURCES）优先：
-// dsh-plugin / dsh / deepseek-harness-plugin / dsh-bundle / dsh-skill
+// 全部切 DSH 生态要点：dsh 插件 / 市场 / dsh web；不用泛词（react/vite/open-source 无区分度）
 const topics = [
-  "dsh-plugin",
-  "deepseek-harness",
   "dsh",
-  "deepseek-harness-plugin",
+  "dsh-market",
+  "dsh-plugin",
+  "dsh-plugins",
+  "dsh-web",
   "dsh-bundle",
   "dsh-skill",
+  "deepseek-harness",
+  "deepseek-harness-plugin",
+  "deepseek-harness-plugins",
   "plugin-market",
+  "plugin-marketplace",
   "plugin-registry",
+  "plugin-search",
   "marketplace",
-  "ai-agents",
-  "agent-harness",
-  "plugins",
-  "typescript",
-  "react",
-  "vite",
-  "github-pages",
-  "fuzzy-search",
-  "open-source",
+  "web",
 ];
 
 async function main() {
