@@ -26,7 +26,7 @@ jobs:
               `- **提交内容**：${repoUrl}`,
               `- **处理流程**：每日 06:00 的自动收录管道会检测该仓库，收录结果会自动回复本 issue。`,
               ``,
-              `> 💡 提示：给仓库打上 \`dsh-plugin\` topic 可加速收录；未通过检测（非 DSH 插件）也会回复说明。`,
+              `> 💡 提示：给仓库打上 \`dsh-plugin\` topic 可加速收录；若仓库未通过检测（非 DSH 插件），本 issue 将保持静默不回复，仓库补齐插件标记后会被自动扫描收录。`,
             ].join('\n');
             await github.rest.issues.createComment({
               owner: context.repo.owner,

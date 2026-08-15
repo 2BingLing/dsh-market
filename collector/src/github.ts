@@ -48,17 +48,25 @@ export async function githubFetch<T>(
       });
 
       if (res.status === 403 || res.status === 429) {
+        // GitHub 限流两种形式：
+        // 1) 主限流：x-ratelimit-reset（时间戳）
+        // 2) secondary rate limit：Retry-After（秒）——403 无 x-ratelimit-reset 时常见
+        const retryAfter = res.headers.get("retry-after");
         const reset = res.headers.get("x-ratelimit-reset");
-        if (reset) {
-          const waitMs = Math.min(
-            (Number(reset) * 1000 - Date.now()) + 1000,
-            60_000
-          );
-          if (waitMs > 0) {
-            await sleep(waitMs);
-            continue;
-          }
+        let waitMs = 0;
+        if (retryAfter) {
+          waitMs = Number(retryAfter) * 1000 + 500;
+        } else if (reset) {
+          waitMs = Math.min(Number(reset) * 1000 - Date.now() + 1000, 60_000);
+        } else if (res.status === 429) {
+          waitMs = 5000; // 429 无 header：保守等待后重试
         }
+        if (waitMs > 0) {
+          await sleep(Math.min(waitMs, 60_000));
+          continue;
+        }
+        // 403 且无任何限流 header：视为普通权限错误，不重试
+        throw new GithubError(`GitHub API ${res.status}`, res.status, url);
       }
 
       if (!res.ok) {
@@ -72,7 +80,8 @@ export async function githubFetch<T>(
       if (err instanceof GithubError && err.status < 500 && err.status !== 429) {
         throw err; // 4xx 不重试
       }
-      await sleep(1000 * (attempt + 1));
+      // 网络错误/5xx：指数退避重试
+      await sleep(1000 * Math.pow(2, attempt));
     }
   }
   throw lastError ?? new Error(`Request failed: ${url}`);

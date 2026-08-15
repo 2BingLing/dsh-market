@@ -23,7 +23,8 @@ const xml = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, 
 const COPY = {
   zh: {
     out: "assets/readme/banner",
-    sub: "DeepSeek Harness 插件市场 · 每日自动收录",
+    subPre: "DeepSeek Harness 插件市场 · 持续收录 ",
+    subPost: " 个插件",
     subSize: 21,
     block: "DSH 插件版 · 装进侧边栏",
     feat1: "一键安装 · 猜你喜欢 · 场景推荐",
@@ -37,7 +38,8 @@ const COPY = {
   },
   en: {
     out: "assets/readme/banner-en",
-    sub: "DeepSeek Harness plugin market · daily auto-collection",
+    subPre: "DeepSeek Harness plugin market · ",
+    subPost: "+ plugins daily",
     subSize: 18,
     block: "DSH Plugin · in your sidebar",
     feat1: "One-click install · Recommendations · Scene-aware",
@@ -50,6 +52,27 @@ const COPY = {
     note: "Web & plugin share only the plugins.json data — independent",
   },
 }[LANG];
+
+/**
+ * 数字叠加：workflow 部署时把 ASCII 数字叠加到占位区（Ubuntu 可渲染数字，无需中文字体）
+ * 本地直接跑 count 参数时也走同一逻辑（生成完整带数字 banner）
+ */
+const COUNT_ARG = process.argv.find((a) => a.startsWith("--count="));
+const COUNT = COUNT_ARG ? COUNT_ARG.split("=")[1] : null;
+
+// 数字占位区位置（副标题 y=192，subPre 文字之后）：
+// 中文 subPre 约 15 字 × 21px ≈ 315px；英文约 40 字符 × 9px ≈ 360px。
+// 用固定间隙 + 数字居中叠加。实测对齐后微调。
+const NUM_Y = 192;
+const NUM_GAP_START = LANG === "en" ? TEXT_X + 372 : TEXT_X + 316;
+const NUM_GAP_W = 120; // 数字区宽度（容纳 5 位数字）
+
+// 副标题：subPre + （占位块或数字）+ subPost
+// 占位块用背景同色矩形（本地 base 版），workflow 叠加数字时覆盖它
+const subMiddle =
+  COUNT !== null
+    ? `<text x="${NUM_GAP_START}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="600" fill="#101418">${COUNT}</text>`
+    : `<rect x="${NUM_GAP_START - 4}" y="${NUM_Y - COPY.subSize + 6}" width="${NUM_GAP_W}" height="${COPY.subSize + 4}" rx="4" fill="#F6F7FC"/>`;
 
 // 字体栈：Noto Sans CJK SC 用于 Linux runner（workflow 合成），Windows 回退雅黑/苹方
 const FONT_CJK =
@@ -67,7 +90,10 @@ const textSvg = `
   </defs>
   <!-- 标题 -->
   <text x="${TEXT_X}" y="150" font-family="${FONT_CJK}" font-size="58" font-weight="800" letter-spacing="-1" fill="#101418">DSH <tspan fill="url(#brandGrad)">Market</tspan></text>
-  <text x="${TEXT_X}" y="192" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.sub)}</text>
+  <!-- 副标题三段式：前段中文（本地渲染）+ 数字（workflow 叠加 ASCII）+ 后段 -->
+  <text x="${TEXT_X}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.subPre)}</text>
+  ${subMiddle}
+  <text x="${NUM_GAP_START + NUM_GAP_W}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.subPost)}</text>
 
   <!-- 分隔线 -->
   <line x1="${TEXT_X}" y1="218" x2="${TEXT_X + TEXT_W}" y2="218" stroke="#D9E4F0" stroke-width="2"/>
