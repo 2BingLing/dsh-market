@@ -23,6 +23,11 @@ if (!count) {
 
 const targets = [
   {
+    file: "scripts/compose-banner.mjs",
+    re: /· \d+\+ plugins daily/,
+    to: `· ${count}+ plugins daily`,
+  },
+  {
     file: "README.md",
     re: /当前 \d+ 个/,
     to: `当前 ${count} 个`,
