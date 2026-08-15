@@ -44,9 +44,9 @@ const numSvg = `
 
 const numLayer = await sharp(Buffer.from(numSvg)).png().toBuffer();
 
-// 叠加到 base 图（占位区位置）
+// 叠加到 base 图（占位区位置）：数字与中文基线平齐（top 上移 4px），并微左移 2px
 await sharp(BASE)
-  .composite([{ input: numLayer, left: Math.round(x - 200 + (pos.w ?? 66) / 2), top: Math.round(y - size - 2) }])
+  .composite([{ input: numLayer, left: Math.round(x - 200 + (pos.w ?? 52) / 2 - 2), top: Math.round(y - size - 4) }])
   .webp({ quality: 80 })
   .toFile(OUT);
 console.log(`overlay-count: ${COUNT} → ${OUT}`);
