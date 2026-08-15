@@ -23,11 +23,28 @@ import { scanByTopics, scanOrg } from "./sources/github-search.js";
 import { fetchSubmissionRepos } from "./sources/issues.js";
 import { detectPlugin, isCordisPackageJson, detectNeedsConfig } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
-import { cached } from "./cache.js";
+import { cached, cacheGet, cacheSet } from "./cache.js";
 import { runPool } from "./pool.js";
 import { translateWithDeepSeek } from "./llm.js";
 import { parseInstallCommands } from "./install-parse.js";
 import { normalizeTags } from "./tag-normalize.js";
+
+/** 检测结果缓存（增量核心：repo 未变化时复用，跳过重复检测网络调用） */
+interface DetectCache {
+  pushedAt: string;
+  detection: {
+    isPlugin: boolean;
+    type: import("@dsh-market/schema").PluginType | null;
+    installMethod: import("@dsh-market/schema").InstallMethod | null;
+    skillFiles: string[];
+    evidence: string[];
+  };
+  isCordis: boolean;
+  needsConfig: boolean;
+  readmeSummary: string | null;
+  installParsed: { commands: string[]; source: string };
+  hasSkillMd: boolean;
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(__dirname, "../../data");
@@ -180,72 +197,115 @@ async function main() {
         }
       }
 
-      // 根目录文件列表（缓存 24h）
-      const rootItems = await cached(
-        "roots",
-        candidate.fullName,
-        () => fetchRepoRoot(repo!.full_name, repo!.default_branch)
-      );
+      // ===== 检测结果缓存（增量核心）：repo 未变化则复用，跳过全部检测网络调用 =====
+      const DETECT_TTL = 7 * 24 * 3600_000;
+      const cachedDetect = cacheGet<DetectCache>("detect", candidate.fullName, DETECT_TTL);
+      let detection: Awaited<ReturnType<typeof detectPlugin>>;
+      let isCordis: boolean;
+      let needsConfig: boolean;
+      let readmeSummary: string | null;
+      let installParsed: { commands: string[]; source: string };
+      let hasSkillMd: boolean;
+      let readmeContent: string | null;
 
-      // 特征检测（只基于文件列表）
-      const detection = await detectPlugin(candidate.fullName, rootItems);
-      if (!detection.isPlugin) {
-        rejected.push({ fullName: candidate.fullName, reason: "no plugin markers" });
-        return;
-      }
-
-      // package.json 二次确认（仅当是 cordis 候选且根目录有 package.json）
-      let packageJsonContent: string | null = null;
-      const hasPkgJson = rootItems.some(
-        (i) => i.name.toLowerCase() === "package.json"
-      );
-      if (hasPkgJson) {
-        packageJsonContent = await cached<string | null>(
-          "pkgjson",
+      if (cachedDetect && cachedDetect.pushedAt === repo.pushed_at) {
+        // 命中：仓库未变化，直接复用检测产物（零网络调用）
+        detection = cachedDetect.detection;
+        isCordis = cachedDetect.isCordis;
+        needsConfig = cachedDetect.needsConfig;
+        readmeSummary = cachedDetect.readmeSummary;
+        installParsed = cachedDetect.installParsed;
+        hasSkillMd = cachedDetect.hasSkillMd;
+        readmeContent = null; // 评分用：下面从 readmes 缓存取（24h 内必有）
+        if (!detection.isPlugin) {
+          rejected.push({ fullName: candidate.fullName, reason: "no plugin markers (cached)" });
+          return;
+        }
+      } else {
+        // 未命中/仓库变化：完整检测流程
+        // 根目录文件列表（缓存 24h）
+        const rootItems = await cached(
+          "roots",
           candidate.fullName,
-          async () => {
-            const f = await fetchFileViaApi(candidate.fullName, "package.json");
-            return f?.content ?? null;
-          }
+          () => fetchRepoRoot(repo!.full_name, repo!.default_branch)
         );
-      }
-      const isCordis = isCordisPackageJson(packageJsonContent);
-      if (detection.type === "cordis-plugin" && !isCordis) {
-        rejected.push({ fullName: candidate.fullName, reason: "package.json not cordis" });
-        return;
-      }
 
-      // README（缓存 24h）
-      const readmeContent = await cached<string | null>(
-        "readmes",
-        candidate.fullName,
-        () => fetchRawFile(candidate.fullName, "README.md", repo!.default_branch)
-      );
+        // 特征检测（只基于文件列表）
+        detection = await detectPlugin(candidate.fullName, rootItems);
+        if (!detection.isPlugin) {
+          rejected.push({ fullName: candidate.fullName, reason: "no plugin markers" });
+          return;
+        }
 
-      // skill 型：抓 SKILL.md 做摘要
-      let skillMd: string | null = null;
-      if (detection.skillFiles.length > 0) {
-        skillMd = await cached<string | null>(
-          "skills",
-          `${candidate.fullName}:${detection.skillFiles[0]}`,
-          () =>
-            fetchRawFile(
-              candidate.fullName,
-              detection.skillFiles[0],
-              repo!.default_branch
-            )
+        // package.json 二次确认（仅当是 cordis 候选且根目录有 package.json）
+        let packageJsonContent: string | null = null;
+        const hasPkgJson = rootItems.some(
+          (i) => i.name.toLowerCase() === "package.json"
         );
+        if (hasPkgJson) {
+          packageJsonContent = await cached<string | null>(
+            "pkgjson",
+            candidate.fullName,
+            async () => {
+              const f = await fetchFileViaApi(candidate.fullName, "package.json");
+              return f?.content ?? null;
+            }
+          );
+        }
+        isCordis = isCordisPackageJson(packageJsonContent);
+        if (detection.type === "cordis-plugin" && !isCordis) {
+          rejected.push({ fullName: candidate.fullName, reason: "package.json not cordis" });
+          return;
+        }
+
+        // README（缓存 24h）
+        readmeContent = await cached<string | null>(
+          "readmes",
+          candidate.fullName,
+          () => fetchRawFile(candidate.fullName, "README.md", repo!.default_branch)
+        );
+
+        // skill 型：抓 SKILL.md 做摘要
+        let skillMd: string | null = null;
+        if (detection.skillFiles.length > 0) {
+          skillMd = await cached<string | null>(
+            "skills",
+            `${candidate.fullName}:${detection.skillFiles[0]}`,
+            () =>
+              fetchRawFile(
+                candidate.fullName,
+                detection.skillFiles[0],
+                repo!.default_branch
+              )
+          );
+        }
+
+        needsConfig = detectNeedsConfig(readmeContent);
+        readmeSummary = readmeContent
+          ? summarizeReadme(readmeContent)
+          : skillMd
+            ? summarizeReadme(skillMd)
+            : null;
+        installParsed = parseInstallCommands(readmeContent);
+        hasSkillMd = detection.skillFiles.length > 0;
+
+        // 写入检测缓存（含派生产物）
+        cacheSet<DetectCache>("detect", candidate.fullName, {
+          pushedAt: repo.pushed_at,
+          detection,
+          isCordis,
+          needsConfig,
+          readmeSummary,
+          installParsed,
+          hasSkillMd,
+        });
       }
 
-      const needsConfig = detectNeedsConfig(readmeContent);
-      const readmeSummary = readmeContent
-        ? summarizeReadme(readmeContent)
-        : skillMd
-          ? summarizeReadme(skillMd)
-          : null;
+      // 评分用的 readmeContent：检测缓存命中时从 readmes 缓存补取（不重新抓取）
+      if (readmeContent === null) {
+        readmeContent = cacheGet<string | null>("readmes", candidate.fullName, 24 * 3600_000);
+      }
 
-      // 解析 README 真实安装命令（精确命令优先于类型模板）
-      const installParsed = parseInstallCommands(readmeContent);
       const installCommands =
         installParsed.commands.length > 0 ? installParsed.commands : undefined;
       const installMethod = detection.installMethod!;
