@@ -28,6 +28,8 @@ const SECTION_LABEL: Record<SectionKey, string> = {
   fresh: "最新上架",
 };
 const FRESH_COUNT = 24;
+/** 每页卡片数 */
+const PAGE_SIZE = 60;
 const FAV_KEY = "dsh-market:favorites";
 
 function loadFavorites(): string[] {
@@ -56,6 +58,8 @@ export default function App() {
   const [fScore, setFScore] = useState<ScoreRange>("");
   const [fConfig, setFConfig] = useState<ConfigFilter>("");
   const [fStars, setFStars] = useState<StarRange>("");
+  // 分页
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}plugins.json`)
@@ -97,22 +101,57 @@ export default function App() {
     window.scrollTo({ top: 0 });
   }, []);
 
+  // 防抖搜索词（避免每次按键都触发全量搜索）
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query), 180);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  // Fuse 模糊搜索兜底（仅当精确匹配为空时使用）
   const fuse = useMemo(
     () =>
       new Fuse(plugins, {
         keys: [
-          { name: "name", weight: 0.4 },
-          { name: "description", weight: 0.25 },
+          { name: "name", weight: 0.5 },
           { name: "descriptionZh", weight: 0.25 },
+          { name: "description", weight: 0.15 },
           { name: "tags", weight: 0.1 },
         ],
-        threshold: 0.4,
-        ignoreLocation: true,
+        threshold: 0.3,
+        minMatchCharLength: 2,
       }),
     [plugins]
   );
 
-  const hasActiveFilter = Boolean(query.trim() || tags.length || fType || fScore || fConfig || fStars);
+  /** 混合搜索：包含匹配（快/准）优先，Fuse 模糊兜底 */
+  const searchPlugins = useCallback(
+    (list: DshPlugin[], q: string): DshPlugin[] => {
+      const ql = q.trim().toLowerCase();
+      if (!ql) return list;
+      // 1. 快速包含匹配（名称/中文简介/英文简介/标签）
+      const exact = list.filter(
+        (p) =>
+          p.name.toLowerCase().includes(ql) ||
+          (p.descriptionZh ?? "").toLowerCase().includes(ql) ||
+          (p.description ?? "").toLowerCase().includes(ql) ||
+          p.tags.some((t) => t.toLowerCase().includes(ql))
+      );
+      if (exact.length > 0) {
+        // 名称开头/完全匹配优先，再按实用分
+        return exact.sort((a, b) => {
+          const rank = (p: DshPlugin) =>
+            p.name.toLowerCase() === ql ? 0 : p.name.toLowerCase().startsWith(ql) ? 1 : 2;
+          return rank(a) - rank(b) || b.score.total - a.score.total;
+        });
+      }
+      // 2. Fuse 模糊兜底（含中文自然语言查询）
+      return fuse.search(ql).map((r) => r.item);
+    },
+    [fuse]
+  );
+
+  const hasActiveFilter = Boolean(debouncedQuery.trim() || tags.length || fType || fScore || fConfig || fStars);
 
   // 分区候选集
   const sectionList = useMemo((): DshPlugin[] => {
@@ -123,8 +162,8 @@ export default function App() {
   }, [plugins, section]);
 
   const visible = useMemo(() => {
-    let list = query.trim()
-      ? fuse.search(query.trim()).map((r) => r.item)
+    let list = debouncedQuery.trim()
+      ? searchPlugins(sectionList, debouncedQuery)
       : [...sectionList];
     if (nav === "favorites") list = list.filter((p) => favorites.includes(p.id));
     // 标签多选 AND
@@ -145,7 +184,16 @@ export default function App() {
     else if (sort === "stars") list.sort((a, b) => b.stars - a.stars);
     else list.sort((a, b) => b.pushedAt.localeCompare(a.pushedAt));
     return list;
-  }, [sectionList, fuse, query, tags, nav, favorites, fType, fScore, fConfig, fStars, sort]);
+  }, [sectionList, debouncedQuery, searchPlugins, tags, nav, favorites, fType, fScore, fConfig, fStars, sort]);
+
+  // 分页切片（每页 PAGE_SIZE 个）
+  const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  const pagedPlugins = visible.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  // 搜索/筛选/分区/排序变化时回到第 1 页
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedQuery, tags, fType, fScore, fConfig, fStars, section, nav, sort]);
 
   const weeklyPick = useMemo(
     () => [...plugins].sort((a, b) => b.score.total - a.score.total)[0],
@@ -343,11 +391,26 @@ export default function App() {
           </a>
         </div>
       ) : (
-        <div className="grid">
-          {visible.map((p) => (
-            <PluginCard key={p.id} plugin={p} favorite={favorites.includes(p.id)} onToggleFavorite={toggleFavorite} onOpen={openDetail} />
-          ))}
-        </div>
+        <>
+          <div className="grid">
+            {pagedPlugins.map((p) => (
+              <PluginCard key={p.id} plugin={p} favorite={favorites.includes(p.id)} onToggleFavorite={toggleFavorite} onOpen={openDetail} />
+            ))}
+          </div>
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button className="page-btn" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+                ‹ 上一页
+              </button>
+              <span className="page-info">
+                第 {page} / {totalPages} 页 · 共 {visible.length} 个插件
+              </span>
+              <button className="page-btn" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>
+                下一页 ›
+              </button>
+            </div>
+          )}
+        </>
       )}
     </>
   ));
