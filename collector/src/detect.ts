@@ -92,7 +92,9 @@ const CORDIS_PKG_KEYWORDS = [
   "@deepseek-ai/dsh-",
 ];
 
-/** package.json 内容是否为 cordis 插件（需有 package.json 且依赖含 cordis 关键字） */
+/** package.json 内容是否为 cordis 插件：
+ * 1. 依赖含 cordis 关键字（标准 cordis 插件）
+ * 2. 有 dsh.bundle.patch 字段（DSH Bundle 结构，如 Code2Skill：cordis.patch.yml + skills） */
 export function isCordisPackageJson(content: string | null): boolean {
   if (!content) return false;
   try {
@@ -102,9 +104,12 @@ export function isCordisPackageJson(content: string | null): boolean {
       ...(pkg.devDependencies ?? {}),
       ...(pkg.peerDependencies ?? {}),
     };
-    return Object.keys(deps).some((d) =>
+    if (Object.keys(deps).some((d) =>
       CORDIS_PKG_KEYWORDS.some((k) => d.includes(k))
-    );
+    )) return true;
+    // DSH Bundle：package.json 的 dsh.bundle.patch 字段声明 cordis patch 文件
+    if (pkg.dsh && typeof pkg.dsh === "object" && pkg.dsh.bundle?.patch) return true;
+    return false;
   } catch {
     return false;
   }
