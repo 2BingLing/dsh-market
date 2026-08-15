@@ -14,7 +14,8 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  # 生态暴涨后全量 collect 需 30+ 分钟，旧 run 排队会堆积；新 run 直接取消旧 run
+  cancel-in-progress: true
 
 jobs:
   collect-and-deploy:
