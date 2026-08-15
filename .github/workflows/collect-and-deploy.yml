@@ -41,8 +41,13 @@ jobs:
       - name: 同步数据到 Web
         run: cp data/plugins.json web/public/plugins.json
 
-      - name: 同步收录数量到 README（banner 为静态资产，本地维护，不每日重生成）
-        run: node scripts/sync-count.mjs
+      - name: 同步收录数量到 README 与 banner 数字
+        run: |
+          node scripts/sync-count.mjs
+          # banner 数字叠加：base 图为本地生成的静态资产（中文已渲染），此处只叠加 ASCII 数字
+          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('data/plugins.json','utf8')).plugins.length)")
+          node scripts/overlay-count.mjs zh "$COUNT"
+          node scripts/overlay-count.mjs en "$COUNT"
 
       - name: 提交并推送数据更新
         run: |
@@ -50,8 +55,8 @@ jobs:
           git config user.email "dsh-market-bot@users.noreply.github.com"
           # data/ 在 .gitignore 中，用 -f 强制提交数据快照
           # issue-replies.json 只在有 issue 收录时生成，不加入 add 清单（reply 步骤读不到会优雅跳过）
-          # banner 静态资产由本地 compose-banner.mjs 维护（Ubuntu runner 无中文字体会乱码），git add 保留以防本地更新后随数据提交
-          git add -f data/plugins.json web/public/plugins.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
+          # banner-base*.webp 与 banner-count-pos*.json 为本地生成的静态资产，不随 workflow 变化
+          git add -f data/plugins.json web/public/plugins.json assets/readme/banner.png assets/readme/banner.webp assets/readme/banner-en.png assets/readme/banner-en.webp assets/readme/hero.svg scripts/sync-count.mjs scripts/overlay-count.mjs README.md README.en.md
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
           git push
 

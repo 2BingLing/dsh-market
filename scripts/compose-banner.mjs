@@ -6,6 +6,7 @@
  * 输出 1200×600 标准尺寸（png + webp 同时导出，供 README 直接引用 webp）
  */
 import sharp from "sharp";
+import { writeFileSync } from "node:fs";
 
 const SRC = "assets/readme/hen.png";
 const W = 1200;
@@ -60,24 +61,47 @@ const COPY = {
 const COUNT_ARG = process.argv.find((a) => a.startsWith("--count="));
 const COUNT = COUNT_ARG ? COUNT_ARG.split("=")[1] : null;
 
-// 数字占位区位置（副标题 y=192，subPre 文字之后）：
-// 中文 subPre 约 15 字 × 21px ≈ 315px；英文约 40 字符 × 9px ≈ 360px。
-// 用固定间隙 + 数字居中叠加。实测对齐后微调。
-const NUM_Y = 192;
-const NUM_GAP_START = LANG === "en" ? TEXT_X + 372 : TEXT_X + 316;
-const NUM_GAP_W = 120; // 数字区宽度（容纳 5 位数字）
-
-// 副标题：subPre + （占位块或数字）+ subPost
-// 占位块用背景同色矩形（本地 base 版），workflow 叠加数字时覆盖它
-const subMiddle =
-  COUNT !== null
-    ? `<text x="${NUM_GAP_START}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="600" fill="#101418">${COUNT}</text>`
-    : `<rect x="${NUM_GAP_START - 4}" y="${NUM_Y - COPY.subSize + 6}" width="${NUM_GAP_W}" height="${COPY.subSize + 4}" rx="4" fill="#F6F7FC"/>`;
-
 // 字体栈：Noto Sans CJK SC 用于 Linux runner（workflow 合成），Windows 回退雅黑/苹方
 const FONT_CJK =
   "'Noto Sans CJK SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
 const FONT_MONO = "ui-monospace, 'Noto Sans Mono CJK SC', SFMono-Regular, Menlo, Consolas, monospace";
+
+// 数字占位区位置：通过测量 subPre 文本实际渲染宽度精确计算（不再手工估算）
+const NUM_Y = 192;
+
+async function measureTextWidth(text, size, weight = "500") {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="80" viewBox="0 0 2000 80">
+  <text x="0" y="40" font-family="${FONT_CJK}" font-size="${size}" font-weight="${weight}" fill="#000">${xml(text)}</text>
+</svg>`;
+  const { data, info } = await sharp(Buffer.from(svg))
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  // 找最右非透明像素
+  let maxX = 0;
+  for (let y = 0; y < info.height; y++) {
+    for (let x = info.width - 1; x >= maxX; x--) {
+      if (data[(y * info.width + x) * 4 + 3] > 10) {
+        if (x > maxX) maxX = x;
+        break;
+      }
+    }
+  }
+  return maxX;
+}
+
+// 数字间隙：subPre 渲染宽度 + 8px 间距；数字宽度约 5 位 × size×0.6
+const subPreW = await measureTextWidth(COPY.subPre, COPY.subSize);
+const NUM_GAP_START = TEXT_X + subPreW + 8;
+const NUM_GAP_W = 66; // 数字区宽度（容纳 5 位数字，如 1481/14812）
+
+// 副标题：subPre + （占位块或数字）+ subPost
+// 占位块用背景同色矩形（本地 base 版），workflow 叠加数字时覆盖它
+const numCenter = NUM_GAP_START + NUM_GAP_W / 2;
+const subMiddle =
+  COUNT !== null
+    ? `<text x="${numCenter}" y="${NUM_Y}" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="600" fill="#101418" text-anchor="middle">${COUNT}</text>`
+    : `<rect x="${NUM_GAP_START - 2}" y="${NUM_Y - COPY.subSize + 6}" width="${NUM_GAP_W}" height="${COPY.subSize + 4}" rx="4" fill="#F6F7FC"/>`;
 
 // 文字层 SVG（与生图右侧背景 #F6F7FC 协调；文字深炭/品牌蓝）
 const textSvg = `
@@ -146,8 +170,27 @@ await sharp({
   .png()
   .toFile(outPng);
 
-// 4. 同步导出 webp（README 引用轻量格式）
+// 4. 导出 webp（README 引用轻量格式）
 const outWebp = `${COPY.out}.webp`;
 await sharp(outPng).webp({ quality: 80 }).toFile(outWebp);
 
-console.log("saved:", outPng, "and", outWebp);
+if (COUNT === null) {
+  // base 版：额外输出 banner-base-{lang}.webp + 数字位置文件（供 overlay-count.mjs 叠加）
+  const baseWebp = `assets/readme/banner-base-${LANG}.webp`;
+  await sharp(outPng).webp({ quality: 80 }).toFile(baseWebp);
+  const posFile = `assets/readme/banner-count-pos-${LANG}.json`;
+  writeFileSync(
+    posFile,
+    JSON.stringify({
+      x: NUM_GAP_START,
+      y: NUM_Y,
+      size: COPY.subSize,
+      w: NUM_GAP_W,
+      font: "sans-serif",
+    }, null, 2),
+    "utf8"
+  );
+  console.log(`saved: ${outPng}, ${outWebp}, ${baseWebp}, ${posFile}`);
+} else {
+  console.log(`saved: ${outPng}, ${outWebp} (count=${COUNT})`);
+}
