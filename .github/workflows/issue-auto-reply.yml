@@ -1,0 +1,34 @@
+name: issue-auto-reply
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  reply:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.title, '[提交插件]') || contains(github.event.issue.labels.*.name, 'submission')
+    steps:
+      - name: 提交时即时回复
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const repoUrl = (issue.body || '').match(/https:\/\/github\.com\/[\w.-]+\/[\w.-]+/)?.[0] ?? '（未填写）';
+            const body = [
+              `📥 已收到你的插件提交！`,
+              ``,
+              `- **提交内容**：${repoUrl}`,
+              `- **处理流程**：每日 06:00 的自动收录管道会检测该仓库，收录结果会自动回复本 issue。`,
+              ``,
+              `> 💡 提示：给仓库打上 \`dsh-plugin\` topic 可加速收录；未通过检测（非 DSH 插件）也会回复说明。`,
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body,
+            });
