@@ -6,6 +6,7 @@
  * 方法集与 core/src/cli.ts 保持一致（cli 是动态调试通道，这里是正式通道）。
  */
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import { createRequire } from 'node:module'
 import {
   resolveConfig,
   readProfile,
@@ -28,6 +29,20 @@ import {
 export const name = 'dsh-market'
 
 export const inject = ['webServer']
+
+/** 读取插件包与核心库版本（设置页「关于」显示） */
+const require = createRequire(import.meta.url)
+function readVersions(): Record<string, string> {
+  const out: Record<string, string> = {}
+  for (const pkg of ['@dsh-market/plugin', '@dsh-market/core', '@dsh-market/schema']) {
+    try {
+      out[pkg] = require(`${pkg}/package.json`).version as string
+    } catch {
+      out[pkg] = 'unknown'
+    }
+  }
+  return out
+}
 
 /** webServer service 最小面（与 dsh-better-sidebar 相同形状） */
 interface WebRoute {
@@ -94,6 +109,7 @@ export function apply(ctx: {
           dataDir: cfg.dataDir,
           defaultProfile: cfg.defaultProfile,
           remoteUrl: cfg.remoteUrl,
+          versions: readVersions(),
         }
       case 'settings':
         return readSettings(cfg)

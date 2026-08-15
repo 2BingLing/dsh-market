@@ -1,9 +1,25 @@
+import { createRequire } from "node:module";
 import { aggregateTags, fetchCurrentUser, fetchMarketData, fetchStarred, hotTags, installPlugin, readProfile, readSettings, recommend, resolveConfig, scanInstalled, search, uninstallPlugin, updateProfile, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获 */
 const name = "dsh-market";
 const inject = ["webServer"];
+/** 读取插件包与核心库版本（设置页「关于」显示） */
+const require = createRequire(import.meta.url);
+function readVersions() {
+	const out = {};
+	for (const pkg of [
+		"@dsh-market/plugin",
+		"@dsh-market/core",
+		"@dsh-market/schema"
+	]) try {
+		out[pkg] = require(`${pkg}/package.json`).version;
+	} catch {
+		out[pkg] = "unknown";
+	}
+	return out;
+}
 /** 精简插件字段（与 cli.ts 的 lite 一致，避免 1.3MB 全量过 HTTP） */
 function lite(p) {
 	return {
@@ -47,7 +63,8 @@ function apply(ctx) {
 				profilesDir: cfg.profilesDir,
 				dataDir: cfg.dataDir,
 				defaultProfile: cfg.defaultProfile,
-				remoteUrl: cfg.remoteUrl
+				remoteUrl: cfg.remoteUrl,
+				versions: readVersions()
 			};
 			case "settings": return readSettings(cfg);
 			case "settings:update":

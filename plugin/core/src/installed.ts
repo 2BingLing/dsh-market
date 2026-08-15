@@ -55,21 +55,30 @@ export function scanInstalled(
           dsh?: { profile?: { bundles?: string[] } };
         };
         const deps = { ...pkg.dependencies, ...pkg.devDependencies };
+        const depNames = new Set(Object.keys(deps));
         for (const [dep, ver] of Object.entries(deps)) {
           // 只关注看起来像 dsh 插件的依赖（dsh- 前缀或知名组织）
           if (!looksLikeDshPlugin(dep)) continue;
           const plugin = byName.get(dep.toLowerCase()) ?? byFull.get(dep.toLowerCase()) ?? null;
+          // 版本优先读 node_modules 实际安装版本（`*` 依赖也准），其次依赖声明；git URL/路径 → null
+          const installedVer = readInstalledVersion(
+            join(cfg.profilesDir, profile.name, "node_modules", dep),
+          );
+          const cleanVer = (installedVer ?? ver).replace(/^[\^~]/, "");
+          const isSemver = /^\d+\.\d+(?:\.\d+)?(?:[-+][\w.-]+)?$/.test(cleanVer);
           found.push({
             pluginId: plugin?.id ?? null,
             localName: dep,
-            version: ver.replace(/^[\^~]/, "") || null,
+            version: isSemver ? cleanVer : null,
             source: "profile",
             plugin,
           });
         }
         // dsh.profile.bundles：组合包清单（官方基础包 @deepseek-ai/dsh-* 跳过）
+        // 已在 dependencies 中出现的包跳过（避免同一插件显示两条：依赖 + bundle）
         for (const bundle of pkg.dsh?.profile?.bundles ?? []) {
           if (!looksLikeDshPlugin(bundle)) continue;
+          if (depNames.has(bundle)) continue; // 去重：依赖里已有版本信息
           const plugin =
             byName.get(bundle.toLowerCase()) ??
             byFull.get(bundle.toLowerCase()) ??
@@ -118,4 +127,16 @@ function looksLikeDshPlugin(dep: string): boolean {
   if (lower.startsWith("@dsh")) return true;
   if (lower.startsWith("dsh-")) return true;
   return false;
+}
+
+/** 读 node_modules 实际安装版本的 package.json version（npm 包目录；link/不存在返回 null） */
+function readInstalledVersion(dir: string): string | null {
+  try {
+    const pkgPath = join(dir, "package.json");
+    if (!existsSync(pkgPath)) return null;
+    const pkg = JSON.parse(readFileSync(pkgPath, "utf8")) as { version?: string };
+    return pkg.version ?? null;
+  } catch {
+    return null;
+  }
 }

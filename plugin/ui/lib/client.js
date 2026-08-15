@@ -91,7 +91,7 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region \0dsh-css:E:\wm\tool\lader\plugin\ui\src\client\styles.module.css.mjs
-		const css = "*{box-sizing:border-box}._LI32q_trigger{color:#5f6670;cursor:pointer;background:0 0;border:none;border-radius:6px;align-items:center;gap:8px;height:100%;padding:0 12px;font-size:14px;display:flex}._LI32q_trigger:hover{color:#252525;background:#edeef1}._LI32q_trigger[data-active]{color:#4d6bfe;background:#edeef1}._LI32q_triggerIcon{align-items:center;line-height:1;display:flex}._LI32q_triggerLabel{white-space:nowrap}._LI32q_backdrop{z-index:100;pointer-events:auto;background:0 0;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_panel{pointer-events:auto;color:#252525;-webkit-font-smoothing:antialiased;background:#fff;border:1px solid #e5e7eb;border-radius:14px;flex-direction:column;width:560px;max-width:94vw;height:720px;max-height:92vh;font-family:-apple-system,BlinkMacSystemFont,PingFang SC,Noto Sans SC,Microsoft YaHei,Helvetica Neue,Arial,sans-serif;font-size:13px;display:flex;position:relative;overflow:hidden;box-shadow:0 8px 40px #00000024,0 2px 8px #00000014}._LI32q_header{border-bottom:1px solid #eef0f2;flex:none;align-items:center;gap:10px;padding:14px 16px 12px;display:flex}._LI32q_titleIcon{align-items:center;display:flex}._LI32q_titleIcon>svg{color:#4d6bfe;width:24px;height:24px}._LI32q_title{font-size:15px;font-weight:600}._LI32q_subtitle{color:#2e4bd8;background:#eaf2fb;border-radius:10px;padding:2px 8px;font-size:11.5px;font-weight:500}._LI32q_headerClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;margin-left:auto;transition:background-color .14s;display:flex}._LI32q_headerClose:hover{color:#252525;background:#f3f4f6}._LI32q_headerClose svg{width:16px;height:16px}._LI32q_tabs{border-bottom:1px solid #eef0f2;flex:none;gap:2px;padding:0 12px;display:flex}._LI32q_tab{color:#5f6670;cursor:pointer;white-space:nowrap;background:0 0;border:none;margin:0 8px;padding:10px 4px;font-size:13px;position:relative}._LI32q_tab:hover{color:#252525}._LI32q_tabOn{color:#252525;font-weight:600}._LI32q_tabOn:after{content:\"\";background:#4d6bfe;border-radius:2px;height:2px;position:absolute;bottom:-1px;left:0;right:0}._LI32q_body{scrollbar-width:thin;scrollbar-color:#d4d7dc transparent;flex:1;min-height:0;padding:16px 16px 20px;overflow-y:auto}._LI32q_body::-webkit-scrollbar{width:6px}._LI32q_body::-webkit-scrollbar-thumb{background:#d4d7dc;border-radius:3px}._LI32q_body::-webkit-scrollbar-track{background:0 0}._LI32q_tabBody,._LI32q_section{flex-direction:column;display:flex}._LI32q_sectionHead{align-items:center;gap:7px;margin:20px 0 10px;display:flex}._LI32q_section:first-child>._LI32q_sectionHead{margin-top:2px}._LI32q_sectionIcon{color:#8a919f;flex:none;align-items:center;display:flex}._LI32q_sectionIcon>svg{width:14px;height:14px}._LI32q_sectionTitle{color:#252525;margin:0;font-size:14px;font-weight:600}._LI32q_sectionNote{color:#8a919f;margin-left:auto;font-size:12px}._LI32q_btn{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s,box-shadow .14s;box-shadow:0 1px 3px #0000000f}._LI32q_btn:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_btn:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnPrimary{color:#fff;background:#4d6bfe;border-color:#4d6bfe;box-shadow:0 1px 3px #4d6bfe59}._LI32q_btnPrimary:hover{background:#3652e6;border-color:#3652e6}._LI32q_btnPrimary:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnGhost{box-shadow:none;color:#5f6670;border-color:#0000}._LI32q_btnGhost:hover{color:#252525;background:#f3f4f6}._LI32q_btnSm{padding:4px 11px;font-size:12px}._LI32q_btnDanger{color:#ef4444;border-color:#f3c8c8}._LI32q_btnDanger:hover{background:#fdeeee;border-color:#f3c8c8}._LI32q_card{cursor:default;background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;min-width:0;padding:14px;transition:box-shadow .15s,transform .15s,border-color .15s;display:flex;overflow:hidden;box-shadow:0 1px 3px #0000000f}._LI32q_card:hover{border-color:#dadde3;transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_cardHead{align-items:center;gap:8px;display:flex}._LI32q_cardName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_cardBadge{color:#2e4bd8;background:#eaf2fb;border-radius:10px;flex:none;padding:1px 7px;font-size:11.5px;font-weight:500}._LI32q_cardStars{color:#5f6670;flex:none;align-items:center;gap:4px;margin-left:auto;font-size:12px;display:flex}._LI32q_cardStars>svg{color:#f59e0b;width:13px;height:13px}._LI32q_cardDesc{color:#5f6670;-webkit-line-clamp:3;-webkit-box-orient:vertical;margin:8px 0 9px;font-size:13px;line-height:1.55;display:-webkit-box;overflow:hidden}._LI32q_cardTags,._LI32q_cardReasons{flex-wrap:wrap;gap:6px;margin-bottom:10px;display:flex}._LI32q_reason{color:#15803d;background:#eef8f3;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_reasonAi{color:#2e4bd8;background:#eaf2fb;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_cardActions{align-items:center;gap:6px;display:flex}._LI32q_spacer{margin-left:auto}._LI32q_needConfig{color:#a97f1f;font-size:11px}._LI32q_cardActionHint{color:#8a919f;text-align:right;margin-top:6px;font-size:11px}._LI32q_iconBtn{cursor:pointer;color:#8a919f;background:#fff;border:1px solid #d1d5db;border-radius:7px;flex:none;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_iconBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_iconBtn:disabled{opacity:.5;cursor:not-allowed}._LI32q_iconBtn svg{width:15px;height:15px}._LI32q_iconBtnOn{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtn{color:#5f6670;cursor:pointer;background:#fff;border:1px solid #d1d5db;border-radius:7px;align-items:center;gap:4px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_favBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtnOn{color:#4d6bfe;background:#eaf2fb;border-color:#c9d4f5}._LI32q_repoBtn{color:#5f6670;cursor:pointer;background:#fff;border:1px solid #d1d5db;border-radius:7px;align-items:center;gap:5px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_repoBtn svg{width:13px;height:13px}._LI32q_repoBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_tag{color:#4a5460;cursor:pointer;user-select:none;background:#f3f4f6;border:none;border-radius:8px;padding:2px 6px;font-size:11px;transition:background-color .12s,color .12s}._LI32q_tag:hover{color:#2e4bd8;background:#eaf2fb}._LI32q_tagOn{color:#2e4bd8;background:#eaf2fb;font-weight:500}._LI32q_recommendToolbar{background:#eaf2fb;border:1px solid #d6e4f8;border-radius:11px;align-items:center;gap:8px;margin-bottom:4px;padding:9px 12px;display:flex}._LI32q_recommendToolbarIcon{color:#4d6bfe;flex:none;align-items:center;display:flex}._LI32q_recommendToolbarIcon>svg{width:14px;height:14px}._LI32q_recommendHint{color:#5f6670;flex:1;font-size:12px;line-height:1.5}._LI32q_modeSwitchRow{margin-bottom:4px;display:flex}._LI32q_quizCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;margin-bottom:4px;padding:15px;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_quizHead{align-items:center;gap:8px;margin-bottom:4px;display:flex}._LI32q_quizHeadIcon{color:#4d6bfe;align-items:center;display:flex}._LI32q_quizHeadIcon>svg{width:16px;height:16px}._LI32q_quizTitle{flex:1;font-size:14px;font-weight:600}._LI32q_quizDesc{color:#5f6670;margin:0 0 12px;font-size:12px}._LI32q_quizTags{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_quizChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_quizChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_quizChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_quizActions{align-items:center;gap:8px;display:flex}._LI32q_quizCount{color:#8a919f;font-size:12px}._LI32q_quizCta{align-items:center;margin-left:auto;display:flex}._LI32q_quizCta ._LI32q_btnPrimary{padding:9px 14px;font-size:13px;font-weight:600}._LI32q_sceneList{flex-direction:column;gap:0;display:flex}._LI32q_sceneRow{border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:10px;margin-bottom:9px;padding:12px 13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_sceneRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_sceneInfo{flex:1;min-width:0}._LI32q_sceneName{margin-bottom:3px;font-size:13.5px;font-weight:600}._LI32q_sceneDesc{color:#5f6670;font-size:12px;line-height:1.5}._LI32q_sceneHint{color:#8a919f;font-size:12px}._LI32q_sceneEmpty{color:#8a919f;border:1px solid #e5e7eb;border-radius:11px;margin:0;padding:12px 13px;font-size:12px}._LI32q_stateHint{text-align:center;color:#8a919f;padding:24px 12px;font-size:12px}._LI32q_installedNote{color:#8a919f;margin-top:8px;font-size:11px}._LI32q_grid2{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_grid2>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_grid2{grid-template-columns:1fr}}._LI32q_searchWrap{margin-bottom:14px;position:relative}._LI32q_searchWrapIcon{color:#8a919f;pointer-events:none;align-items:center;width:15px;height:15px;display:flex;position:absolute;top:50%;left:11px;transform:translateY(-50%)}._LI32q_searchWrapIcon>svg{width:15px;height:15px}._LI32q_searchInput{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:10px;outline:none;width:100%;height:38px;padding:0 34px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_searchInput::placeholder{color:#9299a3}._LI32q_searchInput:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_searchClear{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:5px;justify-content:center;align-items:center;width:20px;height:20px;padding:0;display:flex;position:absolute;top:50%;right:9px;transform:translateY(-50%)}._LI32q_searchClear:hover{background:#f3f4f6}._LI32q_searchClear svg{width:13px;height:13px}._LI32q_filterRow{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_filterChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:13px;padding:4px 11px;font-size:12px;transition:all .14s}._LI32q_filterChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_filterChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_semanticToggle{background:#fff;border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:9px;margin-bottom:14px;padding:9px 12px;display:flex}._LI32q_semanticInfo{flex:1}._LI32q_semanticTitle{align-items:center;gap:6px;font-size:13px;font-weight:600;display:flex}._LI32q_semanticPill{color:#8a919f;border:1px solid #e5e7eb;border-radius:9px;padding:0 6px;font-size:10px;font-weight:500}._LI32q_semanticDesc{color:#8a919f;margin-top:2px;font-size:12px}._LI32q_semanticSwitch{cursor:not-allowed;opacity:.7;background:#d4d7dc;border-radius:10px;flex:none;width:34px;height:20px;position:relative}._LI32q_semanticSwitch:after{content:\"\";background:#fff;border-radius:50%;width:16px;height:16px;position:absolute;top:2px;left:2px;box-shadow:0 1px 2px #0003}._LI32q_hotTagsTitle{color:#8a919f;margin-bottom:8px;font-size:12px}._LI32q_tagCloud{flex-wrap:wrap;gap:6px;padding:0;display:flex}._LI32q_hotTag{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_hotTag:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_hotTagOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_tagMoreRow{margin:2px 0 4px}._LI32q_results{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_results>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_results{grid-template-columns:1fr}}._LI32q_resultCount{color:#5f6670;margin:2px 0 10px;font-size:12px}._LI32q_resultCount b{color:#252525}._LI32q_loadMoreRow{text-align:center;margin:14px 0 6px}._LI32q_loadMore{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s;box-shadow:0 1px 3px #0000000f}._LI32q_loadMore:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_semanticResult{color:#8a919f;flex-wrap:wrap;align-items:center;gap:5px;font-size:12px;display:flex}._LI32q_emptyState{text-align:center;padding:56px 20px}._LI32q_emptyIcon{color:#d4d7dc;justify-content:center;margin-bottom:12px;display:flex}._LI32q_emptyIcon>svg{width:44px;height:44px}._LI32q_emptyTitle{color:#252525;margin-bottom:5px;font-size:14px;font-weight:600}._LI32q_emptyDesc{color:#8a919f;margin-bottom:16px;font-size:12px}._LI32q_installedRow{border:1px solid #e5e7eb;border-radius:11px;align-items:flex-start;gap:11px;margin-bottom:9px;padding:13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_installedRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_installedInfo{flex:1;min-width:0}._LI32q_installedHead{align-items:center;gap:8px;display:flex}._LI32q_installedName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_installedMeta{color:#8a919f;margin-top:3px;font-size:12px}._LI32q_installedActions{flex-direction:column;flex:none;gap:6px;display:flex}._LI32q_unmatched{flex-wrap:wrap;gap:5px;margin-top:8px;display:flex}._LI32q_unmatchedChip{color:#a97f1f;background:#fef7e7;border:1px dashed #e3c997;border-radius:10px;padding:3px 8px;font-size:11.5px}._LI32q_unmatchedMore{color:#8a919f;align-self:center;font-size:11px}._LI32q_settingCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;margin-bottom:12px;padding:15px;box-shadow:0 1px 3px #0000000f}._LI32q_settingHead{align-items:center;gap:8px;margin-bottom:10px;display:flex}._LI32q_settingIc{color:#4d6bfe;background:#f3f4f6;border-radius:8px;flex:none;justify-content:center;align-items:center;width:26px;height:26px;display:flex}._LI32q_settingIc>svg{width:15px;height:15px}._LI32q_settingTitle{font-size:14px;font-weight:600}._LI32q_settingStatus{border-radius:9px;margin-left:auto;padding:2px 8px;font-size:11.5px}._LI32q_statusOk{color:#22c55e;background:#eef8f3}._LI32q_statusOff{color:#8a919f;background:#f3f4f6}._LI32q_statusWarn{color:#a97f1f;background:#fef7e7}._LI32q_settingsRow{align-items:center;gap:8px;display:flex}._LI32q_settingsLabel{color:#5f6670;white-space:nowrap;font-size:12px}._LI32q_ghTip{color:#5f6670;margin:0;font-size:12px;line-height:1.7}._LI32q_ghLink{color:#4d6bfe;align-items:center;gap:2px;text-decoration:none;display:inline-flex}._LI32q_ghLink:hover{text-decoration:underline}._LI32q_ghLogin{flex:1;font-size:13px;font-weight:600}._LI32q_ghRow{align-items:center;gap:8px;display:flex}._LI32q_deviceFlow{color:#5f6670;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;flex-direction:column;gap:6px;padding:9px 11px;font-size:12px;display:flex}._LI32q_deviceCode{letter-spacing:2px;color:#4d6bfe;background:#fff;border-radius:6px;align-self:flex-start;padding:4px 8px;font-family:ui-monospace,Menlo,monospace;font-size:18px;font-weight:700}._LI32q_ghPollState{color:#5f6670;margin:0;font-size:12px}._LI32q_deviceFlow a{color:#4d6bfe}._LI32q_deviceFlowTip{color:#8a919f;margin:0;font-size:11.5px;line-height:1.6}._LI32q_ghDone{color:#22c55e;align-items:center;font-weight:500;display:inline-flex}._LI32q_field{margin-bottom:11px}._LI32q_fieldRow{gap:8px;display:flex}._LI32q_fieldRow>._LI32q_field{flex:1;margin-bottom:0}._LI32q_fieldLabel{color:#5f6670;margin-bottom:5px;font-size:12px;display:block}._LI32q_input,._LI32q_select{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:9px;outline:none;width:100%;height:34px;padding:0 10px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_input:focus,._LI32q_select:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_input::placeholder{color:#9299a3}._LI32q_error{color:#ef4444;margin:0;font-size:12px}._LI32q_warn{color:#a97f1f;align-items:center;margin:0;font-size:12px;display:flex}._LI32q_dividerLine{background:#eef0f2;height:1px;margin:13px 0}._LI32q_inlineIcon{vertical-align:-2px;flex:none;margin-right:4px;display:inline-block}._LI32q_modalBackdrop{z-index:120;background:#14161c6b;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_modal{background:#fff;border-radius:14px;flex-direction:column;width:420px;max-width:92vw;padding:20px 22px;display:flex;overflow:hidden;box-shadow:0 12px 50px #0000003d}._LI32q_modalHead{justify-content:space-between;align-items:center;margin-bottom:12px;display:flex}._LI32q_modalTitle{font-size:15px;font-weight:600}._LI32q_modalClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:background-color .14s;display:flex}._LI32q_modalClose:hover{color:#252525;background:#f3f4f6}._LI32q_modalClose svg{width:16px;height:16px}._LI32q_modalBody{flex-direction:column;gap:10px;display:flex}._LI32q_modalDesc{color:#5f6670;margin:0;font-size:12.5px;line-height:1.6}._LI32q_modalActions{justify-content:flex-end;gap:8px;margin-top:8px;display:flex}._LI32q_modalSuccess{text-align:center;flex-direction:column;justify-content:center;align-items:center;gap:10px;display:flex}._LI32q_modalSuccessIcon{color:#22c55e;background:#eef8f3;border-radius:50%;justify-content:center;align-items:center;width:44px;height:44px;margin:0 auto;display:flex}._LI32q_modalSuccessIcon>svg{width:22px;height:22px}._LI32q_modalSuccessTitle{color:#252525;font-size:14px;font-weight:600}._LI32q_modalError{color:#ef4444;word-break:break-all;align-items:center;font-size:13px;font-weight:600;display:flex}._LI32q_loading{text-align:center;color:#8a919f;padding:20px;font-size:12px}._LI32q_advanced{margin-top:2px}._LI32q_advanced summary{cursor:pointer;color:#8a919f;user-select:none;font-size:11px}._LI32q_advancedTip{color:#8a919f;margin:6px 0 0;font-size:11px;line-height:1.5}._LI32q_advancedCmd{color:#5f6670;white-space:pre-wrap;word-break:break-all;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;margin-top:6px;padding:9px 11px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.6;display:block}._LI32q_steps{align-items:center;margin-bottom:18px;display:flex}._LI32q_step{color:#8a919f;flex:1;align-items:center;gap:7px;font-size:12px;display:flex;position:relative}._LI32q_stepDot{color:#8a919f;background:#fff;border:1.5px solid #d4d7dc;border-radius:50%;flex:none;justify-content:center;align-items:center;width:20px;height:20px;font-size:11.5px;transition:all .2s;display:flex}._LI32q_stepActive{color:#252525}._LI32q_stepActive ._LI32q_stepDot{color:#4d6bfe;border-color:#4d6bfe}._LI32q_stepDone{color:#252525}._LI32q_stepDone ._LI32q_stepDot{color:#fff;background:#4d6bfe;border-color:#4d6bfe}._LI32q_stepBar{background:#e7e9ed;border-radius:1px;flex:1;height:1.5px;margin:0 6px}._LI32q_stepBarDone{background:#4d6bfe}._LI32q_toast{color:#fff;z-index:200;pointer-events:none;background:#252525;border-radius:8px;padding:8px 16px;font-size:12.5px;animation:.22s _LI32q_toastIn;position:fixed;bottom:24px;left:50%;transform:translate(-50%);box-shadow:0 4px 16px #0003}@keyframes _LI32q_toastIn{0%{opacity:0;transform:translate(-50%)translateY(10px)}to{opacity:1;transform:translate(-50%)translateY(0)}}";
+		const css = "*{box-sizing:border-box}._LI32q_trigger{color:#5f6670;cursor:pointer;background:0 0;border:none;border-radius:6px;align-items:center;gap:8px;height:100%;padding:0 12px;font-size:14px;display:flex}._LI32q_trigger:hover{color:#252525;background:#edeef1}._LI32q_trigger[data-active]{color:#4d6bfe;background:#edeef1}._LI32q_triggerIcon{align-items:center;line-height:1;display:flex}._LI32q_triggerLabel{white-space:nowrap}._LI32q_backdrop{z-index:100;pointer-events:auto;background:0 0;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_panel{pointer-events:auto;color:#252525;-webkit-font-smoothing:antialiased;background:#fff;border:1px solid #e5e7eb;border-radius:14px;flex-direction:column;width:560px;max-width:94vw;height:720px;max-height:92vh;font-family:-apple-system,BlinkMacSystemFont,PingFang SC,Noto Sans SC,Microsoft YaHei,Helvetica Neue,Arial,sans-serif;font-size:13px;display:flex;position:relative;overflow:hidden;box-shadow:0 8px 40px #00000024,0 2px 8px #00000014}._LI32q_header{border-bottom:1px solid #eef0f2;flex:none;align-items:center;gap:10px;padding:14px 16px 12px;display:flex}._LI32q_titleIcon{align-items:center;display:flex}._LI32q_titleIcon>svg{color:#4d6bfe;width:24px;height:24px}._LI32q_title{font-size:15px;font-weight:600}._LI32q_subtitle{color:#2e4bd8;background:#eaf2fb;border-radius:10px;padding:2px 8px;font-size:11.5px;font-weight:500}._LI32q_headerClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;margin-left:auto;transition:background-color .14s;display:flex}._LI32q_headerClose:hover{color:#252525;background:#f3f4f6}._LI32q_headerClose svg{width:16px;height:16px}._LI32q_tabs{border-bottom:1px solid #eef0f2;flex:none;gap:2px;padding:0 12px;display:flex}._LI32q_tab{color:#5f6670;cursor:pointer;white-space:nowrap;background:0 0;border:none;margin:0 8px;padding:10px 4px;font-size:13px;position:relative}._LI32q_tab:hover{color:#252525}._LI32q_tabOn{color:#252525;font-weight:600}._LI32q_tabOn:after{content:\"\";background:#4d6bfe;border-radius:2px;height:2px;position:absolute;bottom:-1px;left:0;right:0}._LI32q_body{scrollbar-width:thin;scrollbar-color:#d4d7dc transparent;flex:1;min-height:0;padding:16px 16px 20px;overflow-y:auto}._LI32q_body::-webkit-scrollbar{width:6px}._LI32q_body::-webkit-scrollbar-thumb{background:#d4d7dc;border-radius:3px}._LI32q_body::-webkit-scrollbar-track{background:0 0}._LI32q_tabBody,._LI32q_section{flex-direction:column;display:flex}._LI32q_sectionHead{align-items:center;gap:7px;margin:20px 0 10px;display:flex}._LI32q_section:first-child>._LI32q_sectionHead{margin-top:2px}._LI32q_sectionIcon{color:#8a919f;flex:none;align-items:center;display:flex}._LI32q_sectionIcon>svg{width:14px;height:14px}._LI32q_sectionTitle{color:#252525;margin:0;font-size:14px;font-weight:600}._LI32q_sectionNote{color:#8a919f;margin-left:auto;font-size:12px}._LI32q_btn{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s,box-shadow .14s;box-shadow:0 1px 3px #0000000f}._LI32q_btn:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_btn:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnPrimary{color:#fff;background:#4d6bfe;border-color:#4d6bfe;box-shadow:0 1px 3px #4d6bfe59}._LI32q_btnPrimary:hover{background:#3652e6;border-color:#3652e6}._LI32q_btnPrimary:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnGhost{box-shadow:none;color:#5f6670;border-color:#0000}._LI32q_btnGhost:hover{color:#252525;background:#f3f4f6}._LI32q_btnSm{padding:4px 11px;font-size:12px}._LI32q_btnDanger{color:#ef4444;border-color:#f3c8c8}._LI32q_btnDanger:hover{background:#fdeeee;border-color:#f3c8c8}._LI32q_card{cursor:default;background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;min-width:0;padding:14px;transition:box-shadow .15s,transform .15s,border-color .15s;display:flex;overflow:hidden;box-shadow:0 1px 3px #0000000f}._LI32q_card:hover{border-color:#dadde3;transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_cardHead{align-items:center;gap:8px;display:flex}._LI32q_cardName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_cardBadge{color:#2e4bd8;background:#eaf2fb;border-radius:10px;flex:none;padding:1px 7px;font-size:11.5px;font-weight:500}._LI32q_cardStars{color:#5f6670;flex:none;align-items:center;gap:4px;margin-left:auto;font-size:12px;display:flex}._LI32q_cardStars>svg{color:#f59e0b;width:13px;height:13px}._LI32q_cardDesc{color:#5f6670;-webkit-line-clamp:3;-webkit-box-orient:vertical;margin:8px 0 9px;font-size:13px;line-height:1.55;display:-webkit-box;overflow:hidden}._LI32q_cardTags,._LI32q_cardReasons{flex-wrap:wrap;gap:6px;margin-bottom:10px;display:flex}._LI32q_reason{color:#15803d;background:#eef8f3;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_reasonAi{color:#2e4bd8;background:#eaf2fb;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_cardActions{align-items:center;gap:6px;display:flex}._LI32q_spacer{margin-left:auto}._LI32q_needConfig{color:#a97f1f;font-size:11px}._LI32q_cardActionHint{color:#8a919f;text-align:right;margin-top:6px;font-size:11px}._LI32q_iconBtn{cursor:pointer;color:#8a919f;background:#fff;border:1px solid #d1d5db;border-radius:7px;flex:none;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_iconBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_iconBtn:disabled{opacity:.5;cursor:not-allowed}._LI32q_iconBtn svg{width:15px;height:15px}._LI32q_iconBtnOn{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtn{color:#5f6670;cursor:pointer;white-space:nowrap;background:#fff;border:1px solid #d1d5db;border-radius:7px;justify-content:center;align-items:center;gap:4px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_favBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtnOn{color:#4d6bfe;background:#eaf2fb;border-color:#c9d4f5}._LI32q_repoBtn{color:#5f6670;cursor:pointer;background:#fff;border:1px solid #d1d5db;border-radius:7px;align-items:center;gap:5px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_repoBtn svg{width:13px;height:13px}._LI32q_repoBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_tag{color:#4a5460;cursor:pointer;user-select:none;background:#f3f4f6;border:none;border-radius:8px;padding:2px 6px;font-size:11px;transition:background-color .12s,color .12s}._LI32q_tag:hover{color:#2e4bd8;background:#eaf2fb}._LI32q_tagOn{color:#2e4bd8;background:#eaf2fb;font-weight:500}._LI32q_recommendToolbar{background:#eaf2fb;border:1px solid #d6e4f8;border-radius:11px;align-items:center;gap:8px;margin-bottom:4px;padding:9px 12px;display:flex}._LI32q_recommendToolbarIcon{color:#4d6bfe;flex:none;align-items:center;display:flex}._LI32q_recommendToolbarIcon>svg{width:14px;height:14px}._LI32q_recommendHint{color:#5f6670;flex:1;font-size:12px;line-height:1.5}._LI32q_modeSwitchRow{margin-bottom:4px;display:flex}._LI32q_quizCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;margin-bottom:4px;padding:15px;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_quizHead{align-items:center;gap:8px;margin-bottom:4px;display:flex}._LI32q_quizHeadIcon{color:#4d6bfe;align-items:center;display:flex}._LI32q_quizHeadIcon>svg{width:16px;height:16px}._LI32q_quizTitle{flex:1;font-size:14px;font-weight:600}._LI32q_quizDesc{color:#5f6670;margin:0 0 12px;font-size:12px}._LI32q_quizTags{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_quizChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_quizChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_quizChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_quizActions{align-items:center;gap:8px;display:flex}._LI32q_quizCount{color:#8a919f;font-size:12px}._LI32q_quizCta{align-items:center;margin-left:auto;display:flex}._LI32q_quizCta ._LI32q_btnPrimary{padding:9px 14px;font-size:13px;font-weight:600}._LI32q_sceneList{flex-direction:column;gap:0;display:flex}._LI32q_sceneRow{border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:10px;margin-bottom:9px;padding:12px 13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_sceneRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_sceneInfo{flex:1;min-width:0}._LI32q_sceneName{margin-bottom:3px;font-size:13.5px;font-weight:600}._LI32q_sceneDesc{color:#5f6670;font-size:12px;line-height:1.5}._LI32q_sceneHint{color:#8a919f;font-size:12px}._LI32q_sceneEmpty{color:#8a919f;border:1px solid #e5e7eb;border-radius:11px;margin:0;padding:12px 13px;font-size:12px}._LI32q_stateHint{text-align:center;color:#8a919f;padding:24px 12px;font-size:12px}._LI32q_installedNote{color:#8a919f;margin-top:8px;font-size:11px}._LI32q_grid2{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_grid2>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_grid2{grid-template-columns:1fr}}._LI32q_searchWrap{margin-bottom:14px;position:relative}._LI32q_searchWrapIcon{color:#8a919f;pointer-events:none;align-items:center;width:15px;height:15px;display:flex;position:absolute;top:50%;left:11px;transform:translateY(-50%)}._LI32q_searchWrapIcon>svg{width:15px;height:15px}._LI32q_searchInput{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:10px;outline:none;width:100%;height:38px;padding:0 34px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_searchInput::placeholder{color:#9299a3}._LI32q_searchInput:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_searchClear{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:5px;justify-content:center;align-items:center;width:20px;height:20px;padding:0;display:flex;position:absolute;top:50%;right:9px;transform:translateY(-50%)}._LI32q_searchClear:hover{background:#f3f4f6}._LI32q_searchClear svg{width:13px;height:13px}._LI32q_filterRow{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_filterChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:13px;padding:4px 11px;font-size:12px;transition:all .14s}._LI32q_filterChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_filterChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_semanticToggle{background:#fff;border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:9px;margin-bottom:14px;padding:9px 12px;display:flex}._LI32q_semanticInfo{flex:1}._LI32q_semanticTitle{align-items:center;gap:6px;font-size:13px;font-weight:600;display:flex}._LI32q_semanticPill{color:#8a919f;border:1px solid #e5e7eb;border-radius:9px;padding:0 6px;font-size:10px;font-weight:500}._LI32q_semanticDesc{color:#8a919f;margin-top:2px;font-size:12px}._LI32q_semanticSwitch{cursor:not-allowed;opacity:.7;background:#d4d7dc;border-radius:10px;flex:none;width:34px;height:20px;position:relative}._LI32q_semanticSwitch:after{content:\"\";background:#fff;border-radius:50%;width:16px;height:16px;position:absolute;top:2px;left:2px;box-shadow:0 1px 2px #0003}._LI32q_hotTagsTitle{color:#8a919f;margin-bottom:8px;font-size:12px}._LI32q_tagCloud{flex-wrap:wrap;gap:6px;padding:0;display:flex}._LI32q_hotTag{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_hotTag:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_hotTagOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_tagMoreRow{margin:2px 0 4px}._LI32q_results{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_results>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_results{grid-template-columns:1fr}}._LI32q_resultCount{color:#5f6670;margin:2px 0 10px;font-size:12px}._LI32q_resultCount b{color:#252525}._LI32q_loadMoreRow{text-align:center;margin:14px 0 6px}._LI32q_loadMore{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s;box-shadow:0 1px 3px #0000000f}._LI32q_loadMore:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_semanticResult{color:#8a919f;flex-wrap:wrap;align-items:center;gap:5px;font-size:12px;display:flex}._LI32q_emptyState{text-align:center;padding:56px 20px}._LI32q_emptyIcon{color:#d4d7dc;justify-content:center;margin-bottom:12px;display:flex}._LI32q_emptyIcon>svg{width:44px;height:44px}._LI32q_emptyTitle{color:#252525;margin-bottom:5px;font-size:14px;font-weight:600}._LI32q_emptyDesc{color:#8a919f;margin-bottom:16px;font-size:12px}._LI32q_installedRow{border:1px solid #e5e7eb;border-radius:11px;align-items:flex-start;gap:11px;margin-bottom:9px;padding:13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_installedRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_installedInfo{flex:1;min-width:0}._LI32q_installedHead{align-items:center;gap:8px;display:flex}._LI32q_installedName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_installedMeta{color:#8a919f;margin-top:3px;font-size:12px}._LI32q_installedActions{flex-direction:column;flex:none;gap:6px;display:flex}._LI32q_unmatched{flex-wrap:wrap;gap:5px;margin-top:8px;display:flex}._LI32q_unmatchedChip{color:#a97f1f;background:#fef7e7;border:1px dashed #e3c997;border-radius:10px;padding:3px 8px;font-size:11.5px}._LI32q_unmatchedMore{color:#8a919f;align-self:center;font-size:11px}._LI32q_settingCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;margin-bottom:12px;padding:15px;box-shadow:0 1px 3px #0000000f}._LI32q_settingHead{align-items:center;gap:8px;margin-bottom:10px;display:flex}._LI32q_settingIc{color:#4d6bfe;background:#f3f4f6;border-radius:8px;flex:none;justify-content:center;align-items:center;width:26px;height:26px;display:flex}._LI32q_settingIc>svg{width:15px;height:15px}._LI32q_settingTitle{font-size:14px;font-weight:600}._LI32q_versionRow{border-top:1px solid #eef0f2;align-items:center;gap:8px;margin-top:10px;padding-top:10px;display:flex}._LI32q_versionLabel{color:#5f6670;flex:none;font-size:12px}._LI32q_versionCode{color:#252525;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:6px;padding:2px 8px;font-family:ui-monospace,Menlo,monospace;font-size:12px}._LI32q_settingStatus{border-radius:9px;margin-left:auto;padding:2px 8px;font-size:11.5px}._LI32q_statusOk{color:#22c55e;background:#eef8f3}._LI32q_statusOff{color:#8a919f;background:#f3f4f6}._LI32q_statusWarn{color:#a97f1f;background:#fef7e7}._LI32q_settingsRow{align-items:center;gap:8px;display:flex}._LI32q_settingsLabel{color:#5f6670;white-space:nowrap;font-size:12px}._LI32q_ghTip{color:#5f6670;margin:0;font-size:12px;line-height:1.7}._LI32q_ghLink{color:#4d6bfe;align-items:center;gap:2px;text-decoration:none;display:inline-flex}._LI32q_ghLink:hover{text-decoration:underline}._LI32q_ghLogin{flex:1;font-size:13px;font-weight:600}._LI32q_ghRow{align-items:center;gap:8px;display:flex}._LI32q_deviceFlow{color:#5f6670;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;flex-direction:column;gap:6px;padding:9px 11px;font-size:12px;display:flex}._LI32q_deviceCode{letter-spacing:2px;color:#4d6bfe;background:#fff;border-radius:6px;align-self:flex-start;padding:4px 8px;font-family:ui-monospace,Menlo,monospace;font-size:18px;font-weight:700}._LI32q_ghPollState{color:#5f6670;margin:0;font-size:12px}._LI32q_deviceFlow a{color:#4d6bfe}._LI32q_deviceFlowTip{color:#8a919f;margin:0;font-size:11.5px;line-height:1.6}._LI32q_ghDone{color:#22c55e;align-items:center;font-weight:500;display:inline-flex}._LI32q_field{margin-bottom:11px}._LI32q_fieldRow{gap:8px;display:flex}._LI32q_fieldRow>._LI32q_field{flex:1;margin-bottom:0}._LI32q_fieldLabel{color:#5f6670;margin-bottom:5px;font-size:12px;display:block}._LI32q_input,._LI32q_select{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:9px;outline:none;width:100%;height:34px;padding:0 10px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_input:focus,._LI32q_select:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_input::placeholder{color:#9299a3}._LI32q_error{color:#ef4444;margin:0;font-size:12px}._LI32q_warn{color:#a97f1f;align-items:center;margin:0;font-size:12px;display:flex}._LI32q_dividerLine{background:#eef0f2;height:1px;margin:13px 0}._LI32q_inlineIcon{vertical-align:-2px;flex:none;margin-right:4px;display:inline-block}._LI32q_modalBackdrop{z-index:120;background:#14161c6b;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_modal{background:#fff;border-radius:14px;flex-direction:column;width:420px;max-width:92vw;padding:20px 22px;display:flex;overflow:hidden;box-shadow:0 12px 50px #0000003d}._LI32q_modalHead{justify-content:space-between;align-items:center;margin-bottom:12px;display:flex}._LI32q_modalTitle{font-size:15px;font-weight:600}._LI32q_modalClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:background-color .14s;display:flex}._LI32q_modalClose:hover{color:#252525;background:#f3f4f6}._LI32q_modalClose svg{width:16px;height:16px}._LI32q_modalBody{flex-direction:column;gap:10px;display:flex}._LI32q_modalDesc{color:#5f6670;margin:0;font-size:12.5px;line-height:1.6}._LI32q_modalActions{justify-content:flex-end;gap:8px;margin-top:8px;display:flex}._LI32q_modalSuccess{text-align:center;flex-direction:column;justify-content:center;align-items:center;gap:10px;display:flex}._LI32q_modalSuccessIcon{color:#22c55e;background:#eef8f3;border-radius:50%;justify-content:center;align-items:center;width:44px;height:44px;margin:0 auto;display:flex}._LI32q_modalSuccessIcon>svg{width:22px;height:22px}._LI32q_modalSuccessTitle{color:#252525;font-size:14px;font-weight:600}._LI32q_modalError{color:#ef4444;word-break:break-all;align-items:center;font-size:13px;font-weight:600;display:flex}._LI32q_loading{text-align:center;color:#8a919f;padding:20px;font-size:12px}._LI32q_advanced{margin-top:2px}._LI32q_advanced summary{cursor:pointer;color:#8a919f;user-select:none;font-size:11px}._LI32q_advancedTip{color:#8a919f;margin:6px 0 0;font-size:11px;line-height:1.5}._LI32q_advancedCmd{color:#5f6670;white-space:pre-wrap;word-break:break-all;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;margin-top:6px;padding:9px 11px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.6;display:block}._LI32q_steps{align-items:center;margin-bottom:18px;display:flex}._LI32q_step{color:#8a919f;flex:1;align-items:center;gap:7px;font-size:12px;display:flex;position:relative}._LI32q_stepDot{color:#8a919f;background:#fff;border:1.5px solid #d4d7dc;border-radius:50%;flex:none;justify-content:center;align-items:center;width:20px;height:20px;font-size:11.5px;transition:all .2s;display:flex}._LI32q_stepActive{color:#252525}._LI32q_stepActive ._LI32q_stepDot{color:#4d6bfe;border-color:#4d6bfe}._LI32q_stepDone{color:#252525}._LI32q_stepDone ._LI32q_stepDot{color:#fff;background:#4d6bfe;border-color:#4d6bfe}._LI32q_stepBar{background:#e7e9ed;border-radius:1px;flex:1;height:1.5px;margin:0 6px}._LI32q_stepBarDone{background:#4d6bfe}._LI32q_toast{color:#fff;z-index:200;pointer-events:none;background:#252525;border-radius:8px;padding:8px 16px;font-size:12.5px;animation:.22s _LI32q_toastIn;position:fixed;bottom:24px;left:50%;transform:translate(-50%);box-shadow:0 4px 16px #0003}@keyframes _LI32q_toastIn{0%{opacity:0;transform:translate(-50%)translateY(10px)}to{opacity:1;transform:translate(-50%)translateY(0)}}";
 		const tagId = "@dsh-market/plugin/styles.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -101,166 +101,169 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var styles_module_css_default = {
-			"cardTags": "_LI32q_cardTags",
-			"emptyTitle": "_LI32q_emptyTitle",
-			"btnSm": "_LI32q_btnSm",
-			"card": "_LI32q_card",
-			"fieldRow": "_LI32q_fieldRow",
-			"filterChipOn": "_LI32q_filterChipOn",
-			"settingHead": "_LI32q_settingHead",
-			"btn": "_LI32q_btn",
-			"btnPrimary": "_LI32q_btnPrimary",
-			"installedInfo": "_LI32q_installedInfo",
-			"emptyDesc": "_LI32q_emptyDesc",
-			"filterChip": "_LI32q_filterChip",
-			"field": "_LI32q_field",
-			"semanticSwitch": "_LI32q_semanticSwitch",
-			"warn": "_LI32q_warn",
-			"settingCard": "_LI32q_settingCard",
-			"subtitle": "_LI32q_subtitle",
-			"searchWrap": "_LI32q_searchWrap",
-			"ghPollState": "_LI32q_ghPollState",
-			"error": "_LI32q_error",
-			"modalBackdrop": "_LI32q_modalBackdrop",
-			"stepDone": "_LI32q_stepDone",
-			"fieldLabel": "_LI32q_fieldLabel",
-			"quizHead": "_LI32q_quizHead",
-			"semanticTitle": "_LI32q_semanticTitle",
-			"quizDesc": "_LI32q_quizDesc",
-			"trigger": "_LI32q_trigger",
-			"tagOn": "_LI32q_tagOn",
-			"needConfig": "_LI32q_needConfig",
-			"panel": "_LI32q_panel",
-			"sceneInfo": "_LI32q_sceneInfo",
-			"inlineIcon": "_LI32q_inlineIcon",
-			"results": "_LI32q_results",
-			"tabOn": "_LI32q_tabOn",
-			"grid2": "_LI32q_grid2",
-			"deviceFlowTip": "_LI32q_deviceFlowTip",
-			"modalBody": "_LI32q_modalBody",
-			"triggerIcon": "_LI32q_triggerIcon",
-			"settingsRow": "_LI32q_settingsRow",
-			"modalDesc": "_LI32q_modalDesc",
-			"stateHint": "_LI32q_stateHint",
-			"tabBody": "_LI32q_tabBody",
-			"sceneRow": "_LI32q_sceneRow",
-			"steps": "_LI32q_steps",
-			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
-			"sectionHead": "_LI32q_sectionHead",
-			"stepBarDone": "_LI32q_stepBarDone",
-			"tabs": "_LI32q_tabs",
-			"semanticDesc": "_LI32q_semanticDesc",
-			"statusOk": "_LI32q_statusOk",
-			"modalActions": "_LI32q_modalActions",
-			"hotTagOn": "_LI32q_hotTagOn",
-			"sectionIcon": "_LI32q_sectionIcon",
-			"searchClear": "_LI32q_searchClear",
-			"favBtnOn": "_LI32q_favBtnOn",
-			"modeSwitchRow": "_LI32q_modeSwitchRow",
-			"settingIc": "_LI32q_settingIc",
-			"installedHead": "_LI32q_installedHead",
-			"section": "_LI32q_section",
-			"ghLink": "_LI32q_ghLink",
-			"filterRow": "_LI32q_filterRow",
-			"unmatchedChip": "_LI32q_unmatchedChip",
-			"stepBar": "_LI32q_stepBar",
-			"tag": "_LI32q_tag",
-			"backdrop": "_LI32q_backdrop",
-			"iconBtn": "_LI32q_iconBtn",
-			"emptyIcon": "_LI32q_emptyIcon",
-			"cardActions": "_LI32q_cardActions",
-			"semanticResult": "_LI32q_semanticResult",
-			"repoBtn": "_LI32q_repoBtn",
-			"btnDanger": "_LI32q_btnDanger",
-			"cardName": "_LI32q_cardName",
-			"cardDesc": "_LI32q_cardDesc",
-			"recommendToolbar": "_LI32q_recommendToolbar",
-			"tagMoreRow": "_LI32q_tagMoreRow",
-			"cardReasons": "_LI32q_cardReasons",
-			"quizChip": "_LI32q_quizChip",
-			"ghTip": "_LI32q_ghTip",
-			"unmatchedMore": "_LI32q_unmatchedMore",
-			"cardBadge": "_LI32q_cardBadge",
-			"settingTitle": "_LI32q_settingTitle",
-			"dividerLine": "_LI32q_dividerLine",
-			"favBtn": "_LI32q_favBtn",
-			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
-			"body": "_LI32q_body",
-			"sceneName": "_LI32q_sceneName",
-			"cardStars": "_LI32q_cardStars",
-			"searchInput": "_LI32q_searchInput",
-			"statusWarn": "_LI32q_statusWarn",
-			"recommendHint": "_LI32q_recommendHint",
-			"deviceFlow": "_LI32q_deviceFlow",
-			"ghDone": "_LI32q_ghDone",
-			"modalTitle": "_LI32q_modalTitle",
-			"modalSuccess": "_LI32q_modalSuccess",
-			"sceneHint": "_LI32q_sceneHint",
-			"semanticInfo": "_LI32q_semanticInfo",
-			"ghLogin": "_LI32q_ghLogin",
-			"spacer": "_LI32q_spacer",
-			"iconBtnOn": "_LI32q_iconBtnOn",
-			"quizTags": "_LI32q_quizTags",
-			"hotTagsTitle": "_LI32q_hotTagsTitle",
-			"quizCard": "_LI32q_quizCard",
-			"modalError": "_LI32q_modalError",
-			"stepDot": "_LI32q_stepDot",
-			"toast": "_LI32q_toast",
-			"installedRow": "_LI32q_installedRow",
-			"emptyState": "_LI32q_emptyState",
-			"quizCount": "_LI32q_quizCount",
-			"reason": "_LI32q_reason",
-			"searchWrapIcon": "_LI32q_searchWrapIcon",
-			"cardHead": "_LI32q_cardHead",
-			"installedActions": "_LI32q_installedActions",
-			"resultCount": "_LI32q_resultCount",
-			"quizHeadIcon": "_LI32q_quizHeadIcon",
-			"installedNote": "_LI32q_installedNote",
-			"cardActionHint": "_LI32q_cardActionHint",
-			"tagCloud": "_LI32q_tagCloud",
-			"sectionNote": "_LI32q_sectionNote",
-			"btnGhost": "_LI32q_btnGhost",
-			"quizCta": "_LI32q_quizCta",
-			"input": "_LI32q_input",
-			"loading": "_LI32q_loading",
-			"loadMoreRow": "_LI32q_loadMoreRow",
-			"advanced": "_LI32q_advanced",
-			"modal": "_LI32q_modal",
-			"tab": "_LI32q_tab",
-			"step": "_LI32q_step",
-			"quizActions": "_LI32q_quizActions",
-			"statusOff": "_LI32q_statusOff",
-			"semanticPill": "_LI32q_semanticPill",
-			"select": "_LI32q_select",
-			"titleIcon": "_LI32q_titleIcon",
-			"settingStatus": "_LI32q_settingStatus",
-			"settingsLabel": "_LI32q_settingsLabel",
-			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
-			"installedName": "_LI32q_installedName",
-			"loadMore": "_LI32q_loadMore",
-			"triggerLabel": "_LI32q_triggerLabel",
 			"title": "_LI32q_title",
-			"semanticToggle": "_LI32q_semanticToggle",
-			"deviceCode": "_LI32q_deviceCode",
-			"ghRow": "_LI32q_ghRow",
-			"modalHead": "_LI32q_modalHead",
-			"modalClose": "_LI32q_modalClose",
-			"hotTag": "_LI32q_hotTag",
-			"header": "_LI32q_header",
-			"headerClose": "_LI32q_headerClose",
-			"advancedTip": "_LI32q_advancedTip",
-			"sceneEmpty": "_LI32q_sceneEmpty",
-			"advancedCmd": "_LI32q_advancedCmd",
+			"sceneName": "_LI32q_sceneName",
+			"statusOk": "_LI32q_statusOk",
+			"btn": "_LI32q_btn",
+			"repoBtn": "_LI32q_repoBtn",
+			"btnGhost": "_LI32q_btnGhost",
+			"iconBtn": "_LI32q_iconBtn",
+			"quizTags": "_LI32q_quizTags",
+			"section": "_LI32q_section",
+			"emptyTitle": "_LI32q_emptyTitle",
 			"installedMeta": "_LI32q_installedMeta",
-			"quizChipOn": "_LI32q_quizChipOn",
-			"sceneList": "_LI32q_sceneList",
-			"stepActive": "_LI32q_stepActive",
-			"unmatched": "_LI32q_unmatched",
-			"quizTitle": "_LI32q_quizTitle",
-			"sectionTitle": "_LI32q_sectionTitle",
+			"versionLabel": "_LI32q_versionLabel",
+			"favBtnOn": "_LI32q_favBtnOn",
+			"advanced": "_LI32q_advanced",
+			"hotTagOn": "_LI32q_hotTagOn",
+			"settingCard": "_LI32q_settingCard",
+			"header": "_LI32q_header",
 			"reasonAi": "_LI32q_reasonAi",
+			"hotTag": "_LI32q_hotTag",
+			"statusOff": "_LI32q_statusOff",
+			"toast": "_LI32q_toast",
+			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
+			"stepActive": "_LI32q_stepActive",
+			"iconBtnOn": "_LI32q_iconBtnOn",
+			"versionCode": "_LI32q_versionCode",
+			"sceneEmpty": "_LI32q_sceneEmpty",
+			"installedRow": "_LI32q_installedRow",
+			"advancedCmd": "_LI32q_advancedCmd",
 			"sceneDesc": "_LI32q_sceneDesc",
-			"toastIn": "_LI32q_toastIn"
+			"panel": "_LI32q_panel",
+			"advancedTip": "_LI32q_advancedTip",
+			"tab": "_LI32q_tab",
+			"installedActions": "_LI32q_installedActions",
+			"stepBarDone": "_LI32q_stepBarDone",
+			"toastIn": "_LI32q_toastIn",
+			"modalBody": "_LI32q_modalBody",
+			"semanticInfo": "_LI32q_semanticInfo",
+			"cardReasons": "_LI32q_cardReasons",
+			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
+			"favBtn": "_LI32q_favBtn",
+			"searchInput": "_LI32q_searchInput",
+			"emptyDesc": "_LI32q_emptyDesc",
+			"quizDesc": "_LI32q_quizDesc",
+			"stepDone": "_LI32q_stepDone",
+			"results": "_LI32q_results",
+			"grid2": "_LI32q_grid2",
+			"sceneHint": "_LI32q_sceneHint",
+			"select": "_LI32q_select",
+			"modalTitle": "_LI32q_modalTitle",
+			"quizCard": "_LI32q_quizCard",
+			"cardActions": "_LI32q_cardActions",
+			"ghTip": "_LI32q_ghTip",
+			"cardName": "_LI32q_cardName",
+			"spacer": "_LI32q_spacer",
+			"quizTitle": "_LI32q_quizTitle",
+			"sceneList": "_LI32q_sceneList",
+			"emptyIcon": "_LI32q_emptyIcon",
+			"card": "_LI32q_card",
+			"fieldLabel": "_LI32q_fieldLabel",
+			"step": "_LI32q_step",
+			"subtitle": "_LI32q_subtitle",
+			"loading": "_LI32q_loading",
+			"installedNote": "_LI32q_installedNote",
+			"ghLogin": "_LI32q_ghLogin",
+			"ghRow": "_LI32q_ghRow",
+			"modal": "_LI32q_modal",
+			"modalClose": "_LI32q_modalClose",
+			"tagCloud": "_LI32q_tagCloud",
+			"unmatchedMore": "_LI32q_unmatchedMore",
+			"triggerLabel": "_LI32q_triggerLabel",
+			"recommendHint": "_LI32q_recommendHint",
+			"quizChip": "_LI32q_quizChip",
+			"tabBody": "_LI32q_tabBody",
+			"settingsLabel": "_LI32q_settingsLabel",
+			"ghDone": "_LI32q_ghDone",
+			"modeSwitchRow": "_LI32q_modeSwitchRow",
+			"installedInfo": "_LI32q_installedInfo",
+			"cardStars": "_LI32q_cardStars",
+			"searchWrap": "_LI32q_searchWrap",
+			"filterChip": "_LI32q_filterChip",
+			"semanticSwitch": "_LI32q_semanticSwitch",
+			"settingsRow": "_LI32q_settingsRow",
+			"stepDot": "_LI32q_stepDot",
+			"searchClear": "_LI32q_searchClear",
+			"quizChipOn": "_LI32q_quizChipOn",
+			"needConfig": "_LI32q_needConfig",
+			"sceneInfo": "_LI32q_sceneInfo",
+			"fieldRow": "_LI32q_fieldRow",
+			"emptyState": "_LI32q_emptyState",
+			"dividerLine": "_LI32q_dividerLine",
+			"titleIcon": "_LI32q_titleIcon",
+			"modalSuccess": "_LI32q_modalSuccess",
+			"settingIc": "_LI32q_settingIc",
+			"body": "_LI32q_body",
+			"versionRow": "_LI32q_versionRow",
+			"semanticDesc": "_LI32q_semanticDesc",
+			"btnSm": "_LI32q_btnSm",
+			"sceneRow": "_LI32q_sceneRow",
+			"installedHead": "_LI32q_installedHead",
+			"btnPrimary": "_LI32q_btnPrimary",
+			"recommendToolbar": "_LI32q_recommendToolbar",
+			"unmatched": "_LI32q_unmatched",
+			"deviceFlowTip": "_LI32q_deviceFlowTip",
+			"unmatchedChip": "_LI32q_unmatchedChip",
+			"sectionIcon": "_LI32q_sectionIcon",
+			"btnDanger": "_LI32q_btnDanger",
+			"triggerIcon": "_LI32q_triggerIcon",
+			"error": "_LI32q_error",
+			"warn": "_LI32q_warn",
+			"inlineIcon": "_LI32q_inlineIcon",
+			"stepBar": "_LI32q_stepBar",
+			"field": "_LI32q_field",
+			"trigger": "_LI32q_trigger",
+			"quizHeadIcon": "_LI32q_quizHeadIcon",
+			"semanticTitle": "_LI32q_semanticTitle",
+			"tabs": "_LI32q_tabs",
+			"deviceCode": "_LI32q_deviceCode",
+			"settingStatus": "_LI32q_settingStatus",
+			"settingHead": "_LI32q_settingHead",
+			"sectionTitle": "_LI32q_sectionTitle",
+			"cardDesc": "_LI32q_cardDesc",
+			"cardActionHint": "_LI32q_cardActionHint",
+			"modalBackdrop": "_LI32q_modalBackdrop",
+			"quizHead": "_LI32q_quizHead",
+			"modalHead": "_LI32q_modalHead",
+			"searchWrapIcon": "_LI32q_searchWrapIcon",
+			"sectionNote": "_LI32q_sectionNote",
+			"cardHead": "_LI32q_cardHead",
+			"tag": "_LI32q_tag",
+			"semanticResult": "_LI32q_semanticResult",
+			"input": "_LI32q_input",
+			"modalError": "_LI32q_modalError",
+			"settingTitle": "_LI32q_settingTitle",
+			"stateHint": "_LI32q_stateHint",
+			"ghLink": "_LI32q_ghLink",
+			"sectionHead": "_LI32q_sectionHead",
+			"quizCta": "_LI32q_quizCta",
+			"cardBadge": "_LI32q_cardBadge",
+			"filterChipOn": "_LI32q_filterChipOn",
+			"resultCount": "_LI32q_resultCount",
+			"deviceFlow": "_LI32q_deviceFlow",
+			"cardTags": "_LI32q_cardTags",
+			"modalActions": "_LI32q_modalActions",
+			"hotTagsTitle": "_LI32q_hotTagsTitle",
+			"quizCount": "_LI32q_quizCount",
+			"tagOn": "_LI32q_tagOn",
+			"statusWarn": "_LI32q_statusWarn",
+			"ghPollState": "_LI32q_ghPollState",
+			"tabOn": "_LI32q_tabOn",
+			"backdrop": "_LI32q_backdrop",
+			"quizActions": "_LI32q_quizActions",
+			"tagMoreRow": "_LI32q_tagMoreRow",
+			"installedName": "_LI32q_installedName",
+			"loadMoreRow": "_LI32q_loadMoreRow",
+			"semanticToggle": "_LI32q_semanticToggle",
+			"semanticPill": "_LI32q_semanticPill",
+			"loadMore": "_LI32q_loadMore",
+			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
+			"filterRow": "_LI32q_filterRow",
+			"reason": "_LI32q_reason",
+			"headerClose": "_LI32q_headerClose",
+			"modalDesc": "_LI32q_modalDesc",
+			"steps": "_LI32q_steps"
 		};
 		//#endregion
 		//#region src/client/panel.tsx
@@ -449,7 +452,7 @@ window.__ModuleLoader__.load({
 			}, El(Icon, {
 				d: fav ? ICON_STAR : ICON_STAR_OUTLINE,
 				size: 12
-			}), fav ? "已收藏" : "收藏"), El("button", {
+			}), "收藏"), El("button", {
 				className: `${styles_module_css_default.iconBtn} ${starring ? styles_module_css_default.iconBtnOn : ""}`,
 				title: ghToken() ? "在 GitHub 加星这个仓库（PAT 绑定支持）" : "未绑定 GitHub，点击查看绑定方式",
 				disabled: starring,
@@ -521,6 +524,26 @@ window.__ModuleLoader__.load({
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary}`,
 				onClick: onClose
 			}, "关闭")))));
+		}
+		function SceneRow(props) {
+			const { plugin, onInstall } = props;
+			const [fav, setFav] = (0, react.useState)(() => isFavorite(plugin.id));
+			const toggleFav = () => {
+				const now = toggleFavorite(plugin.id);
+				setFav(now);
+				toast(now ? `已收藏「${plugin.name}」` : `已取消收藏「${plugin.name}」`);
+			};
+			return El("div", { className: styles_module_css_default.sceneRow }, El("div", { className: styles_module_css_default.sceneInfo }, El("div", { className: styles_module_css_default.sceneName }, plugin.name), El("div", { className: styles_module_css_default.sceneDesc }, plugin.descriptionZh)), El("button", {
+				className: `${styles_module_css_default.favBtn} ${fav ? styles_module_css_default.favBtnOn : ""}`,
+				title: fav ? "取消收藏" : "收藏（稍后安装）",
+				onClick: toggleFav
+			}, El(Icon, {
+				d: fav ? ICON_STAR : ICON_STAR_OUTLINE,
+				size: 12
+			}), "收藏"), El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary} ${styles_module_css_default.btnSm}`,
+				onClick: () => onInstall(plugin)
+			}, "获取"));
 		}
 		function RecommendTab(props) {
 			const { plugins, profile, recs, loading, installedIds, onInstall, onTagClick, onSwitchMode, onQuizSubmit, sceneState, onFetchScene } = props;
@@ -601,13 +624,11 @@ window.__ModuleLoader__.load({
 			}), El("h3", { className: styles_module_css_default.sectionTitle }, "适合当前场景"), El("span", { className: styles_module_css_default.sectionNote }, sceneState.loading ? "读取会话上下文…" : sceneState.recs.length > 0 ? `基于「${sceneState.sceneTags.slice(0, 3).join(" / ")}」` : "基于你的工作区"), sceneState.loading ? null : El("button", {
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
 				onClick: () => void onFetchScene()
-			}, sceneState.recs.length > 0 ? "刷新" : "获取场景推荐")), sceneState.loading ? El("div", { className: styles_module_css_default.stateHint }, "读取中…") : sceneState.recs.length > 0 ? El("div", { className: styles_module_css_default.sceneList }, ...sceneState.recs.slice(0, 4).map((r) => El("div", {
+			}, sceneState.recs.length > 0 ? "刷新" : "获取场景推荐")), sceneState.loading ? El("div", { className: styles_module_css_default.stateHint }, "读取中…") : sceneState.recs.length > 0 ? El("div", { className: styles_module_css_default.sceneList }, ...sceneState.recs.slice(0, 4).map((r) => El(SceneRow, {
 				key: r.plugin.id,
-				className: styles_module_css_default.sceneRow
-			}, El("div", { className: styles_module_css_default.sceneInfo }, El("div", { className: styles_module_css_default.sceneName }, r.plugin.name), El("div", { className: styles_module_css_default.sceneDesc }, r.plugin.descriptionZh)), El("button", {
-				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary} ${styles_module_css_default.btnSm}`,
-				onClick: () => onInstall(r.plugin)
-			}, "获取")))) : El("p", { className: styles_module_css_default.sceneEmpty }, "根据你当前正在做的事推荐插件（点击获取，基于会话内容）")), ...groups.map((g) => El("div", {
+				plugin: r.plugin,
+				onInstall
+			}))) : El("p", { className: styles_module_css_default.sceneEmpty }, "根据你当前正在做的事推荐插件（点击获取，基于会话内容）")), ...groups.map((g) => El("div", {
 				key: g.title,
 				className: styles_module_css_default.section
 			}, El("div", { className: styles_module_css_default.sectionHead }, El(Icon, {
@@ -743,6 +764,7 @@ window.__ModuleLoader__.load({
 			const { installed, loading, onChanged } = props;
 			const [confirming, setConfirming] = (0, react.useState)(null);
 			const [busy, setBusy] = (0, react.useState)(false);
+			const [showAllUnmatched, setShowAllUnmatched] = (0, react.useState)(false);
 			const uninstall = async (item) => {
 				if (!item.pluginId) return;
 				setBusy(true);
@@ -763,8 +785,8 @@ window.__ModuleLoader__.load({
 				d: ICON_PACKAGE,
 				size: 14,
 				className: styles_module_css_default.sectionIcon
-			}), El("h3", { className: styles_module_css_default.sectionTitle }, "已安装"), El("span", { className: styles_module_css_default.sectionNote }, `${installed.length} 个`)), matched.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "未检测到市场收录的已装插件") : null, ...matched.map((i) => El("div", {
-				key: i.localName,
+			}), El("h3", { className: styles_module_css_default.sectionTitle }, "已安装"), El("span", { className: styles_module_css_default.sectionNote }, `${installed.length} 个`)), matched.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "未检测到市场收录的已装插件") : null, ...matched.map((i, idx) => El("div", {
+				key: `${i.localName}-${idx}`,
 				className: styles_module_css_default.installedRow
 			}, El("div", { className: styles_module_css_default.installedInfo }, El("div", { className: styles_module_css_default.installedHead }, El("span", { className: styles_module_css_default.installedName }, i.plugin?.name ?? i.localName), El("span", { className: styles_module_css_default.cardBadge }, i.source === "skills" ? "技能" : "插件")), El("div", { className: styles_module_css_default.installedMeta }, `${i.version ?? "未知版本"} · ${i.source === "skills" ? "skill" : "profile"}`)), confirming === i.localName ? El("div", { className: styles_module_css_default.installedActions }, El("button", {
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
@@ -781,10 +803,14 @@ window.__ModuleLoader__.load({
 				d: ICON_PACKAGE,
 				size: 14,
 				className: styles_module_css_default.sectionIcon
-			}), El("h3", { className: styles_module_css_default.sectionTitle }, "其他已装"), El("span", { className: styles_module_css_default.sectionNote }, `${unmatched.length} 个 · 未收录市场`)), El("div", { className: styles_module_css_default.unmatched }, ...unmatched.slice(0, 30).map((i) => El("span", {
-				key: i.localName,
+			}), El("h3", { className: styles_module_css_default.sectionTitle }, "其他已装"), El("span", { className: styles_module_css_default.sectionNote }, `${unmatched.length} 个 · 未收录市场`)), El("div", { className: styles_module_css_default.unmatched }, ...unmatched.slice(0, showAllUnmatched ? unmatched.length : 5).map((i, idx) => El("span", {
+				key: `${i.localName}-${idx}`,
 				className: styles_module_css_default.unmatchedChip
-			}, i.localName)), unmatched.length > 30 ? El("span", { className: styles_module_css_default.unmatchedMore }, `+${unmatched.length - 30}`) : null)) : null);
+			}, i.localName)), unmatched.length > 5 ? El("button", {
+				type: "button",
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnGhost} ${styles_module_css_default.btnSm}`,
+				onClick: () => setShowAllUnmatched((v) => !v)
+			}, showAllUnmatched ? "收起" : `查看详细（${unmatched.length} 个）`) : null)) : null);
 		}
 		function SettingsTab(props) {
 			const { profile, onChanged } = props;
@@ -795,8 +821,12 @@ window.__ModuleLoader__.load({
 			const [patInput, setPatInput] = (0, react.useState)("");
 			const [mode, setMode] = (0, react.useState)(profile?.modeOverride ?? "auto");
 			const [profileName, setProfileName] = (0, react.useState)("web");
+			const [versions, setVersions] = (0, react.useState)({});
 			(0, react.useEffect)(() => {
 				setMode(profile?.modeOverride ?? "auto");
+				api("config").then((c) => {
+					if (c?.versions) setVersions(c.versions);
+				}).catch(() => {});
 			}, [profile]);
 			const saveSettings = async (patch) => {
 				try {
@@ -980,7 +1010,7 @@ window.__ModuleLoader__.load({
 			}, "刷新推荐数据")), El("div", { className: styles_module_css_default.settingCard }, El("div", { className: styles_module_css_default.settingHead }, El("span", { className: styles_module_css_default.settingIc }, El(Icon, {
 				d: ICON_CLOCK,
 				size: 15
-			})), El("span", { className: styles_module_css_default.settingTitle }, "关于")), El("p", { className: styles_module_css_default.ghTip }, "插件市场 · 方向 B「克制增强」", El("br"), "数据缓存于本地（GitHub Actions 每日抓取）。")));
+			})), El("span", { className: styles_module_css_default.settingTitle }, "关于")), El("p", { className: styles_module_css_default.ghTip }, "数据缓存于本地（GitHub Actions 每日抓取）。"), versions["@dsh-market/plugin"] ? El("div", { className: styles_module_css_default.versionRow }, El("span", { className: styles_module_css_default.versionLabel }, "插件版本"), El("code", { className: styles_module_css_default.versionCode }, `${versions["@dsh-market/plugin"] ?? "?"}`, versions["@dsh-market/core"] ? ` · core ${versions["@dsh-market/core"]}` : "")) : null));
 		}
 		function FavoritesTab(props) {
 			const { plugins, onInstall, onTagClick, refreshTick, onGotoRecommend } = props;

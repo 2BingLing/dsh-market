@@ -235,7 +235,7 @@ function PluginCard(props: {
           onClick: toggleFav,
         },
         El(Icon, { d: fav ? ICON_STAR : ICON_STAR_OUTLINE, size: 12 }),
-        fav ? '已收藏' : '收藏',
+        '收藏',
       ),
       El('button',
         {
@@ -364,6 +364,37 @@ function InstallModal(props: {
   )
 }
 
+// ---------- 场景推荐行（含收藏按钮） ----------
+
+function SceneRow(props: {
+  plugin: LitePlugin
+  onInstall: (p: LitePlugin) => void
+}): ReactNode {
+  const { plugin, onInstall } = props
+  const [fav, setFav] = useState(() => isFavorite(plugin.id))
+  const toggleFav = () => {
+    const now = toggleFavorite(plugin.id)
+    setFav(now)
+    toast(now ? `已收藏「${plugin.name}」` : `已取消收藏「${plugin.name}」`)
+  }
+  return El('div', { className: styles.sceneRow },
+    El('div', { className: styles.sceneInfo },
+      El('div', { className: styles.sceneName }, plugin.name),
+      El('div', { className: styles.sceneDesc }, plugin.descriptionZh),
+    ),
+    El('button',
+      {
+        className: `${styles.favBtn} ${fav ? styles.favBtnOn : ''}`,
+        title: fav ? '取消收藏' : '收藏（稍后安装）',
+        onClick: toggleFav,
+      },
+      El(Icon, { d: fav ? ICON_STAR : ICON_STAR_OUTLINE, size: 12 }),
+      '收藏',
+    ),
+    El('button', { className: `${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`, onClick: () => onInstall(plugin) }, '获取'),
+  )
+}
+
 // ---------- 推荐 Tab ----------
 
 function RecommendTab(props: {
@@ -485,13 +516,11 @@ function RecommendTab(props: {
         : sceneState.recs.length > 0
           ? El('div', { className: styles.sceneList },
               ...sceneState.recs.slice(0, 4).map((r) =>
-                El('div', { key: r.plugin.id, className: styles.sceneRow },
-                  El('div', { className: styles.sceneInfo },
-                    El('div', { className: styles.sceneName }, r.plugin.name),
-                    El('div', { className: styles.sceneDesc }, r.plugin.descriptionZh),
-                  ),
-                  El('button', { className: `${styles.btn} ${styles.btnPrimary} ${styles.btnSm}`, onClick: () => onInstall(r.plugin) }, '获取'),
-                ),
+                El(SceneRow, {
+                  key: r.plugin.id,
+                  plugin: r.plugin,
+                  onInstall,
+                }),
               ),
             )
           : El('p', { className: styles.sceneEmpty }, '根据你当前正在做的事推荐插件（点击获取，基于会话内容）'),
@@ -724,6 +753,8 @@ function InstalledTab(props: {
   const { installed, loading, onChanged } = props
   const [confirming, setConfirming] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  // 其他已装（未收录）默认只显示前 5 个，点「查看详细」展开全部
+  const [showAllUnmatched, setShowAllUnmatched] = useState(false)
 
   const uninstall = async (item: InstalledItem) => {
     if (!item.pluginId) return
@@ -751,8 +782,8 @@ function InstalledTab(props: {
         El('span', { className: styles.sectionNote }, `${installed.length} 个`),
       ),
       matched.length === 0 ? El('div', { className: styles.stateHint }, '未检测到市场收录的已装插件') : null,
-      ...matched.map((i) =>
-        El('div', { key: i.localName, className: styles.installedRow },
+      ...matched.map((i, idx) =>
+        El('div', { key: `${i.localName}-${idx}`, className: styles.installedRow },
           El('div', { className: styles.installedInfo },
             El('div', { className: styles.installedHead },
               El('span', { className: styles.installedName }, i.plugin?.name ?? i.localName),
@@ -789,10 +820,16 @@ function InstalledTab(props: {
             El('span', { className: styles.sectionNote }, `${unmatched.length} 个 · 未收录市场`),
           ),
           El('div', { className: styles.unmatched },
-            ...unmatched.slice(0, 30).map((i) =>
-              El('span', { key: i.localName, className: styles.unmatchedChip }, i.localName),
+            ...unmatched.slice(0, showAllUnmatched ? unmatched.length : 5).map((i, idx) =>
+              El('span', { key: `${i.localName}-${idx}`, className: styles.unmatchedChip }, i.localName),
             ),
-            unmatched.length > 30 ? El('span', { className: styles.unmatchedMore }, `+${unmatched.length - 30}`) : null,
+            unmatched.length > 5
+              ? El('button', {
+                  type: 'button',
+                  className: `${styles.btn} ${styles.btnGhost} ${styles.btnSm}`,
+                  onClick: () => setShowAllUnmatched((v) => !v),
+                }, showAllUnmatched ? '收起' : `查看详细（${unmatched.length} 个）`)
+              : null,
           ),
         )
       : null,
@@ -813,9 +850,14 @@ function SettingsTab(props: {
   const [patInput, setPatInput] = useState('')
   const [mode, setMode] = useState<string>(profile?.modeOverride ?? 'auto')
   const [profileName, setProfileName] = useState('web')
+  // 版本信息（设置页「关于」显示；Host config 读取已装包版本）
+  const [versions, setVersions] = useState<Record<string, string>>({})
 
   useEffect(() => {
     setMode(profile?.modeOverride ?? 'auto')
+    void api<{ versions?: Record<string, string> }>('config').then((c) => {
+      if (c?.versions) setVersions(c.versions)
+    }).catch(() => {})
   }, [profile])
 
   const saveSettings = async (patch: Record<string, unknown>) => {
@@ -1086,10 +1128,17 @@ function SettingsTab(props: {
         El('span', { className: styles.settingTitle }, '关于'),
       ),
       El('p', { className: styles.ghTip },
-        '插件市场 · 方向 B「克制增强」',
-        El('br'),
         '数据缓存于本地（GitHub Actions 每日抓取）。',
       ),
+      versions['@dsh-market/plugin']
+        ? El('div', { className: styles.versionRow },
+            El('span', { className: styles.versionLabel }, '插件版本'),
+            El('code', { className: styles.versionCode },
+              `${versions['@dsh-market/plugin'] ?? '?'}`,
+              versions['@dsh-market/core'] ? ` · core ${versions['@dsh-market/core']}` : '',
+            ),
+          )
+        : null,
     ),
   )
 }

@@ -1,6 +1,6 @@
 {
   "name": "@dsh-market/plugin",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "DSH Market 插件端：cordis 侧边栏插件（浏览/搜索/猜你喜欢/一键安装/已装管理），核心逻辑来自 @dsh-market/core",
   "type": "module",
   "main": "lib/index.js",
@@ -16,7 +16,11 @@
     },
     "./package.json": "./package.json"
   },
-  "files": ["lib", "cordis.patch.yml", "README.md"],
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md"
+  ],
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"
@@ -47,7 +51,13 @@
   "dependencies": {
     "@dsh-market/core": "*"
   },
-  "keywords": ["dsh", "deepseek-harness", "plugin", "market", "cordis"],
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "market",
+    "cordis"
+  ],
   "devDependencies": {
     "@types/node": "^26.2.0",
     "@types/react": "~18.3.1",

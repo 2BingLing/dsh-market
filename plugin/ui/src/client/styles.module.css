@@ -427,10 +427,11 @@
   color: #4d6bfe;
   border-color: #c9d4f5;
 }
-/* 收藏按钮（文字形式：星形图标 + 「收藏/已收藏」） */
+/* 收藏按钮（文字「收藏」固定，图标随状态变实心/空心 + 变色；宽度自适应不挤压同行） */
 .favBtn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   font-size: 12px;
   color: #5f6670;
@@ -440,6 +441,7 @@
   background: #ffffff;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
   transition: color 0.14s ease, border-color 0.14s ease, background-color 0.14s ease;
   font-family: inherit;
 }
@@ -1058,6 +1060,29 @@
 .settingTitle {
   font-size: 14px;
   font-weight: 600;
+}
+/* 版本信息行（设置页「关于」） */
+.versionRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eef0f2;
+}
+.versionLabel {
+  font-size: 12px;
+  color: #5f6670;
+  flex: 0 0 auto;
+}
+.versionCode {
+  font-size: 12px;
+  font-family: ui-monospace, Menlo, monospace;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 2px 8px;
+  color: #252525;
 }
 .settingStatus {
   margin-left: auto;
