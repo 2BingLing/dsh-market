@@ -6,10 +6,6 @@
   <img src="./assets/readme/banner-en.webp" width="100%" alt="DSH Market — DeepSeek Harness plugin marketplace: Web edition (blue) and DSH plugin edition (black-gray) logos; plugin features, live demo entry, and one-click install">
 </p>
 
-<p align="center">
-  <b>currently 1481 plugins listed</b> · auto-updated daily at 06:00
-</p>
-
 <div align="center">
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://dsh.market/)

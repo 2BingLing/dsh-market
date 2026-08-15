@@ -6,10 +6,6 @@
   <img src="./assets/readme/banner.webp" width="100%" alt="DSH Market —— DeepSeek Harness 插件市场：左侧 Web 版（蓝）与 DSH 插件版（黑灰）双 Logo 斜线强对照，右侧插件版功能（一键安装/猜你喜欢/场景推荐/已装管理/GitHub 加星/AI 代理安装）与在线体验入口">
 </p>
 
-<p align="center">
-  <b>持续收录 <a href="https://dsh.market/">当前 1481 个插件</a></b> · 每日 06:00 自动更新
-</p>
-
 <div align="center">
 
 [![在线体验](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://dsh.market/)
