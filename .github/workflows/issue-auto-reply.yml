@@ -19,6 +19,8 @@ jobs:
             const issue = context.payload.issue;
             const repoUrl = (issue.body || '').match(/https:\/\/github\.com\/[\w.-]+\/[\w.-]+/)?.[0] ?? '（未填写）';
             const body = [
+              `> ⚙️ **自动回复** · DSH Market Bot`,
+              ``,
               `📥 已收到你的插件提交！`,
               ``,
               `- **提交内容**：${repoUrl}`,

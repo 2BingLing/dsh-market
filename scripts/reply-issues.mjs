@@ -18,6 +18,8 @@ function buildReply(r) {
   const listedUrl = `https://2bingling.github.io/dsh-market/?q=${encodeURIComponent(r.fullName)}`;
   const badgeDoc = "https://github.com/2BingLing/dsh-market/blob/main/PLUGIN-BADGE.md";
   return [
+    `> ⚙️ **自动回复** · DSH Market Bot`,
+    ``,
     `✅ **已收录** \`${r.fullName}\`（${r.type === "skill" ? "skill" : "cordis 插件"}${r.score ? ` · 实用分 ${r.score}` : ""}）`,
     ``,
     `- 数据已进入市场，**次日 06:00 更新**后可在 [DSH Market](https://2bingling.github.io/dsh-market/) 搜索到（${listedUrl}）。`,
@@ -50,6 +52,16 @@ async function main() {
     console.error("缺少 GITHUB_TOKEN");
     process.exit(1);
   }
+  // 先读当前收录数据，核对仓库确实已收录才回复（双保险，避免误报）
+  let collectedIds = new Set();
+  try {
+    const market = JSON.parse(readFileSync(join(here, "../data/plugins.json"), "utf8"));
+    collectedIds = new Set(market.plugins.map((p) => p.id.toLowerCase()));
+  } catch {
+    console.warn("无法读取 data/plugins.json，跳过本次回复（下次部署重试）");
+    return;
+  }
+
   let replies;
   try {
     replies = JSON.parse(readFileSync(REPLIES_FILE, "utf8")).replies ?? [];
@@ -63,6 +75,11 @@ async function main() {
   }
 
   for (const r of replies) {
+    // 条件 1：仓库必须已收录（否则不回复，保持静默）
+    if (!collectedIds.has(r.fullName.toLowerCase())) {
+      console.warn(`跳过 ${r.fullName}：不在当前收录数据中（未收录，保持静默）`);
+      continue;
+    }
     for (const issueNumber of r.issueNumbers) {
       // 防重复回复：检查是否已有 bot 评论
       const comments = await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/comments`);
