@@ -53,11 +53,8 @@ No install needed, just visit:
 ### Install the plugin edition
 
 ```bash
-# Official way (npx, no install needed — requires Node.js)
 npx @deepseek-ai/dsh plugin --profile web add @dsh-market/plugin
 ```
-
-> Environments with a global `dsh` command can use `dsh plugin --profile web add @dsh-market/plugin` directly (equivalent; `npx @deepseek-ai/dsh` is the official standard form).
 
 **Restart the harness** after installing — the "Plugin Market" entry appears at the bottom of the sidebar.
 

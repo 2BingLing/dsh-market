@@ -53,11 +53,8 @@ DSH 生态增长极快，插件散落在 GitHub 各处 —— **不知道哪个�
 ### 安装插件版
 
 ```bash
-# 官方方式（npx 免安装，需要 Node.js）
 npx @deepseek-ai/dsh plugin --profile web add @dsh-market/plugin
 ```
-
-> 已配置全局 `dsh` 命令的环境可直接 `dsh plugin --profile web add @dsh-market/plugin`（两者等价，`npx @deepseek-ai/dsh` 是官方标准形态）。
 
 装完**重启 harness**，侧边栏底部出现「插件市场」入口。
 
