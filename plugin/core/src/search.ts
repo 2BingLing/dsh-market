@@ -57,18 +57,14 @@ export function search(
   const fuse = createSearchIndex(plugins);
   const q = query.trim();
 
-  // 关键词召回：Fuse 结果 + 子串兜底（Fuse 对中文/短查询可能漏）
+  // 关键词召回：子串命中优先（Fuse 按匹配长度占比归一化，长名仓库吃亏；
+  // 直接子串命中不依赖长度，且高质量（高分）仓库应排前），Fuse 模糊补漏
   let hits: Array<{ item: DshPlugin; score: number }> = [];
   if (q) {
-    hits = fuse.search(q).map((r) => ({
-      item: r.item,
-      score: r.score ?? 1,
-    }));
-    // 子串兜底：把 fuse 漏掉的直接子串匹配加进来（score 给 0.6 附近）
-    const seen = new Set(hits.map((h) => h.item.id));
     const lower = q.toLowerCase();
+    const seen = new Set<string>();
+    // 1) 直接子串命中（任意字段），score 0.05 → relevance 95，绝对优先
     for (const p of plugins) {
-      if (seen.has(p.id)) continue;
       const haystack = [
         p.name,
         p.fullName,
@@ -79,8 +75,14 @@ export function search(
         .join(" ")
         .toLowerCase();
       if (haystack.includes(lower)) {
-        hits.push({ item: p, score: 0.55 });
+        hits.push({ item: p, score: 0.05 });
+        seen.add(p.id);
       }
+    }
+    // 2) Fuse 模糊补漏（跳过已子串命中的）
+    for (const r of fuse.search(q)) {
+      if (seen.has(r.item.id)) continue;
+      hits.push({ item: r.item, score: r.score ?? 1 });
     }
   } else {
     hits = plugins.map((p) => ({ item: p, score: 1 }));
