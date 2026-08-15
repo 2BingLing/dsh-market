@@ -28,6 +28,9 @@ jobs:
         with:
           node-version: 22
 
+      - name: 安装中文字体（banner 合成渲染需要，避免乱码）
+        run: sudo apt-get update && sudo apt-get install -y fonts-noto-cjk
+
       - name: Install deps
         run: npm ci
 

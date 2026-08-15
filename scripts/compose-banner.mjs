@@ -51,6 +51,11 @@ const COPY = {
   },
 }[LANG];
 
+// 字体栈：Noto Sans CJK SC 用于 Linux runner（workflow 合成），Windows 回退雅黑/苹方
+const FONT_CJK =
+  "'Noto Sans CJK SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif";
+const FONT_MONO = "ui-monospace, 'Noto Sans Mono CJK SC', SFMono-Regular, Menlo, Consolas, monospace";
+
 // 文字层 SVG（与生图右侧背景 #F6F7FC 协调；文字深炭/品牌蓝）
 const textSvg = `
 <svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
@@ -61,32 +66,32 @@ const textSvg = `
     </linearGradient>
   </defs>
   <!-- 标题 -->
-  <text x="${TEXT_X}" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="58" font-weight="800" letter-spacing="-1" fill="#101418">DSH <tspan fill="url(#brandGrad)">Market</tspan></text>
-  <text x="${TEXT_X}" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.sub)}</text>
+  <text x="${TEXT_X}" y="150" font-family="${FONT_CJK}" font-size="58" font-weight="800" letter-spacing="-1" fill="#101418">DSH <tspan fill="url(#brandGrad)">Market</tspan></text>
+  <text x="${TEXT_X}" y="192" font-family="${FONT_CJK}" font-size="${COPY.subSize}" font-weight="500" fill="#59636E">${xml(COPY.sub)}</text>
 
   <!-- 分隔线 -->
   <line x1="${TEXT_X}" y1="218" x2="${TEXT_X + TEXT_W}" y2="218" stroke="#D9E4F0" stroke-width="2"/>
 
   <!-- 插件版重点区块 -->
-  <text x="${TEXT_X}" y="262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="19" font-weight="700" fill="#252525">${xml(COPY.block)}</text>
-  <text x="${TEXT_X}" y="296" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" fill="#3A4046">${xml(COPY.feat1)}</text>
-  <text x="${TEXT_X}" y="324" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" fill="#3A4046">${xml(COPY.feat2)}</text>
-  <text x="${TEXT_X}" y="352" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#8CA3BB">${xml(COPY.mono)}</text>
+  <text x="${TEXT_X}" y="262" font-family="${FONT_CJK}" font-size="19" font-weight="700" fill="#252525">${xml(COPY.block)}</text>
+  <text x="${TEXT_X}" y="296" font-family="${FONT_CJK}" font-size="16" fill="#3A4046">${xml(COPY.feat1)}</text>
+  <text x="${TEXT_X}" y="324" font-family="${FONT_CJK}" font-size="16" fill="#3A4046">${xml(COPY.feat2)}</text>
+  <text x="${TEXT_X}" y="352" font-family="${FONT_MONO}" font-size="14" fill="#8CA3BB">${xml(COPY.mono)}</text>
 
   <!-- 徽章行 -->
   <g transform="translate(${TEXT_X} 388)">
     <a href="https://dsh.market/">
       <rect x="0" y="0" width="${COPY.btn1w}" height="34" rx="17" fill="url(#brandGrad)"/>
-      <text x="${COPY.btn1w / 2}" y="22" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">${COPY.btn1}</text>
+      <text x="${COPY.btn1w / 2}" y="22" font-family="${FONT_CJK}" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">${COPY.btn1}</text>
     </a>
     <a href="https://github.com/2BingLing/dsh-market">
       <rect x="${COPY.btn1w + 12}" y="0" width="${COPY.btn2w}" height="34" rx="17" fill="#252525"/>
-      <text x="${COPY.btn1w + 12 + COPY.btn2w / 2}" y="22" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">${COPY.btn2}</text>
+      <text x="${COPY.btn1w + 12 + COPY.btn2w / 2}" y="22" font-family="${FONT_CJK}" font-size="14" font-weight="700" fill="#FFFFFF" text-anchor="middle">${COPY.btn2}</text>
     </a>
   </g>
 
   <!-- 关系说明 -->
-  <text x="${TEXT_X}" y="470" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13.5" fill="#8A919F">${xml(COPY.note)}</text>
+  <text x="${TEXT_X}" y="470" font-family="${FONT_CJK}" font-size="13.5" fill="#8A919F">${xml(COPY.note)}</text>
 </svg>
 `;
 
