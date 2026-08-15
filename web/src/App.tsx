@@ -114,9 +114,10 @@ export default function App() {
       new Fuse(plugins, {
         keys: [
           { name: "name", weight: 0.5 },
-          { name: "descriptionZh", weight: 0.25 },
-          { name: "description", weight: 0.15 },
-          { name: "tags", weight: 0.1 },
+          { name: "fullName", weight: 0.15 },
+          { name: "descriptionZh", weight: 0.2 },
+          { name: "description", weight: 0.1 },
+          { name: "tags", weight: 0.05 },
         ],
         threshold: 0.3,
         minMatchCharLength: 2,
@@ -129,10 +130,11 @@ export default function App() {
     (list: DshPlugin[], q: string): DshPlugin[] => {
       const ql = q.trim().toLowerCase();
       if (!ql) return list;
-      // 1. 快速包含匹配（名称/中文简介/英文简介/标签）
+      // 1. 快速包含匹配（名称/作者·仓库名/中文简介/英文简介/标签）
       const exact = list.filter(
         (p) =>
           p.name.toLowerCase().includes(ql) ||
+          p.fullName.toLowerCase().includes(ql) ||
           (p.descriptionZh ?? "").toLowerCase().includes(ql) ||
           (p.description ?? "").toLowerCase().includes(ql) ||
           p.tags.some((t) => t.toLowerCase().includes(ql))
