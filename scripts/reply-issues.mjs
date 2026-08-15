@@ -20,7 +20,7 @@ function buildReply(r) {
   return [
     `> ⚙️ **自动回复** · DSH Market Bot`,
     ``,
-    `✅ **已收录** \`${r.fullName}\`（${r.type === "skill" ? "skill" : "cordis 插件"}${r.score ? ` · 实用分 ${r.score}` : ""}）`,
+    `✅ **已收录** \`${r.fullName}\`（${r.type === "skill" ? "skill" : "cordis 插件"}）`,
     ``,
     `- 数据已进入市场，**次日 06:00 更新**后可在 [DSH Market](https://2bingling.github.io/dsh-market/) 搜索到（${listedUrl}）。`,
     `- 你的仓库本身无需任何改动；如果还没有打 \`dsh-plugin\` topic，建议打上，便于持续被发现。`,
