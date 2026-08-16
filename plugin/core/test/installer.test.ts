@@ -136,4 +136,48 @@ describe("uninstallPlugin", () => {
     );
     expect(calls.some((c) => c.includes("remove"))).toBe(true);
   });
+
+  it("cordis 型：优先用 localName（依赖键名，pnpm 大小写敏感）构造 remove 命令", async () => {
+    const cfg = makeCfg();
+    const runner = runnerMock();
+    // 模拟真实场景：market name 是 GitHub 原始大小写（DSH-better-sidebar），
+    // 依赖键名是小写（dsh-better-sidebar）——用 localName 才不会被 pnpm 拒绝
+    const mixedCase = { ...cordisPlugin, name: "DSH-better-sidebar" };
+    const r = await uninstallPlugin(cfg, mixedCase, {
+      runner,
+      targetProfile: "web",
+      localName: "dsh-better-sidebar",
+    });
+    expect(r.ok).toBe(true);
+    const calls = (runner.run as ReturnType<typeof vi.fn>).mock.calls.map(
+      (c) => c[0] as string,
+    );
+    expect(calls.some((c) => c.includes("remove dsh-better-sidebar"))).toBe(true);
+    // 绝不使用 GitHub 原始大小写
+    expect(calls.some((c) => c.includes("remove DSH-better-sidebar"))).toBe(false);
+  });
+
+  it("skill 型：优先用 localName（目录名）删除", async () => {
+    const cfg = makeCfg();
+    const { mkdirSync } = await import("node:fs");
+    mkdirSync(join(cfg.skillsDir, "custom-dir-name"), { recursive: true });
+    const r = await uninstallPlugin(cfg, skillPlugin, {
+      runner: runnerMock(),
+      localName: "custom-dir-name",
+    });
+    expect(r.ok).toBe(true);
+    expect(existsSync(join(cfg.skillsDir, "custom-dir-name"))).toBe(false);
+  });
+
+  it("cordis 型：命令失败 → ok:false + 错误信息（client 据此弹提示）", async () => {
+    const cfg = makeCfg();
+    const runner = runnerMock({ fail: true });
+    const r = await uninstallPlugin(cfg, cordisPlugin, {
+      runner,
+      targetProfile: "web",
+      localName: "dsh-better-sidebar",
+    });
+    expect(r.ok).toBe(false);
+    expect(r.error).toBeTruthy();
+  });
 });

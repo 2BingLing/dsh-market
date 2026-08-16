@@ -318,14 +318,19 @@ export async function uninstallPlugin(
 ): Promise<{ ok: boolean; error?: string }> {
   try {
     if (plugin.type === "skill") {
-      const dest = join(cfg.skillsDir, `${plugin.name}-latest`);
+      // 优先用已装目录名（localName），与 scanInstalled 的目录名一致
+      const dest = options.localName
+        ? join(cfg.skillsDir, options.localName)
+        : join(cfg.skillsDir, `${plugin.name}-latest`);
       if (!existsSync(dest)) return { ok: true };
       if (options.dryRun) return { ok: true };
       await removeDirWithRetry(dest, options);
       return { ok: true };
     }
     const profile = options.targetProfile ?? cfg.defaultProfile;
-    const pkgName = installPackageName(plugin);
+    // 优先用已装依赖键名（localName）：pnpm remove 对键名大小写敏感，
+    // plugin.name 是 GitHub 仓库原始大小写（如 DSH-better-sidebar），直接用它卸载会找不到依赖
+    const pkgName = options.localName ?? installPackageName(plugin);
     if (options.dryRun) return { ok: true };
     const r = await options.runner.run(
       `dsh plugin --profile ${profile} remove ${pkgName}`,

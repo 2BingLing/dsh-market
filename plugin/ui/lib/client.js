@@ -101,174 +101,174 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var styles_module_css_default = {
-			"iconBtnOn": "_LI32q_iconBtnOn",
-			"stepDot": "_LI32q_stepDot",
-			"tagCloud": "_LI32q_tagCloud",
-			"installedInfo": "_LI32q_installedInfo",
-			"field": "_LI32q_field",
-			"ghPollState": "_LI32q_ghPollState",
-			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
-			"sceneInfo": "_LI32q_sceneInfo",
-			"deviceFlowTip": "_LI32q_deviceFlowTip",
-			"headerClose": "_LI32q_headerClose",
-			"cardTags": "_LI32q_cardTags",
-			"sceneList": "_LI32q_sceneList",
-			"btn": "_LI32q_btn",
-			"modalBody": "_LI32q_modalBody",
-			"modalClose": "_LI32q_modalClose",
-			"selfUpdateText": "_LI32q_selfUpdateText",
-			"installedName": "_LI32q_installedName",
-			"cardDesc": "_LI32q_cardDesc",
-			"quizTitle": "_LI32q_quizTitle",
-			"quizActions": "_LI32q_quizActions",
-			"advancedTip": "_LI32q_advancedTip",
-			"reasonAi": "_LI32q_reasonAi",
-			"stepDone": "_LI32q_stepDone",
-			"quizCta": "_LI32q_quizCta",
-			"modeSwitchRow": "_LI32q_modeSwitchRow",
-			"hotTagsTitle": "_LI32q_hotTagsTitle",
-			"modalActions": "_LI32q_modalActions",
-			"cardStars": "_LI32q_cardStars",
-			"advanced": "_LI32q_advanced",
-			"fieldLabel": "_LI32q_fieldLabel",
-			"versionCode": "_LI32q_versionCode",
-			"cardActions": "_LI32q_cardActions",
-			"iconBtn": "_LI32q_iconBtn",
-			"favBtnOn": "_LI32q_favBtnOn",
-			"installedRow": "_LI32q_installedRow",
-			"sceneDesc": "_LI32q_sceneDesc",
-			"sceneEmpty": "_LI32q_sceneEmpty",
-			"settingsRow": "_LI32q_settingsRow",
-			"recommendToolbar": "_LI32q_recommendToolbar",
-			"searchInput": "_LI32q_searchInput",
-			"statusOk": "_LI32q_statusOk",
-			"searchWrapIcon": "_LI32q_searchWrapIcon",
-			"stepBarDone": "_LI32q_stepBarDone",
-			"tag": "_LI32q_tag",
-			"loadMoreRow": "_LI32q_loadMoreRow",
-			"grid2": "_LI32q_grid2",
-			"ghLink": "_LI32q_ghLink",
-			"quizTags": "_LI32q_quizTags",
-			"btnGhost": "_LI32q_btnGhost",
-			"header": "_LI32q_header",
-			"semanticInfo": "_LI32q_semanticInfo",
-			"semanticDesc": "_LI32q_semanticDesc",
-			"statusOff": "_LI32q_statusOff",
-			"versionRow": "_LI32q_versionRow",
-			"dividerLine": "_LI32q_dividerLine",
-			"titleIcon": "_LI32q_titleIcon",
-			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
-			"tab": "_LI32q_tab",
-			"searchClear": "_LI32q_searchClear",
-			"body": "_LI32q_body",
-			"sectionTitle": "_LI32q_sectionTitle",
-			"backdrop": "_LI32q_backdrop",
-			"cardHead": "_LI32q_cardHead",
-			"installedHead": "_LI32q_installedHead",
-			"section": "_LI32q_section",
-			"quizCount": "_LI32q_quizCount",
-			"cardActionHint": "_LI32q_cardActionHint",
-			"subtitle": "_LI32q_subtitle",
-			"sectionIcon": "_LI32q_sectionIcon",
-			"quizChip": "_LI32q_quizChip",
-			"step": "_LI32q_step",
-			"sceneName": "_LI32q_sceneName",
-			"error": "_LI32q_error",
-			"modalDesc": "_LI32q_modalDesc",
-			"semanticResult": "_LI32q_semanticResult",
-			"versionLabel": "_LI32q_versionLabel",
-			"emptyState": "_LI32q_emptyState",
-			"quizChipOn": "_LI32q_quizChipOn",
-			"unmatchedMore": "_LI32q_unmatchedMore",
-			"updateChip": "_LI32q_updateChip",
-			"needConfig": "_LI32q_needConfig",
-			"recommendHint": "_LI32q_recommendHint",
-			"settingIc": "_LI32q_settingIc",
-			"sectionNote": "_LI32q_sectionNote",
-			"cardReasons": "_LI32q_cardReasons",
-			"spacer": "_LI32q_spacer",
 			"repoBtn": "_LI32q_repoBtn",
-			"quizCard": "_LI32q_quizCard",
-			"loadMore": "_LI32q_loadMore",
-			"stateHint": "_LI32q_stateHint",
-			"statusWarn": "_LI32q_statusWarn",
-			"emptyTitle": "_LI32q_emptyTitle",
-			"modalTitle": "_LI32q_modalTitle",
-			"modalSuccess": "_LI32q_modalSuccess",
-			"installedActions": "_LI32q_installedActions",
-			"updateHint": "_LI32q_updateHint",
-			"panel": "_LI32q_panel",
-			"semanticTitle": "_LI32q_semanticTitle",
-			"searchWrap": "_LI32q_searchWrap",
-			"semanticToggle": "_LI32q_semanticToggle",
-			"triggerLabel": "_LI32q_triggerLabel",
-			"tabOn": "_LI32q_tabOn",
-			"selfUpdateBar": "_LI32q_selfUpdateBar",
-			"modalError": "_LI32q_modalError",
-			"steps": "_LI32q_steps",
-			"resultCount": "_LI32q_resultCount",
-			"semanticSwitch": "_LI32q_semanticSwitch",
-			"toastIn": "_LI32q_toastIn",
-			"settingTitle": "_LI32q_settingTitle",
-			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
-			"ghLogin": "_LI32q_ghLogin",
-			"quizDesc": "_LI32q_quizDesc",
-			"hotTagOn": "_LI32q_hotTagOn",
-			"unmatchedChip": "_LI32q_unmatchedChip",
-			"inlineIcon": "_LI32q_inlineIcon",
-			"deviceCode": "_LI32q_deviceCode",
-			"cardBadge": "_LI32q_cardBadge",
-			"ghDone": "_LI32q_ghDone",
-			"advancedCmd": "_LI32q_advancedCmd",
-			"favBtn": "_LI32q_favBtn",
-			"sceneRow": "_LI32q_sceneRow",
-			"tagOn": "_LI32q_tagOn",
-			"unmatched": "_LI32q_unmatched",
-			"modal": "_LI32q_modal",
-			"filterRow": "_LI32q_filterRow",
-			"hotTag": "_LI32q_hotTag",
-			"results": "_LI32q_results",
-			"settingCard": "_LI32q_settingCard",
-			"select": "_LI32q_select",
-			"tabBody": "_LI32q_tabBody",
-			"emptyIcon": "_LI32q_emptyIcon",
-			"latestChip": "_LI32q_latestChip",
-			"stepActive": "_LI32q_stepActive",
-			"stepBar": "_LI32q_stepBar",
-			"toast": "_LI32q_toast",
-			"triggerIcon": "_LI32q_triggerIcon",
-			"filterChip": "_LI32q_filterChip",
-			"deviceFlow": "_LI32q_deviceFlow",
-			"btnDanger": "_LI32q_btnDanger",
-			"emptyDesc": "_LI32q_emptyDesc",
-			"modalHead": "_LI32q_modalHead",
-			"trigger": "_LI32q_trigger",
-			"btnPrimary": "_LI32q_btnPrimary",
-			"installedMeta": "_LI32q_installedMeta",
-			"loading": "_LI32q_loading",
-			"title": "_LI32q_title",
-			"quizHead": "_LI32q_quizHead",
-			"filterChipOn": "_LI32q_filterChipOn",
-			"semanticPill": "_LI32q_semanticPill",
-			"fieldRow": "_LI32q_fieldRow",
-			"settingStatus": "_LI32q_settingStatus",
-			"reason": "_LI32q_reason",
-			"ghTip": "_LI32q_ghTip",
-			"card": "_LI32q_card",
-			"input": "_LI32q_input",
-			"quizHeadIcon": "_LI32q_quizHeadIcon",
-			"modalBackdrop": "_LI32q_modalBackdrop",
 			"ghRow": "_LI32q_ghRow",
-			"tagMoreRow": "_LI32q_tagMoreRow",
-			"btnSm": "_LI32q_btnSm",
-			"sectionHead": "_LI32q_sectionHead",
+			"stepDot": "_LI32q_stepDot",
+			"settingStatus": "_LI32q_settingStatus",
+			"modalBackdrop": "_LI32q_modalBackdrop",
+			"emptyIcon": "_LI32q_emptyIcon",
+			"ghDone": "_LI32q_ghDone",
+			"tabOn": "_LI32q_tabOn",
+			"stepActive": "_LI32q_stepActive",
+			"favBtnOn": "_LI32q_favBtnOn",
 			"cardName": "_LI32q_cardName",
-			"installedNote": "_LI32q_installedNote",
+			"hotTag": "_LI32q_hotTag",
+			"ghTip": "_LI32q_ghTip",
+			"semanticSwitch": "_LI32q_semanticSwitch",
+			"statusOff": "_LI32q_statusOff",
+			"cardTags": "_LI32q_cardTags",
+			"filterChipOn": "_LI32q_filterChipOn",
+			"body": "_LI32q_body",
+			"stateHint": "_LI32q_stateHint",
+			"quizHead": "_LI32q_quizHead",
+			"searchWrapIcon": "_LI32q_searchWrapIcon",
+			"searchClear": "_LI32q_searchClear",
+			"spacer": "_LI32q_spacer",
+			"btnSm": "_LI32q_btnSm",
+			"settingsLabel": "_LI32q_settingsLabel",
+			"field": "_LI32q_field",
 			"sceneHint": "_LI32q_sceneHint",
-			"warn": "_LI32q_warn",
+			"tagOn": "_LI32q_tagOn",
+			"titleIcon": "_LI32q_titleIcon",
+			"semanticDesc": "_LI32q_semanticDesc",
+			"installedHead": "_LI32q_installedHead",
+			"stepDone": "_LI32q_stepDone",
+			"semanticInfo": "_LI32q_semanticInfo",
+			"quizCard": "_LI32q_quizCard",
+			"hotTagOn": "_LI32q_hotTagOn",
+			"fieldRow": "_LI32q_fieldRow",
+			"filterRow": "_LI32q_filterRow",
+			"advancedTip": "_LI32q_advancedTip",
+			"installedActions": "_LI32q_installedActions",
+			"sceneDesc": "_LI32q_sceneDesc",
+			"settingIc": "_LI32q_settingIc",
+			"btnPrimary": "_LI32q_btnPrimary",
+			"selfUpdateBar": "_LI32q_selfUpdateBar",
+			"versionRow": "_LI32q_versionRow",
+			"settingTitle": "_LI32q_settingTitle",
+			"sectionTitle": "_LI32q_sectionTitle",
+			"btnDanger": "_LI32q_btnDanger",
+			"hotTagsTitle": "_LI32q_hotTagsTitle",
+			"updateHint": "_LI32q_updateHint",
+			"emptyState": "_LI32q_emptyState",
+			"modalDesc": "_LI32q_modalDesc",
+			"stepBar": "_LI32q_stepBar",
+			"installedName": "_LI32q_installedName",
+			"tagCloud": "_LI32q_tagCloud",
+			"quizCta": "_LI32q_quizCta",
+			"quizTitle": "_LI32q_quizTitle",
+			"unmatched": "_LI32q_unmatched",
+			"emptyDesc": "_LI32q_emptyDesc",
+			"sceneList": "_LI32q_sceneList",
+			"reason": "_LI32q_reason",
+			"tag": "_LI32q_tag",
+			"headerClose": "_LI32q_headerClose",
+			"loadMoreRow": "_LI32q_loadMoreRow",
+			"ghLogin": "_LI32q_ghLogin",
+			"loading": "_LI32q_loading",
+			"iconBtn": "_LI32q_iconBtn",
+			"quizChipOn": "_LI32q_quizChipOn",
 			"tabs": "_LI32q_tabs",
+			"sectionHead": "_LI32q_sectionHead",
+			"recommendHint": "_LI32q_recommendHint",
+			"cardStars": "_LI32q_cardStars",
+			"triggerIcon": "_LI32q_triggerIcon",
+			"panel": "_LI32q_panel",
+			"quizChip": "_LI32q_quizChip",
+			"cardActionHint": "_LI32q_cardActionHint",
+			"sceneInfo": "_LI32q_sceneInfo",
+			"modal": "_LI32q_modal",
+			"modalHead": "_LI32q_modalHead",
+			"header": "_LI32q_header",
+			"deviceCode": "_LI32q_deviceCode",
+			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
+			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
+			"card": "_LI32q_card",
+			"iconBtnOn": "_LI32q_iconBtnOn",
+			"installedNote": "_LI32q_installedNote",
+			"sceneEmpty": "_LI32q_sceneEmpty",
+			"semanticToggle": "_LI32q_semanticToggle",
+			"searchInput": "_LI32q_searchInput",
+			"sceneName": "_LI32q_sceneName",
+			"subtitle": "_LI32q_subtitle",
+			"quizCount": "_LI32q_quizCount",
+			"versionCode": "_LI32q_versionCode",
 			"settingHead": "_LI32q_settingHead",
-			"settingsLabel": "_LI32q_settingsLabel"
+			"ghLink": "_LI32q_ghLink",
+			"warn": "_LI32q_warn",
+			"section": "_LI32q_section",
+			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
+			"cardDesc": "_LI32q_cardDesc",
+			"quizDesc": "_LI32q_quizDesc",
+			"trigger": "_LI32q_trigger",
+			"versionLabel": "_LI32q_versionLabel",
+			"favBtn": "_LI32q_favBtn",
+			"backdrop": "_LI32q_backdrop",
+			"sceneRow": "_LI32q_sceneRow",
+			"error": "_LI32q_error",
+			"advancedCmd": "_LI32q_advancedCmd",
+			"stepBarDone": "_LI32q_stepBarDone",
+			"quizHeadIcon": "_LI32q_quizHeadIcon",
+			"step": "_LI32q_step",
+			"unmatchedChip": "_LI32q_unmatchedChip",
+			"modalBody": "_LI32q_modalBody",
+			"tab": "_LI32q_tab",
+			"semanticPill": "_LI32q_semanticPill",
+			"modeSwitchRow": "_LI32q_modeSwitchRow",
+			"unmatchedMore": "_LI32q_unmatchedMore",
+			"installedRow": "_LI32q_installedRow",
+			"quizTags": "_LI32q_quizTags",
+			"input": "_LI32q_input",
+			"resultCount": "_LI32q_resultCount",
+			"updateChip": "_LI32q_updateChip",
+			"deviceFlow": "_LI32q_deviceFlow",
+			"results": "_LI32q_results",
+			"modalClose": "_LI32q_modalClose",
+			"modalError": "_LI32q_modalError",
+			"loadMore": "_LI32q_loadMore",
+			"triggerLabel": "_LI32q_triggerLabel",
+			"sectionIcon": "_LI32q_sectionIcon",
+			"modalActions": "_LI32q_modalActions",
+			"needConfig": "_LI32q_needConfig",
+			"quizActions": "_LI32q_quizActions",
+			"installedMeta": "_LI32q_installedMeta",
+			"select": "_LI32q_select",
+			"dividerLine": "_LI32q_dividerLine",
+			"inlineIcon": "_LI32q_inlineIcon",
+			"settingCard": "_LI32q_settingCard",
+			"reasonAi": "_LI32q_reasonAi",
+			"cardHead": "_LI32q_cardHead",
+			"btn": "_LI32q_btn",
+			"installedInfo": "_LI32q_installedInfo",
+			"semanticResult": "_LI32q_semanticResult",
+			"modalTitle": "_LI32q_modalTitle",
+			"advanced": "_LI32q_advanced",
+			"sectionNote": "_LI32q_sectionNote",
+			"latestChip": "_LI32q_latestChip",
+			"statusOk": "_LI32q_statusOk",
+			"ghPollState": "_LI32q_ghPollState",
+			"grid2": "_LI32q_grid2",
+			"emptyTitle": "_LI32q_emptyTitle",
+			"filterChip": "_LI32q_filterChip",
+			"toast": "_LI32q_toast",
+			"deviceFlowTip": "_LI32q_deviceFlowTip",
+			"cardActions": "_LI32q_cardActions",
+			"tabBody": "_LI32q_tabBody",
+			"cardBadge": "_LI32q_cardBadge",
+			"settingsRow": "_LI32q_settingsRow",
+			"title": "_LI32q_title",
+			"searchWrap": "_LI32q_searchWrap",
+			"statusWarn": "_LI32q_statusWarn",
+			"recommendToolbar": "_LI32q_recommendToolbar",
+			"tagMoreRow": "_LI32q_tagMoreRow",
+			"steps": "_LI32q_steps",
+			"semanticTitle": "_LI32q_semanticTitle",
+			"selfUpdateText": "_LI32q_selfUpdateText",
+			"modalSuccess": "_LI32q_modalSuccess",
+			"toastIn": "_LI32q_toastIn",
+			"fieldLabel": "_LI32q_fieldLabel",
+			"btnGhost": "_LI32q_btnGhost",
+			"cardReasons": "_LI32q_cardReasons"
 		};
 		//#endregion
 		//#region src/client/panel.tsx
@@ -345,7 +345,7 @@ window.__ModuleLoader__.load({
 			return (0, react.createElement)(tag, props ?? {}, ...children);
 		}
 		let toastTimer = null;
-		function toast(msg) {
+		function toast(msg, duration = 2200) {
 			if (typeof document === "undefined") return;
 			document.querySelectorAll("[data-dshm-toast]").forEach((n) => n.remove());
 			if (toastTimer) clearTimeout(toastTimer);
@@ -354,7 +354,7 @@ window.__ModuleLoader__.load({
 			el.className = styles_module_css_default.toast;
 			el.textContent = msg;
 			document.body.appendChild(el);
-			toastTimer = setTimeout(() => el.remove(), 2200);
+			toastTimer = setTimeout(() => el.remove(), duration);
 		}
 		/** 通用线性图标：dangerouslySetInnerHTML 承载 path/circle 内容 */
 		function Icon(props) {
@@ -778,10 +778,15 @@ window.__ModuleLoader__.load({
 				if (!item.pluginId) return;
 				setBusy(true);
 				try {
-					await api("uninstall", { pluginId: item.pluginId });
+					const r = await api("uninstall", { pluginId: item.pluginId });
+					if (!r.ok) {
+						toast(`卸载失败：${r.error ?? "未知错误"}`, 3500);
+						return;
+					}
 					onChanged();
+					toast(item.source === "profile" ? "卸载完成，重启 harness 后生效" : "卸载完成");
 				} catch (e) {
-					alert(`卸载失败：${e.message}`);
+					toast(`卸载失败：${e.message}`, 3500);
 				} finally {
 					setBusy(false);
 					setConfirming(null);
@@ -811,15 +816,19 @@ window.__ModuleLoader__.load({
 						pluginId: item.pluginId,
 						force: true
 					});
+					if (!r.ok) {
+						toast(`更新失败：${r.error ?? "未知错误"}`, 3500);
+						return;
+					}
 					onChanged();
 					setUpdateMap((m) => {
 						const next = { ...m };
 						delete next[item.localName];
 						return next;
 					});
-					alert(r.requiresRestart ? "更新完成，重启 harness 后生效" : "更新完成");
+					toast(r.requiresRestart ? "更新完成，重启 harness 后生效" : "更新完成");
 				} catch (e) {
-					alert(`更新失败：${e.message}`);
+					toast(`更新失败：${e.message}`, 3500);
 				} finally {
 					setUpdating(null);
 				}
@@ -1074,6 +1083,94 @@ window.__ModuleLoader__.load({
 				size: 15
 			})), El("span", { className: styles_module_css_default.settingTitle }, "关于")), El("p", { className: styles_module_css_default.ghTip }, "数据缓存于本地（GitHub Actions 每日抓取）。"), versions["@dsh-market/plugin"] ? El("div", { className: styles_module_css_default.versionRow }, El("span", { className: styles_module_css_default.versionLabel }, "插件版本"), El("code", { className: styles_module_css_default.versionCode }, `${versions["@dsh-market/plugin"] ?? "?"}`, versions["@dsh-market/core"] ? ` · core ${versions["@dsh-market/core"]}` : "")) : null));
 		}
+		function PacksTab(props) {
+			const { packs } = props;
+			const [query, setQuery] = (0, react.useState)("");
+			const [expanded, setExpanded] = (0, react.useState)(null);
+			const ql = query.trim().toLowerCase();
+			const visible = [...packs].sort((a, b) => b.scoreTotal - a.scoreTotal).filter((p) => !ql || p.name.toLowerCase().includes(ql) || (p.descriptionZh ?? "").toLowerCase().includes(ql) || p.author.toLowerCase().includes(ql) || p.tags.some((t) => t.toLowerCase().includes(ql)));
+			return El("div", { className: styles_module_css_default.tabBody }, El("div", { className: styles_module_css_default.searchWrap }, El("span", { className: styles_module_css_default.searchWrapIcon }, El(Icon, {
+				d: ICON_SEARCH,
+				size: 15
+			})), El("input", {
+				className: styles_module_css_default.searchInput,
+				placeholder: "搜索整合包：翻译 / 安全 / MCP / 环境…",
+				value: query,
+				onChange: (e) => setQuery(e.target.value)
+			}), query.length > 0 ? El("button", {
+				className: styles_module_css_default.searchClear,
+				"aria-label": "清除",
+				onClick: () => setQuery("")
+			}, El(Icon, {
+				d: ICON_CLOSE,
+				size: 13
+			})) : null), packs.length === 0 ? El("div", { className: styles_module_css_default.emptyState }, "整合包正式协议开发中，暂未开放收录——敬请期待。") : visible.length === 0 ? El("div", { className: styles_module_css_default.emptyState }, "没有匹配的整合包，换个关键词试试。") : El("div", {
+				className: styles_module_css_default.list,
+				style: {
+					display: "flex",
+					flexDirection: "column",
+					gap: 10
+				}
+			}, ...visible.map((p) => {
+				const { total, ok, inMarket } = p.entryStats;
+				const rate = total > 0 ? Math.round(ok / total * 100) : 0;
+				const open = expanded === p.id;
+				return El("div", {
+					key: p.id,
+					className: styles_module_css_default.card
+				}, El("div", { className: styles_module_css_default.cardTop }, El("span", {
+					className: styles_module_css_default.cardStars,
+					style: {
+						background: "#F3EFFF",
+						color: "#7C3AED",
+						borderRadius: 6,
+						padding: "2px 8px",
+						fontSize: 10
+					}
+				}, "PACK"), El("span", { className: styles_module_css_default.cardStars }, `★ ${fmtStars(p.stars)}`)), El("div", { className: styles_module_css_default.cardName }, p.name), El("div", { className: styles_module_css_default.cardDesc }, p.descriptionZh ?? "（无简介）"), El("div", { style: {
+					display: "flex",
+					alignItems: "center",
+					gap: 6,
+					fontSize: 11,
+					color: rate >= 80 ? "#1E7A46" : rate >= 50 ? "#B26A00" : "#B33A3A",
+					padding: "4px 8px",
+					borderRadius: 6,
+					background: "#F6F8FB",
+					marginBottom: 8
+				} }, `✓ ${ok}/${total} 条目可解析 · ${inMarket} 已在市场`, El("b", {}, `${rate}%`)), El("div", { className: styles_module_css_default.cardActions }, El("span", { style: {
+					fontSize: 12,
+					fontWeight: 600,
+					color: "#7C3AED"
+				} }, `${p.scoreTotal} 实用分`), El("button", {
+					className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm} ${styles_module_css_default.btnGhost}`,
+					onClick: () => setExpanded(open ? null : p.id)
+				}, open ? "收起条目" : "查看条目")), open ? El("div", { style: {
+					display: "flex",
+					flexDirection: "column",
+					gap: 4,
+					marginTop: 8,
+					paddingTop: 8,
+					borderTop: "1px solid #EEF2F7"
+				} }, ...p.entries.map((e, i) => El("div", {
+					key: `${e.id}-${i}`,
+					style: {
+						display: "flex",
+						alignItems: "center",
+						gap: 8,
+						fontSize: 11,
+						color: e.resolved?.ok ? "inherit" : "#B33A3A",
+						padding: "3px 0"
+					}
+				}, El("span", {}, e.resolved?.ok ? "✓" : "✗"), El("code", { style: { fontSize: 10.5 } }, e.id), El("span", { style: {
+					fontSize: 10,
+					color: "#8CA3BB"
+				} }, e.type), El("span", { style: {
+					marginLeft: "auto",
+					fontSize: 10,
+					color: "#8CA3BB"
+				} }, e.resolved?.ok ? e.resolved.inMarket ? "已在市场" : "可安装" : e.resolved?.reason ?? "解析失败")))) : null);
+			})));
+		}
 		function FavoritesTab(props) {
 			const { plugins, onInstall, onTagClick, refreshTick, onGotoRecommend } = props;
 			const favIds = (0, react.useMemo)(() => readFavorites(), [refreshTick]);
@@ -1102,6 +1199,7 @@ window.__ModuleLoader__.load({
 			const [plugins, setPlugins] = (0, react.useState)([]);
 			const [profile, setProfile] = (0, react.useState)(null);
 			const [installed, setInstalled] = (0, react.useState)([]);
+			const [packs, setPacks] = (0, react.useState)([]);
 			const [recs, setRecs] = (0, react.useState)([]);
 			const [loading, setLoading] = (0, react.useState)(false);
 			const [installTarget, setInstallTarget] = (0, react.useState)(null);
@@ -1117,14 +1215,16 @@ window.__ModuleLoader__.load({
 			const loadAll = async () => {
 				setLoading(true);
 				try {
-					const [pl, prof, inst] = await Promise.all([
+					const [pl, prof, inst, pk] = await Promise.all([
 						api("plugins"),
 						api("profile:read"),
-						api("installed")
+						api("installed"),
+						api("packs").catch(() => [])
 					]);
 					setPlugins(pl);
 					setProfile(prof);
 					setInstalled(inst);
+					setPacks(pk);
 					const counts = /* @__PURE__ */ new Map();
 					for (const i of inst) {
 						if (!i.plugin) continue;
@@ -1167,10 +1267,10 @@ window.__ModuleLoader__.load({
 					if (r.applied) {
 						setSelfUpdate(null);
 						setSelfDismissed(true);
-						alert(`插件更新完成（${r.latest}），请重启 harness 生效`);
-					} else alert(`更新失败：${r.applyOutput ?? "未知错误"}`);
+						toast(`插件更新完成（${r.latest}），重启 harness 后生效`);
+					} else toast(`更新失败：${r.applyOutput ?? "未知错误"}。若提示文件被占用，需先停止 harness 后重试`, 5e3);
 				} catch (e) {
-					alert(`更新失败：${e.message}`);
+					toast(`更新失败：${e.message}。若提示文件被占用，需先停止 harness 后重试`, 5e3);
 				} finally {
 					setSelfUpdating(false);
 				}
@@ -1261,6 +1361,10 @@ window.__ModuleLoader__.load({
 					label: "搜索"
 				},
 				{
+					id: "packs",
+					label: "整合包"
+				},
+				{
 					id: "favorites",
 					label: "收藏"
 				},
@@ -1295,6 +1399,11 @@ window.__ModuleLoader__.load({
 				plugins,
 				onInstall: setInstallTarget,
 				onTagClick
+			}) : tab === "packs" ? El(PacksTab, {
+				packs,
+				onInstallPack: (pack) => {
+					window.open(`https://github.com/${pack.id}`, "_blank");
+				}
 			}) : tab === "favorites" ? El(FavoritesTab, {
 				plugins,
 				onInstall: setInstallTarget,

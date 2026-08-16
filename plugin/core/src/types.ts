@@ -72,6 +72,8 @@ export interface InstallOptions {
   dryRun?: boolean;
   /** 目标 profile（cordis 型；默认取配置的 defaultProfile） */
   targetProfile?: string;
+  /** 已装项的本地名（卸载用：cordis = 依赖键名，skill = 目录名；比 plugin.name 推断更准） */
+  localName?: string;
   /** 执行器：真实环境由 UI 层注入（Host 子进程），测试注入 mock */
   runner: CommandRunner;
   /** 步骤回调 */

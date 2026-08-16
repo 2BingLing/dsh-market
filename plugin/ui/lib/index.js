@@ -1,5 +1,5 @@
 import { createRequire } from "node:module";
-import { aggregateTags, checkSelfUpdate, checkUpdates, fetchCurrentUser, fetchMarketData, fetchStarred, hotTags, installPlugin, readProfile, readSettings, recommend, resolveConfig, scanInstalled, search, uninstallPlugin, updateProfile, writeProfile, writeSettings } from "@dsh-market/core";
+import { aggregateTags, checkSelfUpdate, checkUpdates, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, readProfile, readSettings, recommend, resolveConfig, scanInstalled, search, uninstallPlugin, updateProfile, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获 */
@@ -38,6 +38,32 @@ function lite(p) {
 		installMethod: p.install?.method,
 		installCommands: p.install?.commands ?? [],
 		installTarget: p.install?.target
+	};
+}
+/** 精简整合包字段（条目 + 解析率 + 评分） */
+function litePack(p) {
+	return {
+		id: p.id,
+		name: p.name,
+		author: p.author,
+		descriptionZh: p.descriptionZh,
+		tags: p.tags,
+		stars: p.stars,
+		pushedAt: p.pushedAt,
+		curated: p.curated,
+		scoreTotal: p.score?.total ?? 0,
+		entryStats: p.entryStats ?? {
+			total: 0,
+			ok: 0,
+			failed: 0,
+			inMarket: 0
+		},
+		entries: (p.entries ?? []).map((e) => ({
+			id: e.id,
+			type: e.type,
+			version: e.version,
+			resolved: e.resolved ?? null
+		}))
 	};
 }
 function apply(ctx) {
@@ -81,6 +107,8 @@ function apply(ctx) {
 			}
 			case "plugins": return (await market()).plugins.map(lite);
 			case "plugin:get": return (await market()).plugins.find((p) => p.id === args.pluginId) ?? null;
+			case "packs": return (await fetchPacksData(cfg)).map(litePack);
+			case "pack:get": return (await fetchPacksData(cfg)).find((p) => p.id === args.packId) ?? null;
 			case "installed": return (await market()).plugins && scanInstalled(cfg, await market()).map((i) => ({
 				...i,
 				plugin: i.plugin ? lite(i.plugin) : null
@@ -96,11 +124,18 @@ function apply(ctx) {
 				const check = await checkSelfUpdate(current, { force: Boolean(args.force) });
 				if (!args.apply) return check;
 				const profile = readSettings(cfg).profile;
-				const r = await realRunner().run(`dsh plugin --profile ${profile} add @dsh-market/plugin`, { timeoutMs: 18e4 });
+				const r = await realRunner().run(`dsh plugin --profile ${profile} add @dsh-market/plugin@latest`, { timeoutMs: 18e4 });
+				const output = (r.stderr || r.stdout).slice(0, 300);
+				const applyOutput = r.exitCode === 0 ? void 0 : output;
+				if (r.exitCode !== 0 && /EPERM|permission|EACCES/i.test(output)) return {
+					...check,
+					applied: false,
+					applyOutput: `${output}。请先停止 harness，再执行：npx @deepseek-ai/dsh plugin --profile ${profile} add @dsh-market/plugin@latest，然后重启 harness`
+				};
 				return {
 					...check,
 					applied: r.exitCode === 0,
-					applyOutput: r.exitCode === 0 ? void 0 : (r.stderr || r.stdout).slice(0, 300)
+					applyOutput
 				};
 			}
 			case "profile:read": return withSettingsMode(readProfile(cfg));
@@ -256,11 +291,14 @@ function apply(ctx) {
 				});
 			}
 			case "uninstall": {
-				const plugin = (await market()).plugins.find((p) => p.id === args.pluginId);
+				const data = await market();
+				const plugin = data.plugins.find((p) => p.id === args.pluginId);
 				if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
+				const item = scanInstalled(cfg, data).find((i) => i.pluginId === args.pluginId);
 				return uninstallPlugin(cfg, plugin, {
 					targetProfile: args.targetProfile ?? readSettings(cfg).profile,
-					runner: realRunner()
+					runner: realRunner(),
+					localName: item?.localName
 				});
 			}
 			case "ai:install": {
