@@ -9,9 +9,11 @@
 <div align="center">
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://dsh.market/)
-[![Contribute](https://img.shields.io/badge/Contribute-Submit%20a%20plugin-2EA043?style=flat-square)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/2BingLing/dsh-market/blob/master/LICENSE)
-[![Tracked](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2F2BingLing%2Fdsh-market%2Fmaster%2Fdata%2Fplugins.json&query=plugins.length&label=Tracked&color=4D6BFE&cacheSeconds=3600)](https://dsh.market/)
+[![Contribute](https://img.shields.io/badge/Contribute-Submit%20a%20plugin-2EA043?style=flat-square&logo=github&logoColor=white)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
+[![Stars](https://img.shields.io/github/stars/2BingLing/dsh-market?style=flat-square&logo=github&label=Stars&color=4D6BFE)](https://github.com/2BingLing/dsh-market)
+[![Tracked](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2F2BingLing%2Fdsh-market%2Fmaster%2Fdata%2Fplugins.json&query=plugins.length&label=Tracked&color=4D6BFE&style=flat-square&cacheSeconds=3600)](https://dsh.market/)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square&logo=opensourceinitiative&logoColor=white)](https://github.com/2BingLing/dsh-market/blob/master/LICENSE)
+[![Auto-collect](https://img.shields.io/github/actions/workflow/status/2BingLing/dsh-market/collect-and-deploy.yml?style=flat-square&label=Auto-collect&logo=githubactions&logoColor=white)](https://github.com/2BingLing/dsh-market/actions)
 [![Daily update](https://img.shields.io/badge/Daily%20update-06%3A00-1a7f37?style=flat-square)](https://github.com/2BingLing/dsh-market/actions)
 
 </div>

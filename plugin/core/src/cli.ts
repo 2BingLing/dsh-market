@@ -9,6 +9,7 @@
  */
 import { createInterface } from "node:readline";
 import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
 import { resolveConfig } from "./config.js";
 import { fetchMarketData } from "./data.js";
 import { scanInstalled } from "./installed.js";
@@ -18,6 +19,7 @@ import { recommend } from "./recommend.js";
 import { search } from "./search.js";
 import { hotTags, aggregateTags } from "./tags.js";
 import { installPlugin, uninstallPlugin } from "./installer.js";
+import { checkUpdates, checkSelfUpdate } from "./update.js";
 import type { CommandRunner } from "./types.js";
 import { fetchCurrentUser, fetchStarred } from "./github.js";
 
@@ -49,6 +51,16 @@ const realRunner: CommandRunner = {
 
 const cfg = resolveConfig();
 let cachedMarket: Awaited<ReturnType<typeof fetchMarketData>> | null = null;
+
+/** 读取已安装的 @dsh-market/plugin 版本（自更新检测用；core 与 plugin 同装于 profile node_modules） */
+const require = createRequire(import.meta.url);
+function pluginVersion(): string | null {
+  try {
+    return require("@dsh-market/plugin/package.json").version as string;
+  } catch {
+    return null;
+  }
+}
 
 async function market() {
   if (!cachedMarket) {
@@ -123,6 +135,25 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
         plugin: i.plugin ? litePlugin(i.plugin) : null,
       })),
     ),
+  "update:check": (args) =>
+    market().then((d) => checkUpdates(cfg, scanInstalled(cfg, d), { force: args?.force })),
+  // 插件自身更新检测（apply 时执行 dsh plugin add 覆盖安装）
+  "update:self": async (args) => {
+    const current = pluginVersion();
+    if (!current) throw new Error("无法读取当前插件版本");
+    const check = await checkSelfUpdate(current, { force: Boolean(args?.force) });
+    if (!args?.apply) return check;
+    const profile = readSettings(cfg).profile;
+    const r = await realRunner.run(
+      `dsh plugin --profile ${profile} add @dsh-market/plugin`,
+      { timeoutMs: 180000 },
+    );
+    return {
+      ...check,
+      applied: r.exitCode === 0,
+      applyOutput: r.exitCode === 0 ? undefined : (r.stderr || r.stdout).slice(0, 300),
+    };
+  },
 
   // ---------- 画像 ----------
   "profile:read": () => withSettingsMode(readProfile(cfg)),

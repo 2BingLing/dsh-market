@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="28" viewBox="0 0 240 28" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="20" viewBox="0 0 180 20" role="img" aria-labelledby="t d">
   <title id="t">DSH Market 已收录</title>
   <desc id="d">DSH Market 插件市场收录徽章（中文版）：虎鲸插头标识 + 已收录</desc>
   <defs>
@@ -10,14 +10,14 @@
       <stop offset="0" stop-color="#5F90D0"/>
       <stop offset="1" stop-color="#4C7FC4"/>
     </linearGradient>
-    <clipPath id="clip"><rect width="240" height="28" rx="6"/></clipPath>
+    <clipPath id="clip"><rect width="180" height="20" rx="5"/></clipPath>
   </defs>
   <g clip-path="url(#clip)">
-    <rect width="115" height="28" fill="url(#lg)"/>
-    <rect x="115" width="125" height="28" fill="url(#rg)"/>
-    <rect x="115" width="1.5" height="28" fill="#ffffff" opacity="0.3"/>
-    <!-- 虎鲸插头图标（复用 logo-web.svg 图形，缩放至 20px 级） -->
-    <g transform="translate(-0.6 -5.1) scale(0.33)" fill="#fff">
+    <rect width="85" height="20" fill="url(#lg)"/>
+    <rect x="85" width="95" height="20" fill="url(#rg)"/>
+    <rect x="85" width="1.5" height="20" fill="#ffffff" opacity="0.3"/>
+    <!-- 虎鲸插头图标（复用 logo-web.svg 图形，缩放至 16px 级） -->
+    <g transform="translate(-5.6 -4.5) scale(0.25)" fill="#fff">
       <path d="M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z"/>
       <path d="M83 62 C87 57 93 55 97 56 C94 59 91 61 88 62 C91 65 91 69 88 70 C90 66 87 63 83 62 Z"/>
       <path d="M38 42 h44 a6 6 0 0 1 6 6 v8 h-14 a8 8 0 1 0 -16 0 h-20 a6 6 0 0 1 -6 -6 v-2 a6 6 0 0 1 6 -6 z"/>
@@ -26,7 +26,7 @@
       <rect x="62" y="60" width="8" height="14" rx="4"/>
       <circle cx="60" cy="46" r="2.8" fill="#173F73"/>
     </g>
-    <text x="37" y="14" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="700" fill="#ffffff" dominant-baseline="middle">DSH Market</text>
-    <text x="177.5" y="14" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">已收录</text>
+    <text x="23" y="10" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="11" font-weight="700" fill="#ffffff" dominant-baseline="middle">DSH Market</text>
+    <text x="132.5" y="10" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">已收录</text>
   </g>
 </svg>

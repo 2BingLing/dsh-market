@@ -1,5 +1,5 @@
 import { createRequire } from "node:module";
-import { aggregateTags, fetchCurrentUser, fetchMarketData, fetchStarred, hotTags, installPlugin, readProfile, readSettings, recommend, resolveConfig, scanInstalled, search, uninstallPlugin, updateProfile, writeProfile, writeSettings } from "@dsh-market/core";
+import { aggregateTags, checkSelfUpdate, checkUpdates, fetchCurrentUser, fetchMarketData, fetchStarred, hotTags, installPlugin, readProfile, readSettings, recommend, resolveConfig, scanInstalled, search, uninstallPlugin, updateProfile, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获 */
@@ -85,6 +85,24 @@ function apply(ctx) {
 				...i,
 				plugin: i.plugin ? lite(i.plugin) : null
 			}));
+			case "update:check": {
+				const data = await market();
+				const installed = scanInstalled(cfg, data);
+				return checkUpdates(cfg, installed, { force: Boolean(args.force) });
+			}
+			case "update:self": {
+				const current = readVersions()["@dsh-market/plugin"];
+				if (!current) throw new Error("无法读取当前插件版本");
+				const check = await checkSelfUpdate(current, { force: Boolean(args.force) });
+				if (!args.apply) return check;
+				const profile = readSettings(cfg).profile;
+				const r = await realRunner().run(`dsh plugin --profile ${profile} add @dsh-market/plugin`, { timeoutMs: 18e4 });
+				return {
+					...check,
+					applied: r.exitCode === 0,
+					applyOutput: r.exitCode === 0 ? void 0 : (r.stderr || r.stdout).slice(0, 300)
+				};
+			}
 			case "profile:read": return withSettingsMode(readProfile(cfg));
 			case "profile:update": {
 				const data = await market();
