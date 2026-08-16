@@ -295,7 +295,7 @@ body::before {
 .install-state.ok { background: var(--ds-green-bg); color: var(--ds-green); border: 1px solid var(--ds-green-line); }
 .install-state.warn { background: #fff7e8; color: #c8943d; border: 1px solid #f0d9a7; }
 .install-target { font-size: 12px; color: var(--ds-weak); font-family: ui-monospace, Consolas, monospace; }
-.readme-summary { font-size: 12.5px; color: var(--ds-text); line-height: 1.9; max-height: 320px; overflow-y: auto; }
+.readme-summary { font-size: 12.5px; color: var(--ds-text); line-height: 1.9; max-height: 320px; overflow-y: auto; overflow-wrap: anywhere; }
 .readme-link {
   display: inline-block; margin-top: 12px; font-size: 12px; color: var(--ds-blue-700);
   text-decoration: none; border: 1px solid var(--ds-blue-300); background: var(--ds-blue-50);
@@ -503,3 +503,30 @@ body::before {
   .search-row { flex-direction: column; }
   .search-btn { height: 44px; }
 }
+
+/* ===== 整合包（Pack）===== */
+.pill-pack { background: #F3EFFF; color: #7C3AED; border: 1px solid #E4D8FF; }
+.pack-stats { display: flex; align-items: center; gap: 6px; font-size: 11.5px; padding: 6px 10px; border-radius: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.pack-stats b { margin-left: auto; font-size: 13px; font-family: ui-monospace, Consolas, monospace; }
+.pack-stats.ok { background: #EAF7EF; color: #1E7A46; border: 1px solid #C9EBD6; }
+.pack-stats.warn { background: #FFF6E8; color: #B26A00; border: 1px solid #F5DFC0; }
+.pack-stats.bad { background: #FDF0F0; color: #B33A3A; border: 1px solid #F3D2D2; }
+.pack-stats.detail { font-size: 13px; padding: 10px 14px; margin: 4px 0 20px; }
+.pack-total { text-align: center; color: #7C3AED; line-height: 1; }
+.pack-total b { font-size: 30px; font-weight: 600; display: block; }
+.pack-total span { font-size: 10.5px; color: #8CA3BB; }
+.pack-total.big b { font-size: 44px; }
+.hero-packs h1 { font-size: 34px; }
+.pack-entries { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+.pack-entry { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; border: 1px solid #E4EAF2; background: #FBFCFE; font-size: 12.5px; flex-wrap: wrap; }
+.entry-status { font-weight: 700; width: 18px; text-align: center; }
+.entry-status.ok { color: #1E7A46; }
+.entry-status.bad { color: #B33A3A; }
+.entry-id { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: #1F3A5F; background: #EEF3FA; padding: 2px 8px; border-radius: 6px; }
+.entry-type { font-size: 11px; color: #5B7BA8; flex: none; }
+.entry-version { font-size: 11px; color: #8CA3BB; font-family: ui-monospace, Consolas, monospace; flex: none; }
+.entry-note { margin-left: auto; font-size: 11px; color: #5B7BA8; }
+.detail-h { font-size: 13.5px; font-weight: 600; color: var(--ds-title); margin: 22px 0 10px; }
+.why { font-size: 13px; color: var(--ds-text); line-height: 1.8; background: #F4F8FD; border: 1px solid #DFEAF6; border-radius: 10px; padding: 12px 14px; margin-top: 12px; }
+.install-box pre { background: #0F1E33; color: #C9E0FF; padding: 12px 14px; border-radius: 10px; font-size: 12.5px; overflow-x: auto; }
+.install-box .note { font-size: 11.5px; color: #8CA3BB; }

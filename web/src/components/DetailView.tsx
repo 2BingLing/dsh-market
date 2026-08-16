@@ -13,15 +13,20 @@ function fmtDate(iso: string): string {
   return iso.slice(0, 10);
 }
 
-/** 清洗 markdown/HTML 源码 → 可读纯文本 */
+/** 清洗 markdown/HTML 源码 → 可读纯文本
+ * 注意：README 摘要在 420 字符截断，可能截断在 HTML 标签中间（未闭合标签），
+ * 必须额外清除 data: URL、行尾未闭合标签残片与超长无空格 token（防详情页溢出） */
 export function cleanMarkdown(md: string): string {
   return md
     .replace(/```[\s\S]*?```/g, " ") // 代码块
-    .replace(/<[^>]+>/g, " ") // HTML 标签
+    .replace(/<[^>]+>/g, " ") // HTML 标签（闭合）
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ") // 图片
     .replace(/\[\]\([^)]*\)/g, " ") // 空文本链接
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1") // 链接 → 文本
     .replace(/[#>*_`~|]{1,}/g, " ") // markdown 标记
+    .replace(/data:[^\s"'<>)]*/gi, " ") // data: URL（base64/内嵌 SVG，超长元凶）
+    .replace(/<[^>]*$/g, " ") // 行尾未闭合标签（截断残留）
+    .replace(/[^\s]{200,}/g, " ") // 超长无空格 token 兜底（残留 URL/乱码）
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -76,6 +81,11 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
   const installPrompt = buildInstallPrompt(plugin);
   // 是否走了 clone 兜底（需要提示阅读 README / 对话安装）
   const isCloneFallback = !isReliableSingleCommand(plugin);
+  // 清洗后的 README 摘要（全为图片/HTML 时为空 → 不渲染区块）
+  const cleanedSummary = useMemo(
+    () => (plugin.readmeSummary ? cleanMarkdown(plugin.readmeSummary) : ""),
+    [plugin.readmeSummary]
+  );
 
   const copy = async (key: string, text: string) => {
     try {
@@ -192,12 +202,12 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
             </div>
           </section>
 
-          {plugin.readmeSummary && (
+          {cleanedSummary && (
             <section className="info-block">
               <h4>README 摘要</h4>
               <p className="readme-summary">
-                {cleanMarkdown(plugin.readmeSummary)}
-                {plugin.readmeSummary.trimEnd().endsWith("…") && "（摘要节选）"}
+                {cleanedSummary}
+                {plugin.readmeSummary!.trimEnd().endsWith("…") && "（摘要节选）"}
               </p>
               <a
                 className="readme-link"
