@@ -16,7 +16,12 @@ const TOKEN = process.env.GITHUB_TOKEN ?? "";
 
 function buildReply(r) {
   const listedUrl = `https://2bingling.github.io/dsh-market/?q=${encodeURIComponent(r.fullName)}`;
-  const badgeDoc = "https://github.com/2BingLing/dsh-market/blob/main/PLUGIN-BADGE.md";
+  const badgeDoc = "https://github.com/2BingLing/dsh-market/blob/master/PLUGIN-BADGE.md";
+  // 附徽章实物图：评分 ≥80 展示金色 Top Rated 档，否则蓝色已收录档（不说分数，只展示档位）
+  const badgeImg =
+    r.score && r.score >= 80
+      ? "https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-top-rated.svg"
+      : "https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-listed-zh.svg";
   return [
     `> ⚙️ **自动回复** · DSH Market Bot`,
     ``,
@@ -24,7 +29,11 @@ function buildReply(r) {
     ``,
     `- 数据已进入市场，**次日 06:00 更新**后可在 [DSH Market](https://2bingling.github.io/dsh-market/) 搜索到（${listedUrl}）。`,
     `- 你的仓库本身无需任何改动；如果还没有打 \`dsh-plugin\` topic，建议打上，便于持续被发现。`,
-    `- 可选：在插件 README 顶部挂 [DSH Market 收录徽章](${badgeDoc})（已收录 / 高分精选两档）。`,
+    `- 可选：把下面这枚 DSH Market 收录徽章挂到插件 README 顶部，让用户一眼认出：`,
+    ``,
+    `  [![DSH Market 收录徽章](${badgeImg})](https://dsh.market/)`,
+    ``,
+    `  用法与高分精选（金色）档说明见 [PLUGIN-BADGE.md](${badgeDoc})。`,
     ``,
     `> 本 issue 已自动关闭。如有问题（简介/评分/安装命令有误）欢迎重新打开或提交新 issue。`,
   ].join("\n");
