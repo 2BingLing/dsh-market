@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="44" viewBox="0 0 300 44" role="img" aria-labelledby="t d">
+  <title id="t">DSH Market 已收录</title>
+  <desc id="d">DSH Market 插件市场收录徽章（中文版）：虎鲸插头标识 + 已收录</desc>
+  <defs>
+    <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4C7FC4"/>
+      <stop offset="1" stop-color="#173F73"/>
+    </linearGradient>
+    <linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5F90D0"/>
+      <stop offset="1" stop-color="#4C7FC4"/>
+    </linearGradient>
+    <clipPath id="clip"><rect width="300" height="44" rx="9"/></clipPath>
+  </defs>
+  <g clip-path="url(#clip)">
+    <rect width="150" height="44" fill="url(#lg)"/>
+    <rect x="150" width="150" height="44" fill="url(#rg)"/>
+    <rect x="150" width="1.5" height="44" fill="#ffffff" opacity="0.3"/>
+    <!-- 虎鲸插头图标（复用 logo-web.svg 图形，缩放至 24px 级） -->
+    <g transform="translate(-8.75 -7) scale(0.5)" fill="#fff">
+      <path d="M51 42 C52 36 56 32 61 32 C60 37 60 40 60 42 Z"/>
+      <path d="M83 62 C87 57 93 55 97 56 C94 59 91 61 88 62 C91 65 91 69 88 70 C90 66 87 63 83 62 Z"/>
+      <path d="M38 42 h44 a6 6 0 0 1 6 6 v8 h-14 a8 8 0 1 0 -16 0 h-20 a6 6 0 0 1 -6 -6 v-2 a6 6 0 0 1 6 -6 z"/>
+      <rect x="38" y="60" width="8" height="14" rx="4"/>
+      <rect x="50" y="66" width="8" height="18" rx="4"/>
+      <rect x="62" y="60" width="8" height="14" rx="4"/>
+      <circle cx="60" cy="46" r="2.8" fill="#173F73"/>
+    </g>
+    <text x="47" y="22" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#ffffff" dominant-baseline="middle">DSH Market</text>
+    <text x="225" y="22" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">已收录</text>
+  </g>
+</svg>

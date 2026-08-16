@@ -10,28 +10,28 @@
 
 ### 已收录（中文）
 
-[![DSH Market](https://img.shields.io/badge/DSH%20Market-%E5%B7%B2%E6%94%B6%E5%BD%95-4C7FC4?style=flat-square)](https://dsh.market/)
+[![DSH Market](https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-listed-zh.svg)](https://dsh.market/)
 
 ```markdown
-[![DSH Market](https://img.shields.io/badge/DSH%20Market-%E5%B7%B2%E6%94%B6%E5%BD%95-4C7FC4?style=flat-square)](https://dsh.market/)
+[![DSH Market](https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-listed-zh.svg)](https://dsh.market/)
 ```
 
 ### Listed (English)
 
-[![DSH Market](https://img.shields.io/badge/DSH%20Market-Listed-4C7FC4?style=flat-square)](https://dsh.market/)
+[![DSH Market](https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-listed-en.svg)](https://dsh.market/)
 
 ```markdown
-[![DSH Market](https://img.shields.io/badge/DSH%20Market-Listed-4C7FC4?style=flat-square)](https://dsh.market/)
+[![DSH Market](https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-listed-en.svg)](https://dsh.market/)
 ```
 
 ### Top Rated · 高分精选（评分 ≥ 80）
 
 如果你的插件在 DSH Market 的**实用五维评分**达到 80 分以上，可以使用金色精选徽章：
 
-[![DSH Market](https://img.shields.io/badge/DSH%20Market-Top%20Rated-D4A72C?style=flat-square)](https://dsh.market/)
+[![DSH Market](https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-top-rated.svg)](https://dsh.market/)
 
 ```markdown
-[![DSH Market](https://img.shields.io/badge/DSH%20Market-Top%20Rated-D4A72C?style=flat-square)](https://dsh.market/)
+[![DSH Market](https://raw.githubusercontent.com/2BingLing/dsh-market/master/assets/readme/badge-top-rated.svg)](https://dsh.market/)
 ```
 
 ---

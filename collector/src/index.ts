@@ -21,7 +21,7 @@ import {
 import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
 import { fetchSubmissionRepos } from "./sources/issues.js";
-import { detectPlugin, isCordisPackageJson, detectNeedsConfig } from "./detect.js";
+import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectSubdirBundle } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
 import { runPool } from "./pool.js";
@@ -44,6 +44,8 @@ interface DetectCache {
   readmeSummary: string | null;
   installParsed: { commands: string[]; source: string };
   hasSkillMd: boolean;
+  /** 子目录 bundle 的插件子目录路径（如 dsh-pet/），null = 常规根目录插件 */
+  subdir: string | null;
 }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -207,6 +209,7 @@ async function main() {
       let installParsed: { commands: string[]; source: string };
       let hasSkillMd: boolean;
       let readmeContent: string | null;
+      let subdir: string | null = null;
 
       if (cachedDetect && cachedDetect.pushedAt === repo.pushed_at) {
         // 命中：仓库未变化，直接复用检测产物（零网络调用）
@@ -216,6 +219,7 @@ async function main() {
         readmeSummary = cachedDetect.readmeSummary;
         installParsed = cachedDetect.installParsed;
         hasSkillMd = cachedDetect.hasSkillMd;
+        subdir = cachedDetect.subdir ?? null;
         readmeContent = null; // 评分用：下面从 readmes 缓存取（24h 内必有）
         if (!detection.isPlugin) {
           rejected.push({ fullName: candidate.fullName, reason: "no plugin markers (cached)" });
@@ -233,21 +237,38 @@ async function main() {
         // 特征检测（只基于文件列表）
         detection = await detectPlugin(candidate.fullName, rootItems);
         if (!detection.isPlugin) {
-          rejected.push({ fullName: candidate.fullName, reason: "no plugin markers" });
-          return;
+          // 子目录 bundle 探测：根目录无标记时，检查子目录内的插件成品（如 dsh-pet/）
+          const sub = await detectSubdirBundle(
+            candidate.fullName,
+            rootItems,
+            repo!.default_branch
+          );
+          if (sub) {
+            detection = {
+              isPlugin: true,
+              type: "cordis-plugin",
+              installMethod: "pnpm-profile",
+              skillFiles: [],
+              evidence: sub.evidence,
+            };
+            subdir = sub.subdir;
+          } else {
+            rejected.push({ fullName: candidate.fullName, reason: "no plugin markers" });
+            return;
+          }
         }
 
-        // package.json 二次确认（仅当是 cordis 候选且根目录有 package.json）
+        // package.json 二次确认（子目录 bundle 时读子目录内的 package.json）
         let packageJsonContent: string | null = null;
-        const hasPkgJson = rootItems.some(
-          (i) => i.name.toLowerCase() === "package.json"
-        );
+        const pkgRel = subdir ? `${subdir}/package.json` : "package.json";
+        const hasPkgJson =
+          rootItems.some((i) => i.name.toLowerCase() === "package.json") || Boolean(subdir);
         if (hasPkgJson) {
           packageJsonContent = await cached<string | null>(
             "pkgjson",
-            candidate.fullName,
+            candidate.fullName + (subdir ? `:${subdir}` : ""),
             async () => {
-              const f = await fetchFileViaApi(candidate.fullName, "package.json");
+              const f = await fetchFileViaApi(candidate.fullName, pkgRel);
               return f?.content ?? null;
             }
           );
@@ -298,6 +319,7 @@ async function main() {
           readmeSummary,
           installParsed,
           hasSkillMd,
+          subdir,
         });
       }
 

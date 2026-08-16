@@ -85,6 +85,40 @@ export async function detectPlugin(
   return { isPlugin: true, type, installMethod, skillFiles, evidence };
 }
 
+/** 子目录 bundle 探测：根目录无插件标记时，检查是否存在"子目录内含 package.json + cordis 标记"的插件成品
+ * （仓库根目录放素材/文档/工具链，插件在子目录——如 PC2005-cloud/dsh-pet 的 dsh-pet/）
+ * 只探测可疑目录（与仓库同名 / dsh- 前缀 / cordis|plugin|bundle|client 开头），最多 3 个，控制 API 调用 */
+export async function detectSubdirBundle(
+  fullName: string,
+  rootItems: RepoContentItem[],
+  branch?: string | null
+): Promise<{ subdir: string; evidence: string[] } | null> {
+  const repoName = fullName.split("/")[1]?.toLowerCase();
+  // 常见非插件目录直接跳过（素材/文档/构建目录）
+  const SKIP_DIRS =
+    /^(docs?|assets?|test|tests|scripts?|tools?|examples?|images?|img|public|src|lib|dist|node_modules|vendor|\.github)$/i;
+  const dirs = rootItems.filter((i) => i.type === "dir" && !SKIP_DIRS.test(i.name));
+  const candidates = dirs
+    .filter((d) => {
+      const n = d.name.toLowerCase();
+      return n === repoName || /^(dsh-|cordis|plugin|bundle|client)/.test(n);
+    })
+    .slice(0, 3);
+  for (const dir of candidates) {
+    const items = await fetchRepoRoot(fullName, branch, dir.path);
+    const names = new Set(items.map((i) => i.name.toLowerCase()));
+    if (
+      names.has("package.json") &&
+      (names.has("cordis.patch.yml") ||
+        names.has("dsh.profile") ||
+        names.has("dsh.profile.yml"))
+    ) {
+      return { subdir: dir.path, evidence: [`subdir ${dir.path}/（package.json + cordis 标记）`] };
+    }
+  }
+  return null;
+}
+
 const CORDIS_PKG_KEYWORDS = [
   "cordis",
   "@cordisjs/plugin",
