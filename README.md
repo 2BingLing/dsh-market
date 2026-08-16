@@ -9,12 +9,10 @@
 <div align="center">
 
 [![在线体验](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://dsh.market/)
-[![提交插件](https://img.shields.io/badge/Contribute-%E6%8F%90%E4%BA%A4%E6%8F%92%E4%BB%B6-2EA043?style=flat-square&logo=github&logoColor=white)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
-[![Stars](https://img.shields.io/github/stars/2BingLing/dsh-market?style=flat-square&logo=github&label=Stars&color=4D6BFE)](https://github.com/2BingLing/dsh-market)
-[![收录](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2F2BingLing%2Fdsh-market%2Fmaster%2Fdata%2Fplugins.json&query=plugins.length&label=%E6%94%B6%E5%BD%95&color=4D6BFE&style=flat-square&cacheSeconds=3600)](https://dsh.market/)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square&logo=opensourceinitiative&logoColor=white)](https://github.com/2BingLing/dsh-market/blob/master/LICENSE)
-[![自动收录](https://img.shields.io/github/actions/workflow/status/2BingLing/dsh-market/collect-and-deploy.yml?style=flat-square&label=%E8%87%AA%E5%8A%A8%E6%94%B6%E5%BD%95&logo=githubactions&logoColor=white)](https://github.com/2BingLing/dsh-market/actions)
-[![每日自动更新](https://img.shields.io/badge/%E6%AF%8F%E6%97%A5%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0-06%3A00-1a7f37?style=flat-square)](https://github.com/2BingLing/dsh-market/actions)
+[![提交插件](https://img.shields.io/badge/Contribute-%E6%8F%90%E4%BA%A4%E6%8F%92%E4%BB%B6-2EA043?style=flat-square)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://github.com/2BingLing/dsh-market/blob/master/LICENSE)
+[![收录](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2F2BingLing%2Fdsh-market%2Fmaster%2Fdata%2Fplugins.json&query=plugins.length&label=%E6%94%B6%E5%BD%95&color=4D6BFE&cacheSeconds=3600)](https://dsh.market/)
+[![更新](https://img.shields.io/badge/%E6%AF%8F%E6%97%A5%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0-06%3A00-1a7f37?style=flat-square)](https://github.com/2BingLing/dsh-market/actions)
 
 </div>
 

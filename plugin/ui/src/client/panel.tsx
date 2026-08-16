@@ -9,8 +9,6 @@ import {
   type InstalledItem,
   type LitePlugin,
   type Recommendation,
-  type SelfUpdateInfo,
-  type UpdateCheckResult,
   type UserProfile,
 } from './api.ts'
 import { getOpen, setOpen, subscribe } from './store.ts'
@@ -757,11 +755,6 @@ function InstalledTab(props: {
   const [busy, setBusy] = useState(false)
   // 其他已装（未收录）默认只显示前 5 个，点「查看详细」展开全部
   const [showAllUnmatched, setShowAllUnmatched] = useState(false)
-  // 更新检测：localName → 检测结果（手动触发，结果 1h 内复用，force 时重新查询）
-  const [updateMap, setUpdateMap] = useState<Record<string, UpdateCheckResult>>({})
-  const [checking, setChecking] = useState(false)
-  const [checkError, setCheckError] = useState('')
-  const [updating, setUpdating] = useState<string | null>(null)
 
   const uninstall = async (item: InstalledItem) => {
     if (!item.pluginId) return
@@ -777,60 +770,6 @@ function InstalledTab(props: {
     }
   }
 
-  /** 检查更新（force：绕过 core 内存缓存，重新查 npm / GitHub） */
-  const checkNow = async () => {
-    setChecking(true)
-    setCheckError('')
-    try {
-      const list = await api<UpdateCheckResult[]>('update:check', { force: true })
-      const m: Record<string, UpdateCheckResult> = {}
-      for (const r of list) m[r.localName] = r
-      setUpdateMap(m)
-    } catch (e) {
-      setCheckError((e as Error).message)
-    } finally {
-      setChecking(false)
-    }
-  }
-
-  /** 一键更新：复用 install force（cordis 重新 add；skill 备份后重新 clone） */
-  const updatePlugin = async (item: InstalledItem) => {
-    if (!item.pluginId || updating) return
-    setUpdating(item.localName)
-    try {
-      const r = await api<{ requiresRestart?: boolean }>('install', {
-        pluginId: item.pluginId,
-        force: true,
-      })
-      onChanged() // 重扫已装（版本/目录变化）
-      setUpdateMap((m) => {
-        const next = { ...m }
-        delete next[item.localName] // 清掉旧结果，避免显示过期版本
-        return next
-      })
-      alert(r.requiresRestart ? '更新完成，重启 harness 后生效' : '更新完成')
-    } catch (e) {
-      alert(`更新失败：${(e as Error).message}`)
-    } finally {
-      setUpdating(null)
-    }
-  }
-
-  /** 单行检测状态（未检测过返回 null） */
-  const renderCheck = (item: InstalledItem): ReactNode => {
-    const r = updateMap[item.localName]
-    if (!r) return null
-    if (r.kind === 'none') {
-      return El('div', { className: styles.updateHint }, `无法检测 · ${r.error ?? ''}`)
-    }
-    if (r.hasUpdate) {
-      return El('div', { className: styles.updateChip },
-        r.kind === 'npm' ? `可更新 ${r.current} → ${r.latest}` : '远端有新提交')
-    }
-    return El('div', { className: styles.latestChip },
-      r.kind === 'npm' ? `已是最新 ${r.latest}` : '已是最新')
-  }
-
   if (loading) return El('div', { className: styles.stateHint }, '扫描已装插件…')
   const matched = installed.filter((i) => i.pluginId)
   const unmatched = installed.filter((i) => !i.pluginId)
@@ -841,15 +780,7 @@ function InstalledTab(props: {
         El(Icon, { d: ICON_PACKAGE, size: 14, className: styles.sectionIcon }),
         El('h3', { className: styles.sectionTitle }, '已安装'),
         El('span', { className: styles.sectionNote }, `${installed.length} 个`),
-        installed.length > 0
-          ? El('button', {
-              className: `${styles.btn} ${styles.btnSm} ${styles.btnGhost}`,
-              disabled: checking,
-              onClick: () => void checkNow(),
-            }, checking ? '检测中…' : '检查更新')
-          : null,
       ),
-      checkError ? El('div', { className: styles.updateHint }, `检测失败：${checkError}`) : null,
       matched.length === 0 ? El('div', { className: styles.stateHint }, '未检测到市场收录的已装插件') : null,
       ...matched.map((i, idx) =>
         El('div', { key: `${i.localName}-${idx}`, className: styles.installedRow },
@@ -861,7 +792,6 @@ function InstalledTab(props: {
             El('div', { className: styles.installedMeta },
               `${i.version ?? '未知版本'} · ${i.source === 'skills' ? 'skill' : 'profile'}`,
             ),
-            checking ? El('div', { className: styles.updateHint }, '检测中…') : renderCheck(i),
           ),
           confirming === i.localName
             ? El('div', { className: styles.installedActions },
@@ -873,13 +803,6 @@ function InstalledTab(props: {
                 }, '确认卸载'),
               )
             : El('div', { className: styles.installedActions },
-                updateMap[i.localName]?.hasUpdate
-                  ? El('button', {
-                      className: `${styles.btn} ${styles.btnSm} ${styles.btnPrimary}`,
-                      disabled: updating !== null || busy,
-                      onClick: () => void updatePlugin(i),
-                    }, updating === i.localName ? '更新中…' : '更新')
-                  : null,
                 El('button', {
                   className: `${styles.btn} ${styles.btnSm}`,
                   disabled: !i.pluginId,
@@ -1278,10 +1201,6 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
     recs: [],
     sceneTags: [],
   })
-  // 插件自身更新提示（打开面板自动检测 npm 最新版；有新版 → 顶部提示条）
-  const [selfUpdate, setSelfUpdate] = useState<SelfUpdateInfo | null>(null)
-  const [selfUpdating, setSelfUpdating] = useState(false)
-  const [selfDismissed, setSelfDismissed] = useState(false)
 
   const loadAll = async () => {
     setLoading(true)
@@ -1320,33 +1239,6 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
   useEffect(() => {
     if (open) void loadAll()
   }, [open, refreshKey])
-
-  // 插件自身更新自动检测（打开面板时触发一次，force 刷新 npm 查询缓存）
-  useEffect(() => {
-    if (!open || selfDismissed) return
-    api<SelfUpdateInfo>('update:self', { force: true })
-      .then((r) => setSelfUpdate(r))
-      .catch(() => {})
-  }, [open, selfDismissed])
-
-  /** 一键更新插件自身（dsh plugin add 覆盖安装；完成后需重启 harness） */
-  const applySelfUpdate = async () => {
-    setSelfUpdating(true)
-    try {
-      const r = await api<SelfUpdateInfo>('update:self', { apply: true })
-      if (r.applied) {
-        setSelfUpdate(null)
-        setSelfDismissed(true)
-        alert(`插件更新完成（${r.latest}），请重启 harness 生效`)
-      } else {
-        alert(`更新失败：${r.applyOutput ?? '未知错误'}`)
-      }
-    } catch (e) {
-      alert(`更新失败：${(e as Error).message}`)
-    } finally {
-      setSelfUpdating(false)
-    }
-  }
 
   if (!open) return null
 
@@ -1412,26 +1304,6 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
         El('button', { className: styles.headerClose, onClick: onClose, 'aria-label': '关闭' },
           El(Icon, { d: ICON_CLOSE, size: 14 })),
       ),
-      selfUpdate?.hasUpdate
-        ? El('div', { className: styles.selfUpdateBar },
-            El('span', { className: styles.selfUpdateText },
-              selfUpdating
-                ? '正在更新插件…'
-                : `插件有新版本 ${selfUpdate.current ?? '?'} → ${selfUpdate.latest ?? '?'}`),
-            selfUpdating
-              ? null
-              : El('button', {
-                  className: `${styles.btn} ${styles.btnSm} ${styles.btnPrimary}`,
-                  onClick: () => void applySelfUpdate(),
-                }, '更新'),
-            selfUpdating
-              ? null
-              : El('button', {
-                  className: `${styles.btn} ${styles.btnSm} ${styles.btnGhost}`,
-                  onClick: () => setSelfDismissed(true),
-                }, '忽略'),
-          )
-        : null,
       El('div', { className: styles.tabs },
         ...tabs.map((t) =>
           El('button', {

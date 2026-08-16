@@ -22,8 +22,6 @@ import {
   aggregateTags,
   installPlugin,
   uninstallPlugin,
-  checkUpdates,
-  checkSelfUpdate,
   fetchCurrentUser,
   fetchStarred,
 } from '@dsh-market/core'
@@ -136,33 +134,6 @@ export function apply(ctx: {
           ...i,
           plugin: i.plugin ? lite(i.plugin) : null,
         }))
-
-      // 已装插件更新检测（npm registry / GitHub pushedAt；force 绕过缓存）
-      case 'update:check': {
-        const data = await market()
-        const installed = scanInstalled(cfg, data)
-        return checkUpdates(cfg, installed, { force: Boolean(args.force) })
-      }
-
-      // 插件自身更新检测（打开面板自动调用，force 强制刷新）；
-      // apply 时执行 dsh plugin add 覆盖安装到当前版本
-      case 'update:self': {
-        const versions = readVersions()
-        const current = versions['@dsh-market/plugin']
-        if (!current) throw new Error('无法读取当前插件版本')
-        const check = await checkSelfUpdate(current, { force: Boolean(args.force) })
-        if (!args.apply) return check
-        const profile = readSettings(cfg).profile
-        const r = await realRunner().run(
-          `dsh plugin --profile ${profile} add @dsh-market/plugin`,
-          { timeoutMs: 180000 },
-        )
-        return {
-          ...check,
-          applied: r.exitCode === 0,
-          applyOutput: r.exitCode === 0 ? undefined : (r.stderr || r.stdout).slice(0, 300),
-        }
-      }
 
       case 'profile:read':
         return withSettingsMode(readProfile(cfg))

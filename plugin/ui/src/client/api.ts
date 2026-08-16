@@ -37,27 +37,6 @@ export interface InstalledItem {
   plugin: LitePlugin | null
 }
 
-/** 已装插件更新检测结果（core/update.ts） */
-export interface UpdateCheckResult {
-  localName: string
-  pluginId: string | null
-  kind: 'npm' | 'github' | 'none'
-  current: string | null
-  latest: string | null
-  hasUpdate: boolean
-  error?: string
-}
-
-/** 插件自身更新检测结果（core/update.ts checkSelfUpdate） */
-export interface SelfUpdateInfo {
-  current: string | null
-  latest: string | null
-  hasUpdate: boolean
-  /** apply 执行结果 */
-  applied?: boolean
-  applyOutput?: string
-}
-
 export interface UserProfile {
   tags: Record<string, number>
   sources: { installed: string[]; starred: string[]; quiz: string[]; installedPluginIds: string[] }
