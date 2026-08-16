@@ -11,4 +11,5 @@ export * from "./installed.js";
 export * from "./profile.js";
 export * from "./recommend.js";
 export * from "./installer.js";
+export * from "./update.js";
 export * from "./github.js";
