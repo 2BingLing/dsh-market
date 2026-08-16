@@ -213,7 +213,11 @@ npm run build -w @dsh-market/plugin  # 插件包（lib/index.js + lib/client.js�
 ```
 
 - **修正数据**：评分 / 描述 / 安装命令有误，提 issue 或 PR
-- **挂收录徽章**：被收录的插件作者可在 README 顶部挂 [DSH Market 徽章](./PLUGIN-BADGE.md)（已收录 / 高分精选两档），自动回复里也会附指引
+- **挂收录徽章**：被收录的插件作者可在 README 顶部挂 DSH Market 收录徽章，让用户一眼认出：
+
+  [![已收录](assets/readme/badge-listed-zh.svg)](https://dsh.market/) [![高分精选](assets/readme/badge-top-rated.svg)](https://dsh.market/)
+
+  用法见 [PLUGIN-BADGE.md](./PLUGIN-BADGE.md)（高分精选需实用评分 ≥ 80）
 
 ## 路线图
 

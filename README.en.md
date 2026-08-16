@@ -213,7 +213,11 @@ Submit issue → next day 06:00 the pipeline extracts the repo → plugin detect
 ```
 
 - **Fix data**: wrong scores / descriptions / install commands — open an issue or PR
-- **Add the listing badge**: listed plugin authors can add the [DSH Market badge](./PLUGIN-BADGE.md) (Listed / Top Rated) to their README (the auto-reply includes the guide)
+- **Add the listing badge**: listed plugin authors can display the DSH Market badge at the top of their README:
+
+  [![Listed](assets/readme/badge-listed-en.svg)](https://dsh.market/) [![Top Rated](assets/readme/badge-top-rated.svg)](https://dsh.market/)
+
+  Usage: [PLUGIN-BADGE.md](./PLUGIN-BADGE.md) (Top Rated requires a practical score ≥ 80)
 
 ## Roadmap
 
