@@ -27,10 +27,14 @@ SOFTWARE.
 上述 MIT 许可仅适用于源代码与文档。本项目的品牌资产——包括但不限于项目
 logo、图标与 "dsh.market" 域名——**权利保留**，归 2BingLing 独占所有，不
 随 MIT 协议授权。任何第三方对品牌资产的复制、修改或商业使用，须事先获得
-版权持有者的书面许可。
+版权持有者的书面许可。**例外**：收录徽章（PLUGIN-BADGE.md 所述）内含品牌
+图形，按该文档约定授权已收录插件作者使用，无需另行书面许可。
 
 The MIT license above covers the source code and documentation only. The
 project's brand assets — including but not limited to the project logo, icons,
 and the domain "dsh.market" — are **reserved** and remain the exclusive
 property of 2BingLing. Any reproduction, modification, or commercial use of
 these brand assets requires prior written permission from the copyright holder.
+**Exception**: the listing badges described in PLUGIN-BADGE.md contain brand
+graphics and are licensed to authors of listed plugins as specified in that
+document, without further written permission.

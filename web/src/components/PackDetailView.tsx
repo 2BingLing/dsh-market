@@ -223,17 +223,7 @@ export default function PackDetailView({ pack, onBack }: Props) {
       <section className="pd-install">
         <div className="pd-glass">
           <h2>安装指引</h2>
-          <p className="pd-sub">在你的 dsh 环境执行以下命令，即可将本整合包的全部条目一键接入：</p>
-          <div className="pd-code-block">
-            <span className="pd-prompt">$</span>
-            <span className="pd-cmd"><b>dsh</b> bundler install <b>github:{pack.id}</b></span>
-            <span className="pd-copy-hint">复制</span>
-          </div>
-          <div className="pd-install-notes">
-            <span>前置：dsh &gt;= 0.4 或更高</span>
-            <span>自动解析并验证全部条目</span>
-            <span>安装后可自定义覆盖版本</span>
-          </div>
+          <p className="pd-sub">整合包一键安装工具（bundler）研发中，安装方式待定——敬请期待。</p>
         </div>
       </section>
     </div>
