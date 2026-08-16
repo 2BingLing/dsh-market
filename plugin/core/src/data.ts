@@ -4,7 +4,7 @@
  */
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import type { MarketData } from "@dsh-market/schema";
+import type { DshPack, MarketData } from "@dsh-market/schema";
 import type { ResolvedConfig } from "./config.js";
 
 const CACHE_FILE = "plugins-cache.json";
@@ -69,6 +69,21 @@ export function readCachedData(cfg: ResolvedConfig): MarketDataResult | null {
     stale: ageMs > cfg.cacheTtlMs,
     ageMs,
   };
+}
+
+/** 拉取整合包数据（packs.json，与 plugins.json 同目录；失败静默返回空数组） */
+export async function fetchPacksData(cfg: ResolvedConfig): Promise<DshPack[]> {
+  const url = cfg.remoteUrl.replace(/plugins\.json(?:$|\?)/, "packs.json$1");
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+    if (res.ok) {
+      const data = (await res.json()) as { packs?: DshPack[] };
+      return data.packs ?? [];
+    }
+  } catch {
+    /* 整合包数据缺失不影响主流程 */
+  }
+  return [];
 }
 
 function cachePath(cfg: ResolvedConfig): string {

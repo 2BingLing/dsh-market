@@ -29,6 +29,26 @@ export interface Recommendation {
   origin: 'scene' | 'guess' | 'curated' | 'trending'
 }
 
+/** 整合包（lite，来自 core fetchPacksData） */
+export interface LitePack {
+  id: string
+  name: string
+  author: string
+  descriptionZh: string | null
+  tags: string[]
+  stars: number
+  pushedAt: string
+  curated: boolean
+  scoreTotal: number
+  entryStats: { total: number; ok: number; failed: number; inMarket: number }
+  entries: Array<{
+    id: string
+    type: 'skill' | 'cordis' | 'bundle' | 'pack'
+    version: string
+    resolved: { ok: boolean; inMarket: boolean; matchId?: string; reason?: string } | null
+  }>
+}
+
 export interface InstalledItem {
   pluginId: string | null
   localName: string

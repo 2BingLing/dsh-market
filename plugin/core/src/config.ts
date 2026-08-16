@@ -7,6 +7,9 @@ import { join } from "node:path";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import type { CoreConfig, GitHubBinding, UserProfile } from "./types.js";
 
+// 数据源用 GitHub Pages 默认路径而非自定义域名（dsh.market）：
+// 仓库不变 → 该路径永久有效，不依赖域名续费/换绑；
+// 宣传链接（README/issue 回复）才用 dsh.market——机器读的数据源赌稳定，人读的链接赌品牌。
 const DEFAULT_REMOTE_URL =
   "https://2bingling.github.io/dsh-market/plugins.json";
 

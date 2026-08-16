@@ -38,6 +38,19 @@ export function extractRepoFromText(text: string): string[] {
 
 /** 读取本仓库所有 open 的提交插件 issue：返回 fullName(lower) → 对应 issue 号列表 */
 export async function fetchSubmissionRepos(): Promise<Map<string, number[]>> {
+  return fetchSubmissionReposBy(/^\[提交插件\]|^\[submit/i, "submission", "issues:submission");
+}
+
+/** 读取本仓库所有 open 的提交整合包 issue（[提交整合包] 标题）→ fullName(lower) → issue 号列表 */
+export async function fetchPackSubmissionRepos(): Promise<Map<string, number[]>> {
+  return fetchSubmissionReposBy(/^\[提交整合包\]|^\[submit pack/i, "submission", "issues:pack-submission");
+}
+
+async function fetchSubmissionReposBy(
+  titleRe: RegExp,
+  label: string,
+  logTag: string
+): Promise<Map<string, number[]>> {
   const out = new Map<string, number[]>();
   try {
     // label 过滤 + 标题前缀兜底（未打 label 的存量/模板失效 issue 也能命中）
@@ -47,8 +60,8 @@ export async function fetchSubmissionRepos(): Promise<Map<string, number[]>> {
     let counted = 0;
     for (const issue of issues) {
       const isSubmission =
-        (issue.labels ?? []).some((l: { name?: string }) => l.name === SUBMISSION_LABEL) ||
-        /^\[提交插件\]|^\[submit/i.test(issue.title);
+        (issue.labels ?? []).some((l: { name?: string }) => l.name === label) ||
+        titleRe.test(issue.title);
       if (!isSubmission) continue;
       counted++;
       const text = `${issue.title}\n${issue.body ?? ""}`;
@@ -58,7 +71,7 @@ export async function fetchSubmissionRepos(): Promise<Map<string, number[]>> {
         out.set(fn, list);
       }
     }
-    console.log(`  issues:submission -> ${counted} issues, ${out.size} repos`);
+    console.log(`  ${logTag} -> ${counted} issues, ${out.size} repos`);
     return out;
   } catch (err) {
     // 失败不阻断主流程（issues 只是补充源）

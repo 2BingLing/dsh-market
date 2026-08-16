@@ -26,13 +26,13 @@
   <img src="./assets/readme/section-forms-en.svg" width="100%" alt="Two editions banner: the Web edition and plugin edition logos connected through the shared plugins.json dataset">
 </p>
 
-The DSH ecosystem is growing fast, and plugins are scattered across GitHub — **it's hard to know which ones are good and how to install them**. DSH Market gathers them all in one place and offers two ways to consume them:
+The DSH ecosystem is growing fast, and plugins & skills are scattered across GitHub — **it's hard to know which ones are good, how to install them, and how to combine them into a working environment**. DSH Market gathers them all in one place and offers two ways to consume them:
 
 | | <img src="./assets/readme/logo-web.svg" width="26" alt="Web edition logo"> **Web edition** (Live) | <img src="./assets/readme/logo-plugin.svg" width="26" alt="Plugin edition logo"> **DSH plugin edition** (Done) |
 |---|---|---|
 | **Where** | Browser · GitHub Pages static site | DSH sidebar · cordis plugin |
 | **Role** | Discover & evaluate | Install & manage |
-| **Core** | Chinese search · 5-dimension radar chart · Curated/New sections · Cold-start quiz · Real install commands on detail pages | 5-tab panel · one-click install · beginner-friendly picks · personalized & scene recommendations · AI-assisted install (see [DSH Plugin Edition](#dsh-plugin-edition)) |
+| **Content** | Plugins (cordis/skill) + packs section (ecosystem content marketplace) | 5-tab panel · one-click install · beginner-friendly picks · personalized & scene recommendations · AI-assisted install (see [DSH Plugin Edition](#dsh-plugin-edition)) + packs tab |
 | **Install** | Zero install, open in your browser | `npx @deepseek-ai/dsh plugin --profile web add @dsh-market/plugin` |
 | **Resources** | — | Zero-token passive, never in daily conversations |
 
@@ -89,12 +89,13 @@ The plugin market lives in your DSH sidebar: **up and running in 3 minutes, and 
 
 ## Features
 
-- **Continuous collection** — scans `dsh-plugin` / `dsh` GitHub topics and curated community lists every day, collecting everything (currently 1928)
+- **Continuous collection** — scans `dsh-plugin` / `dsh` GitHub topics and curated community lists every day, collecting everything (currently 1928 plugins + packs channel)
 - **Practical 5-dimension scoring** — maintenance activity / usefulness / ecosystem heat / convenience / signal quality, fused with a weighted geometric mean; every plugin comes with a "why recommended" explanation
 - **Chinese experience** — auto-generated Chinese summaries and feature tags; Chinese search & filters
 - **One-click install** — deterministic routing in the plugin edition: `git clone` for skill plugins, `dsh plugin add` for cordis plugins; retry & rollback on failure
 - **AI install** — hand it to a DSH subagent that reads the README, verifies, then installs; asks you first when configuration is needed
 - **Recommendation system** — cold-start quiz / beginner-friendly / for-you (profile-based) / scene recommendations (reads the current session context; see [DSH Plugin Edition](#dsh-plugin-edition))
+- **Pack ecosystem** — Web "Packs" section + plugin packs tab (browse / entry resolvability checks / install entry); backed by the `dsh.pack.json` pack protocol (see [dsh-bundler](https://github.com/2BingLing/dsh-bundler))
 - **Zero-token resident** — the plugin runs purely passively; no panel open, no resources consumed
 
 ## Usage
@@ -220,17 +221,6 @@ Submit issue → next day 06:00 the pipeline extracts the repo → plugin detect
   [![Listed](assets/readme/badge-listed-en.svg)](https://dsh.market/) [![Top Rated](assets/readme/badge-top-rated.svg)](https://dsh.market/)
 
   Usage: [PLUGIN-BADGE.md](./PLUGIN-BADGE.md) (Top Rated requires a practical score ≥ 80)
-
-## Roadmap
-
-- [x] M1 Data pipeline (collection / 5-dimension scoring / caching)
-- [x] M2 Web site (home / detail / favorites / scoring guide)
-- [x] M3 i18n (DeepSeek batch Chinese summaries & tags)
-- [x] Discovery system (sections / quiz / tag panel / multi-dimension filters)
-- [x] M5 Deployment (Pages + daily auto-collection)
-- [x] M4 DSH plugin edition (cordis sidebar + one-click install)
-- [ ] Semantic search (LLM pick & rerank, 60 candidates → top 20, token-saving design)
-- [ ] Domestic mirrors (Vercel / Gitee Pages)
 
 ## License
 

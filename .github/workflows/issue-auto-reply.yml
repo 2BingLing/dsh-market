@@ -10,15 +10,25 @@ permissions:
 jobs:
   reply:
     runs-on: ubuntu-latest
-    if: contains(github.event.issue.title, '[提交插件]') || contains(github.event.issue.labels.*.name, 'submission')
+    if: contains(github.event.issue.title, '[提交插件]') || contains(github.event.issue.title, '[提交整合包]') || contains(github.event.issue.labels.*.name, 'submission')
     steps:
       - name: 提交时即时回复
         uses: actions/github-script@v7
         with:
           script: |
             const issue = context.payload.issue;
+            const isPack = issue.title.includes('[提交整合包]');
             const repoUrl = (issue.body || '').match(/https:\/\/github\.com\/[\w.-]+\/[\w.-]+/)?.[0] ?? '（未填写）';
-            const body = [
+            const body = isPack ? [
+              `> ⚙️ **自动回复** · DSH Market Bot`,
+              ``,
+              `📦 已收到你的整合包提交！`,
+              ``,
+              `- **提交内容**：${repoUrl}`,
+              `- **处理流程**：整合包采用人工审核制——维护者会验证仓库里的整合包清单（\`dsh.pack.json\` / \`pack.json\`，或「包含哪些插件 + 怎么安装」的说明），审核通过后收录进整合包分区并回复本 issue。`,
+              ``,
+              `> 💡 提示：仓库根目录放 \`dsh.pack.json\`（协议格式见 dsh-bundler）会显著加快审核；若清单里列出插件地址，收录后会自动校验每个条目的可解析性与市场收录状态。`,
+            ].join('\n') : [
               `> ⚙️ **自动回复** · DSH Market Bot`,
               ``,
               `📥 已收到你的插件提交！`,

@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-16T10:14:25.667Z",
+  "packs": [
+    {
+      "id": "mengyaoi/dsh-mcp-pack",
+      "name": "示例 · dsh-mcp-pack",
+      "description": "# dsh-mcp-pack\n\n> 把常用 MCP server 一键接入 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)(`dsh`)的现成 `.cordis.yml` 插件清单合集。\n\n[English](README.en.md) | 中文\n\n## 这是什么\n\nDeepSeek Harness 底层是 C",
+      "descriptionZh": null,
+      "author": "mengyaoi",
+      "schemaVersion": 1,
+      "kind": "loose-pack",
+      "entries": [
+        {
+          "id": "deepseek-ai/deepseek-harness",
+          "type": "skill",
+          "version": "latest",
+          "resolved": {
+            "ok": true,
+            "inMarket": false
+          }
+        },
+        {
+          "id": "topics/dsh-plugin",
+          "type": "skill",
+          "version": "latest",
+          "resolved": {
+            "ok": false,
+            "inMarket": false,
+            "reason": "GitHub 仓库不存在"
+          }
+        }
+      ],
+      "entryStats": {
+        "total": 2,
+        "ok": 1,
+        "failed": 1,
+        "inMarket": 0
+      },
+      "tags": [
+        "deepseek",
+        "deepseek-v4-pro",
+        "dsh-plugin",
+        "mcp",
+        "整合包",
+        "skill 包"
+      ],
+      "stars": 1,
+      "curated": false,
+      "homepage": "",
+      "license": "MIT",
+      "pushedAt": "2026-08-14T08:21:00Z",
+      "createdAt": "2026-08-14T07:39:13Z",
+      "updatedAt": "2026-08-14T08:21:27Z",
+      "readmeSummary": "# dsh-mcp-pack > 把常用 MCP server 一键接入 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)(`dsh`)的现成 `.cordis.yml` 插件清单合集。 [English](README.en.md) | 中文 ## 这是什么 DeepSeek Harness 底层是 Cordis 插件框架——**接一个 MCP server 只需要几行 YAML**。 本仓库为最常见的 MCP server 准备好了开箱即用的配置片段:让 agent 直接读文件、抓网页、查数据库、操作 GitHub…… > ⚠️ DeepSeek Harness 处于 **开发者预览** 阶段,未来可能有破坏性变更。本仓库清单格式以 2026-08 官方示例(`examples/mcp-memory`)为准。…",
+      "score": {
+        "total": 55,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 8,
+          "ease": 80,
+          "signal": 85
+        },
+        "confidence": 1,
+        "explanation": "包内含 2 个条目，1 个可解析（50%），0 个已在市场收录；近 2 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "manual"
+      ],
+      "lastCheckedAt": "2026-08-16T10:14:25.667Z"
+    },
+    {
+      "id": "Dariandai/dsh-starter-pack",
+      "name": "示例 · dsh-starter-pack",
+      "description": "# dsh-starter-pack\n\nOne-click curated plugin starter pack for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (`dsh`). Install this one plugin, and it installs and configures a bat",
+      "descriptionZh": null,
+      "author": "Dariandai",
+      "schemaVersion": 1,
+      "kind": "loose-pack",
+      "entries": [
+        {
+          "id": "deepseek-ai/deepseek-harness",
+          "type": "skill",
+          "version": "latest",
+          "resolved": {
+            "ok": true,
+            "inMarket": false
+          }
+        }
+      ],
+      "entryStats": {
+        "total": 1,
+        "ok": 1,
+        "failed": 0,
+        "inMarket": 0
+      },
+      "tags": [
+        "dsh-plugin",
+        "整合包",
+        "skill 包"
+      ],
+      "stars": 2,
+      "curated": false,
+      "homepage": null,
+      "license": "MIT",
+      "pushedAt": "2026-08-15T09:04:40Z",
+      "createdAt": "2026-07-25T04:31:21Z",
+      "updatedAt": "2026-08-16T08:36:32Z",
+      "readmeSummary": "# dsh-starter-pack One-click curated plugin starter pack for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (`dsh`). Install this one plugin, and it installs and configures a batch of the most useful community plugins for you. > 中文说明见 [README.zh.md](README.zh.md)。 ## Why New DSH users face 400+ community plugins and no idea which to install. `dsh-starter-pack` is the \"essentials bundle\":…",
+      "score": {
+        "total": 44,
+        "breakdown": {
+          "maintain": 100,
+          "practical": 80,
+          "popularity": 13,
+          "ease": 80,
+          "signal": 70
+        },
+        "confidence": 0.75,
+        "explanation": "包内含 1 个条目，1 个可解析（100%），0 个已在市场收录；近 1 天仍在更新，DSH 迭代快也不怕坏；README 含完整安装与使用说明，上手即用；无需额外配置即可安装，开箱即用。"
+      },
+      "sources": [
+        "manual"
+      ],
+      "lastCheckedAt": "2026-08-16T10:14:25.372Z"
+    }
+  ]
+}

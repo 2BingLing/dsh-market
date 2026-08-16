@@ -15,7 +15,7 @@ const MARKET_REPO = "2BingLing/dsh-market";
 const TOKEN = process.env.GITHUB_TOKEN ?? "";
 
 function buildReply(r) {
-  const listedUrl = `https://2bingling.github.io/dsh-market/?q=${encodeURIComponent(r.fullName)}`;
+  const listedUrl = `https://dsh.market/?q=${encodeURIComponent(r.fullName)}`;
   const badgeDoc = "https://github.com/2BingLing/dsh-market/blob/master/PLUGIN-BADGE.md";
   // 附徽章实物图：评分 ≥80 展示金色 Top Rated 档，否则蓝色已收录档（不说分数，只展示档位）
   const badgeImg =
@@ -27,7 +27,7 @@ function buildReply(r) {
     ``,
     `✅ **已收录** \`${r.fullName}\`（${r.type === "skill" ? "skill" : "cordis 插件"}）`,
     ``,
-    `- 数据已进入市场，**次日 06:00 更新**后可在 [DSH Market](https://2bingling.github.io/dsh-market/) 搜索到（${listedUrl}）。`,
+    `- 数据已进入市场，**次日 06:00 更新**后可在 [DSH Market](https://dsh.market/) 搜索到（${listedUrl}）。`,
     `- 你的仓库本身无需任何改动；如果还没有打 \`dsh-plugin\` topic，建议打上，便于持续被发现。`,
     `- 可选：把下面这枚 DSH Market 收录徽章挂到插件 README 顶部，让用户一眼认出：`,
     ``,

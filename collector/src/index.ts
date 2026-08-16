@@ -9,7 +9,7 @@
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { DshPlugin, MarketData } from "@dsh-market/schema";
+import type { DshPlugin, DshPack, MarketData } from "@dsh-market/schema";
 import "./env.js"; // 加载仓库根 .env（GITHUB_TOKEN）
 import {
   githubFetch,
@@ -20,7 +20,7 @@ import {
 } from "./github.js";
 import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
-import { fetchSubmissionRepos } from "./sources/issues.js";
+import { fetchSubmissionRepos, fetchPackSubmissionRepos } from "./sources/issues.js";
 import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectSubdirBundle } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
@@ -28,6 +28,8 @@ import { runPool } from "./pool.js";
 import { translateWithDeepSeek } from "./llm.js";
 import { parseInstallCommands } from "./install-parse.js";
 import { normalizeTags } from "./tag-normalize.js";
+import { summarizeReadme } from "./summary.js";
+import { collectPacks } from "./packs.js";
 
 /** 检测结果缓存（增量核心：repo 未变化时复用，跳过重复检测网络调用） */
 interface DetectCache {
@@ -88,21 +90,6 @@ function loadPreviousZh(): Map<string, { descriptionZh: string | null; tagsZh: s
   } catch {
     return new Map();
   }
-}
-
-/** 智能摘要：在句子边界截断，不切断句子，截断处加省略号 */
-export function summarizeReadme(text: string, maxLen = 420): string {
-  const clean = text.replace(/\s+/g, " ").trim();
-  if (clean.length <= maxLen) return clean;
-  const cut = clean.slice(0, maxLen);
-  const boundary = Math.max(
-    cut.lastIndexOf("。"), cut.lastIndexOf("！"), cut.lastIndexOf("？"),
-    cut.lastIndexOf("；"), cut.lastIndexOf(". "), cut.lastIndexOf("! "),
-    cut.lastIndexOf("? "), cut.lastIndexOf("; "), cut.lastIndexOf("："),
-    cut.lastIndexOf(": ")
-  );
-  const end = boundary > maxLen * 0.45 ? boundary + 1 : maxLen;
-  return clean.slice(0, end) + "…";
 }
 
 async function main() {
@@ -530,14 +517,88 @@ async function main() {
     console.log("  跳过（无 API key）");
   }
 
+  console.log("[3.7/5] 整合包收集...");
+  // 产品决策（2026-08-16）：生态尚无标准协议与工具，自动扫描暂缓。
+  // 基础设施（schema v2 / Web 分区 / 插件端 Tab / 提交 issue 通道）已就绪，
+  // 设环境变量 DSH_PACK_SCAN=1 启用扫描（协议 dsh.pack.json 与 dsh-bundler 落地后默认开启）。
+  const packs: DshPack[] =
+    process.env.DSH_PACK_SCAN === "1"
+      ? await (async () => {
+          const packIssueRepos = await fetchPackSubmissionRepos();
+          return collectPacks(
+            detected.map((d) => ({ id: d.plugin.id, fullName: d.plugin.fullName })),
+            p99,
+            [...packIssueRepos.keys()]
+          );
+        })()
+      : [];
+  if (process.env.DSH_PACK_SCAN === "1") {
+    console.log(`  整合包扫描已启用：${packs.length} 个`);
+  } else {
+    console.log("  整合包扫描暂缓（设 DSH_PACK_SCAN=1 启用；收到人工提交时见 data/packs.json 手工通道）");
+  }
+  // 整合包中文化（增量：复用上次结果，packs 少直接顺序翻译）
+  if (apiKey && packs.length > 0) {
+    let prevPacks: DshPack[] = [];
+    try {
+      prevPacks = JSON.parse(readFileSync(join(DATA_DIR, "packs.json"), "utf-8")).packs ?? [];
+    } catch {
+      prevPacks = [];
+    }
+    const prevZh = new Map(prevPacks.map((p) => [p.id, p.descriptionZh]));
+    const knownPackTags = [
+      ...new Set(packs.flatMap((p) => p.tags.filter((t) => /[\u4e00-\u9fff]/.test(t)))),
+    ].slice(0, 30);
+    let translated = 0;
+    for (const pack of packs) {
+      const prev = prevZh.get(pack.id);
+      if (prev) {
+        pack.descriptionZh = prev;
+        continue;
+      }
+      const result = await translateWithDeepSeek(
+        {
+          name: pack.name,
+          description: pack.description,
+          readmeSummary: pack.readmeSummary,
+          topics: pack.tags,
+          knownTags: knownPackTags,
+        },
+        { apiKey, baseURL, model }
+      );
+      if (result) {
+        pack.descriptionZh = result.descriptionZh;
+        for (const t of result.tagsZh) {
+          if (!pack.tags.includes(t)) pack.tags.push(t);
+        }
+        translated++;
+        console.log(`    ✓ pack ${pack.id} -> ${result.descriptionZh.slice(0, 40)}`);
+      }
+    }
+    console.log(`  packs translated: ${translated}`);
+  }
+
   console.log("[4/5] 生成数据文件...");
   const market: MarketData = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     generatedAt: new Date().toISOString(),
     plugins: detected.map((d) => d.plugin),
+    packs,
   };
   mkdirSync(DATA_DIR, { recursive: true });
   writeFileSync(join(DATA_DIR, "plugins.json"), JSON.stringify(market, null, 2), "utf-8");
+  // 独立 packs 数据文件（Web 单独加载，schemaVersion 1）：
+  // 扫描关闭时不覆盖——data/packs.json 由人工通道（scripts/pack-add.ts）维护，
+  // 每日管道只负责把已提交的文件同步到 web/public 并部署。
+  if (process.env.DSH_PACK_SCAN === "1") {
+    writeFileSync(
+      join(DATA_DIR, "packs.json"),
+      JSON.stringify({ schemaVersion: 1, generatedAt: market.generatedAt, packs }, null, 2),
+      "utf-8"
+    );
+  } else {
+    console.log("  保留人工 data/packs.json（扫描关闭，不覆盖人工收录的整合包）");
+  }
   writeFileSync(
     join(DATA_DIR, "report.json"),
     JSON.stringify(
@@ -554,6 +615,13 @@ async function main() {
             return acc;
           }, {})
         ),
+        packs: packs.map((p) => ({
+          id: p.id,
+          entries: p.entryStats.total,
+          ok: p.entryStats.ok,
+          inMarket: p.entryStats.inMarket,
+          score: p.score.total,
+        })),
         p99Stars: p99,
         top10: [...market.plugins]
           .sort((a, b) => b.score.total - a.score.total)

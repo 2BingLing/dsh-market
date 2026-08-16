@@ -7,6 +7,7 @@ import type { ReactNode } from 'react'
 import {
   api,
   type InstalledItem,
+  type LitePack,
   type LitePlugin,
   type Recommendation,
   type SelfUpdateInfo,
@@ -98,7 +99,7 @@ function El(tag: string | ((props: any) => ReactNode), props: Record<string, unk
 // ---------- Toast（B 稿底部黑底白字，DOM 直挂不受 React 树影响） ----------
 
 let toastTimer: ReturnType<typeof setTimeout> | null = null
-function toast(msg: string): void {
+function toast(msg: string, duration = 2200): void {
   if (typeof document === 'undefined') return
   document.querySelectorAll('[data-dshm-toast]').forEach((n) => n.remove())
   if (toastTimer) clearTimeout(toastTimer)
@@ -107,7 +108,7 @@ function toast(msg: string): void {
   el.className = styles.toast
   el.textContent = msg
   document.body.appendChild(el)
-  toastTimer = setTimeout(() => el.remove(), 2200)
+  toastTimer = setTimeout(() => el.remove(), duration)
 }
 
 // ---------- 线性 SVG 图标（B 方向：1.5px 描边，与 DSH 语言一致，禁 emoji） ----------
@@ -767,10 +768,15 @@ function InstalledTab(props: {
     if (!item.pluginId) return
     setBusy(true)
     try {
-      await api('uninstall', { pluginId: item.pluginId })
+      const r = await api<{ ok: boolean; error?: string }>('uninstall', { pluginId: item.pluginId })
+      if (!r.ok) {
+        toast(`卸载失败：${r.error ?? '未知错误'}`, 3500)
+        return
+      }
       onChanged()
+      toast(item.source === 'profile' ? '卸载完成，重启 harness 后生效' : '卸载完成')
     } catch (e) {
-      alert(`卸载失败：${(e as Error).message}`)
+      toast(`卸载失败：${(e as Error).message}`, 3500)
     } finally {
       setBusy(false)
       setConfirming(null)
@@ -798,19 +804,23 @@ function InstalledTab(props: {
     if (!item.pluginId || updating) return
     setUpdating(item.localName)
     try {
-      const r = await api<{ requiresRestart?: boolean }>('install', {
+      const r = await api<{ ok: boolean; error?: string; requiresRestart?: boolean }>('install', {
         pluginId: item.pluginId,
         force: true,
       })
+      if (!r.ok) {
+        toast(`更新失败：${r.error ?? '未知错误'}`, 3500)
+        return
+      }
       onChanged() // 重扫已装（版本/目录变化）
       setUpdateMap((m) => {
         const next = { ...m }
         delete next[item.localName] // 清掉旧结果，避免显示过期版本
         return next
       })
-      alert(r.requiresRestart ? '更新完成，重启 harness 后生效' : '更新完成')
+      toast(r.requiresRestart ? '更新完成，重启 harness 后生效' : '更新完成')
     } catch (e) {
-      alert(`更新失败：${(e as Error).message}`)
+      toast(`更新失败：${(e as Error).message}`, 3500)
     } finally {
       setUpdating(null)
     }
@@ -1220,6 +1230,96 @@ function SettingsTab(props: {
   )
 }
 
+// ---------- 整合包 Tab ----------
+function PacksTab(props: {
+  packs: LitePack[]
+  onInstallPack: (pack: LitePack) => void
+}) {
+  const { packs } = props
+  const [query, setQuery] = useState('')
+  const [expanded, setExpanded] = useState<string | null>(null)
+  const ql = query.trim().toLowerCase()
+
+  const visible = [...packs]
+    .sort((a, b) => b.scoreTotal - a.scoreTotal)
+    .filter((p) =>
+      !ql ||
+      p.name.toLowerCase().includes(ql) ||
+      (p.descriptionZh ?? '').toLowerCase().includes(ql) ||
+      p.author.toLowerCase().includes(ql) ||
+      p.tags.some((t) => t.toLowerCase().includes(ql)),
+    )
+
+  return El('div', { className: styles.tabBody },
+    El('div', { className: styles.searchWrap },
+      El('span', { className: styles.searchWrapIcon }, El(Icon, { d: ICON_SEARCH, size: 15 })),
+      El('input', {
+        className: styles.searchInput,
+        placeholder: '搜索整合包：翻译 / 安全 / MCP / 环境…',
+        value: query,
+        onChange: (e: { target: { value: string } }) => setQuery(e.target.value),
+      }),
+      query.length > 0
+        ? El('button', { className: styles.searchClear, 'aria-label': '清除', onClick: () => setQuery('') },
+            El(Icon, { d: ICON_CLOSE, size: 13 }))
+        : null,
+    ),
+    packs.length === 0
+      ? El('div', { className: styles.emptyState },
+          '整合包正式协议开发中，暂未开放收录——敬请期待。',
+        )
+      : visible.length === 0
+        ? El('div', { className: styles.emptyState }, '没有匹配的整合包，换个关键词试试。')
+        : El('div', { className: styles.list, style: { display: 'flex', flexDirection: 'column', gap: 10 } },
+            ...visible.map((p) => {
+              const { total, ok, inMarket } = p.entryStats
+              const rate = total > 0 ? Math.round((ok / total) * 100) : 0
+              const open = expanded === p.id
+              return El('div', { key: p.id, className: styles.card },
+                El('div', { className: styles.cardTop },
+                  El('span', { className: styles.cardStars, style: { background: '#F3EFFF', color: '#7C3AED', borderRadius: 6, padding: '2px 8px', fontSize: 10 } }, 'PACK'),
+                  El('span', { className: styles.cardStars }, `★ ${fmtStars(p.stars)}`),
+                ),
+                El('div', { className: styles.cardName }, p.name),
+                El('div', { className: styles.cardDesc }, p.descriptionZh ?? '（无简介）'),
+                El('div', { style: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: rate >= 80 ? '#1E7A46' : rate >= 50 ? '#B26A00' : '#B33A3A', padding: '4px 8px', borderRadius: 6, background: '#F6F8FB', marginBottom: 8 } },
+                  `✓ ${ok}/${total} 条目可解析 · ${inMarket} 已在市场`,
+                  El('b', {}, `${rate}%`),
+                ),
+                El('div', { className: styles.cardActions },
+                  El('span', { style: { fontSize: 12, fontWeight: 600, color: '#7C3AED' } }, `${p.scoreTotal} 实用分`),
+                  El('button', {
+                    className: `${styles.btn} ${styles.btnSm} ${styles.btnGhost}`,
+                    onClick: () => setExpanded(open ? null : p.id),
+                  }, open ? '收起条目' : '查看条目'),
+                ),
+                open
+                  ? El('div', { style: { display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8, paddingTop: 8, borderTop: '1px solid #EEF2F7' } },
+                      ...p.entries.map((e, i) =>
+                        El('div', {
+                          key: `${e.id}-${i}`,
+                          style: {
+                            display: 'flex', alignItems: 'center', gap: 8, fontSize: 11,
+                            color: e.resolved?.ok ? 'inherit' : '#B33A3A', padding: '3px 0',
+                          },
+                        },
+                          El('span', {}, e.resolved?.ok ? '✓' : '✗'),
+                          El('code', { style: { fontSize: 10.5 } }, e.id),
+                          El('span', { style: { fontSize: 10, color: '#8CA3BB' } }, e.type),
+                          El('span', { style: { marginLeft: 'auto', fontSize: 10, color: '#8CA3BB' } },
+                            e.resolved?.ok
+                              ? (e.resolved.inMarket ? '已在市场' : '可安装')
+                              : (e.resolved?.reason ?? '解析失败')),
+                        ),
+                      ),
+                    )
+                  : null,
+              )
+            }),
+          ),
+  )
+}
+
 // ---------- 收藏 Tab ----------
 
 function FavoritesTab(props: {
@@ -1264,10 +1364,11 @@ function FavoritesTab(props: {
 export function MarketPanel(props: { onClose: () => void }): ReactNode {
   const { onClose } = props
   const open = useSyncExternalStore(subscribe, getOpen, getOpen)
-  const [tab, setTab] = useState<'recommend' | 'search' | 'favorites' | 'installed' | 'settings'>('recommend')
+  const [tab, setTab] = useState<'recommend' | 'search' | 'packs' | 'favorites' | 'installed' | 'settings'>('recommend')
   const [plugins, setPlugins] = useState<LitePlugin[]>([])
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [installed, setInstalled] = useState<InstalledItem[]>([])
+  const [packs, setPacks] = useState<LitePack[]>([])
   const [recs, setRecs] = useState<Recommendation[]>([])
   const [loading, setLoading] = useState(false)
   const [installTarget, setInstallTarget] = useState<LitePlugin | null>(null)
@@ -1286,14 +1387,16 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
   const loadAll = async () => {
     setLoading(true)
     try {
-      const [pl, prof, inst] = await Promise.all([
+      const [pl, prof, inst, pk] = await Promise.all([
         api<LitePlugin[]>('plugins'),
         api<UserProfile | null>('profile:read'),
         api<InstalledItem[]>('installed'),
+        api<LitePack[]>('packs').catch(() => [] as LitePack[]),
       ])
       setPlugins(pl)
       setProfile(prof)
       setInstalled(inst)
+      setPacks(pk)
       // 场景推荐改为手动触发（读会话有成本），默认用已装插件标签近似兜底
       const counts = new Map<string, number>()
       for (const i of inst) {
@@ -1337,12 +1440,12 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
       if (r.applied) {
         setSelfUpdate(null)
         setSelfDismissed(true)
-        alert(`插件更新完成（${r.latest}），请重启 harness 生效`)
+        toast(`插件更新完成（${r.latest}），重启 harness 后生效`)
       } else {
-        alert(`更新失败：${r.applyOutput ?? '未知错误'}`)
+        toast(`更新失败：${r.applyOutput ?? '未知错误'}。若提示文件被占用，需先停止 harness 后重试`, 5000)
       }
     } catch (e) {
-      alert(`更新失败：${(e as Error).message}`)
+      toast(`更新失败：${(e as Error).message}。若提示文件被占用，需先停止 harness 后重试`, 5000)
     } finally {
       setSelfUpdating(false)
     }
@@ -1396,6 +1499,7 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
   const tabs: Array<{ id: typeof tab; label: string }> = [
     { id: 'recommend', label: '推荐' },
     { id: 'search', label: '搜索' },
+    { id: 'packs', label: '整合包' },
     { id: 'favorites', label: '收藏' },
     { id: 'installed', label: '已装' },
     { id: 'settings', label: '设置' },
@@ -1461,7 +1565,15 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
             })
           : tab === 'search'
             ? El(SearchTab, { plugins, onInstall: setInstallTarget, onTagClick })
-            : tab === 'favorites'
+            : tab === 'packs'
+              ? El(PacksTab, {
+                  packs,
+                  onInstallPack: (pack: LitePack) => {
+                    // v0.1：打开整合包仓库页，由包作者提供安装方式
+                    window.open(`https://github.com/${pack.id}`, '_blank')
+                  },
+                })
+              : tab === 'favorites'
               ? El(FavoritesTab, {
                   plugins,
                   onInstall: setInstallTarget,

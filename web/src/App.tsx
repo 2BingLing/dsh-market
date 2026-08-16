@@ -5,8 +5,10 @@
  */
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Fuse from "fuse.js";
-import type { DshPlugin, MarketData } from "@dsh-market/schema";
+import type { DshPlugin, DshPack, MarketData } from "@dsh-market/schema";
 import PluginCard from "./components/PluginCard";
+import PackCard from "./components/PackCard";
+import PackDetailView from "./components/PackDetailView";
 import DetailView from "./components/DetailView";
 import ScoringGuide from "./components/ScoringGuide";
 import QuizView from "./components/QuizView";
@@ -16,8 +18,8 @@ import Logo from "./components/Logo";
 import { matchesTags } from "./lib/tags";
 
 type SortKey = "score" | "stars" | "newest";
-type View = "home" | "detail" | "guide" | "quiz";
-type NavKey = "market" | "favorites";
+type View = "home" | "detail" | "guide" | "quiz" | "packDetail";
+type NavKey = "market" | "favorites" | "packs";
 type SectionKey = "all" | "elite" | "friendly" | "fresh";
 
 const SORT_LABEL: Record<SortKey, string> = { score: "实用分", stars: "热度", newest: "最新" };
@@ -42,14 +44,17 @@ function loadFavorites(): string[] {
 
 export default function App() {
   const [plugins, setPlugins] = useState<DshPlugin[]>([]);
+  const [packs, setPacks] = useState<DshPack[]>([]);
   const [loading, setLoading] = useState(true);
   const [generatedAt, setGeneratedAt] = useState<string>("");
   const [query, setQuery] = useState("");
+  const [packQuery, setPackQuery] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [sort, setSort] = useState<SortKey>("score");
   const [nav, setNav] = useState<NavKey>("market");
   const [view, setView] = useState<View>("home");
   const [selected, setSelected] = useState<DshPlugin | null>(null);
+  const [selectedPack, setSelectedPack] = useState<DshPack | null>(null);
   const [favorites, setFavorites] = useState<string[]>(loadFavorites);
   // 分区（小按钮 Tab）
   const [section, setSection] = useState<SectionKey>("all");
@@ -70,6 +75,13 @@ export default function App() {
       })
       .catch((e) => console.error("加载插件数据失败:", e))
       .finally(() => setLoading(false));
+    // 整合包通道（独立文件；缺失时静默降级为空）
+    fetch(`${import.meta.env.BASE_URL}packs.json`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: { packs?: DshPack[] } | null) => {
+        setPacks(data?.packs ?? []);
+      })
+      .catch(() => setPacks([]));
   }, []);
 
   const toggleFavorite = useCallback((id: string) => {
@@ -86,9 +98,16 @@ export default function App() {
     window.scrollTo({ top: 0 });
   }, []);
 
+  const openPackDetail = useCallback((p: DshPack) => {
+    setSelectedPack(p);
+    setView("packDetail");
+    window.scrollTo({ top: 0 });
+  }, []);
+
   const backHome = useCallback(() => {
     setView("home");
     setSelected(null);
+    setSelectedPack(null);
   }, []);
 
   const openGuide = useCallback(() => {
@@ -206,6 +225,7 @@ export default function App() {
     setNav(key);
     setView("home");
     setQuery("");
+    setPackQuery("");
     setTags([]);
     window.scrollTo({ top: 0 });
   }, []);
@@ -228,7 +248,8 @@ export default function App() {
         </a>
         <nav className="nav-links">
           <a onClick={() => gotoNav("market")} className={active === "market" ? "on" : ""}>市场</a>
-          <a onClick={() => gotoNav("favorites")} className={active === "favorites" ? "on" : ""}>收藏{favorites.length > 0 ? ` (${favorites.length})` : ""}</a>
+          <a onClick={() => gotoNav("packs")} className={active === "packs" ? "on" : ""}>整合包</a>
+          <a onClick={() => gotoNav("favorites")} className={active === "favorites" ? "on" : ""}>收藏</a>
           <a onClick={openGuide} className={active === "guide" ? "on" : ""}>评分体系</a>
           <a className="gh-link" href="https://github.com/2BingLing/dsh-market" target="_blank" rel="noreferrer" title="GitHub 仓库">
             <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -240,7 +261,7 @@ export default function App() {
       </header>
       {children}
       <footer className="footer">
-        <span>DSH Market · 已收录 {plugins.length} 个插件 · 数据更新于 {generatedAt ? generatedAt.slice(0, 10) : "—"}</span>
+        <span>DSH Market · 已收录 {plugins.length} 个插件 · {packs.length} 个整合包 · 数据更新于 {generatedAt ? generatedAt.slice(0, 10) : "—"}</span>
         <span>
           <a href="https://github.com/2BingLing/dsh-market" target="_blank" rel="noreferrer">GitHub</a>
           {" · "}
@@ -263,6 +284,10 @@ export default function App() {
     ));
   }
 
+  if (view === "packDetail" && selectedPack) {
+    return shell("packs", <PackDetailView pack={selectedPack} onBack={backHome} />);
+  }
+
   if (view === "guide") {
     return shell("guide", <ScoringGuide plugins={plugins} onBack={backHome} />);
   }
@@ -276,6 +301,86 @@ export default function App() {
         onOpen={openDetail}
         onBack={backHome}
       />
+    ));
+  }
+
+  if (nav === "packs") {
+    const ql = packQuery.trim().toLowerCase();
+    const visiblePacks = [...packs]
+      .sort((a, b) => b.score.total - a.score.total)
+      .filter(
+        (p) =>
+          !ql ||
+          p.name.toLowerCase().includes(ql) ||
+          (p.descriptionZh ?? "").toLowerCase().includes(ql) ||
+          (p.description ?? "").toLowerCase().includes(ql) ||
+          p.tags.some((t) => t.toLowerCase().includes(ql)) ||
+          p.author.toLowerCase().includes(ql)
+      );
+    return shell("packs", (
+      <>
+        <section className="hero hero-packs">
+          <div>
+            <span className="hero-eyebrow">插件 · 技能 · 整合包</span>
+            <h1>
+              一个文件，装好
+              <br />
+              <strong>一个 Agent 环境</strong>
+            </h1>
+            <p className="lead">
+              整合包是把一组插件/技能 + 版本策略打包的「开箱即用环境」——当前收录 {packs.length} 个，每日自动校验包内条目的可解析性与市场收录状态。
+            </p>
+            <div className="hero-actions">
+              <a className="btn btn-primary" href="#pack-list">浏览整合包</a>
+              <a
+                className="btn btn-ghost"
+                href="https://github.com/2BingLing/dsh-market/issues/new?template=submit_pack.md"
+                target="_blank"
+                rel="noreferrer"
+              >
+                提交你的整合包
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <div className="search-zone" id="pack-list">
+          <form className="search-row" onSubmit={(e) => e.preventDefault()}>
+            <div className="search-box">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#8CA3BB" strokeWidth="1.5">
+                <circle cx="7" cy="7" r="5" />
+                <path d="M11 11l3.5 3.5" />
+              </svg>
+              <input
+                type="text"
+                value={packQuery}
+                onChange={(e) => setPackQuery(e.target.value)}
+                placeholder="搜索整合包：翻译 / 安全 / MCP / 环境…"
+              />
+            </div>
+            <button className="search-btn" type="submit">搜索</button>
+          </form>
+        </div>
+
+        {visiblePacks.length === 0 ? (
+          <div className="state-hint">
+            {packs.length === 0
+              ? "整合包正式协议开发中，暂未开放收录——敬请期待"
+              : "暂无符合条件的整合包，换个关键词试试"}
+          </div>
+        ) : (
+          <>
+            <div className="grid">
+              {visiblePacks.map((p) => (
+                <PackCard key={p.id} pack={p} onOpen={openPackDetail} />
+              ))}
+            </div>
+            <div className="pagination" style={{ justifyContent: "center" }}>
+              <span className="page-info">共 {visiblePacks.length} 个整合包</span>
+            </div>
+          </>
+        )}
+      </>
     ));
   }
 

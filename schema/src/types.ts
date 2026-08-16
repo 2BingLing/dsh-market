@@ -85,8 +85,68 @@ export interface DshPlugin {
   lastCheckedAt: string;
 }
 
+/** 整合包条目类型（协议 v0.1 语义：skill/cordis/bundle/pack） */
+export type PackEntryType = "skill" | "cordis" | "bundle" | "pack";
+
+/** 整合包条目（包内一个插件/技能/子包） */
+export interface PackEntry {
+  /** owner/repo | npm 包名 | bundle id */
+  id: string;
+  type: PackEntryType;
+  /** latest / semver 范围 / 日期锚点 / commit（协议 v0.1） */
+  version: string;
+  /** 条目解析状态（市场侧每日校验产物） */
+  resolved?: {
+    ok: boolean;
+    /** 是否已在 plugins.json 收录 */
+    inMarket: boolean;
+    /** 命中市场里的插件 id */
+    matchId?: string;
+    reason?: string;
+  };
+}
+
+/** 整合包（市场收录视图） */
+export interface DshPack {
+  /** 唯一标识 owner/repo */
+  id: string;
+  name: string;
+  description: string;
+  descriptionZh: string | null;
+  /** GitHub 语义作者 */
+  author: string;
+  /** 协议版本（校验用） */
+  schemaVersion: number;
+  /** 包形态：dsh-pack（协议清单）/ loose-pack（README 信号，宽松收录）/ 协议自定义值 */
+  kind: string;
+  entries: PackEntry[];
+  entryStats: {
+    total: number;
+    ok: number;
+    failed: number;
+    inMarket: number;
+  };
+  tags: string[];
+  stars: number;
+  curated: boolean;
+  curatedReason?: string;
+  homepage: string | null;
+  license: string | null;
+  pushedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  readmeSummary: string | null;
+  /** 实用五维评分（包维度输入） */
+  score: PracticalScore;
+  /** 数据源（pack-search / pack-known / user-submit） */
+  sources: string[];
+  lastCheckedAt: string;
+}
+
 export interface MarketData {
   schemaVersion: number;
   generatedAt: string;
   plugins: DshPlugin[];
+  /** 整合包通道（v2 新增；旧数据缺省为空数组） */
+  packs?: DshPack[];
 }

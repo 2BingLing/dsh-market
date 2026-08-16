@@ -2,7 +2,7 @@
   "name": "dsh-market",
   "version": "0.1.0",
   "private": true,
-  "description": "DSH Market —— DeepSeek Harness 插件市场：持续收录 / 搜索 / 实用五维评分 / 个性化推荐 / 一键安装",
+  "description": "DSH Market —— DeepSeek Harness 生态内容市场（插件 · 技能 · 整合包）：持续收录 / 搜索 / 实用五维评分 / 个性化推荐 / 一键安装",
   "workspaces": [
     "schema",
     "collector",

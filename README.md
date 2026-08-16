@@ -26,13 +26,13 @@
   <img src="./assets/readme/section-forms.svg" width="100%" alt="两种形态横幅：Web 版与插件版两个 Logo 通过同一份 plugins.json 数据相连">
 </p>
 
-DSH 生态增长极快，插件散落在 GitHub 各处 —— **不知道哪个好用、怎么装**。DSH Market 用一个平台收齐它们，并提供两种消费入口：
+DSH 生态增长极快，插件与技能散落在 GitHub 各处 —— **不知道哪个好用、怎么装、怎么组合成一套能干活的环境**。DSH Market 用一个平台收齐它们，并提供两种消费入口：
 
 | | <img src="./assets/readme/logo-web.svg" width="26" alt="Web 版 Logo"> **Web 版**（已上线） | <img src="./assets/readme/logo-plugin.svg" width="26" alt="插件版 Logo"> **DSH 插件版**（开发完成） |
 |---|---|---|
 | **位置** | 浏览器 · GitHub Pages 纯静态站 | DSH 侧边栏 · cordis 插件 |
 | **定位** | 发现与评估 | 安装与管理 |
-| **核心能力** | 中文搜索 · 五维评分雷达图 · 精选/最新分区 · 冷启动问卷 · 详情页安装命令 | 5-Tab 面板 · 一键安装 · 新手推荐 · 个性化推荐 · 场景推荐 · AI 代理安装（详见 [DSH 插件版](#dsh-插件版)） |
+| **内容** | 插件（cordis/skill）+ 整合包分区（生态内容市场） | 5-Tab 面板 · 一键安装 · 新手推荐 · 个性化推荐 · 场景推荐 · AI 代理安装（详见 [DSH 插件版](#dsh-插件版)）+ 整合包 Tab |
 | **安装** | 零安装，浏览器打开即用 | `npx @deepseek-ai/dsh plugin --profile web add @dsh-market/plugin` |
 | **资源消耗** | — | 零 token 被动运行，不参与日常对话 |
 
@@ -89,12 +89,13 @@ npx @deepseek-ai/dsh plugin --profile web add @dsh-market/plugin
 
 ## 特性
 
-- **持续收录** — 每天自动扫描 `dsh-plugin` / `dsh` 等 GitHub topic、社区精选列表，全量收录（当前 1928 个）
+- **持续收录** — 每天自动扫描 `dsh-plugin` / `dsh` 等 GitHub topic、社区精选列表，全量收录（当前 1928 个插件 + 整合包通道）
 - **实用五维评分** — 维护活跃 / 实用度 / 生态热度 / 便捷度 / 信号质量，加权几何平均融合，每个插件附「为什么推荐」解释
 - **中文体验** — 所有插件自动生成中文简介与中文功能标签，中文搜索、中文筛选
 - **一键安装** — 插件版确定性脚本路由：skill 型 `git clone`，cordis 型 `dsh plugin add`；失败可重试、可回滚
 - **AI 安装** — 插件版可交给 DSH 子代理读 README 验证后安装，需要配置时先向你确认
 - **推荐体系** — 冷启动问卷 / 新手友好 / 猜你喜欢（个性化画像）/ 场景推荐（读会话上下文，详见 [DSH 插件版](#dsh-插件版)）
+- **整合包生态** — Web「整合包」分区 + 插件端整合包 Tab（浏览 / 条目解析率校验 / 装包入口）；配套 `dsh.pack.json` 整合包协议（详见 [dsh-bundler](https://github.com/2BingLing/dsh-bundler)）
 - **零 token 常驻** — 插件版纯被动运行，不打开面板不消耗任何资源
 
 ## 使用
@@ -220,17 +221,6 @@ npm run build -w @dsh-market/plugin  # 插件包（lib/index.js + lib/client.js�
   [![已收录](assets/readme/badge-listed-zh.svg)](https://dsh.market/) [![高分精选](assets/readme/badge-top-rated.svg)](https://dsh.market/)
 
   用法见 [PLUGIN-BADGE.md](./PLUGIN-BADGE.md)（高分精选需实用评分 ≥ 80）
-
-## 路线图
-
-- [x] M1 数据管道（收录 / 五维评分 / 缓存）
-- [x] M2 Web 站（首页 / 详情 / 收藏 / 评分体系页）
-- [x] M3 中文化（DeepSeek 批量生成中文简介与标签）
-- [x] 发现体系（分区 / 问卷 / 标签面板 / 多维筛选）
-- [x] M5 部署（Pages + 每日自动收录）
-- [x] M4 DSH 插件端（cordis 侧边栏 + 一键安装）
-- [ ] 语义搜索（LLM 选品精排，候选 60 → 精排 20，省 token 设计）
-- [ ] 国内镜像（Vercel / Gitee Pages）
 
 ## License
 

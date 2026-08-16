@@ -48,7 +48,10 @@ jobs:
         run: npm run collect
 
       - name: 同步数据到 Web
-        run: cp data/plugins.json web/public/plugins.json
+        run: |
+          cp data/plugins.json web/public/plugins.json
+          # 整合包通道：只有启用扫描/手工生成后才同步（未生成则不部署该文件）
+          test -f data/packs.json && cp data/packs.json web/public/packs.json || true
 
       - name: 同步收录数量到 README
         run: node scripts/sync-count.mjs
@@ -60,7 +63,9 @@ jobs:
           # data/ 在 .gitignore 中，用 -f 强制提交数据快照
           # issue-replies.json 只在有 issue 收录时生成，不加入 add 清单（reply 步骤读不到会优雅跳过）
           # banner 为本地手动维护的静态资产（scripts/compose-banner.mjs 生成），workflow 不重生成
+          # packs.json 由人工通道（scripts/pack-add.ts）维护，独立 add（不存在时跳过，避免拖垮整条 add）
           git add -f data/plugins.json web/public/plugins.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
+          test -f data/packs.json && git add -f data/packs.json web/public/packs.json || true
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
           git push
 

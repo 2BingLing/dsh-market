@@ -14,6 +14,7 @@ import {
   readSettings,
   writeSettings,
   fetchMarketData,
+  fetchPacksData,
   scanInstalled,
   updateProfile,
   recommend,
@@ -82,6 +83,28 @@ function lite(p: any): Record<string, unknown> {
   }
 }
 
+/** 精简整合包字段（条目 + 解析率 + 评分） */
+function litePack(p: any): Record<string, unknown> {
+  return {
+    id: p.id,
+    name: p.name,
+    author: p.author,
+    descriptionZh: p.descriptionZh,
+    tags: p.tags,
+    stars: p.stars,
+    pushedAt: p.pushedAt,
+    curated: p.curated,
+    scoreTotal: p.score?.total ?? 0,
+    entryStats: p.entryStats ?? { total: 0, ok: 0, failed: 0, inMarket: 0 },
+    entries: (p.entries ?? []).map((e: any) => ({
+      id: e.id,
+      type: e.type,
+      version: e.version,
+      resolved: e.resolved ?? null,
+    })),
+  }
+}
+
 export function apply(ctx: {
   effect(fn: () => unknown, label?: string): unknown
   webServer: WebServer
@@ -131,6 +154,14 @@ export function apply(ctx: {
         return data.plugins.find((p) => p.id === args.pluginId) ?? null
       }
 
+      // 整合包通道（packs.json；失败返回空数组）
+      case 'packs':
+        return (await fetchPacksData(cfg)).map(litePack)
+      case 'pack:get': {
+        const packs = await fetchPacksData(cfg)
+        return packs.find((p) => p.id === args.packId) ?? null
+      }
+
       case 'installed':
         return (await market()).plugins && scanInstalled(cfg, await market()).map((i) => ({
           ...i,
@@ -145,7 +176,7 @@ export function apply(ctx: {
       }
 
       // 插件自身更新检测（打开面板自动调用，force 强制刷新）；
-      // apply 时执行 dsh plugin add 覆盖安装到当前版本
+      // apply 时执行 dsh plugin add 覆盖安装到最新版本（@latest 防 pnpm 跳过）
       case 'update:self': {
         const versions = readVersions()
         const current = versions['@dsh-market/plugin']
@@ -154,14 +185,20 @@ export function apply(ctx: {
         if (!args.apply) return check
         const profile = readSettings(cfg).profile
         const r = await realRunner().run(
-          `dsh plugin --profile ${profile} add @dsh-market/plugin`,
+          `dsh plugin --profile ${profile} add @dsh-market/plugin@latest`,
           { timeoutMs: 180000 },
         )
-        return {
-          ...check,
-          applied: r.exitCode === 0,
-          applyOutput: r.exitCode === 0 ? undefined : (r.stderr || r.stdout).slice(0, 300),
+        const output = (r.stderr || r.stdout).slice(0, 300)
+        const applyOutput = r.exitCode === 0 ? undefined : output
+        // 更新自身时 harness 正在运行，pnpm 替换文件可能被占用（EPERM）→ 给出可执行的修复指引
+        if (r.exitCode !== 0 && /EPERM|permission|EACCES/i.test(output)) {
+          return {
+            ...check,
+            applied: false,
+            applyOutput: `${output}。请先停止 harness，再执行：npx @deepseek-ai/dsh plugin --profile ${profile} add @dsh-market/plugin@latest，然后重启 harness`,
+          }
         }
+        return { ...check, applied: r.exitCode === 0, applyOutput }
       }
 
       case 'profile:read':
@@ -326,9 +363,13 @@ export function apply(ctx: {
         const data = await market()
         const plugin = data.plugins.find((p) => p.id === args.pluginId)
         if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
+        // 传已装项的 localName（依赖键名/目录名）——pnpm remove 对键名大小写敏感，
+        // plugin.name 是 GitHub 原始大小写（如 DSH-better-sidebar），直接推断会卸载失败
+        const item = scanInstalled(cfg, data).find((i) => i.pluginId === args.pluginId)
         return uninstallPlugin(cfg, plugin, {
           targetProfile: (args.targetProfile as string) ?? readSettings(cfg).profile,
           runner: realRunner(),
+          localName: item?.localName,
         })
       }
 
