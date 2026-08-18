@@ -16,6 +16,7 @@ import {
   fetchRepoRoot,
   fetchRawFile,
   fetchFileViaApi,
+  GithubError,
   type GithubRepo,
 } from "./github.js";
 import { fetchAwesomeEntries } from "./sources/awesome.js";
@@ -87,6 +88,44 @@ function loadPreviousZh(): Map<string, { descriptionZh: string | null; tagsZh: s
         { descriptionZh: p.descriptionZh ?? null, tagsZh: (p.tags ?? []).filter((t) => /[\u4e00-\u9fff]/.test(t)) },
       ])
     );
+  } catch {
+    return new Map();
+  }
+}
+
+/* ===== A：持久化中文翻译缓存（跨天累积，波动回归的插件复用旧翻译，不重复翻译）===== */
+import { shouldRetranslate, type ZhEntry } from "./zh-util.js";
+
+interface ZhCache {
+  updatedAt: string;
+  entries: Record<string, ZhEntry>;
+}
+const ZH_CACHE_FILE = join(DATA_DIR, "zh-cache.json");
+
+function loadZhCache(): Map<string, ZhEntry> {
+  try {
+    const raw = JSON.parse(readFileSync(ZH_CACHE_FILE, "utf-8")) as ZhCache;
+    return new Map(Object.entries(raw.entries ?? {}));
+  } catch {
+    return new Map();
+  }
+}
+function saveZhCache(entries: Map<string, ZhEntry>): void {
+  try {
+    const out: ZhCache = { updatedAt: new Date().toISOString(), entries: Object.fromEntries(entries) };
+    mkdirSync(DATA_DIR, { recursive: true });
+    writeFileSync(ZH_CACHE_FILE, JSON.stringify(out), "utf-8");
+  } catch (err) {
+    console.warn(`  zh-cache 保存失败: ${(err as Error).message}`);
+  }
+}
+
+/* ===== B2：已收录延续性——读取上次完整插件记录（id → plugin）===== */
+function loadPreviousPlugins(): Map<string, DshPlugin> {
+  try {
+    const raw = readFileSync(join(DATA_DIR, "plugins.json"), "utf-8");
+    const prev = JSON.parse(raw) as MarketData;
+    return new Map(prev.plugins.map((p) => [p.id.toLowerCase(), p]));
   } catch {
     return new Map();
   }
@@ -390,9 +429,65 @@ async function main() {
     detected.push(...deduped);
   }
 
+  // [B2] 已收录延续性：上次收录但本次未扫描到的仓库，repos API 单独确认后补回
+  // （防「三路前 1000」边界抖动导致已收录插件消失；404 确认真删除才移除）
+  const prevPlugins = loadPreviousPlugins();
+  const currentIds = new Set(detected.map((d) => d.plugin.id.toLowerCase()));
+  const missing = [...prevPlugins.keys()].filter((id) => !currentIds.has(id));
+  let restored = 0;
+  let confirmedGone = 0;
+  if (missing.length > 0) {
+    console.log(
+      `  [B2] 上次收录 ${prevPlugins.size}，本次扫描未出现 ${missing.length}，单独确认中（并发 10）...`
+    );
+    await runPool(missing, async (id) => {
+      const prev = prevPlugins.get(id)!;
+      try {
+        const repo = await githubFetch<GithubRepo>(`/repos/${id}`);
+        if (repo.fork || repo.archived) {
+          confirmedGone++;
+          return;
+        }
+        // 改名/转移（full_name 变化）：旧名不补，新名由扫描收录走正常检测
+        if (repo.full_name.toLowerCase() !== id.toLowerCase()) {
+          confirmedGone++;
+          return;
+        }
+        // pushedAt 与上次一致（仓库没变，只是本次扫描抖动漏了）→ 复用上次记录 + 更新元数据
+        if (repo.pushed_at === prev.pushedAt) {
+          detected.push({
+            candidate: { fullName: id, repo, sources: ["restore"] },
+            plugin: {
+              ...prev,
+              stars: repo.stargazers_count,
+              forks: repo.forks_count,
+              openIssues: repo.open_issues_count,
+              language: repo.language,
+              pushedAt: repo.pushed_at,
+              createdAt: repo.created_at,
+              updatedAt: repo.updated_at,
+              homepage: repo.homepage ?? prev.homepage,
+              lastCheckedAt: new Date().toISOString(),
+            },
+            repo,
+            readmeContent: null,
+            hasSkillMd: false,
+          });
+          restored++;
+        }
+        // pushedAt 变了：等下次扫描进池正常重检测，本次不补（避免静默更新检测产物）
+      } catch (err) {
+        if (err instanceof GithubError && err.status === 404) confirmedGone++; // 仓库确已删除
+        // 其他错误（限流/网络）跳过，下次再说
+      }
+    });
+    console.log(`  [B2] 补回 ${restored}，确认移除 ${confirmedGone}（其余等下次扫描）`);
+  }
+
   console.log("[3/5] 实用五维评分...");
   const p99 = computeP99Stars(detected.map((d) => d.repo.stargazers_count));
   for (const d of detected) {
+    if (d.candidate.sources.includes("restore")) continue; // B2 补回项保留上次评分（readme 未重抓，避免分数失真）
     d.plugin.score = computePracticalScore(
       {
         stars: d.repo.stargazers_count,
@@ -414,8 +509,16 @@ async function main() {
 
   console.log("[3.5/5] 中文化（DeepSeek 增量翻译）...");
   const prevZh = loadPreviousZh();
+  // A：持久化翻译缓存——跨天累积；首次/缺 cache 时从上次 plugins.json 播种
+  const zhCache = loadZhCache();
+  for (const [id, v] of prevZh) {
+    if (!zhCache.has(id) && v.descriptionZh) {
+      zhCache.set(id, { descriptionZh: v.descriptionZh, tagsZh: v.tagsZh });
+    }
+  }
   let translated = 0;
   let skipped = 0;
+  let retranslated = 0;
   const apiKey = process.env.DEEPSEEK_API_KEY;
   const baseURL = process.env.DEEPSEEK_API_BASE ?? "https://api.deepseek.com";
   const model = process.env.DEEPSEEK_MODEL ?? "deepseek-chat";
@@ -431,12 +534,17 @@ async function main() {
     ].slice(0, 40);
 
     const pending = detected.filter((d) => {
-      const prev = prevZh.get(d.plugin.id);
       if (d.plugin.descriptionZh) return false; // 本次已有
-      if (prev?.descriptionZh) {
-        // 复用上次结果
-        d.plugin.descriptionZh = prev.descriptionZh;
-        for (const t of prev.tagsZh) {
+      const cached = zhCache.get(d.plugin.id);
+      if (cached?.descriptionZh) {
+        // 第三步「变化量触发」：README 摘要与上次翻译时相比实质大改 → 重翻（让简介不过时）
+        if (shouldRetranslate(d.plugin.readmeSummary, cached.summaryKey)) {
+          retranslated++;
+          return true;
+        }
+        // 未大改 → 复用历史翻译（含波动回归的插件——A 缓存跨天，不再被当新仓库重翻）
+        d.plugin.descriptionZh = cached.descriptionZh;
+        for (const t of cached.tagsZh) {
           if (!d.plugin.tags.includes(t)) d.plugin.tags.push(t);
         }
         skipped++;
@@ -444,7 +552,9 @@ async function main() {
       }
       return true;
     });
-    console.log(`  pending translate: ${pending.length}, reused: ${skipped}`);
+    console.log(
+      `  pending translate: ${pending.length}（其中大改重翻 ${retranslated}），reused: ${skipped}`
+    );
 
     await runPool(
       pending,
@@ -471,6 +581,18 @@ async function main() {
       5 // LLM 并发保守
     );
     console.log(`  translated: ${translated}, failed: ${pending.length - translated}`);
+    // A：把本次全部中文简介写回持久化缓存（新翻译 + 复用 + 播种）+ 摘要指纹，跨天累积
+    for (const d of detected) {
+      if (d.plugin.descriptionZh) {
+        const prev = zhCache.get(d.plugin.id);
+        zhCache.set(d.plugin.id, {
+          descriptionZh: d.plugin.descriptionZh,
+          tagsZh: d.plugin.tags.filter((t) => /[\u4e00-\u9fff]/.test(t)),
+          summaryKey: d.plugin.readmeSummary ?? prev?.summaryKey,
+        });
+      }
+    }
+    saveZhCache(zhCache);
   } else {
     console.log("  未配置 DEEPSEEK_API_KEY，跳过中文化（仅保留英文）");
   }

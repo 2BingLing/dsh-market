@@ -64,7 +64,7 @@ jobs:
           # issue-replies.json 只在有 issue 收录时生成，不加入 add 清单（reply 步骤读不到会优雅跳过）
           # banner 为本地手动维护的静态资产（scripts/compose-banner.mjs 生成），workflow 不重生成
           # packs.json 由人工通道（scripts/pack-add.ts）维护，独立 add（不存在时跳过，避免拖垮整条 add）
-          git add -f data/plugins.json web/public/plugins.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
+          git add -f data/plugins.json data/zh-cache.json web/public/plugins.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
           test -f data/packs.json && git add -f data/packs.json web/public/packs.json || true
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
           git push
