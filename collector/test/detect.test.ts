@@ -2,7 +2,7 @@
  * detectSubdirBundle 单元测试：子目录 bundle 探测（根目录无标记、插件在子目录）
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { detectSubdirBundle } from "../src/detect.js";
+import { detectSubdirBundle, isCordisPackageJson } from "../src/detect.js";
 import { fetchRepoRoot } from "../src/github.js";
 
 vi.mock("../src/github.js", () => ({
@@ -89,5 +89,47 @@ describe("detectSubdirBundle", () => {
     const r = await detectSubdirBundle("someone/some-repo", root as never, "main");
     expect(r).toBeNull();
     expect(mockFetch).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe("isCordisPackageJson", () => {
+  it("纯 client 注入插件（dsh.client 字段，dsh-read-history 案例）判定为插件", () => {
+    const pkg = JSON.stringify({
+      name: "dsh-read-history",
+      main: "lib/index.js",
+      exports: { ".": "./lib/index.js", "./client": "./lib/client.js" },
+      dsh: { client: { platform: "web", inject: ["@deepseek-ai/dsh-client-runtime"] } },
+    });
+    expect(isCordisPackageJson(pkg)).toBe(true);
+  });
+
+  it("dshClient 顶层字段（With-With 案例形态）判定为插件", () => {
+    const pkg = JSON.stringify({
+      name: "dsh-hindsight-plugins",
+      dsh: { bundle: { patch: "./cordis.patch.yml" } },
+      dshClient: { inject: ["@deepseek-ai/dsh-client-runtime"], platform: "web" },
+    });
+    expect(isCordisPackageJson(pkg)).toBe(true);
+  });
+
+  it("无任何 DSH/cordis 标记的普通包判定为非插件", () => {
+    const pkg = JSON.stringify({
+      name: "some-tool",
+      dependencies: { lodash: "^4.0.0" },
+    });
+    expect(isCordisPackageJson(pkg)).toBe(false);
+  });
+
+  it("dsh 字段存在但无 client/bundle（如只有 dsh.xxx 自定义）判定为非插件", () => {
+    const pkg = JSON.stringify({
+      name: "some-repo",
+      dsh: { something: { else: true } },
+    });
+    expect(isCordisPackageJson(pkg)).toBe(false);
+  });
+
+  it("null/空内容返回 false", () => {
+    expect(isCordisPackageJson(null)).toBe(false);
+    expect(isCordisPackageJson("")).toBe(false);
   });
 });
