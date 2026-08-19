@@ -40,10 +40,19 @@ export function extractRepoFromText(text: string): string[] {
  * 兼容 markdown 加粗（**作者自述**：/ **自定义简介**：）与裸写法（作者自述：） */
 export function extractIntroByAuthor(body: string | null): string | undefined {
   if (!body) return undefined;
-  const m = body.match(
+  // 1) 方括号形式（模板推荐写法，可多行）
+  const braced = body.match(
+    /(?:作者自述|自定义简介|作者自述简介)\s*\*{0,2}\s*[：:]\s*\[([\s\S]*?)\]/m
+  );
+  if (braced) {
+    const text = braced[1].trim();
+    if (text) return text;
+  }
+  // 2) 裸写法（单行）
+  const plain = body.match(
     /(?:作者自述|自定义简介|作者自述简介)\s*\*{0,2}\s*[：:]\s*([^\n\r]+)/
   );
-  const text = m?.[1]?.trim();
+  const text = plain?.[1]?.trim();
   return text || undefined;
 }
 

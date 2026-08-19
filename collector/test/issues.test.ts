@@ -55,4 +55,21 @@ describe("extractIntroByAuthor", () => {
   it("只取第一行", () => {
     expect(extractIntroByAuthor("作者自述：第一行\n第二行")).toBe("第一行");
   });
+
+  it("方括号形式支持多行（跨行取方括号内全部内容）", () => {
+    const body =
+      "- **作者自述简介**：[这是我的第一行介绍，\n  第二行补充说明，\n  还有第三行。]\n- 其他字段";
+    const got = extractIntroByAuthor(body);
+    expect(got).toContain("这是");
+    expect(got).toContain("第三行");
+  });
+
+  it("模板推荐写法（作者自述简介：[…]）", () => {
+    const body = "- **作者自述简介**：[这是用我自己话写的介绍。]";
+    expect(extractIntroByAuthor(body)).toBe("这是用我自己话写的介绍。");
+  });
+
+  it("方括号为空回退裸写法", () => {
+    expect(extractIntroByAuthor("作者自述：[] 实际在另一行")).toBe("[] 实际在另一行");
+  });
 });
