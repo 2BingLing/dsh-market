@@ -4,6 +4,7 @@
 import { useMemo, useState } from "react";
 import type { DshPlugin } from "@dsh-market/schema";
 import RadarChart, { RADAR_ORDER, RADAR_LABELS } from "./RadarChart";
+import CommunityBadge, { isCommunitySubmitted } from "./CommunityBadge";
 
 function fmt(n: number): string {
   return n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
@@ -117,6 +118,7 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
           <span className={`pill ${plugin.type === "skill" ? "pill-skill" : "pill-plugin"}`}>
             {plugin.type === "skill" ? "SKILL" : "PLUGIN"}
           </span>
+          {isCommunitySubmitted(plugin) && <CommunityBadge />}
           <h2>{plugin.name}</h2>
           <button
             className={`fav-btn ${favorite ? "on" : ""}`}
@@ -207,22 +209,12 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                     "如已装 DSH 插件端（开发中），以后可一键安装"
                   )}
                 </span>
-                {plugin.submissionIssue && (
-                  <a
-                    className="issue-inline"
-                    href={`https://github.com/2BingLing/dsh-market/issues/${plugin.submissionIssue}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    提交者的安装说明 / 讨论 ↗
-                  </a>
-                )}
               </div>
             </div>
           </section>
 
-          {plugin.introByAuthor ? (
-            /* 有作者自述：C 位显示作者自述专区（带标识 + 跳转 issue） */
+          {/* 作者自述（可选）：C 位，带标识 + 跳转 issue */}
+          {plugin.introByAuthor && (
             <section className="info-block author-intro">
               <h4 className="author-intro-head">
                 <AuthorIntroIcon /> 作者自述
@@ -239,47 +231,28 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                 </a>
               )}
             </section>
-          ) : (
-            /* 无作者自述：保持原布局（README 摘要原位置） */
-            cleanedSummary && (
-              <section className="info-block">
-                <h4>README 摘要</h4>
-                <p className="readme-summary">
-                  {cleanedSummary}
-                  {plugin.readmeSummary!.trimEnd().endsWith("…") && "（摘要节选）"}
-                </p>
-                <a
-                  className="readme-link"
-                  href={`https://github.com/${plugin.fullName}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  查看完整 README ↗
-                </a>
-              </section>
-            )
+          )}
+
+          {/* README 摘要：右栏等宽（与作者自述/安装卡片同宽），位于其下 */}
+          {cleanedSummary && (
+            <section className="info-block">
+              <h4>README 摘要</h4>
+              <p className="readme-summary">
+                {cleanedSummary}
+                {plugin.readmeSummary!.trimEnd().endsWith("…") && "（摘要节选）"}
+              </p>
+              <a
+                className="readme-link"
+                href={`https://github.com/${plugin.fullName}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                查看完整 README ↗
+              </a>
+            </section>
           )}
         </div>
       </div>
-
-      {/* 仅新布局（有作者自述）时：README 摘要移到最底部（整宽） */}
-      {plugin.introByAuthor && cleanedSummary && (
-        <section className="info-block summary-bottom">
-          <h4>README 摘要</h4>
-          <p className="readme-summary">
-            {cleanedSummary}
-            {plugin.readmeSummary!.trimEnd().endsWith("…") && "（摘要节选）"}
-          </p>
-          <a
-            className="readme-link"
-            href={`https://github.com/${plugin.fullName}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            查看完整 README ↗
-          </a>
-        </section>
-      )}
     </div>
   );
 }

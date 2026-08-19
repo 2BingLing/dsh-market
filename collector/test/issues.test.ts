@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractRepoFromText } from "../src/sources/issues.js";
+import { extractRepoFromText, extractIntroByAuthor } from "../src/sources/issues.js";
 
 describe("extractRepoFromText", () => {
   it("从 issue 正文提取仓库地址", () => {
@@ -30,5 +30,29 @@ describe("extractRepoFromText", () => {
 
   it("无仓库地址返回空", () => {
     expect(extractRepoFromText("这是一个普通 issue")).toEqual([]);
+  });
+});
+
+describe("extractIntroByAuthor", () => {
+  it("提取模板字段（markdown 加粗：**作者自述简介**：…）", () => {
+    const body = "- **作者自述简介**：用我自己的话介绍这个插件，解决日常痛点。";
+    expect(extractIntroByAuthor(body)).toBe("用我自己的话介绍这个插件，解决日常痛点。");
+  });
+
+  it("兼容裸写法（作者自述：…）", () => {
+    expect(extractIntroByAuthor("作者自述：一句话介绍我的插件")).toBe("一句话介绍我的插件");
+  });
+
+  it("兼容自定义简介写法", () => {
+    expect(extractIntroByAuthor("自定义简介: 这是自述内容")).toBe("这是自述内容");
+  });
+
+  it("无作者自述返回 undefined", () => {
+    expect(extractIntroByAuthor("- **一句话简介**：普通描述")).toBeUndefined();
+    expect(extractIntroByAuthor(null)).toBeUndefined();
+  });
+
+  it("只取第一行", () => {
+    expect(extractIntroByAuthor("作者自述：第一行\n第二行")).toBe("第一行");
   });
 });

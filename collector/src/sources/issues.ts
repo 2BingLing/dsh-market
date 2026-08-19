@@ -36,10 +36,13 @@ export function extractRepoFromText(text: string): string[] {
   return out;
 }
 
-/** 从 issue 正文提取「作者自述简介」（模板字段：**作者自述**：…），取一行 */
+/** 从 issue 正文提取「作者自述简介」（模板字段：**作者自述简介**：…），取一行
+ * 兼容 markdown 加粗（**作者自述**：/ **自定义简介**：）与裸写法（作者自述：） */
 export function extractIntroByAuthor(body: string | null): string | undefined {
   if (!body) return undefined;
-  const m = body.match(/(?:作者自述|自定义简介|作者自述简介)[：:]\s*([^\n\r]+)/);
+  const m = body.match(
+    /(?:作者自述|自定义简介|作者自述简介)\s*\*{0,2}\s*[：:]\s*([^\n\r]+)/
+  );
   const text = m?.[1]?.trim();
   return text || undefined;
 }

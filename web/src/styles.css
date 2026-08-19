@@ -168,6 +168,7 @@ body::before {
 }
 .card:hover { border-color: var(--ds-blue-300); box-shadow: 0 16px 40px rgba(35, 84, 140, 0.14); transform: translateY(-3px); }
 .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.card-type { display: flex; align-items: center; gap: 6px; }
 .pill { font-size: 11px; padding: 3px 9px; border-radius: 6px; letter-spacing: 0.02em; }
 .pill-skill { background: var(--ds-blue-100); color: var(--ds-blue-700); border: 1px solid var(--ds-blue-300); }
 .pill-plugin { background: var(--ds-green-bg); color: var(--ds-green); border: 1px solid var(--ds-green-line); }
@@ -303,13 +304,19 @@ body::before {
 }
 .readme-link:hover { background: #fff; border-color: var(--ds-blue-500); }
 
-/* 社区提交 → 提交者 issue 讨论链接（与提示词同行） */
-.issue-inline {
-  margin-left: 10px; font-size: 12px; color: var(--ds-blue-700);
-  text-decoration: none; border-bottom: 1px dashed var(--ds-blue-400); padding-bottom: 1px;
-  white-space: nowrap; transition: color 0.2s;
+
+/* 社区提交标识（SVG + 文字，蓝系） */
+.community-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--ds-blue-700);
+  background: var(--ds-blue-50); border: 1px solid var(--ds-blue-300);
+  padding: 3px 8px; border-radius: 6px; white-space: nowrap; vertical-align: middle;
 }
-.issue-inline:hover { color: var(--ds-blue-500); border-color: var(--ds-blue-500); }
+.community-badge.small {
+  font-size: 11px; padding: 2px 6px; border-radius: 5px;
+}
+/* 详情页标题行：社区标识紧贴左侧 PLUGIN */
+.detail-title-row .community-badge { margin-left: -6px; }
 
 /* 作者自述专区（原 README 摘要位置，C 位） */
 .author-intro { border-left: 3px solid var(--ds-blue-500); padding-left: 14px; }

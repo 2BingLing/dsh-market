@@ -3,6 +3,7 @@
  */
 import type { DshPlugin } from "@dsh-market/schema";
 import RadarChart, { RADAR_ORDER, RADAR_LABELS } from "./RadarChart";
+import CommunityBadge, { isCommunitySubmitted } from "./CommunityBadge";
 
 function fmt(n: number): string {
   return n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
@@ -28,8 +29,11 @@ export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen 
   return (
     <article className="card" onClick={() => onOpen(plugin)}>
       <div className="card-top">
-        <span className={`pill ${plugin.type === "skill" ? "pill-skill" : "pill-plugin"}`}>
-          {plugin.type === "skill" ? "SKILL" : "PLUGIN"}
+        <span className="card-type">
+          <span className={`pill ${plugin.type === "skill" ? "pill-skill" : "pill-plugin"}`}>
+            {plugin.type === "skill" ? "SKILL" : "PLUGIN"}
+          </span>
+          {isCommunitySubmitted(plugin) && <CommunityBadge small />}
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span style={{ fontSize: 11, color: "#8CA3BB" }}>{timeAgo(plugin.pushedAt)}</span>
