@@ -216,6 +216,7 @@ Submit issue → next day 06:00 the pipeline extracts the repo → plugin detect
 ```
 
 - **Fix data**: wrong scores / descriptions / install commands — open an issue or PR
+- **Author intro**: include an "author self-introduction" when submitting — it will be shown in the "Author's words" section on the market detail page (with an author badge), letting you describe your plugin in your own words. Already-listed plugins can submit a `[data fix]` issue to add one.
 - **Add the listing badge**: listed plugin authors can display the DSH Market badge at the top of their README:
 
   [![Listed](assets/readme/badge-listed-en.svg)](https://dsh.market/) [![Top Rated](assets/readme/badge-top-rated.svg)](https://dsh.market/)

@@ -13,6 +13,15 @@ function fmtDate(iso: string): string {
   return iso.slice(0, 10);
 }
 
+/** 作者自述 SVG 标识（引用线图标，网站蓝系，无 emoji） */
+function AuthorIntroIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M7 7h4v5H8c0 2 1.5 3 3 3.2v2C6.5 17 7 14 6.5 12V8c0-.6.4-1 1-1zM15 7h4v5h-3c0 2 1.5 3 3 3.2v2c-4.5-.2-4-3.2-4.5-5.2V8c0-.6.4-1 1-1z" />
+    </svg>
+  );
+}
+
 /** 清洗 markdown/HTML 源码 → 可读纯文本
  * 注意：README 摘要在 420 字符截断，可能截断在 HTML 标签中间（未闭合标签），
  * 必须额外清除 data: URL、行尾未闭合标签残片与超长无空格 token（防详情页溢出） */
@@ -180,7 +189,7 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                 </button>
               </div>
 
-              {/* 复制提示词 + 说明（同行） */}
+              {/* 复制提示词 + 说明 + 提交者讨论（同行） */}
               <div className="prompt-row">
                 <button className={`copy-btn ${copied === "prompt" ? "ok" : ""}`} onClick={() => copy("prompt", installPrompt)}>
                   {copied === "prompt" ? "✓ 已复制" : "复制安装提示词"}
@@ -198,29 +207,79 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                     "如已装 DSH 插件端（开发中），以后可一键安装"
                   )}
                 </span>
+                {plugin.submissionIssue && (
+                  <a
+                    className="issue-inline"
+                    href={`https://github.com/2BingLing/dsh-market/issues/${plugin.submissionIssue}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    提交者的安装说明 / 讨论 ↗
+                  </a>
+                )}
               </div>
             </div>
           </section>
 
-          {cleanedSummary && (
-            <section className="info-block">
-              <h4>README 摘要</h4>
-              <p className="readme-summary">
-                {cleanedSummary}
-                {plugin.readmeSummary!.trimEnd().endsWith("…") && "（摘要节选）"}
-              </p>
-              <a
-                className="readme-link"
-                href={`https://github.com/${plugin.fullName}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                查看完整 README ↗
-              </a>
+          {plugin.introByAuthor ? (
+            /* 有作者自述：C 位显示作者自述专区（带标识 + 跳转 issue） */
+            <section className="info-block author-intro">
+              <h4 className="author-intro-head">
+                <AuthorIntroIcon /> 作者自述
+              </h4>
+              <blockquote className="author-intro-quote">{plugin.introByAuthor}</blockquote>
+              {plugin.submissionIssue && (
+                <a
+                  className="readme-link"
+                  href={`https://github.com/2BingLing/dsh-market/issues/${plugin.submissionIssue}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  查看提交者的完整说明 / 讨论 ↗
+                </a>
+              )}
             </section>
+          ) : (
+            /* 无作者自述：保持原布局（README 摘要原位置） */
+            cleanedSummary && (
+              <section className="info-block">
+                <h4>README 摘要</h4>
+                <p className="readme-summary">
+                  {cleanedSummary}
+                  {plugin.readmeSummary!.trimEnd().endsWith("…") && "（摘要节选）"}
+                </p>
+                <a
+                  className="readme-link"
+                  href={`https://github.com/${plugin.fullName}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  查看完整 README ↗
+                </a>
+              </section>
+            )
           )}
         </div>
       </div>
+
+      {/* 仅新布局（有作者自述）时：README 摘要移到最底部（整宽） */}
+      {plugin.introByAuthor && cleanedSummary && (
+        <section className="info-block summary-bottom">
+          <h4>README 摘要</h4>
+          <p className="readme-summary">
+            {cleanedSummary}
+            {plugin.readmeSummary!.trimEnd().endsWith("…") && "（摘要节选）"}
+          </p>
+          <a
+            className="readme-link"
+            href={`https://github.com/${plugin.fullName}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            查看完整 README ↗
+          </a>
+        </section>
+      )}
     </div>
   );
 }

@@ -67,6 +67,8 @@ interface Candidate {
   awesomeDescription?: string;
   /** 提交插件 issue 号（issue-submission 来源；收录成功后自动回复用） */
   issueNumbers?: number[];
+  /** 作者自述简介（提交 issue 时提供，可选；存到 plugin.introByAuthor） */
+  introByAuthor?: string;
 }
 
 interface Detected {
@@ -170,7 +172,7 @@ async function main() {
     fullName: string,
     repo: GithubRepo | null,
     source: string,
-    meta?: { name?: string; description?: string; issueNumbers?: number[] }
+    meta?: { name?: string; description?: string; issueNumbers?: number[]; introByAuthor?: string }
   ) => {
     const key = fullName.toLowerCase();
     if (EXCLUDED_REPOS.has(key)) return;
@@ -192,6 +194,7 @@ async function main() {
       awesomeName: meta?.name,
       awesomeDescription: meta?.description,
       issueNumbers: meta?.issueNumbers,
+      introByAuthor: meta?.introByAuthor,
     });
   };
   for (const fn of awesomeByFullName.keys()) {
@@ -200,8 +203,11 @@ async function main() {
   }
   for (const r of topicRepos) addCandidate(r.full_name, r, "topic");
   for (const r of orgRepos) addCandidate(r.full_name, r, "org");
-  for (const [fn, issueNumbers] of issueRepos) {
-    addCandidate(fn, null, "issue-submission", { issueNumbers });
+  for (const [fn, meta] of issueRepos) {
+    addCandidate(fn, null, "issue-submission", {
+      issueNumbers: meta.issueNumbers,
+      introByAuthor: meta.introByAuthor,
+    });
   }
 
   const all = [...candidates.values()];
@@ -380,6 +386,8 @@ async function main() {
         createdAt: repo!.created_at,
         updatedAt: repo!.updated_at,
         readmeSummary,
+        introByAuthor: candidate.introByAuthor,
+        submissionIssue: candidate.issueNumbers?.[0],
         install: {
           method: installMethod,
           target: detection.type === "skill" ? "~/.agents/skills" : undefined,

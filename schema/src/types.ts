@@ -76,6 +76,10 @@ export interface DshPlugin {
   updatedAt: string;
   /** README 摘要（截断，供详情页展示） */
   readmeSummary: string | null;
+  /** 作者自述简介（插件提交时提供，可选；Web 详情页 C 位展示，区分于自动简介） */
+  introByAuthor?: string;
+  /** 提交该插件的 issue 号（供详情页/安装区跳转讨论，可选） */
+  submissionIssue?: number;
   /** 安装相关信息 */
   install: InstallInfo;
   /** 实用五维评分 */

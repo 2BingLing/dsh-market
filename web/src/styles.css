@@ -303,6 +303,32 @@ body::before {
 }
 .readme-link:hover { background: #fff; border-color: var(--ds-blue-500); }
 
+/* 社区提交 → 提交者 issue 讨论链接（与提示词同行） */
+.issue-inline {
+  margin-left: 10px; font-size: 12px; color: var(--ds-blue-700);
+  text-decoration: none; border-bottom: 1px dashed var(--ds-blue-400); padding-bottom: 1px;
+  white-space: nowrap; transition: color 0.2s;
+}
+.issue-inline:hover { color: var(--ds-blue-500); border-color: var(--ds-blue-500); }
+
+/* 作者自述专区（原 README 摘要位置，C 位） */
+.author-intro { border-left: 3px solid var(--ds-blue-500); padding-left: 14px; }
+.author-intro-head {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--ds-blue-700); font-size: 13px; letter-spacing: 0.5px;
+}
+.author-intro-quote {
+  margin: 8px 0 0; padding: 0; border: none;
+  font-size: 14.5px; line-height: 1.9; color: var(--ds-strong);
+  font-style: italic;
+}
+
+/* README 摘要：底部整宽区块 */
+.summary-bottom {
+  margin-top: 18px;
+  border-top: 1px solid var(--ds-line); padding-top: 14px;
+}
+
 @media (max-width: 900px) {
   .detail-body { grid-template-columns: 1fr; }
 }

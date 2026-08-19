@@ -10,6 +10,7 @@ labels: ["submission"]
 - **GitHub 仓库地址**：(必填，如 https://github.com/owner/repo)
 - **插件类型**：(skill / cordis-plugin)
 - **一句话简介**：(必填，用什么语言都可以，我们会生成中文简介)
+- **作者自述简介**：(可选，用你自己的话介绍这个插件——会展示在市场详情页的「作者自述」专区，带作者标识)
 - **是否已打 dsh-plugin 相关 topic**：(建议打上 `dsh-plugin` topic，有助于自动收录)
 
 ## 补充说明（可选）
