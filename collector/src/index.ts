@@ -217,7 +217,7 @@ async function main() {
   const detected: Detected[] = [];
   const rejected: { fullName: string; reason: string }[] = [];
 
-  await runPool(all, async (candidate) => {
+  const detectOne = async (candidate: Candidate) => {
     try {
       // repo 元数据（缓存 24h）
       let repo = candidate.repo;
@@ -412,7 +412,21 @@ async function main() {
         reason: `error: ${(err as Error).message.slice(0, 80)}`,
       });
     }
-  });
+  };
+
+  await runPool(all, detectOne);
+
+  // [retry-error] 瞬时失败候选重试：限流/网络波动被 error-reject 的不该直接放弃
+  //（否则只能等下一天 cron，如 issue #32/#33/#35 被漏检）
+  const errorIds = new Set(
+    rejected.filter((r) => r.reason.startsWith("error")).map((r) => r.fullName.toLowerCase())
+  );
+  if (errorIds.size > 0) {
+    const retry = all.filter((c) => errorIds.has(c.fullName.toLowerCase()));
+    console.log(`  [retry-error] ${retry.length} 个瞬时失败候选重试（并发 10）...`);
+    await runPool(retry, detectOne);
+    console.log(`  [retry-error] 完成，detected=${detected.length}`);
+  }
 
   console.log(`  detected: ${detected.length}, rejected: ${rejected.length}`);
 
