@@ -45,6 +45,7 @@ export async function githubFetch<T>(
         method: opts.method ?? "GET",
         headers,
         body: opts.body !== undefined ? JSON.stringify(opts.body) : undefined,
+        signal: AbortSignal.timeout(30_000),
       });
 
       if (res.status === 403 || res.status === 429) {
@@ -115,6 +116,7 @@ export async function fetchRawFile(
   try {
     const res = await fetch(url, {
       headers: { "User-Agent": "dsh-market-collector" },
+      signal: AbortSignal.timeout(30_000),
     });
     if (!res.ok) return null;
     const text = await res.text();

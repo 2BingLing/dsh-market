@@ -147,7 +147,7 @@ async function main() {
     for (const branch of ["main", "master"]) {
       const res = await fetch(
         `https://raw.githubusercontent.com/${o}/${r}/${branch}/${p}`,
-        { headers: { "User-Agent": "dsh-market-collector" } }
+        { headers: { "User-Agent": "dsh-market-collector" }, signal: AbortSignal.timeout(20_000) }
       );
       if (res.ok) return res.text();
     }

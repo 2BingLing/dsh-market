@@ -65,6 +65,7 @@ export async function normalizeTags(
       const res = await fetch(`${opts.baseURL}/chat/completions`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${opts.apiKey}` },
+        signal: AbortSignal.timeout(60_000),
         body: JSON.stringify({
           model: opts.model,
           messages: [{ role: "user", content: prompt }],

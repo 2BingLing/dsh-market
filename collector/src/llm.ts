@@ -80,6 +80,7 @@ export async function translateWithDeepSeek(
           Authorization: `Bearer ${opts.apiKey}`,
         },
         body: JSON.stringify(body),
+        signal: AbortSignal.timeout(60_000),
       });
       if (!res.ok) {
         const err = (await res.text()).slice(0, 200);
