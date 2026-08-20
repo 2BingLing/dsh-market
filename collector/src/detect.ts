@@ -11,7 +11,7 @@
  */
 
 import type { InstallMethod, PluginType } from "@dsh-market/schema";
-import { fetchRepoRoot, type RepoContentItem } from "./github.js";
+import { fetchRepoRoot, fetchFileViaApi, type RepoContentItem } from "./github.js";
 
 export interface Detection {
   isPlugin: boolean;
@@ -101,19 +101,34 @@ export async function detectSubdirBundle(
   const candidates = dirs
     .filter((d) => {
       const n = d.name.toLowerCase();
-      return n === repoName || /^(dsh-|cordis|plugin|bundle|client)/.test(n);
+      // 与仓库同名 / dsh 开头（含裸 dsh、dsh-、dsh_）/ cordis|plugin|bundle|client 开头
+      return n === repoName || /^(dsh|cordis|plugin|bundle|client)/.test(n);
     })
     .slice(0, 3);
   for (const dir of candidates) {
     const items = await fetchRepoRoot(fullName, branch, dir.path);
     const names = new Set(items.map((i) => i.name.toLowerCase()));
-    if (
-      names.has("package.json") &&
-      (names.has("cordis.patch.yml") ||
+    if (names.has("package.json")) {
+      const hasMarker =
+        names.has("cordis.patch.yml") ||
         names.has("dsh.profile") ||
-        names.has("dsh.profile.yml"))
-    ) {
-      return { subdir: dir.path, evidence: [`subdir ${dir.path}/（package.json + cordis 标记）`] };
+        names.has("dsh.profile.yml");
+      // 无批处理文件的子目录也可命中：package.json 依赖含 DSH/cordis 关键字（如 @deepseek-ai/dsh-tools）
+      let depsCordis = false;
+      if (!hasMarker) {
+        const f = await fetchFileViaApi(fullName, `${dir.path}/package.json`);
+        depsCordis = isCordisPackageJson(f?.content ?? null);
+      }
+      if (hasMarker || depsCordis) {
+        return {
+          subdir: dir.path,
+          evidence: [
+            hasMarker
+              ? `subdir ${dir.path}/（package.json + cordis 标记）`
+              : `subdir ${dir.path}/（package.json 含 DSH 依赖）`,
+          ],
+        };
+      }
     }
   }
   return null;

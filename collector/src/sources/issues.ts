@@ -27,8 +27,8 @@ export function extractRepoFromText(text: string): string[] {
   while ((m = re.exec(text)) !== null) {
     const owner = m[1].toLowerCase();
     const repo = m[2].toLowerCase().replace(/\.git$/, "");
-    // 过滤明显非仓库路径（如 github.com 自身、market 仓库自己）
-    if (owner === "github" || owner === "2bingling") continue;
+    // 过滤明显非仓库路径（如 github.com 自身、market 仓库自己、GitHub 附件域）
+    if (owner === "github" || owner === "2bingling" || owner === "user-attachments") continue;
     if (repo === "issues" || repo === "settings" || repo === "marketplace") continue;
     const fn = `${owner}/${repo}`;
     if (!out.includes(fn)) out.push(fn);

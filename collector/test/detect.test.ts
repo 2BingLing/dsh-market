@@ -3,13 +3,15 @@
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { detectSubdirBundle, isCordisPackageJson } from "../src/detect.js";
-import { fetchRepoRoot } from "../src/github.js";
+import { fetchRepoRoot, fetchFileViaApi } from "../src/github.js";
 
 vi.mock("../src/github.js", () => ({
   fetchRepoRoot: vi.fn(),
+  fetchFileViaApi: vi.fn(),
 }));
 
 const mockFetch = fetchRepoRoot as unknown as ReturnType<typeof vi.fn>;
+const mockFetchFile = fetchFileViaApi as unknown as ReturnType<typeof vi.fn>;
 
 function rootItem(name: string, type: "file" | "dir" = "file") {
   return { name, path: name, type, size: type === "file" ? 1 : 0 };
@@ -131,5 +133,35 @@ describe("isCordisPackageJson", () => {
   it("null/空内容返回 false", () => {
     expect(isCordisPackageJson(null)).toBe(false);
     expect(isCordisPackageJson("")).toBe(false);
+  });
+});
+
+describe("detectSubdirBundle 子目录依赖判据（#34 search2chart-mcp 场景）", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("子目录无批处理文件但 package.json 依赖 @deepseek-ai → 命中", async () => {
+    const root = [rootItem("README.md"), rootItem("dsh", "dir")];
+    mockFetch.mockResolvedValue([rootItem("package.json")]);
+    mockFetchFile.mockResolvedValue({
+      content: JSON.stringify({
+        name: "dsh-chart",
+        peerDependencies: { "@deepseek-ai/dsh-tools": "*" },
+      }),
+      sha: "x",
+    });
+    const r = await detectSubdirBundle("iqingyoung/search2chart-mcp", root as never, "main");
+    expect(r?.subdir).toBe("dsh");
+    expect(r?.evidence[0]).toContain("DSH 依赖");
+  });
+
+  it("子目录 package.json 无 DSH 依赖且无标记 → 不命中", async () => {
+    const root = [rootItem("README.md"), rootItem("dsh", "dir")];
+    mockFetch.mockResolvedValue([rootItem("package.json")]);
+    mockFetchFile.mockResolvedValue({
+      content: JSON.stringify({ name: "lib", dependencies: { lodash: "^4" } }),
+      sha: "x",
+    });
+    const r = await detectSubdirBundle("someone/some-repo", root as never, "main");
+    expect(r).toBeNull();
   });
 });

@@ -18,6 +18,11 @@ describe("extractRepoFromText", () => {
     expect(extractRepoFromText(text)).toEqual([]);
   });
 
+  it("过滤 GitHub 附件域（user-attachments 图片路径不是仓库）", () => {
+    const text = "截图：https://github.com/user-attachments/assets/123abc 仓库：https://github.com/foo/bar";
+    expect(extractRepoFromText(text)).toEqual(["foo/bar"]);
+  });
+
   it("大小写归一化", () => {
     expect(extractRepoFromText("https://github.com/MyOrg/MyRepo")).toEqual(["myorg/myrepo"]);
   });
