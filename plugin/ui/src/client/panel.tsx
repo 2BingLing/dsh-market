@@ -1543,11 +1543,20 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
       .catch(() => {})
   }, [open, selfDismissed])
 
-  /** 一键更新插件自身（dsh plugin add 覆盖安装；完成后需重启 harness） */
+  /** 插件自身更新：引导式（P0）——运行中不能就地覆盖自己，给出停 harness 后的命令并复制 */
   const applySelfUpdate = async () => {
     setSelfUpdating(true)
     try {
       const r = await api<SelfUpdateInfo>('update:self', { apply: true })
+      if (r.needsManual) {
+        const cmd = r.manualCommand ?? 'dsh plugin --profile web add @dsh-market/plugin@latest'
+        if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(cmd).catch(() => {})
+        }
+        toast(`已复制更新命令：${cmd}。请停止 harness 后运行，再重启 harness 生效。`, 5600)
+        setSelfDismissed(true)
+        return
+      }
       if (r.applied) {
         setSelfUpdate(null)
         setSelfDismissed(true)
@@ -1638,7 +1647,7 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
               : El('button', {
                   className: `${styles.btn} ${styles.btnSm} ${styles.btnPrimary}`,
                   onClick: () => void applySelfUpdate(),
-                }, '更新'),
+                }, '获取命令'),
             selfUpdating
               ? null
               : El('button', {

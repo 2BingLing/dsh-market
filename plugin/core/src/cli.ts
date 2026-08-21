@@ -140,29 +140,20 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
     ),
   "update:check": (args) =>
     market().then((d) => checkUpdates(cfg, scanInstalled(cfg, d), { force: args?.force })),
-  // 插件自身更新检测（apply 时执行 dsh plugin add 覆盖安装到最新版本）
+  // 插件自身更新检测；apply = 引导式（不就地执行，运行中覆盖自己必卡）
   "update:self": async (args) => {
     const current = pluginVersion();
     if (!current) throw new Error("无法读取当前插件版本");
     const check = await checkSelfUpdate(current, { force: Boolean(args?.force) });
     if (!args?.apply) return check;
     const profile = readSettings(cfg).profile;
-    const r = await realRunner.run(
-      `dsh plugin --profile ${profile} add @dsh-market/plugin@latest`,
-      { timeoutMs: 180000 },
-    );
-    const output = (r.stderr || r.stdout).slice(0, 300);
-    if (r.exitCode !== 0 && /EPERM|permission|EACCES/i.test(output)) {
-      return {
-        ...check,
-        applied: false,
-        applyOutput: `${output}。请先停止 harness，再执行：npx @deepseek-ai/dsh plugin --profile ${profile} add @dsh-market/plugin@latest，然后重启 harness`,
-      };
-    }
+    const manualCommand = `dsh plugin --profile ${profile} add @dsh-market/plugin@latest`;
     return {
       ...check,
-      applied: r.exitCode === 0,
-      applyOutput: r.exitCode === 0 ? undefined : output,
+      applied: false,
+      needsManual: true,
+      manualCommand,
+      reason: `更新插件市场自身需要在停止 harness 后执行（运行中就地覆盖会被文件占用拦截）：\n${manualCommand}\n然后重启 harness。`,
     };
   },
 

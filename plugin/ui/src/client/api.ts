@@ -109,6 +109,10 @@ export interface SelfUpdateInfo {
   /** apply 执行结果 */
   applied?: boolean
   applyOutput?: string
+  /** P0：运行中不可就地自更新 → 需要用户停 harness 后手动执行 */
+  needsManual?: boolean
+  manualCommand?: string
+  reason?: string
 }
 
 export interface UserProfile {

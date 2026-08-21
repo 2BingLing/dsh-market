@@ -2,6 +2,19 @@
 
 本项目采用 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 风格。标题按版本号与日期排序，最新在上。
 
+## [0.3.1] - 2026-08-21
+
+### 插件端（`@dsh-market/plugin` / `@dsh-market/core`）
+
+**修复：已装 Tab 无法识别带 scope 的 npm 包（issue #56）**
+- `scanInstalled` 匹配对 `@scope/pkg` 归一化：`pkg` 对齐仓库名 `name`、`scope/pkg` 对齐 `owner/repo`（GitHub owner 大小写不敏感）。
+- 复现例 `@nanmicoder/dsh-agent-teams`（仓库 `NanmiCoder/dsh-agent-teams`）此前落入「未收录市场」且「检查更新」失效 → 现在正确归属「已安装」并可检测更新。
+- 新增 `plugin/core/test/installed.test.ts`（7 用例）。
+
+**改进：插件自身更新改「引导式」（不再运行中就地执行）**
+- `update:self` 的 apply 不再在 harness 运行中执行 `dsh plugin add`（Windows 上覆盖自己必卡），改为返回 `needsManual + manualCommand`；
+- 面板「获取命令」按钮：复制停 harness 后的命令行并提示，杜绝「更新中」卡死。
+
 ## [0.3.0] - 2026-08-21
 
 PoC 落地：装后生效验证、构建脚本放行、假更新防误报、周度失效扫描(**P0**)。

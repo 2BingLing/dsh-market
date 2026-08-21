@@ -59,7 +59,7 @@ export function scanInstalled(
         for (const [dep, ver] of Object.entries(deps)) {
           // 只关注看起来像 dsh 插件的依赖（dsh- 前缀或知名组织）
           if (!looksLikeDshPlugin(dep)) continue;
-          const plugin = byName.get(dep.toLowerCase()) ?? byFull.get(dep.toLowerCase()) ?? null;
+          const plugin = matchMarketPlugin(dep, byName, byFull);
           // 版本优先读 node_modules 实际安装版本（`*` 依赖也准），其次依赖声明；git URL/路径 → null
           const installedVer = readInstalledVersion(
             join(cfg.profilesDir, profile.name, "node_modules", dep),
@@ -79,10 +79,7 @@ export function scanInstalled(
         for (const bundle of pkg.dsh?.profile?.bundles ?? []) {
           if (!looksLikeDshPlugin(bundle)) continue;
           if (depNames.has(bundle)) continue; // 去重：依赖里已有版本信息
-          const plugin =
-            byName.get(bundle.toLowerCase()) ??
-            byFull.get(bundle.toLowerCase()) ??
-            null;
+          const plugin = matchMarketPlugin(bundle, byName, byFull);
           found.push({
             pluginId: plugin?.id ?? null,
             localName: bundle,
@@ -109,6 +106,36 @@ export function splitNameVersion(name: string): {
   const m = name.match(/^(.*?)-(\d+\.\d+(?:\.\d+)?(?:[-+][\w.-]+)?)$/);
   if (m) return { baseName: m[1], version: m[2] };
   return { baseName: name, version: null };
+}
+
+/**
+ * 用已装依赖名匹配市场条目（issue #56：兼容 scoped 包名的误判）。
+ * 归一化口径：
+ *   - 先按原名精确匹配 name / fullName（无 scope 或恰好同名）；
+ *   - 对 `@scope/pkg`：`pkg` 对齐仓库名 `name`（npm 包名常等于仓库名）；
+ *     `scope/pkg` 对齐 `owner/repo`（GitHub owner 大小写不敏感，npm scope 必须小写）。
+ * 两种都试，命中即返回；均未命中返回 null。
+ */
+export function matchMarketPlugin(
+  dep: string,
+  byName: ReadonlyMap<string, DshPlugin>,
+  byFull: ReadonlyMap<string, DshPlugin>,
+): DshPlugin | null {
+  const d = dep.toLowerCase();
+  const direct = byName.get(d) ?? byFull.get(d);
+  if (direct) return direct;
+  if (d.startsWith("@")) {
+    // "@scope/pkg".split("/") = ["@scope","pkg"] —— @ 是首 token 前缀，需先去掉 @ 再拆
+    const [scope, ...rest] = d.slice(1).split("/");
+    const pkg = rest.join("/");
+    if (pkg) {
+      const byRepo = byName.get(pkg);
+      if (byRepo) return byRepo;
+      const byScopedFull = byFull.get(`${scope}/${pkg}`);
+      if (byScopedFull) return byScopedFull;
+    }
+  }
+  return null;
 }
 
 /** 官方基础组合包（非市场插件，扫描时排除） */
