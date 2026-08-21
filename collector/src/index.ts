@@ -133,6 +133,30 @@ function loadPreviousPlugins(): Map<string, DshPlugin> {
   }
 }
 
+/** 从插件记录构造最小 GithubRepo（B2 检测缓存直补用：仓库未变，无需 API 即补回） */
+function repoStubFromPlugin(p: DshPlugin): GithubRepo {
+  return {
+    id: 0, // stub：B2 直补项不依赖真实 id
+    full_name: p.fullName,
+    name: p.repo,
+    owner: { login: p.owner },
+    stargazers_count: p.stars,
+    forks_count: p.forks,
+    open_issues_count: p.openIssues,
+    language: p.language,
+    description: p.description || null,
+    license: p.license ? { spdx_id: p.license } : null,
+    homepage: p.homepage,
+    topics: p.topics,
+    pushed_at: p.pushedAt,
+    created_at: p.createdAt,
+    updated_at: p.updatedAt,
+    default_branch: null,
+    archived: false,
+    fork: false,
+  };
+}
+
 async function main() {
   if (!process.env.GITHUB_TOKEN) {
     console.error("缺少 GITHUB_TOKEN 环境变量");
@@ -451,58 +475,81 @@ async function main() {
     detected.push(...deduped);
   }
 
-  // [B2] 已收录延续性：上次收录但本次未扫描到的仓库，repos API 单独确认后补回
-  // （防「三路前 1000」边界抖动导致已收录插件消失；404 确认真删除才移除）
+  // [B2] 已收录延续性：上次收录但本次未扫描到的仓库补回（防边界抖动消失；404 确认真删除才移除）
+  // 优化：检测缓存证明仓库存在且 pushedAt 未变的直接补回（零 API）；只有缓存缺失/变化的才逐个调 repos API
+  // ——避免每次对上干个 miss 逐个请求撞限流（曾让 cron 从 10 分钟涨到 2 小时）
   const prevPlugins = loadPreviousPlugins();
   const currentIds = new Set(detected.map((d) => d.plugin.id.toLowerCase()));
   const missing = [...prevPlugins.keys()].filter((id) => !currentIds.has(id));
   let restored = 0;
   let confirmedGone = 0;
   if (missing.length > 0) {
-    console.log(
-      `  [B2] 上次收录 ${prevPlugins.size}，本次扫描未出现 ${missing.length}，单独确认中（并发 10）...`
-    );
-    await runPool(missing, async (id) => {
+    const DETECT_TTL = 7 * 24 * 3600_000;
+    const directRestore: string[] = [];
+    const needApi: string[] = [];
+    for (const id of missing) {
       const prev = prevPlugins.get(id)!;
-      try {
-        const repo = await githubFetch<GithubRepo>(`/repos/${id}`);
-        if (repo.fork || repo.archived) {
-          confirmedGone++;
-          return;
+      const dc = cacheGet<DetectCache>("detect", id, DETECT_TTL);
+      if (dc && dc.pushedAt === prev.pushedAt) directRestore.push(id);
+      else needApi.push(id); // 无缓存或仓库近 7 天有变化 → 需 API 确认
+    }
+    // 1) 缓存直补（零 API）：检测缓存证明仓库存在且未变，直接复用上次记录
+    for (const id of directRestore) {
+      const prev = prevPlugins.get(id)!;
+      detected.push({
+        candidate: { fullName: id, repo: null, sources: ["restore"] },
+        plugin: { ...prev, lastCheckedAt: new Date().toISOString() },
+        repo: repoStubFromPlugin(prev),
+        readmeContent: null,
+        hasSkillMd: false,
+      });
+      restored++;
+    }
+    if (restored > 0) console.log(`  [B2] 检测缓存直补 ${restored} 个（零 API）`);
+    // 2) API 确认（少数）
+    if (needApi.length > 0) {
+      console.log(`  [B2] ${needApi.length} 个需 API 确认（缓存缺失/变化）...`);
+      await runPool(needApi, async (id) => {
+        const prev = prevPlugins.get(id)!;
+        try {
+          const repo = await githubFetch<GithubRepo>(`/repos/${id}`);
+          if (repo.fork || repo.archived) {
+            confirmedGone++;
+            return;
+          }
+          // 改名/转移（full_name 变化）：旧名不补，新名由扫描收录走正常检测
+          if (repo.full_name.toLowerCase() !== id.toLowerCase()) {
+            confirmedGone++;
+            return;
+          }
+          // pushedAt 与上次一致（仓库没变）→ 复用上次记录 + 更新元数据
+          if (repo.pushed_at === prev.pushedAt) {
+            detected.push({
+              candidate: { fullName: id, repo, sources: ["restore"] },
+              plugin: {
+                ...prev,
+                stars: repo.stargazers_count,
+                forks: repo.forks_count,
+                openIssues: repo.open_issues_count,
+                language: repo.language,
+                pushedAt: repo.pushed_at,
+                createdAt: repo.created_at,
+                updatedAt: repo.updated_at,
+                homepage: repo.homepage ?? prev.homepage,
+                lastCheckedAt: new Date().toISOString(),
+              },
+              repo,
+              readmeContent: null,
+              hasSkillMd: false,
+            });
+            restored++;
+          }
+          // pushedAt 变了：等下次扫描进池正常重检测，本次不补
+        } catch (err) {
+          if (err instanceof GithubError && err.status === 404) confirmedGone++; // 仓库确已删除
         }
-        // 改名/转移（full_name 变化）：旧名不补，新名由扫描收录走正常检测
-        if (repo.full_name.toLowerCase() !== id.toLowerCase()) {
-          confirmedGone++;
-          return;
-        }
-        // pushedAt 与上次一致（仓库没变，只是本次扫描抖动漏了）→ 复用上次记录 + 更新元数据
-        if (repo.pushed_at === prev.pushedAt) {
-          detected.push({
-            candidate: { fullName: id, repo, sources: ["restore"] },
-            plugin: {
-              ...prev,
-              stars: repo.stargazers_count,
-              forks: repo.forks_count,
-              openIssues: repo.open_issues_count,
-              language: repo.language,
-              pushedAt: repo.pushed_at,
-              createdAt: repo.created_at,
-              updatedAt: repo.updated_at,
-              homepage: repo.homepage ?? prev.homepage,
-              lastCheckedAt: new Date().toISOString(),
-            },
-            repo,
-            readmeContent: null,
-            hasSkillMd: false,
-          });
-          restored++;
-        }
-        // pushedAt 变了：等下次扫描进池正常重检测，本次不补（避免静默更新检测产物）
-      } catch (err) {
-        if (err instanceof GithubError && err.status === 404) confirmedGone++; // 仓库确已删除
-        // 其他错误（限流/网络）跳过，下次再说
-      }
-    });
+      });
+    }
     console.log(`  [B2] 补回 ${restored}，确认移除 ${confirmedGone}（其余等下次扫描）`);
   }
 
