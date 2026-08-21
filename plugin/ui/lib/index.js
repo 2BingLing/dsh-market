@@ -1,5 +1,6 @@
 import { createRequire } from "node:module";
-import { aggregateTags, checkSelfUpdate, checkUpdates, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, readProfile, readSettings, recommend, resolveConfig, scanInstalled, search, uninstallPlugin, updateProfile, writeProfile, writeSettings } from "@dsh-market/core";
+import { join } from "node:path";
+import { aggregateTags, applyUpdate, checkSelfUpdate, checkUpdates, detectPnpmMajor, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, parseBlockedBuilds, readProfile, readSettings, recommend, resolveConfig, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获 */
@@ -283,12 +284,53 @@ function apply(ctx) {
 			case "install": {
 				const plugin = (await market()).plugins.find((p) => p.id === args.pluginId);
 				if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
-				return installPlugin(cfg, plugin, {
+				const profile = args.targetProfile ?? readSettings(cfg).profile;
+				const r = await installPlugin(cfg, plugin, {
 					dryRun: Boolean(args.dryRun),
 					force: Boolean(args.force),
-					targetProfile: args.targetProfile ?? readSettings(cfg).profile,
+					targetProfile: profile,
 					runner: realRunner()
 				});
+				if (r.ok && !r.alreadyInstalled && !args.dryRun) r.activation = verifyAfterInstall(cfg, plugin, { profile });
+				if (!r.ok) {
+					const blocked = parseBlockedBuilds(r.error ?? "");
+					if (blocked.length > 0) r.blockedBuilds = blocked;
+				}
+				return r;
+			}
+			case "verify": {
+				const plugin = (await market()).plugins.find((p) => p.id === args.pluginId);
+				if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
+				return verifyAfterInstall(cfg, plugin, { profile: args.targetProfile ?? readSettings(cfg).profile });
+			}
+			case "update:apply": {
+				const data = await market();
+				const plugin = data.plugins.find((p) => p.id === args.pluginId);
+				if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
+				const item = scanInstalled(cfg, data).find((i) => i.pluginId === args.pluginId) ?? {
+					pluginId: args.pluginId,
+					localName: args.localName ?? plugin.name,
+					version: null,
+					source: "profile",
+					plugin
+				};
+				return applyUpdate(cfg, plugin, item, {
+					runner: realRunner(),
+					profile: args.targetProfile ?? readSettings(cfg).profile
+				});
+			}
+			case "update:relax": {
+				const profile = args.profile ?? readSettings(cfg).profile;
+				return writeMinimumReleaseAge(join(cfg.profilesDir, profile), 0);
+			}
+			case "builds:approve": {
+				const profile = args.profile ?? readSettings(cfg).profile;
+				const profileDir = join(cfg.profilesDir, profile);
+				const major = await detectPnpmMajor({
+					runner: realRunner(),
+					cwd: profileDir
+				});
+				return writeBuildApprovals(profileDir, args.packages ?? [], { pnpmMajor: major });
 			}
 			case "uninstall": {
 				const data = await market();

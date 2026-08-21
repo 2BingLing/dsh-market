@@ -6,6 +6,8 @@ import { createElement, useEffect, useMemo, useRef, useState, useSyncExternalSto
 import type { ReactNode } from 'react'
 import {
   api,
+  type ActivationStatus,
+  type ApplyUpdateResult,
   type InstalledItem,
   type LitePack,
   type LitePlugin,
@@ -94,6 +96,34 @@ function fmtStars(n: number): string {
 
 function El(tag: string | ((props: any) => ReactNode), props: Record<string, unknown> | null, ...children: ReactNode[]): ReactNode {
   return createElement(tag as never, props ?? {}, ...children)
+}
+
+/** P0-1 装后四态 → 中文短标签 */
+function activationText(a: ActivationStatus | undefined): string {
+  if (!a) return ''
+  const map: Record<string, string> = {
+    live: '已生效',
+    restart: '重启后生效',
+    inert: '未成为插件层',
+    broken: '校验失败',
+  }
+  const label = map[a.state] ?? a.state
+  return a.reasons && a.reasons.length ? `${label}（${a.reasons[0]}）` : label
+}
+
+/** P0-2 从安装/更新失败输出解析被拦构建包名 */
+function parseBlockedFromOutput(output: string, item: InstalledItem): string[] {
+  const raw = output.match(/Ignored build scripts\s*:\s*([^\n]*)/i)?.[1] ?? ''
+  const pkgs = raw
+    .split(',')
+    .map((s) => s.trim().replace(/\.$/, '').replace(/@\d[\w.\-+]*$/, ''))
+    .filter(Boolean)
+  // 解析不到时退回插件包名（集合仍受 build 白名单校验约束）
+  if (pkgs.length === 0 && item.plugin) {
+    const fallback = item.plugin.name.replace(/\.$/, '').trim()
+    if (fallback) pkgs.push(fallback)
+  }
+  return [...new Set(pkgs)]
 }
 
 // ---------- Toast（B 稿底部黑底白字，DOM 直挂不受 React 树影响） ----------
@@ -763,6 +793,10 @@ function InstalledTab(props: {
   const [checking, setChecking] = useState(false)
   const [checkError, setCheckError] = useState('')
   const [updating, setUpdating] = useState<string | null>(null)
+  // P0-1/P0-2/P0-3：装后四态验证结果（localName → status）· 验证中 · 构建脚本放行中
+  const [verifMap, setVerifMap] = useState<Record<string, ActivationStatus>>({})
+  const [verifying, setVerifying] = useState<string | null>(null)
+  const [approving, setApproving] = useState<string | null>(null)
 
   const uninstall = async (item: InstalledItem) => {
     if (!item.pluginId) return
@@ -799,26 +833,87 @@ function InstalledTab(props: {
     }
   }
 
-  /** 一键更新：复用 install force（cordis 重新 add；skill 备份后重新 clone） */
+  /** P0-1 装后四态验证：对单个已装项手动触发（读 profile 真值） */
+  const verifyOne = async (item: InstalledItem) => {
+    if (!item.pluginId || verifying) return
+    setVerifying(item.localName)
+    try {
+      const a = await api<ActivationStatus>('verify', { pluginId: item.pluginId })
+      setVerifMap((m) => ({ ...m, [item.localName]: a }))
+      toast(`「${item.localName}」：${activationText(a)}`, 3200)
+    } catch (e) {
+      toast(`验证失败：${(e as Error).message}`, 3000)
+    } finally {
+      setVerifying(null)
+    }
+  }
+
+  /**
+   * P0-3 更新执行（update:apply）：before/after 对比，假更新防误报；
+   * P0-2 构建脚本被拦 → 自动放行并重试一次；P0-1 更新成功后展示装后四态。
+   */
   const updatePlugin = async (item: InstalledItem) => {
     if (!item.pluginId || updating) return
     setUpdating(item.localName)
     try {
-      const r = await api<{ ok: boolean; error?: string; requiresRestart?: boolean }>('install', {
-        pluginId: item.pluginId,
-        force: true,
-      })
-      if (!r.ok) {
-        toast(`更新失败：${r.error ?? '未知错误'}`, 3500)
+      let r = await api<ApplyUpdateResult>('update:apply', { pluginId: item.pluginId })
+
+      // P0-2：构建脚本被拦 → 解析被拦包名 → 放行 → 自动重试一次
+      if (r.error && !r.applied && /Ignored build scripts|approve-builds/i.test(r.error)) {
+        const blocked = parseBlockedFromOutput(r.error, item)
+        setApproving(item.localName)
+        const ar = await api<{ ok: boolean; error?: string }>('builds:approve', { packages: blocked })
+        if (!ar.ok) {
+          setApproving(null)
+          toast(`构建脚本放行失败：${ar.error ?? '未知错误'}`, 3500)
+          return
+        }
+        toast(`已放行构建脚本（${blocked.join('、')}），自动重试…`, 3200)
+        r = await api<ApplyUpdateResult>('update:apply', { pluginId: item.pluginId })
+        setApproving(null)
+      }
+
+      if (r.error && !r.applied) {
+        toast(`更新失败：${r.error}`, 4500)
         return
       }
+
+      // P0-3：假更新防误报——被发布年龄门槛挡住，提供「放宽门槛并重试」
+      if (r.blocked === 'minimum-release-age') {
+        const msg = r.reason ?? '新版本已发布但被 pnpm 发布年龄门槛（minimumReleaseAge）挡住'
+        if (typeof window !== 'undefined' && window.confirm(`${msg}。\n\n点击「确定」= 放宽门槛（minimumReleaseAge: 0）并自动重试；「取消」= 等门槛期过后再更。`)) {
+          const rel = await api<{ ok: boolean; error?: string }>('update:relax', {})
+          if (!rel.ok) {
+            toast(`放宽门槛失败：${rel.error ?? '未知错误'}`, 3500)
+            return
+          }
+          toast('已放宽发布年龄门槛，自动重试…', 3200)
+          r = await api<ApplyUpdateResult>('update:apply', { pluginId: item.pluginId })
+          if (r.error && !r.applied) {
+            toast(`更新失败：${r.error}`, 4500)
+            return
+          }
+        } else {
+          toast('已取消；新版本将在发布年龄门槛期过后自动可更新', 3500)
+          return
+        }
+      }
+
+      if (r.noChange && !r.applied) {
+        toast(r.reason ?? '版本无变化', 3000)
+        return
+      }
+
       onChanged() // 重扫已装（版本/目录变化）
       setUpdateMap((m) => {
         const next = { ...m }
         delete next[item.localName] // 清掉旧结果，避免显示过期版本
         return next
       })
-      toast(r.requiresRestart ? '更新完成，重启 harness 后生效' : '更新完成')
+      const act = r.activation
+      const verTxt = act ? ` · ${activationText(act)}` : ''
+      toast(`更新完成${verTxt}`, 3500)
+      if (act) setVerifMap((m) => ({ ...m, [item.localName]: act }))
     } catch (e) {
       toast(`更新失败：${(e as Error).message}`, 3500)
     } finally {
@@ -871,6 +966,12 @@ function InstalledTab(props: {
             El('div', { className: styles.installedMeta },
               `${i.version ?? '未知版本'} · ${i.source === 'skills' ? 'skill' : 'profile'}`,
             ),
+            // P0-1 装后四态：已有验证结果则展示状态短标签
+            verifMap[i.localName]
+              ? El('div', {
+                  className: `${styles.activationChip} ${verifMap[i.localName].state === 'live' ? styles.activationLive : verifMap[i.localName].state === 'broken' ? styles.activationBroken : verifMap[i.localName].state === 'inert' ? styles.activationInert : ''}`,
+                }, activationText(verifMap[i.localName]))
+              : null,
             checking ? El('div', { className: styles.updateHint }, '检测中…') : renderCheck(i),
           ),
           confirming === i.localName
@@ -883,6 +984,16 @@ function InstalledTab(props: {
                 }, '确认卸载'),
               )
             : El('div', { className: styles.installedActions },
+                // P0-1 验证（装后四态）
+                El('button', {
+                  className: `${styles.btn} ${styles.btnSm} ${styles.btnGhost}`,
+                  disabled: updating !== null || busy || !i.pluginId || verifying !== null,
+                  onClick: () => void verifyOne(i),
+                }, verifying === i.localName ? '验证中…' : '验证'),
+                // P0-2 构建放行中（自动流程的过渡态）
+                approving === i.localName
+                  ? El('span', { className: styles.updateHint }, '放行构建脚本…')
+                  : null,
                 updateMap[i.localName]?.hasUpdate
                   ? El('button', {
                       className: `${styles.btn} ${styles.btnSm} ${styles.btnPrimary}`,

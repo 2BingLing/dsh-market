@@ -68,6 +68,39 @@ export interface UpdateCheckResult {
   error?: string
 }
 
+/** 装后四态生效验证（P0-1，core/verify.ts） */
+export type ActivationState = 'live' | 'restart' | 'inert' | 'broken'
+
+export interface ActivationStatus {
+  state: ActivationState
+  inBundles: boolean
+  hasBundle: boolean
+  hasClient: boolean
+  reasons: string[]
+  action?: string
+}
+
+/** 更新执行结果（P0-3，core/update.ts applyUpdate） */
+export interface ApplyUpdateResult {
+  applied: boolean
+  before: string | null
+  after: string | null
+  noChange: boolean
+  blocked?: 'minimum-release-age' | null
+  reason?: string
+  error?: string
+  activation?: ActivationStatus
+}
+
+/** install 返回（含装后验证 + 构建脚本拦截信号） */
+export interface InstallResultView {
+  ok: boolean
+  error?: string
+  requiresRestart?: boolean
+  activation?: ActivationStatus
+  blockedBuilds?: string[]
+}
+
 /** 插件自身更新检测结果（core/update.ts checkSelfUpdate） */
 export interface SelfUpdateInfo {
   current: string | null

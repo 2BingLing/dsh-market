@@ -1056,6 +1056,34 @@
   margin-top: 5px;
 }
 
+/* ---------- P0-1 装后四态验证徽标 ---------- */
+.activationChip {
+  display: inline-block;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-top: 5px;
+  background: #eef2ff;
+  border: 1px solid #d6defa;
+  color: #4d6bfe;
+}
+.activationLive {
+  background: #e8f6ee;
+  border: 1px solid #bfe3cd;
+  color: #15803d;
+}
+.activationBroken {
+  background: #fdeaea;
+  border: 1px solid #f5c6c6;
+  color: #b91c1c;
+}
+.activationInert {
+  background: #f3f4f6;
+  border: 1px solid #d6d9df;
+  color: #6b7280;
+}
+
 /* ---------- 插件自身更新提示条（面板顶部，所有 tab 之上） ---------- */
 .selfUpdateBar {
   display: flex;

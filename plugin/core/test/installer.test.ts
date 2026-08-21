@@ -3,7 +3,7 @@ import { mkdtempSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { resolveConfig } from "../src/config.js";
-import { installPlugin, uninstallPlugin } from "../src/installer.js";
+import { installPlugin, isLockFailure, uninstallPlugin } from "../src/installer.js";
 import type { CommandRunner, InstallStep } from "../src/types.js";
 import { makeMarket } from "./fixture.js";
 
@@ -64,6 +64,33 @@ describe("installPlugin · skill 型", () => {
     expect(runner.run).toHaveBeenCalledTimes(3);
     // 回滚：目标目录不存在
     expect(existsSync(join(cfg.skillsDir, "web-scraper-latest"))).toBe(false);
+  });
+
+  it("文件占用（EPERM）类失败：不重试，立即失败并带可操作提示", async () => {
+    const cfg = makeCfg();
+    // 模拟运行时 harness 占用文件导致的 EPERM（P0 修复：避免 3×180s 假死）
+    const runner: CommandRunner = {
+      run: vi.fn(async () => ({
+        exitCode: 1,
+        stdout: "",
+        stderr: "ERR_PNPM_EPERM EPERM: operation not permitted, unlink ...",
+      })),
+    };
+    const r = await installPlugin(cfg, skillPlugin, { runner });
+    expect(r.ok).toBe(false);
+    expect(r.error).toContain("文件被占用");
+    // 只调用 1 次（不触发重试）
+    expect(runner.run).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("isLockFailure", () => {
+  it("识别 Windows 文件占用/权限类错误", () => {
+    expect(isLockFailure("EPERM: operation not permitted, unlink")).toBe(true);
+    expect(isLockFailure("EBUSY: resource busy or locked")).toBe(true);
+    expect(isLockFailure("Access is denied")).toBe(true);
+    expect(isLockFailure("426 Insecure Underlying Transport")).toBe(false);
+    expect(isLockFailure("ETIMEDOUT")).toBe(false);
   });
 });
 

@@ -91,7 +91,7 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region \0dsh-css:E:\wm\tool\lader\plugin\ui\src\client\styles.module.css.mjs
-		const css = "*{box-sizing:border-box}._LI32q_trigger{color:#5f6670;cursor:pointer;background:0 0;border:none;border-radius:6px;align-items:center;gap:8px;height:100%;padding:0 12px;font-size:14px;display:flex}._LI32q_trigger:hover{color:#252525;background:#edeef1}._LI32q_trigger[data-active]{color:#4d6bfe;background:#edeef1}._LI32q_triggerIcon{align-items:center;line-height:1;display:flex}._LI32q_triggerLabel{white-space:nowrap}._LI32q_backdrop{z-index:100;pointer-events:auto;background:0 0;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_panel{pointer-events:auto;color:#252525;-webkit-font-smoothing:antialiased;background:#fff;border:1px solid #e5e7eb;border-radius:14px;flex-direction:column;width:560px;max-width:94vw;height:720px;max-height:92vh;font-family:-apple-system,BlinkMacSystemFont,PingFang SC,Noto Sans SC,Microsoft YaHei,Helvetica Neue,Arial,sans-serif;font-size:13px;display:flex;position:relative;overflow:hidden;box-shadow:0 8px 40px #00000024,0 2px 8px #00000014}._LI32q_header{border-bottom:1px solid #eef0f2;flex:none;align-items:center;gap:10px;padding:14px 16px 12px;display:flex}._LI32q_titleIcon{align-items:center;display:flex}._LI32q_titleIcon>svg{color:#4d6bfe;width:24px;height:24px}._LI32q_title{font-size:15px;font-weight:600}._LI32q_subtitle{color:#2e4bd8;background:#eaf2fb;border-radius:10px;padding:2px 8px;font-size:11.5px;font-weight:500}._LI32q_headerClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;margin-left:auto;transition:background-color .14s;display:flex}._LI32q_headerClose:hover{color:#252525;background:#f3f4f6}._LI32q_headerClose svg{width:16px;height:16px}._LI32q_tabs{border-bottom:1px solid #eef0f2;flex:none;gap:2px;padding:0 12px;display:flex}._LI32q_tab{color:#5f6670;cursor:pointer;white-space:nowrap;background:0 0;border:none;margin:0 8px;padding:10px 4px;font-size:13px;position:relative}._LI32q_tab:hover{color:#252525}._LI32q_tabOn{color:#252525;font-weight:600}._LI32q_tabOn:after{content:\"\";background:#4d6bfe;border-radius:2px;height:2px;position:absolute;bottom:-1px;left:0;right:0}._LI32q_body{scrollbar-width:thin;scrollbar-color:#d4d7dc transparent;flex:1;min-height:0;padding:16px 16px 20px;overflow-y:auto}._LI32q_body::-webkit-scrollbar{width:6px}._LI32q_body::-webkit-scrollbar-thumb{background:#d4d7dc;border-radius:3px}._LI32q_body::-webkit-scrollbar-track{background:0 0}._LI32q_tabBody,._LI32q_section{flex-direction:column;display:flex}._LI32q_sectionHead{align-items:center;gap:7px;margin:20px 0 10px;display:flex}._LI32q_section:first-child>._LI32q_sectionHead{margin-top:2px}._LI32q_sectionIcon{color:#8a919f;flex:none;align-items:center;display:flex}._LI32q_sectionIcon>svg{width:14px;height:14px}._LI32q_sectionTitle{color:#252525;margin:0;font-size:14px;font-weight:600}._LI32q_sectionNote{color:#8a919f;margin-left:auto;font-size:12px}._LI32q_btn{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s,box-shadow .14s;box-shadow:0 1px 3px #0000000f}._LI32q_btn:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_btn:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnPrimary{color:#fff;background:#4d6bfe;border-color:#4d6bfe;box-shadow:0 1px 3px #4d6bfe59}._LI32q_btnPrimary:hover{background:#3652e6;border-color:#3652e6}._LI32q_btnPrimary:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnGhost{box-shadow:none;color:#5f6670;border-color:#0000}._LI32q_btnGhost:hover{color:#252525;background:#f3f4f6}._LI32q_btnSm{padding:4px 11px;font-size:12px}._LI32q_btnDanger{color:#ef4444;border-color:#f3c8c8}._LI32q_btnDanger:hover{background:#fdeeee;border-color:#f3c8c8}._LI32q_card{cursor:default;background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;min-width:0;padding:14px;transition:box-shadow .15s,transform .15s,border-color .15s;display:flex;overflow:hidden;box-shadow:0 1px 3px #0000000f}._LI32q_card:hover{border-color:#dadde3;transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_cardHead{align-items:center;gap:8px;display:flex}._LI32q_cardName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_cardBadge{color:#2e4bd8;background:#eaf2fb;border-radius:10px;flex:none;padding:1px 7px;font-size:11.5px;font-weight:500}._LI32q_cardStars{color:#5f6670;flex:none;align-items:center;gap:4px;margin-left:auto;font-size:12px;display:flex}._LI32q_cardStars>svg{color:#f59e0b;width:13px;height:13px}._LI32q_cardDesc{color:#5f6670;-webkit-line-clamp:3;-webkit-box-orient:vertical;margin:8px 0 9px;font-size:13px;line-height:1.55;display:-webkit-box;overflow:hidden}._LI32q_cardTags,._LI32q_cardReasons{flex-wrap:wrap;gap:6px;margin-bottom:10px;display:flex}._LI32q_reason{color:#15803d;background:#eef8f3;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_reasonAi{color:#2e4bd8;background:#eaf2fb;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_cardActions{align-items:center;gap:6px;display:flex}._LI32q_spacer{margin-left:auto}._LI32q_needConfig{color:#a97f1f;font-size:11px}._LI32q_cardActionHint{color:#8a919f;text-align:right;margin-top:6px;font-size:11px}._LI32q_iconBtn{cursor:pointer;color:#8a919f;background:#fff;border:1px solid #d1d5db;border-radius:7px;flex:none;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_iconBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_iconBtn:disabled{opacity:.5;cursor:not-allowed}._LI32q_iconBtn svg{width:15px;height:15px}._LI32q_iconBtnOn{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtn{color:#5f6670;cursor:pointer;white-space:nowrap;background:#fff;border:1px solid #d1d5db;border-radius:7px;justify-content:center;align-items:center;gap:4px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_favBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtnOn{color:#4d6bfe;background:#eaf2fb;border-color:#c9d4f5}._LI32q_repoBtn{color:#5f6670;cursor:pointer;background:#fff;border:1px solid #d1d5db;border-radius:7px;align-items:center;gap:5px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_repoBtn svg{width:13px;height:13px}._LI32q_repoBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_tag{color:#4a5460;cursor:pointer;user-select:none;background:#f3f4f6;border:none;border-radius:8px;padding:2px 6px;font-size:11px;transition:background-color .12s,color .12s}._LI32q_tag:hover{color:#2e4bd8;background:#eaf2fb}._LI32q_tagOn{color:#2e4bd8;background:#eaf2fb;font-weight:500}._LI32q_recommendToolbar{background:#eaf2fb;border:1px solid #d6e4f8;border-radius:11px;align-items:center;gap:8px;margin-bottom:4px;padding:9px 12px;display:flex}._LI32q_recommendToolbarIcon{color:#4d6bfe;flex:none;align-items:center;display:flex}._LI32q_recommendToolbarIcon>svg{width:14px;height:14px}._LI32q_recommendHint{color:#5f6670;flex:1;font-size:12px;line-height:1.5}._LI32q_modeSwitchRow{margin-bottom:4px;display:flex}._LI32q_quizCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;margin-bottom:4px;padding:15px;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_quizHead{align-items:center;gap:8px;margin-bottom:4px;display:flex}._LI32q_quizHeadIcon{color:#4d6bfe;align-items:center;display:flex}._LI32q_quizHeadIcon>svg{width:16px;height:16px}._LI32q_quizTitle{flex:1;font-size:14px;font-weight:600}._LI32q_quizDesc{color:#5f6670;margin:0 0 12px;font-size:12px}._LI32q_quizTags{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_quizChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_quizChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_quizChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_quizActions{align-items:center;gap:8px;display:flex}._LI32q_quizCount{color:#8a919f;font-size:12px}._LI32q_quizCta{align-items:center;margin-left:auto;display:flex}._LI32q_quizCta ._LI32q_btnPrimary{padding:9px 14px;font-size:13px;font-weight:600}._LI32q_sceneList{flex-direction:column;gap:0;display:flex}._LI32q_sceneRow{border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:10px;margin-bottom:9px;padding:12px 13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_sceneRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_sceneInfo{flex:1;min-width:0}._LI32q_sceneName{margin-bottom:3px;font-size:13.5px;font-weight:600}._LI32q_sceneDesc{color:#5f6670;font-size:12px;line-height:1.5}._LI32q_sceneHint{color:#8a919f;font-size:12px}._LI32q_sceneEmpty{color:#8a919f;border:1px solid #e5e7eb;border-radius:11px;margin:0;padding:12px 13px;font-size:12px}._LI32q_stateHint{text-align:center;color:#8a919f;padding:24px 12px;font-size:12px}._LI32q_installedNote{color:#8a919f;margin-top:8px;font-size:11px}._LI32q_grid2{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_grid2>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_grid2{grid-template-columns:1fr}}._LI32q_searchWrap{margin-bottom:14px;position:relative}._LI32q_searchWrapIcon{color:#8a919f;pointer-events:none;align-items:center;width:15px;height:15px;display:flex;position:absolute;top:50%;left:11px;transform:translateY(-50%)}._LI32q_searchWrapIcon>svg{width:15px;height:15px}._LI32q_searchInput{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:10px;outline:none;width:100%;height:38px;padding:0 34px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_searchInput::placeholder{color:#9299a3}._LI32q_searchInput:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_searchClear{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:5px;justify-content:center;align-items:center;width:20px;height:20px;padding:0;display:flex;position:absolute;top:50%;right:9px;transform:translateY(-50%)}._LI32q_searchClear:hover{background:#f3f4f6}._LI32q_searchClear svg{width:13px;height:13px}._LI32q_filterRow{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_filterChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:13px;padding:4px 11px;font-size:12px;transition:all .14s}._LI32q_filterChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_filterChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_semanticToggle{background:#fff;border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:9px;margin-bottom:14px;padding:9px 12px;display:flex}._LI32q_semanticInfo{flex:1}._LI32q_semanticTitle{align-items:center;gap:6px;font-size:13px;font-weight:600;display:flex}._LI32q_semanticPill{color:#8a919f;border:1px solid #e5e7eb;border-radius:9px;padding:0 6px;font-size:10px;font-weight:500}._LI32q_semanticDesc{color:#8a919f;margin-top:2px;font-size:12px}._LI32q_semanticSwitch{cursor:not-allowed;opacity:.7;background:#d4d7dc;border-radius:10px;flex:none;width:34px;height:20px;position:relative}._LI32q_semanticSwitch:after{content:\"\";background:#fff;border-radius:50%;width:16px;height:16px;position:absolute;top:2px;left:2px;box-shadow:0 1px 2px #0003}._LI32q_hotTagsTitle{color:#8a919f;margin-bottom:8px;font-size:12px}._LI32q_tagCloud{flex-wrap:wrap;gap:6px;padding:0;display:flex}._LI32q_hotTag{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_hotTag:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_hotTagOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_tagMoreRow{margin:2px 0 4px}._LI32q_results{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_results>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_results{grid-template-columns:1fr}}._LI32q_resultCount{color:#5f6670;margin:2px 0 10px;font-size:12px}._LI32q_resultCount b{color:#252525}._LI32q_loadMoreRow{text-align:center;margin:14px 0 6px}._LI32q_loadMore{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s;box-shadow:0 1px 3px #0000000f}._LI32q_loadMore:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_semanticResult{color:#8a919f;flex-wrap:wrap;align-items:center;gap:5px;font-size:12px;display:flex}._LI32q_emptyState{text-align:center;padding:56px 20px}._LI32q_emptyIcon{color:#d4d7dc;justify-content:center;margin-bottom:12px;display:flex}._LI32q_emptyIcon>svg{width:44px;height:44px}._LI32q_emptyTitle{color:#252525;margin-bottom:5px;font-size:14px;font-weight:600}._LI32q_emptyDesc{color:#8a919f;margin-bottom:16px;font-size:12px}._LI32q_installedRow{border:1px solid #e5e7eb;border-radius:11px;align-items:flex-start;gap:11px;margin-bottom:9px;padding:13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_installedRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_installedInfo{flex:1;min-width:0}._LI32q_installedHead{align-items:center;gap:8px;display:flex}._LI32q_installedName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_installedMeta{color:#8a919f;margin-top:3px;font-size:12px}._LI32q_installedActions{flex-direction:column;flex:none;gap:6px;display:flex}._LI32q_unmatched{flex-wrap:wrap;gap:5px;margin-top:8px;display:flex}._LI32q_unmatchedChip{color:#a97f1f;background:#fef7e7;border:1px dashed #e3c997;border-radius:10px;padding:3px 8px;font-size:11.5px}._LI32q_unmatchedMore{color:#8a919f;align-self:center;font-size:11px}._LI32q_updateChip{color:#b45309;background:#fef3e2;border:1px solid #f0d9a8;border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_latestChip{color:#15803d;background:#e8f6ee;border:1px solid #bfe3cd;border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_updateHint{color:#8a919f;margin-top:5px;font-size:11.5px}._LI32q_selfUpdateBar{color:#b45309;background:#fef3e2;border:1px solid #f0d9a8;border-radius:10px;align-items:center;gap:8px;margin:0 14px 10px;padding:8px 12px;font-size:12px;display:flex}._LI32q_selfUpdateText{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}._LI32q_settingCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;margin-bottom:12px;padding:15px;box-shadow:0 1px 3px #0000000f}._LI32q_settingHead{align-items:center;gap:8px;margin-bottom:10px;display:flex}._LI32q_settingIc{color:#4d6bfe;background:#f3f4f6;border-radius:8px;flex:none;justify-content:center;align-items:center;width:26px;height:26px;display:flex}._LI32q_settingIc>svg{width:15px;height:15px}._LI32q_settingTitle{font-size:14px;font-weight:600}._LI32q_versionRow{border-top:1px solid #eef0f2;align-items:center;gap:8px;margin-top:10px;padding-top:10px;display:flex}._LI32q_versionLabel{color:#5f6670;flex:none;font-size:12px}._LI32q_versionCode{color:#252525;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:6px;padding:2px 8px;font-family:ui-monospace,Menlo,monospace;font-size:12px}._LI32q_settingStatus{border-radius:9px;margin-left:auto;padding:2px 8px;font-size:11.5px}._LI32q_statusOk{color:#22c55e;background:#eef8f3}._LI32q_statusOff{color:#8a919f;background:#f3f4f6}._LI32q_statusWarn{color:#a97f1f;background:#fef7e7}._LI32q_settingsRow{align-items:center;gap:8px;display:flex}._LI32q_settingsLabel{color:#5f6670;white-space:nowrap;font-size:12px}._LI32q_ghTip{color:#5f6670;margin:0;font-size:12px;line-height:1.7}._LI32q_ghLink{color:#4d6bfe;align-items:center;gap:2px;text-decoration:none;display:inline-flex}._LI32q_ghLink:hover{text-decoration:underline}._LI32q_ghLogin{flex:1;font-size:13px;font-weight:600}._LI32q_ghRow{align-items:center;gap:8px;display:flex}._LI32q_deviceFlow{color:#5f6670;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;flex-direction:column;gap:6px;padding:9px 11px;font-size:12px;display:flex}._LI32q_deviceCode{letter-spacing:2px;color:#4d6bfe;background:#fff;border-radius:6px;align-self:flex-start;padding:4px 8px;font-family:ui-monospace,Menlo,monospace;font-size:18px;font-weight:700}._LI32q_ghPollState{color:#5f6670;margin:0;font-size:12px}._LI32q_deviceFlow a{color:#4d6bfe}._LI32q_deviceFlowTip{color:#8a919f;margin:0;font-size:11.5px;line-height:1.6}._LI32q_ghDone{color:#22c55e;align-items:center;font-weight:500;display:inline-flex}._LI32q_field{margin-bottom:11px}._LI32q_fieldRow{gap:8px;display:flex}._LI32q_fieldRow>._LI32q_field{flex:1;margin-bottom:0}._LI32q_fieldLabel{color:#5f6670;margin-bottom:5px;font-size:12px;display:block}._LI32q_input,._LI32q_select{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:9px;outline:none;width:100%;height:34px;padding:0 10px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_input:focus,._LI32q_select:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_input::placeholder{color:#9299a3}._LI32q_error{color:#ef4444;margin:0;font-size:12px}._LI32q_warn{color:#a97f1f;align-items:center;margin:0;font-size:12px;display:flex}._LI32q_dividerLine{background:#eef0f2;height:1px;margin:13px 0}._LI32q_inlineIcon{vertical-align:-2px;flex:none;margin-right:4px;display:inline-block}._LI32q_modalBackdrop{z-index:120;background:#14161c6b;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_modal{background:#fff;border-radius:14px;flex-direction:column;width:420px;max-width:92vw;padding:20px 22px;display:flex;overflow:hidden;box-shadow:0 12px 50px #0000003d}._LI32q_modalHead{justify-content:space-between;align-items:center;margin-bottom:12px;display:flex}._LI32q_modalTitle{font-size:15px;font-weight:600}._LI32q_modalClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:background-color .14s;display:flex}._LI32q_modalClose:hover{color:#252525;background:#f3f4f6}._LI32q_modalClose svg{width:16px;height:16px}._LI32q_modalBody{flex-direction:column;gap:10px;display:flex}._LI32q_modalDesc{color:#5f6670;margin:0;font-size:12.5px;line-height:1.6}._LI32q_modalActions{justify-content:flex-end;gap:8px;margin-top:8px;display:flex}._LI32q_modalSuccess{text-align:center;flex-direction:column;justify-content:center;align-items:center;gap:10px;display:flex}._LI32q_modalSuccessIcon{color:#22c55e;background:#eef8f3;border-radius:50%;justify-content:center;align-items:center;width:44px;height:44px;margin:0 auto;display:flex}._LI32q_modalSuccessIcon>svg{width:22px;height:22px}._LI32q_modalSuccessTitle{color:#252525;font-size:14px;font-weight:600}._LI32q_modalError{color:#ef4444;word-break:break-all;align-items:center;font-size:13px;font-weight:600;display:flex}._LI32q_loading{text-align:center;color:#8a919f;padding:20px;font-size:12px}._LI32q_advanced{margin-top:2px}._LI32q_advanced summary{cursor:pointer;color:#8a919f;user-select:none;font-size:11px}._LI32q_advancedTip{color:#8a919f;margin:6px 0 0;font-size:11px;line-height:1.5}._LI32q_advancedCmd{color:#5f6670;white-space:pre-wrap;word-break:break-all;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;margin-top:6px;padding:9px 11px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.6;display:block}._LI32q_steps{align-items:center;margin-bottom:18px;display:flex}._LI32q_step{color:#8a919f;flex:1;align-items:center;gap:7px;font-size:12px;display:flex;position:relative}._LI32q_stepDot{color:#8a919f;background:#fff;border:1.5px solid #d4d7dc;border-radius:50%;flex:none;justify-content:center;align-items:center;width:20px;height:20px;font-size:11.5px;transition:all .2s;display:flex}._LI32q_stepActive{color:#252525}._LI32q_stepActive ._LI32q_stepDot{color:#4d6bfe;border-color:#4d6bfe}._LI32q_stepDone{color:#252525}._LI32q_stepDone ._LI32q_stepDot{color:#fff;background:#4d6bfe;border-color:#4d6bfe}._LI32q_stepBar{background:#e7e9ed;border-radius:1px;flex:1;height:1.5px;margin:0 6px}._LI32q_stepBarDone{background:#4d6bfe}._LI32q_toast{color:#fff;z-index:200;pointer-events:none;background:#252525;border-radius:8px;padding:8px 16px;font-size:12.5px;animation:.22s _LI32q_toastIn;position:fixed;bottom:24px;left:50%;transform:translate(-50%);box-shadow:0 4px 16px #0003}@keyframes _LI32q_toastIn{0%{opacity:0;transform:translate(-50%)translateY(10px)}to{opacity:1;transform:translate(-50%)translateY(0)}}";
+		const css = "*{box-sizing:border-box}._LI32q_trigger{color:#5f6670;cursor:pointer;background:0 0;border:none;border-radius:6px;align-items:center;gap:8px;height:100%;padding:0 12px;font-size:14px;display:flex}._LI32q_trigger:hover{color:#252525;background:#edeef1}._LI32q_trigger[data-active]{color:#4d6bfe;background:#edeef1}._LI32q_triggerIcon{align-items:center;line-height:1;display:flex}._LI32q_triggerLabel{white-space:nowrap}._LI32q_backdrop{z-index:100;pointer-events:auto;background:0 0;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_panel{pointer-events:auto;color:#252525;-webkit-font-smoothing:antialiased;background:#fff;border:1px solid #e5e7eb;border-radius:14px;flex-direction:column;width:560px;max-width:94vw;height:720px;max-height:92vh;font-family:-apple-system,BlinkMacSystemFont,PingFang SC,Noto Sans SC,Microsoft YaHei,Helvetica Neue,Arial,sans-serif;font-size:13px;display:flex;position:relative;overflow:hidden;box-shadow:0 8px 40px #00000024,0 2px 8px #00000014}._LI32q_header{border-bottom:1px solid #eef0f2;flex:none;align-items:center;gap:10px;padding:14px 16px 12px;display:flex}._LI32q_titleIcon{align-items:center;display:flex}._LI32q_titleIcon>svg{color:#4d6bfe;width:24px;height:24px}._LI32q_title{font-size:15px;font-weight:600}._LI32q_subtitle{color:#2e4bd8;background:#eaf2fb;border-radius:10px;padding:2px 8px;font-size:11.5px;font-weight:500}._LI32q_headerClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;margin-left:auto;transition:background-color .14s;display:flex}._LI32q_headerClose:hover{color:#252525;background:#f3f4f6}._LI32q_headerClose svg{width:16px;height:16px}._LI32q_tabs{border-bottom:1px solid #eef0f2;flex:none;gap:2px;padding:0 12px;display:flex}._LI32q_tab{color:#5f6670;cursor:pointer;white-space:nowrap;background:0 0;border:none;margin:0 8px;padding:10px 4px;font-size:13px;position:relative}._LI32q_tab:hover{color:#252525}._LI32q_tabOn{color:#252525;font-weight:600}._LI32q_tabOn:after{content:\"\";background:#4d6bfe;border-radius:2px;height:2px;position:absolute;bottom:-1px;left:0;right:0}._LI32q_body{scrollbar-width:thin;scrollbar-color:#d4d7dc transparent;flex:1;min-height:0;padding:16px 16px 20px;overflow-y:auto}._LI32q_body::-webkit-scrollbar{width:6px}._LI32q_body::-webkit-scrollbar-thumb{background:#d4d7dc;border-radius:3px}._LI32q_body::-webkit-scrollbar-track{background:0 0}._LI32q_tabBody,._LI32q_section{flex-direction:column;display:flex}._LI32q_sectionHead{align-items:center;gap:7px;margin:20px 0 10px;display:flex}._LI32q_section:first-child>._LI32q_sectionHead{margin-top:2px}._LI32q_sectionIcon{color:#8a919f;flex:none;align-items:center;display:flex}._LI32q_sectionIcon>svg{width:14px;height:14px}._LI32q_sectionTitle{color:#252525;margin:0;font-size:14px;font-weight:600}._LI32q_sectionNote{color:#8a919f;margin-left:auto;font-size:12px}._LI32q_btn{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s,box-shadow .14s;box-shadow:0 1px 3px #0000000f}._LI32q_btn:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_btn:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnPrimary{color:#fff;background:#4d6bfe;border-color:#4d6bfe;box-shadow:0 1px 3px #4d6bfe59}._LI32q_btnPrimary:hover{background:#3652e6;border-color:#3652e6}._LI32q_btnPrimary:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnGhost{box-shadow:none;color:#5f6670;border-color:#0000}._LI32q_btnGhost:hover{color:#252525;background:#f3f4f6}._LI32q_btnSm{padding:4px 11px;font-size:12px}._LI32q_btnDanger{color:#ef4444;border-color:#f3c8c8}._LI32q_btnDanger:hover{background:#fdeeee;border-color:#f3c8c8}._LI32q_card{cursor:default;background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;min-width:0;padding:14px;transition:box-shadow .15s,transform .15s,border-color .15s;display:flex;overflow:hidden;box-shadow:0 1px 3px #0000000f}._LI32q_card:hover{border-color:#dadde3;transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_cardHead{align-items:center;gap:8px;display:flex}._LI32q_cardName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_cardBadge{color:#2e4bd8;background:#eaf2fb;border-radius:10px;flex:none;padding:1px 7px;font-size:11.5px;font-weight:500}._LI32q_cardStars{color:#5f6670;flex:none;align-items:center;gap:4px;margin-left:auto;font-size:12px;display:flex}._LI32q_cardStars>svg{color:#f59e0b;width:13px;height:13px}._LI32q_cardDesc{color:#5f6670;-webkit-line-clamp:3;-webkit-box-orient:vertical;margin:8px 0 9px;font-size:13px;line-height:1.55;display:-webkit-box;overflow:hidden}._LI32q_cardTags,._LI32q_cardReasons{flex-wrap:wrap;gap:6px;margin-bottom:10px;display:flex}._LI32q_reason{color:#15803d;background:#eef8f3;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_reasonAi{color:#2e4bd8;background:#eaf2fb;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_cardActions{align-items:center;gap:6px;display:flex}._LI32q_spacer{margin-left:auto}._LI32q_needConfig{color:#a97f1f;font-size:11px}._LI32q_cardActionHint{color:#8a919f;text-align:right;margin-top:6px;font-size:11px}._LI32q_iconBtn{cursor:pointer;color:#8a919f;background:#fff;border:1px solid #d1d5db;border-radius:7px;flex:none;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_iconBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_iconBtn:disabled{opacity:.5;cursor:not-allowed}._LI32q_iconBtn svg{width:15px;height:15px}._LI32q_iconBtnOn{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtn{color:#5f6670;cursor:pointer;white-space:nowrap;background:#fff;border:1px solid #d1d5db;border-radius:7px;justify-content:center;align-items:center;gap:4px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_favBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_favBtnOn{color:#4d6bfe;background:#eaf2fb;border-color:#c9d4f5}._LI32q_repoBtn{color:#5f6670;cursor:pointer;background:#fff;border:1px solid #d1d5db;border-radius:7px;align-items:center;gap:5px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_repoBtn svg{width:13px;height:13px}._LI32q_repoBtn:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_tag{color:#4a5460;cursor:pointer;user-select:none;background:#f3f4f6;border:none;border-radius:8px;padding:2px 6px;font-size:11px;transition:background-color .12s,color .12s}._LI32q_tag:hover{color:#2e4bd8;background:#eaf2fb}._LI32q_tagOn{color:#2e4bd8;background:#eaf2fb;font-weight:500}._LI32q_recommendToolbar{background:#eaf2fb;border:1px solid #d6e4f8;border-radius:11px;align-items:center;gap:8px;margin-bottom:4px;padding:9px 12px;display:flex}._LI32q_recommendToolbarIcon{color:#4d6bfe;flex:none;align-items:center;display:flex}._LI32q_recommendToolbarIcon>svg{width:14px;height:14px}._LI32q_recommendHint{color:#5f6670;flex:1;font-size:12px;line-height:1.5}._LI32q_modeSwitchRow{margin-bottom:4px;display:flex}._LI32q_quizCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;margin-bottom:4px;padding:15px;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_quizHead{align-items:center;gap:8px;margin-bottom:4px;display:flex}._LI32q_quizHeadIcon{color:#4d6bfe;align-items:center;display:flex}._LI32q_quizHeadIcon>svg{width:16px;height:16px}._LI32q_quizTitle{flex:1;font-size:14px;font-weight:600}._LI32q_quizDesc{color:#5f6670;margin:0 0 12px;font-size:12px}._LI32q_quizTags{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_quizChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_quizChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_quizChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_quizActions{align-items:center;gap:8px;display:flex}._LI32q_quizCount{color:#8a919f;font-size:12px}._LI32q_quizCta{align-items:center;margin-left:auto;display:flex}._LI32q_quizCta ._LI32q_btnPrimary{padding:9px 14px;font-size:13px;font-weight:600}._LI32q_sceneList{flex-direction:column;gap:0;display:flex}._LI32q_sceneRow{border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:10px;margin-bottom:9px;padding:12px 13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_sceneRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_sceneInfo{flex:1;min-width:0}._LI32q_sceneName{margin-bottom:3px;font-size:13.5px;font-weight:600}._LI32q_sceneDesc{color:#5f6670;font-size:12px;line-height:1.5}._LI32q_sceneHint{color:#8a919f;font-size:12px}._LI32q_sceneEmpty{color:#8a919f;border:1px solid #e5e7eb;border-radius:11px;margin:0;padding:12px 13px;font-size:12px}._LI32q_stateHint{text-align:center;color:#8a919f;padding:24px 12px;font-size:12px}._LI32q_installedNote{color:#8a919f;margin-top:8px;font-size:11px}._LI32q_grid2{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_grid2>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_grid2{grid-template-columns:1fr}}._LI32q_searchWrap{margin-bottom:14px;position:relative}._LI32q_searchWrapIcon{color:#8a919f;pointer-events:none;align-items:center;width:15px;height:15px;display:flex;position:absolute;top:50%;left:11px;transform:translateY(-50%)}._LI32q_searchWrapIcon>svg{width:15px;height:15px}._LI32q_searchInput{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:10px;outline:none;width:100%;height:38px;padding:0 34px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_searchInput::placeholder{color:#9299a3}._LI32q_searchInput:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_searchClear{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:5px;justify-content:center;align-items:center;width:20px;height:20px;padding:0;display:flex;position:absolute;top:50%;right:9px;transform:translateY(-50%)}._LI32q_searchClear:hover{background:#f3f4f6}._LI32q_searchClear svg{width:13px;height:13px}._LI32q_filterRow{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_filterChip{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:13px;padding:4px 11px;font-size:12px;transition:all .14s}._LI32q_filterChip:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_filterChipOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_semanticToggle{background:#fff;border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:9px;margin-bottom:14px;padding:9px 12px;display:flex}._LI32q_semanticInfo{flex:1}._LI32q_semanticTitle{align-items:center;gap:6px;font-size:13px;font-weight:600;display:flex}._LI32q_semanticPill{color:#8a919f;border:1px solid #e5e7eb;border-radius:9px;padding:0 6px;font-size:10px;font-weight:500}._LI32q_semanticDesc{color:#8a919f;margin-top:2px;font-size:12px}._LI32q_semanticSwitch{cursor:not-allowed;opacity:.7;background:#d4d7dc;border-radius:10px;flex:none;width:34px;height:20px;position:relative}._LI32q_semanticSwitch:after{content:\"\";background:#fff;border-radius:50%;width:16px;height:16px;position:absolute;top:2px;left:2px;box-shadow:0 1px 2px #0003}._LI32q_hotTagsTitle{color:#8a919f;margin-bottom:8px;font-size:12px}._LI32q_tagCloud{flex-wrap:wrap;gap:6px;padding:0;display:flex}._LI32q_hotTag{color:#5f6670;cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_hotTag:hover{color:#4d6bfe;border-color:#c9d4f5}._LI32q_hotTagOn{color:#2e4bd8;background:#eaf2fb;border-color:#aec1f0;font-weight:500}._LI32q_tagMoreRow{margin:2px 0 4px}._LI32q_results{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_results>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_results{grid-template-columns:1fr}}._LI32q_resultCount{color:#5f6670;margin:2px 0 10px;font-size:12px}._LI32q_resultCount b{color:#252525}._LI32q_loadMoreRow{text-align:center;margin:14px 0 6px}._LI32q_loadMore{color:#252525;cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s;box-shadow:0 1px 3px #0000000f}._LI32q_loadMore:hover{background:#f3f4f6;border-color:#d8dbe1}._LI32q_semanticResult{color:#8a919f;flex-wrap:wrap;align-items:center;gap:5px;font-size:12px;display:flex}._LI32q_emptyState{text-align:center;padding:56px 20px}._LI32q_emptyIcon{color:#d4d7dc;justify-content:center;margin-bottom:12px;display:flex}._LI32q_emptyIcon>svg{width:44px;height:44px}._LI32q_emptyTitle{color:#252525;margin-bottom:5px;font-size:14px;font-weight:600}._LI32q_emptyDesc{color:#8a919f;margin-bottom:16px;font-size:12px}._LI32q_installedRow{border:1px solid #e5e7eb;border-radius:11px;align-items:flex-start;gap:11px;margin-bottom:9px;padding:13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_installedRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_installedInfo{flex:1;min-width:0}._LI32q_installedHead{align-items:center;gap:8px;display:flex}._LI32q_installedName{color:#252525;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_installedMeta{color:#8a919f;margin-top:3px;font-size:12px}._LI32q_installedActions{flex-direction:column;flex:none;gap:6px;display:flex}._LI32q_unmatched{flex-wrap:wrap;gap:5px;margin-top:8px;display:flex}._LI32q_unmatchedChip{color:#a97f1f;background:#fef7e7;border:1px dashed #e3c997;border-radius:10px;padding:3px 8px;font-size:11.5px}._LI32q_unmatchedMore{color:#8a919f;align-self:center;font-size:11px}._LI32q_updateChip{color:#b45309;background:#fef3e2;border:1px solid #f0d9a8;border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_latestChip{color:#15803d;background:#e8f6ee;border:1px solid #bfe3cd;border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_updateHint{color:#8a919f;margin-top:5px;font-size:11.5px}._LI32q_activationChip{color:#4d6bfe;background:#eef2ff;border:1px solid #d6defa;border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_activationLive{color:#15803d;background:#e8f6ee;border:1px solid #bfe3cd}._LI32q_activationBroken{color:#b91c1c;background:#fdeaea;border:1px solid #f5c6c6}._LI32q_activationInert{color:#6b7280;background:#f3f4f6;border:1px solid #d6d9df}._LI32q_selfUpdateBar{color:#b45309;background:#fef3e2;border:1px solid #f0d9a8;border-radius:10px;align-items:center;gap:8px;margin:0 14px 10px;padding:8px 12px;font-size:12px;display:flex}._LI32q_selfUpdateText{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}._LI32q_settingCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;margin-bottom:12px;padding:15px;box-shadow:0 1px 3px #0000000f}._LI32q_settingHead{align-items:center;gap:8px;margin-bottom:10px;display:flex}._LI32q_settingIc{color:#4d6bfe;background:#f3f4f6;border-radius:8px;flex:none;justify-content:center;align-items:center;width:26px;height:26px;display:flex}._LI32q_settingIc>svg{width:15px;height:15px}._LI32q_settingTitle{font-size:14px;font-weight:600}._LI32q_versionRow{border-top:1px solid #eef0f2;align-items:center;gap:8px;margin-top:10px;padding-top:10px;display:flex}._LI32q_versionLabel{color:#5f6670;flex:none;font-size:12px}._LI32q_versionCode{color:#252525;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:6px;padding:2px 8px;font-family:ui-monospace,Menlo,monospace;font-size:12px}._LI32q_settingStatus{border-radius:9px;margin-left:auto;padding:2px 8px;font-size:11.5px}._LI32q_statusOk{color:#22c55e;background:#eef8f3}._LI32q_statusOff{color:#8a919f;background:#f3f4f6}._LI32q_statusWarn{color:#a97f1f;background:#fef7e7}._LI32q_settingsRow{align-items:center;gap:8px;display:flex}._LI32q_settingsLabel{color:#5f6670;white-space:nowrap;font-size:12px}._LI32q_ghTip{color:#5f6670;margin:0;font-size:12px;line-height:1.7}._LI32q_ghLink{color:#4d6bfe;align-items:center;gap:2px;text-decoration:none;display:inline-flex}._LI32q_ghLink:hover{text-decoration:underline}._LI32q_ghLogin{flex:1;font-size:13px;font-weight:600}._LI32q_ghRow{align-items:center;gap:8px;display:flex}._LI32q_deviceFlow{color:#5f6670;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;flex-direction:column;gap:6px;padding:9px 11px;font-size:12px;display:flex}._LI32q_deviceCode{letter-spacing:2px;color:#4d6bfe;background:#fff;border-radius:6px;align-self:flex-start;padding:4px 8px;font-family:ui-monospace,Menlo,monospace;font-size:18px;font-weight:700}._LI32q_ghPollState{color:#5f6670;margin:0;font-size:12px}._LI32q_deviceFlow a{color:#4d6bfe}._LI32q_deviceFlowTip{color:#8a919f;margin:0;font-size:11.5px;line-height:1.6}._LI32q_ghDone{color:#22c55e;align-items:center;font-weight:500;display:inline-flex}._LI32q_field{margin-bottom:11px}._LI32q_fieldRow{gap:8px;display:flex}._LI32q_fieldRow>._LI32q_field{flex:1;margin-bottom:0}._LI32q_fieldLabel{color:#5f6670;margin-bottom:5px;font-size:12px;display:block}._LI32q_input,._LI32q_select{color:#252525;background:#fff;border:1px solid #d9dce1;border-radius:9px;outline:none;width:100%;height:34px;padding:0 10px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_input:focus,._LI32q_select:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_input::placeholder{color:#9299a3}._LI32q_error{color:#ef4444;margin:0;font-size:12px}._LI32q_warn{color:#a97f1f;align-items:center;margin:0;font-size:12px;display:flex}._LI32q_dividerLine{background:#eef0f2;height:1px;margin:13px 0}._LI32q_inlineIcon{vertical-align:-2px;flex:none;margin-right:4px;display:inline-block}._LI32q_modalBackdrop{z-index:120;background:#14161c6b;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_modal{background:#fff;border-radius:14px;flex-direction:column;width:420px;max-width:92vw;padding:20px 22px;display:flex;overflow:hidden;box-shadow:0 12px 50px #0000003d}._LI32q_modalHead{justify-content:space-between;align-items:center;margin-bottom:12px;display:flex}._LI32q_modalTitle{font-size:15px;font-weight:600}._LI32q_modalClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:background-color .14s;display:flex}._LI32q_modalClose:hover{color:#252525;background:#f3f4f6}._LI32q_modalClose svg{width:16px;height:16px}._LI32q_modalBody{flex-direction:column;gap:10px;display:flex}._LI32q_modalDesc{color:#5f6670;margin:0;font-size:12.5px;line-height:1.6}._LI32q_modalActions{justify-content:flex-end;gap:8px;margin-top:8px;display:flex}._LI32q_modalSuccess{text-align:center;flex-direction:column;justify-content:center;align-items:center;gap:10px;display:flex}._LI32q_modalSuccessIcon{color:#22c55e;background:#eef8f3;border-radius:50%;justify-content:center;align-items:center;width:44px;height:44px;margin:0 auto;display:flex}._LI32q_modalSuccessIcon>svg{width:22px;height:22px}._LI32q_modalSuccessTitle{color:#252525;font-size:14px;font-weight:600}._LI32q_modalError{color:#ef4444;word-break:break-all;align-items:center;font-size:13px;font-weight:600;display:flex}._LI32q_loading{text-align:center;color:#8a919f;padding:20px;font-size:12px}._LI32q_advanced{margin-top:2px}._LI32q_advanced summary{cursor:pointer;color:#8a919f;user-select:none;font-size:11px}._LI32q_advancedTip{color:#8a919f;margin:6px 0 0;font-size:11px;line-height:1.5}._LI32q_advancedCmd{color:#5f6670;white-space:pre-wrap;word-break:break-all;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;margin-top:6px;padding:9px 11px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.6;display:block}._LI32q_steps{align-items:center;margin-bottom:18px;display:flex}._LI32q_step{color:#8a919f;flex:1;align-items:center;gap:7px;font-size:12px;display:flex;position:relative}._LI32q_stepDot{color:#8a919f;background:#fff;border:1.5px solid #d4d7dc;border-radius:50%;flex:none;justify-content:center;align-items:center;width:20px;height:20px;font-size:11.5px;transition:all .2s;display:flex}._LI32q_stepActive{color:#252525}._LI32q_stepActive ._LI32q_stepDot{color:#4d6bfe;border-color:#4d6bfe}._LI32q_stepDone{color:#252525}._LI32q_stepDone ._LI32q_stepDot{color:#fff;background:#4d6bfe;border-color:#4d6bfe}._LI32q_stepBar{background:#e7e9ed;border-radius:1px;flex:1;height:1.5px;margin:0 6px}._LI32q_stepBarDone{background:#4d6bfe}._LI32q_toast{color:#fff;z-index:200;pointer-events:none;background:#252525;border-radius:8px;padding:8px 16px;font-size:12.5px;animation:.22s _LI32q_toastIn;position:fixed;bottom:24px;left:50%;transform:translate(-50%);box-shadow:0 4px 16px #0003}@keyframes _LI32q_toastIn{0%{opacity:0;transform:translate(-50%)translateY(10px)}to{opacity:1;transform:translate(-50%)translateY(0)}}";
 		const tagId = "@dsh-market/plugin/styles.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -101,174 +101,178 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var styles_module_css_default = {
-			"repoBtn": "_LI32q_repoBtn",
-			"ghRow": "_LI32q_ghRow",
-			"stepDot": "_LI32q_stepDot",
-			"settingStatus": "_LI32q_settingStatus",
-			"modalBackdrop": "_LI32q_modalBackdrop",
-			"emptyIcon": "_LI32q_emptyIcon",
-			"ghDone": "_LI32q_ghDone",
-			"tabOn": "_LI32q_tabOn",
-			"stepActive": "_LI32q_stepActive",
-			"favBtnOn": "_LI32q_favBtnOn",
-			"cardName": "_LI32q_cardName",
-			"hotTag": "_LI32q_hotTag",
-			"ghTip": "_LI32q_ghTip",
-			"semanticSwitch": "_LI32q_semanticSwitch",
-			"statusOff": "_LI32q_statusOff",
-			"cardTags": "_LI32q_cardTags",
-			"filterChipOn": "_LI32q_filterChipOn",
-			"body": "_LI32q_body",
-			"stateHint": "_LI32q_stateHint",
-			"quizHead": "_LI32q_quizHead",
-			"searchWrapIcon": "_LI32q_searchWrapIcon",
-			"searchClear": "_LI32q_searchClear",
-			"spacer": "_LI32q_spacer",
-			"btnSm": "_LI32q_btnSm",
-			"settingsLabel": "_LI32q_settingsLabel",
-			"field": "_LI32q_field",
-			"sceneHint": "_LI32q_sceneHint",
-			"tagOn": "_LI32q_tagOn",
-			"titleIcon": "_LI32q_titleIcon",
-			"semanticDesc": "_LI32q_semanticDesc",
-			"installedHead": "_LI32q_installedHead",
-			"stepDone": "_LI32q_stepDone",
-			"semanticInfo": "_LI32q_semanticInfo",
-			"quizCard": "_LI32q_quizCard",
-			"hotTagOn": "_LI32q_hotTagOn",
-			"fieldRow": "_LI32q_fieldRow",
-			"filterRow": "_LI32q_filterRow",
-			"advancedTip": "_LI32q_advancedTip",
-			"installedActions": "_LI32q_installedActions",
-			"sceneDesc": "_LI32q_sceneDesc",
-			"settingIc": "_LI32q_settingIc",
-			"btnPrimary": "_LI32q_btnPrimary",
-			"selfUpdateBar": "_LI32q_selfUpdateBar",
-			"versionRow": "_LI32q_versionRow",
-			"settingTitle": "_LI32q_settingTitle",
-			"sectionTitle": "_LI32q_sectionTitle",
-			"btnDanger": "_LI32q_btnDanger",
-			"hotTagsTitle": "_LI32q_hotTagsTitle",
-			"updateHint": "_LI32q_updateHint",
-			"emptyState": "_LI32q_emptyState",
-			"modalDesc": "_LI32q_modalDesc",
-			"stepBar": "_LI32q_stepBar",
-			"installedName": "_LI32q_installedName",
-			"tagCloud": "_LI32q_tagCloud",
-			"quizCta": "_LI32q_quizCta",
-			"quizTitle": "_LI32q_quizTitle",
-			"unmatched": "_LI32q_unmatched",
-			"emptyDesc": "_LI32q_emptyDesc",
-			"sceneList": "_LI32q_sceneList",
-			"reason": "_LI32q_reason",
-			"tag": "_LI32q_tag",
-			"headerClose": "_LI32q_headerClose",
-			"loadMoreRow": "_LI32q_loadMoreRow",
-			"ghLogin": "_LI32q_ghLogin",
-			"loading": "_LI32q_loading",
-			"iconBtn": "_LI32q_iconBtn",
-			"quizChipOn": "_LI32q_quizChipOn",
-			"tabs": "_LI32q_tabs",
-			"sectionHead": "_LI32q_sectionHead",
-			"recommendHint": "_LI32q_recommendHint",
-			"cardStars": "_LI32q_cardStars",
-			"triggerIcon": "_LI32q_triggerIcon",
-			"panel": "_LI32q_panel",
-			"quizChip": "_LI32q_quizChip",
-			"cardActionHint": "_LI32q_cardActionHint",
-			"sceneInfo": "_LI32q_sceneInfo",
-			"modal": "_LI32q_modal",
-			"modalHead": "_LI32q_modalHead",
-			"header": "_LI32q_header",
-			"deviceCode": "_LI32q_deviceCode",
 			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
-			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
-			"card": "_LI32q_card",
-			"iconBtnOn": "_LI32q_iconBtnOn",
-			"installedNote": "_LI32q_installedNote",
-			"sceneEmpty": "_LI32q_sceneEmpty",
-			"semanticToggle": "_LI32q_semanticToggle",
-			"searchInput": "_LI32q_searchInput",
-			"sceneName": "_LI32q_sceneName",
-			"subtitle": "_LI32q_subtitle",
-			"quizCount": "_LI32q_quizCount",
-			"versionCode": "_LI32q_versionCode",
-			"settingHead": "_LI32q_settingHead",
-			"ghLink": "_LI32q_ghLink",
-			"warn": "_LI32q_warn",
-			"section": "_LI32q_section",
-			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
-			"cardDesc": "_LI32q_cardDesc",
-			"quizDesc": "_LI32q_quizDesc",
-			"trigger": "_LI32q_trigger",
-			"versionLabel": "_LI32q_versionLabel",
-			"favBtn": "_LI32q_favBtn",
-			"backdrop": "_LI32q_backdrop",
-			"sceneRow": "_LI32q_sceneRow",
-			"error": "_LI32q_error",
-			"advancedCmd": "_LI32q_advancedCmd",
-			"stepBarDone": "_LI32q_stepBarDone",
-			"quizHeadIcon": "_LI32q_quizHeadIcon",
-			"step": "_LI32q_step",
-			"unmatchedChip": "_LI32q_unmatchedChip",
-			"modalBody": "_LI32q_modalBody",
-			"tab": "_LI32q_tab",
-			"semanticPill": "_LI32q_semanticPill",
-			"modeSwitchRow": "_LI32q_modeSwitchRow",
-			"unmatchedMore": "_LI32q_unmatchedMore",
-			"installedRow": "_LI32q_installedRow",
-			"quizTags": "_LI32q_quizTags",
-			"input": "_LI32q_input",
-			"resultCount": "_LI32q_resultCount",
-			"updateChip": "_LI32q_updateChip",
-			"deviceFlow": "_LI32q_deviceFlow",
+			"stepBar": "_LI32q_stepBar",
 			"results": "_LI32q_results",
-			"modalClose": "_LI32q_modalClose",
-			"modalError": "_LI32q_modalError",
-			"loadMore": "_LI32q_loadMore",
-			"triggerLabel": "_LI32q_triggerLabel",
-			"sectionIcon": "_LI32q_sectionIcon",
-			"modalActions": "_LI32q_modalActions",
-			"needConfig": "_LI32q_needConfig",
-			"quizActions": "_LI32q_quizActions",
-			"installedMeta": "_LI32q_installedMeta",
-			"select": "_LI32q_select",
-			"dividerLine": "_LI32q_dividerLine",
-			"inlineIcon": "_LI32q_inlineIcon",
-			"settingCard": "_LI32q_settingCard",
-			"reasonAi": "_LI32q_reasonAi",
-			"cardHead": "_LI32q_cardHead",
-			"btn": "_LI32q_btn",
-			"installedInfo": "_LI32q_installedInfo",
-			"semanticResult": "_LI32q_semanticResult",
-			"modalTitle": "_LI32q_modalTitle",
-			"advanced": "_LI32q_advanced",
-			"sectionNote": "_LI32q_sectionNote",
-			"latestChip": "_LI32q_latestChip",
-			"statusOk": "_LI32q_statusOk",
-			"ghPollState": "_LI32q_ghPollState",
-			"grid2": "_LI32q_grid2",
-			"emptyTitle": "_LI32q_emptyTitle",
-			"filterChip": "_LI32q_filterChip",
-			"toast": "_LI32q_toast",
-			"deviceFlowTip": "_LI32q_deviceFlowTip",
-			"cardActions": "_LI32q_cardActions",
-			"tabBody": "_LI32q_tabBody",
-			"cardBadge": "_LI32q_cardBadge",
-			"settingsRow": "_LI32q_settingsRow",
-			"title": "_LI32q_title",
-			"searchWrap": "_LI32q_searchWrap",
-			"statusWarn": "_LI32q_statusWarn",
-			"recommendToolbar": "_LI32q_recommendToolbar",
+			"emptyDesc": "_LI32q_emptyDesc",
 			"tagMoreRow": "_LI32q_tagMoreRow",
-			"steps": "_LI32q_steps",
+			"quizCount": "_LI32q_quizCount",
+			"activationLive": "_LI32q_activationLive",
+			"emptyState": "_LI32q_emptyState",
+			"section": "_LI32q_section",
+			"modalBody": "_LI32q_modalBody",
+			"modalClose": "_LI32q_modalClose",
+			"cardActions": "_LI32q_cardActions",
+			"quizActions": "_LI32q_quizActions",
+			"quizHeadIcon": "_LI32q_quizHeadIcon",
+			"searchClear": "_LI32q_searchClear",
+			"modeSwitchRow": "_LI32q_modeSwitchRow",
+			"resultCount": "_LI32q_resultCount",
+			"installedName": "_LI32q_installedName",
+			"deviceFlow": "_LI32q_deviceFlow",
+			"stepDot": "_LI32q_stepDot",
+			"quizHead": "_LI32q_quizHead",
+			"semanticSwitch": "_LI32q_semanticSwitch",
+			"searchInput": "_LI32q_searchInput",
+			"ghDone": "_LI32q_ghDone",
+			"triggerIcon": "_LI32q_triggerIcon",
 			"semanticTitle": "_LI32q_semanticTitle",
-			"selfUpdateText": "_LI32q_selfUpdateText",
-			"modalSuccess": "_LI32q_modalSuccess",
-			"toastIn": "_LI32q_toastIn",
+			"card": "_LI32q_card",
+			"modalError": "_LI32q_modalError",
+			"settingCard": "_LI32q_settingCard",
+			"modalBackdrop": "_LI32q_modalBackdrop",
+			"installedNote": "_LI32q_installedNote",
+			"cardBadge": "_LI32q_cardBadge",
+			"panel": "_LI32q_panel",
+			"title": "_LI32q_title",
+			"modalActions": "_LI32q_modalActions",
+			"input": "_LI32q_input",
+			"tab": "_LI32q_tab",
+			"btnSm": "_LI32q_btnSm",
+			"filterChipOn": "_LI32q_filterChipOn",
+			"semanticResult": "_LI32q_semanticResult",
+			"cardTags": "_LI32q_cardTags",
+			"sceneName": "_LI32q_sceneName",
+			"sectionNote": "_LI32q_sectionNote",
+			"stateHint": "_LI32q_stateHint",
+			"settingHead": "_LI32q_settingHead",
+			"modalHead": "_LI32q_modalHead",
+			"repoBtn": "_LI32q_repoBtn",
+			"statusOff": "_LI32q_statusOff",
+			"cardDesc": "_LI32q_cardDesc",
+			"quizCta": "_LI32q_quizCta",
+			"updateChip": "_LI32q_updateChip",
+			"deviceFlowTip": "_LI32q_deviceFlowTip",
+			"ghLogin": "_LI32q_ghLogin",
+			"cardStars": "_LI32q_cardStars",
+			"tagOn": "_LI32q_tagOn",
+			"sectionTitle": "_LI32q_sectionTitle",
+			"activationInert": "_LI32q_activationInert",
 			"fieldLabel": "_LI32q_fieldLabel",
+			"quizTags": "_LI32q_quizTags",
+			"spacer": "_LI32q_spacer",
+			"recommendToolbar": "_LI32q_recommendToolbar",
+			"recommendHint": "_LI32q_recommendHint",
+			"searchWrapIcon": "_LI32q_searchWrapIcon",
+			"grid2": "_LI32q_grid2",
+			"semanticInfo": "_LI32q_semanticInfo",
+			"sceneDesc": "_LI32q_sceneDesc",
+			"searchWrap": "_LI32q_searchWrap",
+			"loadMoreRow": "_LI32q_loadMoreRow",
+			"activationChip": "_LI32q_activationChip",
+			"installedRow": "_LI32q_installedRow",
+			"quizDesc": "_LI32q_quizDesc",
+			"settingsRow": "_LI32q_settingsRow",
+			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
+			"ghRow": "_LI32q_ghRow",
+			"settingStatus": "_LI32q_settingStatus",
+			"ghPollState": "_LI32q_ghPollState",
+			"quizChipOn": "_LI32q_quizChipOn",
+			"quizChip": "_LI32q_quizChip",
+			"sectionIcon": "_LI32q_sectionIcon",
+			"tagCloud": "_LI32q_tagCloud",
+			"titleIcon": "_LI32q_titleIcon",
+			"btnPrimary": "_LI32q_btnPrimary",
+			"advancedCmd": "_LI32q_advancedCmd",
+			"emptyIcon": "_LI32q_emptyIcon",
+			"body": "_LI32q_body",
+			"backdrop": "_LI32q_backdrop",
+			"needConfig": "_LI32q_needConfig",
+			"sceneList": "_LI32q_sceneList",
+			"sceneRow": "_LI32q_sceneRow",
+			"unmatched": "_LI32q_unmatched",
+			"deviceCode": "_LI32q_deviceCode",
+			"sceneInfo": "_LI32q_sceneInfo",
+			"sceneEmpty": "_LI32q_sceneEmpty",
+			"ghTip": "_LI32q_ghTip",
+			"reason": "_LI32q_reason",
+			"error": "_LI32q_error",
+			"cardHead": "_LI32q_cardHead",
+			"stepBarDone": "_LI32q_stepBarDone",
+			"semanticPill": "_LI32q_semanticPill",
+			"loadMore": "_LI32q_loadMore",
+			"filterChip": "_LI32q_filterChip",
+			"favBtnOn": "_LI32q_favBtnOn",
+			"statusOk": "_LI32q_statusOk",
+			"versionCode": "_LI32q_versionCode",
+			"btn": "_LI32q_btn",
+			"field": "_LI32q_field",
+			"stepActive": "_LI32q_stepActive",
+			"triggerLabel": "_LI32q_triggerLabel",
+			"loading": "_LI32q_loading",
+			"advancedTip": "_LI32q_advancedTip",
+			"modal": "_LI32q_modal",
+			"versionRow": "_LI32q_versionRow",
+			"quizTitle": "_LI32q_quizTitle",
+			"updateHint": "_LI32q_updateHint",
+			"selfUpdateBar": "_LI32q_selfUpdateBar",
 			"btnGhost": "_LI32q_btnGhost",
-			"cardReasons": "_LI32q_cardReasons"
+			"settingIc": "_LI32q_settingIc",
+			"unmatchedMore": "_LI32q_unmatchedMore",
+			"versionLabel": "_LI32q_versionLabel",
+			"iconBtn": "_LI32q_iconBtn",
+			"hotTag": "_LI32q_hotTag",
+			"dividerLine": "_LI32q_dividerLine",
+			"modalTitle": "_LI32q_modalTitle",
+			"cardReasons": "_LI32q_cardReasons",
+			"warn": "_LI32q_warn",
+			"headerClose": "_LI32q_headerClose",
+			"select": "_LI32q_select",
+			"subtitle": "_LI32q_subtitle",
+			"step": "_LI32q_step",
+			"hotTagOn": "_LI32q_hotTagOn",
+			"steps": "_LI32q_steps",
+			"toast": "_LI32q_toast",
+			"cardActionHint": "_LI32q_cardActionHint",
+			"btnDanger": "_LI32q_btnDanger",
+			"filterRow": "_LI32q_filterRow",
+			"semanticDesc": "_LI32q_semanticDesc",
+			"stepDone": "_LI32q_stepDone",
+			"toastIn": "_LI32q_toastIn",
+			"tabOn": "_LI32q_tabOn",
+			"inlineIcon": "_LI32q_inlineIcon",
+			"header": "_LI32q_header",
+			"advanced": "_LI32q_advanced",
+			"sectionHead": "_LI32q_sectionHead",
+			"installedHead": "_LI32q_installedHead",
+			"activationBroken": "_LI32q_activationBroken",
+			"quizCard": "_LI32q_quizCard",
+			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
+			"emptyTitle": "_LI32q_emptyTitle",
+			"unmatchedChip": "_LI32q_unmatchedChip",
+			"ghLink": "_LI32q_ghLink",
+			"iconBtnOn": "_LI32q_iconBtnOn",
+			"installedInfo": "_LI32q_installedInfo",
+			"tag": "_LI32q_tag",
+			"statusWarn": "_LI32q_statusWarn",
+			"trigger": "_LI32q_trigger",
+			"fieldRow": "_LI32q_fieldRow",
+			"favBtn": "_LI32q_favBtn",
+			"semanticToggle": "_LI32q_semanticToggle",
+			"installedMeta": "_LI32q_installedMeta",
+			"tabBody": "_LI32q_tabBody",
+			"installedActions": "_LI32q_installedActions",
+			"cardName": "_LI32q_cardName",
+			"reasonAi": "_LI32q_reasonAi",
+			"settingTitle": "_LI32q_settingTitle",
+			"latestChip": "_LI32q_latestChip",
+			"settingsLabel": "_LI32q_settingsLabel",
+			"modalDesc": "_LI32q_modalDesc",
+			"hotTagsTitle": "_LI32q_hotTagsTitle",
+			"modalSuccess": "_LI32q_modalSuccess",
+			"tabs": "_LI32q_tabs",
+			"sceneHint": "_LI32q_sceneHint",
+			"selfUpdateText": "_LI32q_selfUpdateText"
 		};
 		//#endregion
 		//#region src/client/panel.tsx
@@ -343,6 +347,26 @@ window.__ModuleLoader__.load({
 		}
 		function El(tag, props, ...children) {
 			return (0, react.createElement)(tag, props ?? {}, ...children);
+		}
+		/** P0-1 装后四态 → 中文短标签 */
+		function activationText(a) {
+			if (!a) return "";
+			const label = {
+				live: "已生效",
+				restart: "重启后生效",
+				inert: "未成为插件层",
+				broken: "校验失败"
+			}[a.state] ?? a.state;
+			return a.reasons && a.reasons.length ? `${label}（${a.reasons[0]}）` : label;
+		}
+		/** P0-2 从安装/更新失败输出解析被拦构建包名 */
+		function parseBlockedFromOutput(output, item) {
+			const pkgs = (output.match(/Ignored build scripts\s*:\s*([^\n]*)/i)?.[1] ?? "").split(",").map((s) => s.trim().replace(/\.$/, "").replace(/@\d[\w.\-+]*$/, "")).filter(Boolean);
+			if (pkgs.length === 0 && item.plugin) {
+				const fallback = item.plugin.name.replace(/\.$/, "").trim();
+				if (fallback) pkgs.push(fallback);
+			}
+			return [...new Set(pkgs)];
 		}
 		let toastTimer = null;
 		function toast(msg, duration = 2200) {
@@ -774,6 +798,9 @@ window.__ModuleLoader__.load({
 			const [checking, setChecking] = (0, react.useState)(false);
 			const [checkError, setCheckError] = (0, react.useState)("");
 			const [updating, setUpdating] = (0, react.useState)(null);
+			const [verifMap, setVerifMap] = (0, react.useState)({});
+			const [verifying, setVerifying] = (0, react.useState)(null);
+			const [approving, setApproving] = (0, react.useState)(null);
 			const uninstall = async (item) => {
 				if (!item.pluginId) return;
 				setBusy(true);
@@ -807,17 +834,70 @@ window.__ModuleLoader__.load({
 					setChecking(false);
 				}
 			};
-			/** 一键更新：复用 install force（cordis 重新 add；skill 备份后重新 clone） */
+			/** P0-1 装后四态验证：对单个已装项手动触发（读 profile 真值） */
+			const verifyOne = async (item) => {
+				if (!item.pluginId || verifying) return;
+				setVerifying(item.localName);
+				try {
+					const a = await api("verify", { pluginId: item.pluginId });
+					setVerifMap((m) => ({
+						...m,
+						[item.localName]: a
+					}));
+					toast(`「${item.localName}」：${activationText(a)}`, 3200);
+				} catch (e) {
+					toast(`验证失败：${e.message}`, 3e3);
+				} finally {
+					setVerifying(null);
+				}
+			};
+			/**
+			* P0-3 更新执行（update:apply）：before/after 对比，假更新防误报；
+			* P0-2 构建脚本被拦 → 自动放行并重试一次；P0-1 更新成功后展示装后四态。
+			*/
 			const updatePlugin = async (item) => {
 				if (!item.pluginId || updating) return;
 				setUpdating(item.localName);
 				try {
-					const r = await api("install", {
-						pluginId: item.pluginId,
-						force: true
-					});
-					if (!r.ok) {
-						toast(`更新失败：${r.error ?? "未知错误"}`, 3500);
+					let r = await api("update:apply", { pluginId: item.pluginId });
+					if (r.error && !r.applied && /Ignored build scripts|approve-builds/i.test(r.error)) {
+						const blocked = parseBlockedFromOutput(r.error, item);
+						setApproving(item.localName);
+						const ar = await api("builds:approve", { packages: blocked });
+						if (!ar.ok) {
+							setApproving(null);
+							toast(`构建脚本放行失败：${ar.error ?? "未知错误"}`, 3500);
+							return;
+						}
+						toast(`已放行构建脚本（${blocked.join("、")}），自动重试…`, 3200);
+						r = await api("update:apply", { pluginId: item.pluginId });
+						setApproving(null);
+					}
+					if (r.error && !r.applied) {
+						toast(`更新失败：${r.error}`, 4500);
+						return;
+					}
+					if (r.blocked === "minimum-release-age") {
+						const msg = r.reason ?? "新版本已发布但被 pnpm 发布年龄门槛（minimumReleaseAge）挡住";
+						if (typeof window !== "undefined" && window.confirm(`${msg}。\n\n点击「确定」= 放宽门槛（minimumReleaseAge: 0）并自动重试；「取消」= 等门槛期过后再更。`)) {
+							const rel = await api("update:relax", {});
+							if (!rel.ok) {
+								toast(`放宽门槛失败：${rel.error ?? "未知错误"}`, 3500);
+								return;
+							}
+							toast("已放宽发布年龄门槛，自动重试…", 3200);
+							r = await api("update:apply", { pluginId: item.pluginId });
+							if (r.error && !r.applied) {
+								toast(`更新失败：${r.error}`, 4500);
+								return;
+							}
+						} else {
+							toast("已取消；新版本将在发布年龄门槛期过后自动可更新", 3500);
+							return;
+						}
+					}
+					if (r.noChange && !r.applied) {
+						toast(r.reason ?? "版本无变化", 3e3);
 						return;
 					}
 					onChanged();
@@ -826,7 +906,12 @@ window.__ModuleLoader__.load({
 						delete next[item.localName];
 						return next;
 					});
-					toast(r.requiresRestart ? "更新完成，重启 harness 后生效" : "更新完成");
+					const act = r.activation;
+					toast(`更新完成${act ? ` · ${activationText(act)}` : ""}`, 3500);
+					if (act) setVerifMap((m) => ({
+						...m,
+						[item.localName]: act
+					}));
 				} catch (e) {
 					toast(`更新失败：${e.message}`, 3500);
 				} finally {
@@ -855,14 +940,18 @@ window.__ModuleLoader__.load({
 			}, checking ? "检测中…" : "检查更新") : null), checkError ? El("div", { className: styles_module_css_default.updateHint }, `检测失败：${checkError}`) : null, matched.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "未检测到市场收录的已装插件") : null, ...matched.map((i, idx) => El("div", {
 				key: `${i.localName}-${idx}`,
 				className: styles_module_css_default.installedRow
-			}, El("div", { className: styles_module_css_default.installedInfo }, El("div", { className: styles_module_css_default.installedHead }, El("span", { className: styles_module_css_default.installedName }, i.plugin?.name ?? i.localName), El("span", { className: styles_module_css_default.cardBadge }, i.source === "skills" ? "技能" : "插件")), El("div", { className: styles_module_css_default.installedMeta }, `${i.version ?? "未知版本"} · ${i.source === "skills" ? "skill" : "profile"}`), checking ? El("div", { className: styles_module_css_default.updateHint }, "检测中…") : renderCheck(i)), confirming === i.localName ? El("div", { className: styles_module_css_default.installedActions }, El("button", {
+			}, El("div", { className: styles_module_css_default.installedInfo }, El("div", { className: styles_module_css_default.installedHead }, El("span", { className: styles_module_css_default.installedName }, i.plugin?.name ?? i.localName), El("span", { className: styles_module_css_default.cardBadge }, i.source === "skills" ? "技能" : "插件")), El("div", { className: styles_module_css_default.installedMeta }, `${i.version ?? "未知版本"} · ${i.source === "skills" ? "skill" : "profile"}`), verifMap[i.localName] ? El("div", { className: `${styles_module_css_default.activationChip} ${verifMap[i.localName].state === "live" ? styles_module_css_default.activationLive : verifMap[i.localName].state === "broken" ? styles_module_css_default.activationBroken : verifMap[i.localName].state === "inert" ? styles_module_css_default.activationInert : ""}` }, activationText(verifMap[i.localName])) : null, checking ? El("div", { className: styles_module_css_default.updateHint }, "检测中…") : renderCheck(i)), confirming === i.localName ? El("div", { className: styles_module_css_default.installedActions }, El("button", {
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
 				onClick: () => setConfirming(null)
 			}, "取消"), El("button", {
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm} ${styles_module_css_default.btnDanger}`,
 				disabled: busy,
 				onClick: () => void uninstall(i)
-			}, "确认卸载")) : El("div", { className: styles_module_css_default.installedActions }, updateMap[i.localName]?.hasUpdate ? El("button", {
+			}, "确认卸载")) : El("div", { className: styles_module_css_default.installedActions }, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm} ${styles_module_css_default.btnGhost}`,
+				disabled: updating !== null || busy || !i.pluginId || verifying !== null,
+				onClick: () => void verifyOne(i)
+			}, verifying === i.localName ? "验证中…" : "验证"), approving === i.localName ? El("span", { className: styles_module_css_default.updateHint }, "放行构建脚本…") : null, updateMap[i.localName]?.hasUpdate ? El("button", {
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm} ${styles_module_css_default.btnPrimary}`,
 				disabled: updating !== null || busy,
 				onClick: () => void updatePlugin(i)

@@ -10,6 +10,7 @@
 import { createInterface } from "node:readline";
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
+import { join } from "node:path";
 import { resolveConfig } from "./config.js";
 import { fetchMarketData } from "./data.js";
 import { scanInstalled } from "./installed.js";
@@ -19,7 +20,9 @@ import { recommend } from "./recommend.js";
 import { search } from "./search.js";
 import { hotTags, aggregateTags } from "./tags.js";
 import { installPlugin, uninstallPlugin } from "./installer.js";
-import { checkUpdates, checkSelfUpdate } from "./update.js";
+import { checkUpdates, checkSelfUpdate, applyUpdate, readMinimumReleaseAge, writeMinimumReleaseAge } from "./update.js";
+import { verifyAfterInstall } from "./verify.js";
+import { detectPnpmMajor, isBuildBlockedFailure, parseBlockedBuilds, writeBuildApprovals } from "./builds.js";
 import type { CommandRunner } from "./types.js";
 import { fetchCurrentUser, fetchStarred } from "./github.js";
 
@@ -217,12 +220,60 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
     const data = await market();
     const plugin = data.plugins.find((p) => p.id === args.pluginId);
     if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
-    return installPlugin(cfg, plugin, {
+    const profile = args.targetProfile ?? readSettings(cfg).profile;
+    const r = await installPlugin(cfg, plugin, {
       dryRun: args.dryRun ?? false,
       force: args.force ?? false,
-      targetProfile: args.targetProfile ?? readSettings(cfg).profile,
+      targetProfile: profile,
       runner: realRunner,
     });
+    // P0-1 装后四态验证：真实安装成功后附带 activation（dryRun / 已装跳过时不附）
+    if (r.ok && !r.alreadyInstalled && !(args.dryRun ?? false)) {
+      r.activation = verifyAfterInstall(cfg, plugin, { profile });
+    }
+    return r;
+  },
+  // 装后四态验证（用于"已装"tab 逐项确认或手动触发）
+  verify: async (args) => {
+    const data = await market();
+    const plugin = data.plugins.find((p) => p.id === args.pluginId);
+    if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
+    const profile = args.targetProfile ?? readSettings(cfg).profile;
+    return verifyAfterInstall(cfg, plugin, { profile });
+  },
+  // 更新执行（P0-3 假更新防误报）：before/after 对比 + minimumReleaseAge / HEAD 判定
+  "update:apply": async (args) => {
+    const data = await market();
+    const plugin = data.plugins.find((p) => p.id === args.pluginId);
+    if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
+    const item =
+      scanInstalled(cfg, data).find((i) => i.pluginId === args.pluginId) ?? {
+        pluginId: plugin.id,
+        localName: args.localName ?? plugin.name,
+        version: null,
+        source: "profile",
+        plugin: plugin as never,
+      };
+    return applyUpdate(cfg, plugin, item as never, {
+      runner: realRunner,
+      profile: args.targetProfile ?? readSettings(cfg).profile,
+    });
+  },
+  // 放宽 pnpm 发布年龄门槛（minimumReleaseAge: 0），配合假更新防误报的一键处理
+  "update:relax": (args) => {
+    const profile = args.profile ?? readSettings(cfg).profile;
+    return writeMinimumReleaseAge(join(cfg.profilesDir, profile), 0);
+  },
+  // 构建脚本被拦检测 + 放行（P0-2）
+  "builds:detect": () => {
+    // cli 调试通道 stdout 不可捕获，构建脚本检测以生产通道（index.ts execFile 捕获）为准
+    return { supported: false, note: "cli 调试通道无法捕获 pnpm 输出，前往正式面板使用" };
+  },
+  "builds:approve": async (args) => {
+    const profile = args.profile ?? readSettings(cfg).profile;
+    const profileDir = join(cfg.profilesDir, profile);
+    const major = await detectPnpmMajor({ runner: realRunner, cwd: profileDir });
+    return writeBuildApprovals(profileDir, args.packages ?? [], { pnpmMajor: major });
   },
   uninstall: async (args) => {
     const data = await market();

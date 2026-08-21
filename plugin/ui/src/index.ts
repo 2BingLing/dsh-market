@@ -7,6 +7,7 @@
  */
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import { createRequire } from 'node:module'
+import { join } from 'node:path'
 import {
   resolveConfig,
   readProfile,
@@ -25,6 +26,12 @@ import {
   uninstallPlugin,
   checkUpdates,
   checkSelfUpdate,
+  applyUpdate,
+  writeMinimumReleaseAge,
+  verifyAfterInstall,
+  detectPnpmMajor,
+  parseBlockedBuilds,
+  writeBuildApprovals,
   fetchCurrentUser,
   fetchStarred,
 } from '@dsh-market/core'
@@ -352,11 +359,63 @@ export function apply(ctx: {
         const data = await market()
         const plugin = data.plugins.find((p) => p.id === args.pluginId)
         if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
-        return installPlugin(cfg, plugin, {
+        const profile = (args.targetProfile as string) ?? readSettings(cfg).profile
+        const r = await installPlugin(cfg, plugin, {
           dryRun: Boolean(args.dryRun),
           force: Boolean(args.force),
-          targetProfile: (args.targetProfile as string) ?? readSettings(cfg).profile,
+          targetProfile: profile,
           runner: realRunner(),
+        })
+        // P0-1 装后四态验证：真实安装成功后附带 activation（dryRun / 已装跳过时不附）
+        if (r.ok && !r.alreadyInstalled && !args.dryRun) {
+          r.activation = verifyAfterInstall(cfg, plugin, { profile })
+        }
+        // P0-2 构建脚本被拦：从失败信息中解析被拦包名（UI 弹出"批准并重试"）
+        if (!r.ok) {
+          const blocked = parseBlockedBuilds(r.error ?? '')
+          if (blocked.length > 0) (r as { blockedBuilds?: string[] }).blockedBuilds = blocked
+        }
+        return r
+      }
+      // P0-1 装后四态验证（"已装"tab 逐项确认 / 手动触发）
+      case 'verify': {
+        const data = await market()
+        const plugin = data.plugins.find((p) => p.id === args.pluginId)
+        if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
+        return verifyAfterInstall(cfg, plugin, {
+          profile: (args.targetProfile as string) ?? readSettings(cfg).profile,
+        })
+      }
+      // P0-3 更新执行：before/after 对比，假更新防误报
+      case 'update:apply': {
+        const data = await market()
+        const plugin = data.plugins.find((p) => p.id === args.pluginId)
+        if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
+        const item =
+          scanInstalled(cfg, data).find((i) => i.pluginId === args.pluginId) ?? {
+            pluginId: args.pluginId as string,
+            localName: (args.localName as string) ?? plugin.name,
+            version: null,
+            source: 'profile',
+            plugin,
+          }
+        return applyUpdate(cfg, plugin, item, {
+          runner: realRunner(),
+          profile: (args.targetProfile as string) ?? readSettings(cfg).profile,
+        })
+      }
+      // P0-3 放宽 pnpm 发布年龄门槛（minimumReleaseAge: 0）——被门槛挡住时一键处理
+      case 'update:relax': {
+        const profile = (args.profile as string) ?? readSettings(cfg).profile
+        return writeMinimumReleaseAge(join(cfg.profilesDir, profile), 0)
+      }
+      // P0-2 构建脚本放行：写 pnpm-workspace.yaml（allowBuilds/onlyBuiltDependencies），保留原内容
+      case 'builds:approve': {
+        const profile = (args.profile as string) ?? readSettings(cfg).profile
+        const profileDir = join(cfg.profilesDir, profile)
+        const major = await detectPnpmMajor({ runner: realRunner(), cwd: profileDir })
+        return writeBuildApprovals(profileDir, (args.packages as string[]) ?? [], {
+          pnpmMajor: major,
         })
       }
       case 'uninstall': {

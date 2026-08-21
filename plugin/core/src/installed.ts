@@ -6,7 +6,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { DshPlugin, MarketData } from "@dsh-market/schema";
 import type { ResolvedConfig } from "./config.js";
-import type { InstalledPlugin } from "./types.js";
+import type { CommandRunner, InstalledPlugin } from "./types.js";
 
 /** 扫描已装插件，并与市场数据匹配 */
 export function scanInstalled(
@@ -139,4 +139,27 @@ function readInstalledVersion(dir: string): string | null {
   } catch {
     return null;
   }
+}
+
+/** 读某个 profile 下已装 npm 包的实际版本（供更新 before/after 对比、验证复用） */
+export function readInstalledVersionForProfile(
+  cfg: ResolvedConfig,
+  profile: string,
+  name: string,
+): string | null {
+  return readInstalledVersion(join(cfg.profilesDir, profile, "node_modules", name));
+}
+
+/** 读本地 git 目录当前 HEAD commit（skill 型更新 before/after 对比用） */
+export function readLocalHeadCommit(
+  runner: CommandRunner,
+  dir: string,
+): Promise<string | null> {
+  return runner
+    .run(`git -C "${dir}" rev-parse HEAD`, { timeoutMs: 15_000 })
+    .then((r) => {
+      const out = (r.stdout || r.stderr || "").trim();
+      return r.exitCode === 0 && /^[0-9a-f]{40}$/i.test(out) ? out : null;
+    })
+    .catch(() => null);
 }

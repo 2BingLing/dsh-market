@@ -5,10 +5,15 @@
  * 纯 Node 实现（global fetch，Node 18+），查询结果带内存缓存（默认 1h，force 绕过）。
  * 更新执行复用 installer（install force = 覆盖安装：cordis 重新 add，skill 备份后重新 clone）。
  */
-import { existsSync, readdirSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import type { DshPlugin } from "@dsh-market/schema";
 import type { ResolvedConfig } from "./config.js";
-import type { InstalledPlugin } from "./types.js";
+import type { CommandRunner, InstalledPlugin } from "./types.js";
+import { getScalar, setScalar } from "./yaml-block.js";
+import { readInstalledVersionForProfile, readLocalHeadCommit } from "./installed.js";
+import { installPlugin, isLockFailure } from "./installer.js";
+import { resolveInstallName, verifyAfterInstall } from "./verify.js";
 
 export interface UpdateCheckResult {
   /** 已装项本地名（skill 目录名 / npm 依赖名） */
@@ -98,12 +103,28 @@ export function compareVersions(a: string, b: string): -1 | 0 | 1 {
 
 // ---------- 远端查询 ----------
 
+/** fetch 兼容类型（测试 mock 友好；真 fetch 天然可赋值） */
+export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
+
+// 缓存键按 fetch 实现打标签：不同 mock（每次测试各一个）不共享缓存，避免跨用例污染；
+// 同一个 mock 实例内仍共享缓存（"404 命中缓存不重复请求"行为保留）。
+const fetchTags = new WeakMap<object, number>();
+let nextFetchTag = 0;
+function fetchTag(impl: FetchLike): string {
+  if (impl === fetch) return "";
+  const existing = fetchTags.get(impl);
+  if (existing !== undefined) return `#${existing}`;
+  const id = ++nextFetchTag;
+  fetchTags.set(impl, id);
+  return `#${id}`;
+}
+
 /** 查询 npm registry 指定包的最新版本（带内存缓存；失败返回 null） */
 export async function fetchNpmLatest(
   pkgName: string,
-  fetchImpl: typeof fetch = fetch,
+  fetchImpl: FetchLike = fetch,
 ): Promise<string | null> {
-  const key = `npm:${pkgName}`;
+  const key = `npm:${pkgName}${fetchTag(fetchImpl)}`;
   const cached = cacheGet(key);
   if (cached !== undefined) return cached;
   try {
@@ -128,9 +149,9 @@ export async function fetchNpmLatest(
 /** 查询 GitHub 仓库 pushed_at（带内存缓存；失败返回 null） */
 export async function fetchRepoPushedAt(
   fullName: string,
-  fetchImpl: typeof fetch = fetch,
+  fetchImpl: FetchLike = fetch,
 ): Promise<string | null> {
-  const key = `gh:${fullName}`;
+  const key = `gh:${fullName}${fetchTag(fetchImpl)}`;
   const cached = cacheGet(key);
   if (cached !== undefined) return cached;
   try {
@@ -158,7 +179,7 @@ export async function fetchRepoPushedAt(
 export async function checkUpdates(
   cfg: ResolvedConfig,
   installed: InstalledPlugin[],
-  opts: { force?: boolean; fetchImpl?: typeof fetch } = {},
+  opts: { force?: boolean; fetchImpl?: FetchLike } = {},
 ): Promise<UpdateCheckResult[]> {
   if (opts.force) cache.clear();
   const fetchImpl = opts.fetchImpl ?? fetch;
@@ -175,7 +196,7 @@ export async function checkUpdates(
 async function checkOne(
   cfg: ResolvedConfig,
   item: InstalledPlugin,
-  fetchImpl: typeof fetch,
+  fetchImpl: FetchLike,
 ): Promise<UpdateCheckResult> {
   // cordis 型：本地实际版本 → npm registry 最新版本
   if (item.source === "profile") {
@@ -293,7 +314,7 @@ async function checkOne(
 /** 插件自身更新检测：npm 最新版 vs 当前安装版本（force 绕过 1h 内存缓存） */
 export async function checkSelfUpdate(
   currentVersion: string,
-  opts: { fetchImpl?: typeof fetch; force?: boolean } = {},
+  opts: { fetchImpl?: FetchLike; force?: boolean } = {},
 ): Promise<{ current: string | null; latest: string | null; hasUpdate: boolean }> {
   if (opts.force) cache.clear();
   const latest = await fetchNpmLatest("@dsh-market/plugin", opts.fetchImpl ?? fetch);
@@ -321,4 +342,134 @@ function findPackageDir(cfg: ResolvedConfig, localName: string): string | null {
     /* profiles 目录不存在 */
   }
   return null;
+}
+
+// ===================== P0-3：更新执行（假更新防误报） =====================
+
+/**
+ * 更新执行（P0-3）：before/after 对比，杜绝"点了更新、显示成功、版本号没动"。
+ * - npm(cordis) 目标：前后读实际安装版本；未变且 npm 有更高版 → 判定被 minimumReleaseAge 挡住（附放宽动作）
+ * - github(skill) 目标：前后读本地 HEAD commit；未变 → "上游无新提交"
+ */
+export interface ApplyUpdateResult {
+  /** 是否真正执行成功 */
+  applied: boolean;
+  /** 更新前版本 / HEAD commit */
+  before: string | null;
+  /** 更新后版本 / HEAD commit */
+  after: string | null;
+  /** 版本/commit 是否未变化（假更新） */
+  noChange: boolean;
+  /** 被 pnpm minimumReleaseAge 发布年龄门槛挡住 */
+  blocked?: "minimum-release-age" | null;
+  /** 人类可读原因 */
+  reason?: string;
+  error?: string;
+  /** 装后四态验证（cordis 更新成功时附带） */
+  activation?: import("./types.js").ActivationStatus;
+}
+
+/** 读 profile 的 pnpm-workspace.yaml 中 minimumReleaseAge（秒；0=不限制） */
+export function readMinimumReleaseAge(profileDir: string): number | null {
+  try {
+    const file = join(profileDir, "pnpm-workspace.yaml");
+    if (!existsSync(file)) return null;
+    const v = getScalar(readFileSync(file, "utf8"), "minimumReleaseAge");
+    if (v === null) return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  } catch {
+    return null;
+  }
+}
+
+/** 写 profile 的 minimumReleaseAge（放宽门槛：0 = 不限制） */
+export function writeMinimumReleaseAge(
+  profileDir: string,
+  value: number,
+): { ok: boolean; value: number; error?: string } {
+  try {
+    if (!existsSync(profileDir)) mkdirSync(profileDir, { recursive: true });
+    const file = join(profileDir, "pnpm-workspace.yaml");
+    const existing = existsSync(file) ? readFileSync(file, "utf8") : "";
+    writeFileSync(file, setScalar(existing, "minimumReleaseAge", value), "utf8");
+    return { ok: true, value };
+  } catch (err) {
+    return { ok: false, value, error: (err as Error).message };
+  }
+}
+
+/** 执行更新（skill 重新 clone；cordis 重新 add @latest），带 before/after 对比 */
+export async function applyUpdate(
+  cfg: ResolvedConfig,
+  plugin: DshPlugin,
+  item: InstalledPlugin,
+  opts: { runner: CommandRunner; profile?: string; dryRun?: boolean; fetchImpl?: FetchLike },
+): Promise<ApplyUpdateResult> {
+  const profile = opts.profile ?? cfg.defaultProfile;
+
+  if (plugin.type === "skill") {
+    const dest = join(cfg.skillsDir, `${plugin.name}-latest`);
+    const before = await readLocalHeadCommit(opts.runner, dest);
+    const r = await installPlugin(cfg, plugin, {
+      force: true,
+      dryRun: opts.dryRun ?? false,
+      runner: opts.runner,
+    });
+    if (!r.ok) {
+      return { applied: false, before, after: null, noChange: false, error: r.error };
+    }
+    const after = await readLocalHeadCommit(opts.runner, dest);
+    if (before !== null && after !== null && before === after) {
+      return {
+        applied: true,
+        before,
+        after,
+        noChange: true,
+        reason: "上游无新提交（HEAD 未变化）",
+      };
+    }
+    return { applied: true, before, after, noChange: false };
+  }
+
+  // cordis：用安装依赖键名（localName 优先，避免大小写/scope 推断误差）
+  const name = item.localName || resolveInstallName(plugin);
+  const before = readInstalledVersionForProfile(cfg, profile, name);
+  if (opts.dryRun) {
+    return { applied: true, before, after: before, noChange: false };
+  }
+  const r = await opts.runner.run(`dsh plugin --profile ${profile} add ${name}@latest`, {
+    timeoutMs: 180_000,
+  });
+  if (r.exitCode !== 0) {
+    const errText = r.stderr || r.stdout;
+    // 运行中 harness 更新本 profile：文件占用（EPERM 等）→ 给可操作提示，不再当普通错误
+    const hint = isLockFailure(errText)
+      ? "（文件被运行中的 harness 占用）请先停止 harness 再更新，或换到未运行的 headless profile。"
+      : "";
+    return {
+      applied: false,
+      before,
+      after: null,
+      noChange: false,
+      error: `${errText.slice(0, 500)}${hint}`,
+    };
+  }
+  const after = readInstalledVersionForProfile(cfg, profile, name);
+  if (before !== null && after !== null && compareVersions(before, after) === 0) {
+    const latest = await fetchNpmLatest(name, opts.fetchImpl);
+    if (latest && compareVersions(before, latest) < 0) {
+      return {
+        applied: false,
+        before,
+        after,
+        noChange: true,
+        blocked: "minimum-release-age",
+        reason: `最新版 ${latest} 已发布但未装上，可能被 pnpm 发布年龄门槛（minimumReleaseAge）挡住；可在设置里放宽门槛后重试`,
+      };
+    }
+    return { applied: false, before, after, noChange: true, reason: "已是最新版本，无需更新" };
+  }
+  const activation = verifyAfterInstall(cfg, plugin, { profile });
+  return { applied: true, before, after, noChange: false, activation };
 }

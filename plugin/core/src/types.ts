@@ -103,6 +103,25 @@ export interface InstallSnapshot {
   pkgName?: string;
 }
 
+/** 装后生效状态（P0：装后四态验证） */
+export type ActivationState = "live" | "restart" | "inert" | "broken";
+
+/** 装后生效验证结果 */
+export interface ActivationStatus {
+  /** live=已生效 · restart=重启后生效 · inert=未成为插件层 · broken=校验失败 */
+  state: ActivationState;
+  /** 是否进入 profile 的 dsh.profile.bundles 真值 */
+  inBundles: boolean;
+  /** 安装后包是否声明 dsh.bundle */
+  hasBundle: boolean;
+  /** 安装后包是否声明 dsh.client */
+  hasClient: boolean;
+  /** 原因列表（UI 展示"为什么"） */
+  reasons: string[];
+  /** 建议动作（可选，UI 提示用） */
+  action?: string;
+}
+
 /** 安装结果 */
 export interface InstallResult {
   ok: boolean;
@@ -111,6 +130,8 @@ export interface InstallResult {
   alreadyInstalled?: boolean;
   /** 需要重启 harness 生效（cordis 型） */
   requiresRestart?: boolean;
+  /** 装后四态验证（P0；非 dryRun 且安装成功时附带） */
+  activation?: ActivationStatus;
   snapshot?: InstallSnapshot;
   error?: string;
 }

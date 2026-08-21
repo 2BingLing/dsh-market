@@ -1,0 +1,41 @@
+name: decay-scan
+
+# 每周失效条目扫描（P0-D2）：仓库消失/归档/成 fork/长期停更 → 单跟踪 issue，只报不删。
+# 扫描本身从不自动移除任何条目（处置由人工复核，见 scripts/decay-report-issue.mjs）。
+
+on:
+  schedule:
+    # 周一 03:21 UTC（避开每日 collect 的 06:00 与整点）
+    - cron: "21 3 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: decay-scan
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install deps
+        run: npm ci
+
+      - name: 运行失效扫描（写 data/decay-report.json）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node --use-env-proxy --import tsx collector/src/decay-cli.ts
+
+      - name: 汇总到跟踪 issue（只报不删；全部健康则关闭）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/decay-report-issue.mjs

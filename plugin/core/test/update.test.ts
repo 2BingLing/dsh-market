@@ -10,6 +10,9 @@ import {
   fetchRepoPushedAt,
   checkUpdates,
   checkSelfUpdate,
+  applyUpdate,
+  readMinimumReleaseAge,
+  writeMinimumReleaseAge,
 } from "../src/update.js";
 import type { InstalledPlugin } from "../src/types.js";
 import { makeMarket } from "./fixture.js";
@@ -271,5 +274,175 @@ describe("checkSelfUpdate", () => {
     const r = await checkSelfUpdate("0.1.2", { fetchImpl: f, force: true });
     expect(r.hasUpdate).toBe(false);
     expect(r.latest).toBeNull();
+  });
+});
+
+// ---------- P0-3 applyUpdate：假更新防误报 ----------
+
+/** mock runner：rev-parse 返回指定 sha，其余命令成功返回空输出 */
+function runnerWithHead(headA: string | null, headB: string | null) {
+  let reads = 0;
+  return {
+    run: vi.fn(async (command: string) => {
+      if (command.includes("rev-parse")) {
+        reads++;
+        const sha = reads === 1 ? headA : headB;
+        return { exitCode: sha ? 0 : 1, stdout: sha ? sha + "\n" : "", stderr: "" };
+      }
+      return { exitCode: 0, stdout: "", stderr: "" };
+    }),
+  };
+}
+
+describe("applyUpdate · cordis 型", () => {
+  it("版本真的变了 → applied + activation(restart)", async () => {
+    const cfg = makeCfg();
+    const plugin = market.plugins.find((p) => p.id === "feishu/feishu-doc")!;
+    const web = join(cfg.profilesDir, "web");
+    mkdirSync(join(web, "node_modules", "feishu-doc"), { recursive: true });
+    writeFileSync(
+      join(web, "node_modules", "feishu-doc", "package.json"),
+      JSON.stringify({ name: "feishu-doc", version: "0.8.0", dsh: { bundle: { patch: "x" } } }),
+    );
+    // profile 真值：依赖 + bundles 都在，但 patch 未应用 → restart
+    writeFileSync(
+      join(web, "package.json"),
+      JSON.stringify({
+        dependencies: { "feishu-doc": "^0.8.0" },
+        dsh: { profile: { bundles: ["feishu-doc"] } },
+      }),
+    );
+    const item: InstalledPlugin = {
+      pluginId: plugin.id,
+      localName: "feishu-doc",
+      version: "0.8.0",
+      source: "profile",
+      plugin,
+    };
+    // 模拟 pnpm add 真实升级磁盘版本（before 0.8.0 → after 0.9.0）
+    const runner = {
+      run: vi.fn(async (command: string) => {
+        if (command.includes("add feishu-doc@latest")) {
+          writeFileSync(
+            join(web, "node_modules", "feishu-doc", "package.json"),
+            JSON.stringify({ name: "feishu-doc", version: "0.9.0", dsh: { bundle: { patch: "x" } } }),
+          );
+        }
+        return { exitCode: 0, stdout: "", stderr: "" };
+      }),
+    };
+    const r = await applyUpdate(cfg, plugin, item, { runner, profile: "web", fetchImpl: npmOk("0.9.0") });
+    expect(r.applied).toBe(true);
+    expect(r.noChange).toBe(false);
+    expect(r.before).toBe("0.8.0");
+    expect(r.after).toBe("0.9.0");
+    expect(r.activation?.state).toBe("restart"); // 已入 bundles，patch 未应用 → 重启后生效
+  });
+
+  it("版本未变 + npm 有更高版 → blocked=minimum-release-age（假更新防误报）", async () => {
+    const cfg = makeCfg();
+    const plugin = market.plugins.find((p) => p.id === "feishu/feishu-doc")!;
+    const web = join(cfg.profilesDir, "web");
+    mkdirSync(join(web, "node_modules", "feishu-doc"), { recursive: true });
+    writeFileSync(
+      join(web, "node_modules", "feishu-doc", "package.json"),
+      JSON.stringify({ name: "feishu-doc", version: "0.8.0" }),
+    );
+    writeFileSync(join(web, "package.json"), JSON.stringify({ dependencies: { "feishu-doc": "^0.8.0" } }));
+    const item: InstalledPlugin = {
+      pluginId: plugin.id,
+      localName: "feishu-doc",
+      version: "0.8.0",
+      source: "profile",
+      plugin,
+    };
+    const runner = { run: vi.fn(async () => ({ exitCode: 0, stdout: "", stderr: "" })) };
+    const r = await applyUpdate(cfg, plugin, item, { runner, profile: "web", fetchImpl: npmOk("9.9.9") });
+    expect(r.applied).toBe(false);
+    expect(r.noChange).toBe(true);
+    expect(r.blocked).toBe("minimum-release-age");
+    expect(r.reason).toContain("9.9.9");
+  });
+
+  it("版本未变 + npm 无更高版 → 已是最新", async () => {
+    const cfg = makeCfg();
+    const plugin = market.plugins.find((p) => p.id === "feishu/feishu-doc")!;
+    const web = join(cfg.profilesDir, "web");
+    mkdirSync(join(web, "node_modules", "feishu-doc"), { recursive: true });
+    writeFileSync(
+      join(web, "node_modules", "feishu-doc", "package.json"),
+      JSON.stringify({ name: "feishu-doc", version: "0.8.0" }),
+    );
+    writeFileSync(join(web, "package.json"), JSON.stringify({ dependencies: { "feishu-doc": "^0.8.0" } }));
+    const item: InstalledPlugin = {
+      pluginId: plugin.id,
+      localName: "feishu-doc",
+      version: "0.8.0",
+      source: "profile",
+      plugin,
+    };
+    const r = await applyUpdate(cfg, plugin, item, {
+      runner: { run: vi.fn(async () => ({ exitCode: 0, stdout: "", stderr: "" })) },
+      profile: "web",
+      fetchImpl: npmOk("0.8.0"),
+    });
+    expect(r.applied).toBe(false);
+    expect(r.noChange).toBe(true);
+    expect(r.reason).toContain("已是最新");
+  });
+});
+
+describe("applyUpdate · skill 型（HEAD 对比）", () => {
+  function skillSetup() {
+    const cfg = makeCfg();
+    mkdirSync(cfg.skillsDir, { recursive: true });
+    const plugin = market.plugins.find((p) => p.id === "acme/web-scraper")!;
+    const item: InstalledPlugin = {
+      pluginId: plugin.id,
+      localName: "web-scraper-latest",
+      version: null,
+      source: "skills",
+      plugin,
+    };
+    return { cfg, plugin, item };
+  }
+
+  it("HEAD 未变化 → noChange（上游无新提交）", async () => {
+    const { cfg, plugin, item } = skillSetup();
+    const runner = runnerWithHead("a".repeat(40), "a".repeat(40));
+    const r = await applyUpdate(cfg, plugin, item, { runner });
+    expect(r.applied).toBe(true);
+    expect(r.noChange).toBe(true);
+    expect(r.reason).toContain("无新提交");
+  });
+
+  it("HEAD 变化 → 真正更新", async () => {
+    const { cfg, plugin, item } = skillSetup();
+    const runner = runnerWithHead("a".repeat(40), "b".repeat(40));
+    const r = await applyUpdate(cfg, plugin, item, { runner });
+    expect(r.applied).toBe(true);
+    expect(r.noChange).toBe(false);
+    expect(r.before).toBe("a".repeat(40));
+    expect(r.after).toBe("b".repeat(40));
+  });
+});
+
+describe("minimumReleaseAge 读写", () => {
+  it("未设置 → null；写入 0 → 读取 0 且保留原内容", () => {
+    const dir = mkdtempSync(join(tmpdir(), "dshm-mra-"));
+    expect(readMinimumReleaseAge(dir)).toBeNull();
+    const r = writeMinimumReleaseAge(dir, 0);
+    expect(r.ok).toBe(true);
+    expect(readMinimumReleaseAge(dir)).toBe(0);
+  });
+
+  it("已设置 → 读取原值，可覆盖", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "dshm-mra-"));
+    writeFileSync(join(dir, "pnpm-workspace.yaml"), "minimumReleaseAge: 86400\npackages:\n  - x\n", "utf8");
+    expect(readMinimumReleaseAge(dir)).toBe(86400);
+    writeMinimumReleaseAge(dir, 0);
+    const raw = (await import("node:fs")).readFileSync(join(dir, "pnpm-workspace.yaml"), "utf8");
+    expect(raw).toContain("packages:\n  - x");
+    expect(raw).toContain("minimumReleaseAge: 0");
   });
 });

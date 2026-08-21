@@ -12,4 +12,7 @@ export * from "./profile.js";
 export * from "./recommend.js";
 export * from "./installer.js";
 export * from "./update.js";
+export * from "./verify.js";
+export * from "./builds.js";
+export * from "./yaml-block.js";
 export * from "./github.js";

@@ -203,17 +203,33 @@ async function runWithRetry(
     try {
       const r = await options.runner.run(command, { timeoutMs });
       if (r.exitCode !== 0) {
-        throw new Error(
-          `命令退出码 ${r.exitCode}：${(r.stderr || r.stdout).slice(0, 500)}`,
-        );
+        const errText = r.stderr || r.stdout;
+        // 文件占用/权限类失败（运行中 harness 更新本 profile 的典型病）：不重试，
+        // 直接失败并给可操作提示——避免"重试 3×180s"把界面拖成永久更新中
+        if (isLockFailure(errText)) {
+          throw new Error(
+            `${errText.slice(0, 200)}\n[提示] 文件被占用：请先停止 harness 再执行该操作，或改用未运行的 profile。`,
+          );
+        }
+        throw new Error(`命令退出码 ${r.exitCode}：${errText.slice(0, 500)}`);
       }
       return;
     } catch (err) {
       lastErr = err;
+      if (isLockFailure((err as Error).message)) throw err;
       if (attempt === MAX_RETRY) throw err;
     }
   }
   throw lastErr;
+}
+
+/** 是否为文件占用/权限类失败（Windows 上更新运行中 profile 的常见病；命中则不应重试） */
+export function isLockFailure(outputOrMessage: string): boolean {
+  return (
+    /EPERM|EACCES|EBUSY|being used by another process|resource busy|in use by another|Access is denied|Cannot create file/i.test(
+      outputOrMessage,
+    )
+  );
 }
 
 /** skill 回滚：删除新目录 / 恢复备份 */
