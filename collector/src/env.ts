@@ -13,7 +13,8 @@ const envPath = join(here, "../../.env"); // collector/src -> 仓库根
 
 if (existsSync(envPath)) {
   const content = readFileSync(envPath, "utf-8");
-  for (const line of content.split(/\r?\n/)) {
+  // 兼容 LF / CRLF / 仅 CR 三种换行（实测用户的 .env 是仅 \r 换行，/\r?\n/ 会把整个文件当一行导致读不到 token）
+  for (const line of content.split(/[\r\n]+/)) {
     const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
     if (!m) continue;
     const key = m[1];
