@@ -330,9 +330,41 @@ async function main() {
           );
         }
         isCordis = isCordisPackageJson(packageJsonContent);
-        if (detection.type === "cordis-plugin" && !isCordis) {
-          rejected.push({ fullName: candidate.fullName, reason: "package.json not cordis" });
-          return;
+        // dsh-manifest.json 声明式插件：manifest 本身就是插件证据，跳过 package.json 二次确认（#53 类）
+        const hasManifest = rootItems.some(
+          (i) => i.name.toLowerCase() === "dsh-manifest.json"
+        );
+        if (detection.type === "cordis-plugin" && !isCordis && !hasManifest) {
+          // monorepo / 子目录兜底：根 package.json 是 workspace 根（非插件），插件在子目录（#52 类）
+          const sub = await detectSubdirBundle(candidate.fullName, rootItems, repo!.default_branch);
+          if (sub) {
+            detection = {
+              isPlugin: true,
+              type: "cordis-plugin",
+              installMethod: "pnpm-profile",
+              skillFiles: [],
+              evidence: sub.evidence,
+            };
+            subdir = sub.subdir;
+            // 子目录 package.json 二次确认
+            const subPkgRel = `${subdir}/package.json`;
+            const subPkg = await cached<string | null>(
+              "pkgjson",
+              candidate.fullName + `:${subdir}`,
+              async () => {
+                const f = await fetchFileViaApi(candidate.fullName, subPkgRel);
+                return f?.content ?? null;
+              }
+            );
+            isCordis = isCordisPackageJson(subPkg);
+            if (!isCordis) {
+              rejected.push({ fullName: candidate.fullName, reason: "package.json not cordis" });
+              return;
+            }
+          } else {
+            rejected.push({ fullName: candidate.fullName, reason: "package.json not cordis" });
+            return;
+          }
         }
 
         // README（缓存 24h）

@@ -24,7 +24,12 @@ export interface Detection {
 }
 
 const SKILL_MARKER = "SKILL.md";
-const CORDIS_MARKERS = ["dsh.profile", "cordis.patch.yml", "dsh.profile.yml"];
+const CORDIS_MARKERS = [
+  "dsh.profile",
+  "cordis.patch.yml",
+  "dsh.profile.yml",
+  "dsh-manifest.json", // DSH 声明式插件清单（name/entry/tools），新生态形态
+];
 
 export async function detectPlugin(
   fullName: string,
@@ -85,9 +90,9 @@ export async function detectPlugin(
   return { isPlugin: true, type, installMethod, skillFiles, evidence };
 }
 
-/** 子目录 bundle 探测：根目录无插件标记时，检查是否存在"子目录内含 package.json + cordis 标记"的插件成品
- * （仓库根目录放素材/文档/工具链，插件在子目录——如 PC2005-cloud/dsh-pet 的 dsh-pet/）
- * 只探测可疑目录（与仓库同名 / dsh- 前缀 / cordis|plugin|bundle|client 开头），最多 3 个，控制 API 调用 */
+/** 子目录 bundle 探测：根目录无插件标记时，检查是否存在子目录内的插件成品
+ * （仓库根目录放素材/文档/工具链，插件在子目录——如 dsh-pet/、monorepo 的 packages/plugin）
+ * 候选：与仓库同名 / dsh|cordis|plugin|bundle|client 开头 + monorepo 的 packages|apps 下子目录，最多 4 个 */
 export async function detectSubdirBundle(
   fullName: string,
   rootItems: RepoContentItem[],
@@ -98,14 +103,23 @@ export async function detectSubdirBundle(
   const SKIP_DIRS =
     /^(docs?|assets?|test|tests|scripts?|tools?|examples?|images?|img|public|src|lib|dist|node_modules|vendor|\.github)$/i;
   const dirs = rootItems.filter((i) => i.type === "dir" && !SKIP_DIRS.test(i.name));
-  const candidates = dirs
-    .filter((d) => {
-      const n = d.name.toLowerCase();
-      // 与仓库同名 / dsh 开头（含裸 dsh、dsh-、dsh_）/ cordis|plugin|bundle|client 开头
-      return n === repoName || /^(dsh|cordis|plugin|bundle|client)/.test(n);
-    })
-    .slice(0, 3);
-  for (const dir of candidates) {
+  // monorepo 子目录优先（packages|apps 下的插件包，如 #52 的 packages/plugin）
+  const candidates: { path: string }[] = [];
+  const mono = dirs.find((d) => /^(packages|apps)$/i.test(d.name));
+  if (mono) {
+    const subs = await fetchRepoRoot(fullName, branch, mono.path);
+    for (const s of subs.filter((x) => x.type === "dir")) {
+      candidates.push({ path: `${mono.path}/${s.name}` });
+    }
+  }
+  // 原有规则：与仓库同名 / dsh 开头 / cordis|plugin|bundle|client 开头
+  for (const d of dirs) {
+    const n = d.name.toLowerCase();
+    if (n === repoName || /^(dsh|cordis|plugin|bundle|client)/.test(n)) {
+      candidates.push({ path: d.path });
+    }
+  }
+  for (const dir of candidates.slice(0, 8)) {
     const items = await fetchRepoRoot(fullName, branch, dir.path);
     const names = new Set(items.map((i) => i.name.toLowerCase()));
     if (names.has("package.json")) {

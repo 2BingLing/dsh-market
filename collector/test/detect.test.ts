@@ -2,7 +2,7 @@
  * detectSubdirBundle 单元测试：子目录 bundle 探测（根目录无标记、插件在子目录）
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { detectSubdirBundle, isCordisPackageJson } from "../src/detect.js";
+import { detectPlugin, detectSubdirBundle, isCordisPackageJson } from "../src/detect.js";
 import { fetchRepoRoot, fetchFileViaApi } from "../src/github.js";
 
 vi.mock("../src/github.js", () => ({
@@ -79,7 +79,7 @@ describe("detectSubdirBundle", () => {
     expect(r).toBeNull();
   });
 
-  it("最多探测 3 个候选目录", async () => {
+  it("最多探测 4 个候选目录（含 monorepo 子包）", async () => {
     const root = [
       rootItem("README.md"),
       rootItem("dsh-a", "dir"),
@@ -90,7 +90,7 @@ describe("detectSubdirBundle", () => {
     mockFetch.mockResolvedValue([rootItem("package.json")]);
     const r = await detectSubdirBundle("someone/some-repo", root as never, "main");
     expect(r).toBeNull();
-    expect(mockFetch).toHaveBeenCalledTimes(3);
+    expect(mockFetch).toHaveBeenCalledTimes(4);
   });
 });
 
@@ -160,6 +160,50 @@ describe("detectSubdirBundle 子目录依赖判据（#34 search2chart-mcp 场景
     mockFetchFile.mockResolvedValue({
       content: JSON.stringify({ name: "lib", dependencies: { lodash: "^4" } }),
       sha: "x",
+    });
+    const r = await detectSubdirBundle("someone/some-repo", root as never, "main");
+    expect(r).toBeNull();
+  });
+});
+
+describe("detectPlugin manifest + detectSubdirBundle monorepo", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("根目录有 dsh-manifest.json → 判定 cordis-plugin（#53 新形态）", async () => {
+    const root = [
+      rootItem("README.md"),
+      rootItem("dsh-manifest.json"),
+      rootItem("package.json"),
+      rootItem("packages", "dir"),
+    ];
+    const det = await detectPlugin("iqingyoung/429-throttle-mcp", root as never);
+    expect(det.isPlugin).toBe(true);
+    expect(det.type).toBe("cordis-plugin");
+    expect(det.evidence.join()).toContain("cordis marker");
+  });
+
+  it("monorepo：packages/ 下插件包命中（#52 类：插件在 packages/plugin）", async () => {
+    const root = [rootItem("README.md"), rootItem("package.json"), rootItem("packages", "dir")];
+    // detectSubdirBundle 内部：先取 packages 子目录列表，再探测 plugin 子包
+    mockFetch.mockImplementation(async (_fn, _br, path) => {
+      if (path === "packages") {
+        return [rootItem("api", "dir"), rootItem("plugin", "dir"), rootItem("shared", "dir")];
+      }
+      if (path === "packages/plugin") {
+        return [rootItem("package.json"), rootItem("cordis.patch.yml")];
+      }
+      return [];
+    });
+    const r = await detectSubdirBundle("uruana33/dsh-cost-meter", root as never, "main");
+    expect(r?.subdir).toBe("packages/plugin");
+  });
+
+  it("monorepo：packages/ 下子包无插件标记 → 不命中", async () => {
+    const root = [rootItem("README.md"), rootItem("packages", "dir")];
+    mockFetch.mockImplementation(async (_fn, _br, path) => {
+      if (path === "packages") return [rootItem("api", "dir")];
+      if (path === "packages/api") return [rootItem("README.md")];
+      return [];
     });
     const r = await detectSubdirBundle("someone/some-repo", root as never, "main");
     expect(r).toBeNull();
