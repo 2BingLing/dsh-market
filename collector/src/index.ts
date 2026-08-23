@@ -17,6 +17,7 @@ import {
   fetchRawFile,
   fetchFileViaApi,
   GithubError,
+  sleep,
   type GithubRepo,
 } from "./github.js";
 import { fetchAwesomeEntries } from "./sources/awesome.js";
@@ -474,12 +475,17 @@ async function main() {
 
   // [retry-error] 瞬时失败候选重试：限流/网络波动被 error-reject 的不该直接放弃
   //（否则只能等下一天 cron，如 issue #32/#33/#35 被漏检）
+  // 注意：刚撞完限流立刻重试会再撞限流导致每个请求退避堆叠（曾拖 35 分钟）——
+  // 重试前先冷却限流窗口 + 限制重试数量，超出部分留给下次 cron 自然重试
   const errorIds = new Set(
     rejected.filter((r) => r.reason.startsWith("error")).map((r) => r.fullName.toLowerCase())
   );
   if (errorIds.size > 0) {
-    const retry = all.filter((c) => errorIds.has(c.fullName.toLowerCase()));
-    console.log(`  [retry-error] ${retry.length} 个瞬时失败候选重试（并发 10）...`);
+    const retry = all
+      .filter((c) => errorIds.has(c.fullName.toLowerCase()))
+      .slice(0, 60);
+    console.log(`  [retry-error] ${retry.length} 个瞬时失败候选，冷却 45s 后重试（并发 10，超出留给下轮）...`);
+    await sleep(45_000); // 限流窗口冷却，避免重试再撞限流
     await runPool(retry, detectOne);
     console.log(`  [retry-error] 完成，detected=${detected.length}`);
   }
