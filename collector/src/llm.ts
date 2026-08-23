@@ -60,16 +60,25 @@ export function extractJson(raw: string): ZhResult | null {
   }
 }
 
+export interface LlmOpts {
+  apiKey: string;
+  baseURL: string;
+  model: string;
+  /** 思考级别（推理模型参数，如 high/medium/low；非推理模型忽略） */
+  thinkingLevel?: string;
+}
+
 export async function translateWithDeepSeek(
   input: Input,
-  opts: { apiKey: string; baseURL: string; model: string }
+  opts: LlmOpts
 ): Promise<ZhResult | null> {
-  const body = {
+  const body: Record<string, unknown> = {
     model: opts.model,
     messages: [{ role: "user", content: buildPrompt(input) }],
     temperature: 0.3,
     max_tokens: 300,
   };
+  if (opts.thinkingLevel) body.thinking_level = opts.thinkingLevel;
 
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {

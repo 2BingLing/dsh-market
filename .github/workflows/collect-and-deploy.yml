@@ -47,6 +47,8 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           DEEPSEEK_API_BASE: ${{ secrets.DEEPSEEK_API_BASE }}
           DEEPSEEK_MODEL: ${{ secrets.DEEPSEEK_MODEL }}
+          DEEPSEEK_THINKING_LEVEL: ${{ secrets.DEEPSEEK_THINKING_LEVEL }}
+          DEEPSEEK_NORM_MODEL: ${{ secrets.DEEPSEEK_NORM_MODEL }}
         run: npm run collect
 
       - name: 同步数据到 Web

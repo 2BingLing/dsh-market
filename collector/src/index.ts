@@ -629,6 +629,7 @@ async function main() {
   const apiKey = process.env.DEEPSEEK_API_KEY;
   const baseURL = process.env.DEEPSEEK_API_BASE ?? "https://api.deepseek.com";
   const model = process.env.DEEPSEEK_MODEL ?? "deepseek-chat";
+  const thinkingLevel = process.env.DEEPSEEK_THINKING_LEVEL ?? undefined;
 
   if (apiKey) {
     // 已知标签清单（约束新翻译优先复用，抑制同义异名）：从已收录插件聚合细分中文标签 top 40
@@ -674,7 +675,7 @@ async function main() {
             topics: d.plugin.topics,
             knownTags,
           },
-          { apiKey, baseURL, model }
+          { apiKey, baseURL, model, thinkingLevel }
         );
         if (result) {
           d.plugin.descriptionZh = result.descriptionZh;
@@ -729,8 +730,9 @@ async function main() {
       }
       p.tags = next;
     }
-    // 2) 再跑 LLM 归一化（针对剩余标签，含宽泛移除）
-    const norm = await normalizeTags(allPlugins, { apiKey, baseURL, model });
+    // 2) 再跑 LLM 归一化（针对剩余标签，含宽泛移除；归一化用独立模型配置，默认保持 v4-flash）
+    const normModel = process.env.DEEPSEEK_NORM_MODEL ?? "deepseek-v4-flash";
+    const norm = await normalizeTags(allPlugins, { apiKey, baseURL, model: normModel });
     const aliasEntries = Object.entries(norm.alias);
     console.log(
       `  历史 alias 应用 ${histMerged} 处 · 新 LLM 合并 ${aliasEntries.length} 组（${norm.mergedCount} 处）· 移除宽泛标签 ${norm.removedGeneric} 处`
@@ -793,7 +795,7 @@ async function main() {
           topics: pack.tags,
           knownTags: knownPackTags,
         },
-        { apiKey, baseURL, model }
+        { apiKey, baseURL, model, thinkingLevel }
       );
       if (result) {
         pack.descriptionZh = result.descriptionZh;
