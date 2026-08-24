@@ -30,7 +30,7 @@ jobs:
           node-version: 24
 
       - name: 恢复检测缓存（增量收集关键：roots/SKILL 内容缓存 + 标签别名）
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: |
             data/cache
@@ -50,6 +50,18 @@ jobs:
           DEEPSEEK_THINKING_LEVEL: ${{ secrets.DEEPSEEK_THINKING_LEVEL }}
           DEEPSEEK_NORM_MODEL: ${{ secrets.DEEPSEEK_NORM_MODEL }}
         run: npm run collect
+
+      # 显式保存检测缓存：紧跟 collect（只要检测阶段跑过就上传），
+      # 失败/后续步骤出错也不影响——避免 Post 自动保存只在 job 全成功时执行导致的缓存链断裂
+      #（曾因 reply 失败/cancel 连续多天无新缓存 → 每次全量冷检测 40 分钟）
+      - name: 保存检测缓存（collect 后立即，always）
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: |
+            data/cache
+            data/tag-alias.json
+          key: detect-cache-${{ github.run_id }}
 
       - name: 同步数据到 Web
         run: |
