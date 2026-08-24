@@ -1,0 +1,26 @@
+name: issue-reply
+
+# 自动回复提交插件 issue（已收录确认 + 关闭）
+# 独立于 collect 管道：collect 于本地 06:00 运行（API 消耗大），
+# 本 workflow 于本地 08:00（UTC 00:00）运行——错开 GitHub installation 限流窗口，
+# 避免 reply 撞 collect 耗尽的配额（曾致 403 全链路失败）
+on:
+  schedule:
+    - cron: "0 0 * * *" # 本地 08:00（北京时间）= UTC 00:00
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  reply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: 自动回复提交插件 issue（读取 collect 提交的队列）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/reply-issues.mjs

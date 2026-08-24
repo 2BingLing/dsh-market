@@ -90,30 +90,35 @@ async function main() {
       continue;
     }
     for (const issueNumber of r.issueNumbers) {
-      // 防重复回复：检查是否已有 bot 评论
-      const comments = await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/comments`);
-      const already = (comments ?? []).some((c) => (c.body ?? "").includes("已收录"));
-      if (already) {
-        console.log(`#${issueNumber} 已回复过，跳过`);
-        continue;
+      try {
+        // 防重复回复：检查是否已有 bot 评论
+        const comments = await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/comments`);
+        const already = (comments ?? []).some((c) => (c.body ?? "").includes("已收录"));
+        if (already) {
+          console.log(`#${issueNumber} 已回复过，跳过`);
+          continue;
+        }
+        // 评论
+        await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/comments`, {
+          method: "POST",
+          body: { body: buildReply(r) },
+        });
+        console.log(`#${issueNumber} 已评论（${r.fullName}）`);
+        // 挂 label
+        await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/labels`, {
+          method: "POST",
+          body: { labels: ["submission", "accepted"] },
+        }).catch((e) => console.warn(`#${issueNumber} label 失败: ${e.message}`));
+        // 关闭
+        await api(`/repos/${MARKET_REPO}/issues/${issueNumber}`, {
+          method: "PATCH",
+          body: { state: "closed" },
+        });
+        console.log(`#${issueNumber} 已关闭`);
+      } catch (err) {
+        // 403（安装级限流）/其他错误：跳过该 issue，不终止脚本（下次队列重试）
+        console.warn(`#${issueNumber} 跳过（待下次重试）: ${err.message.slice(0, 120)}`);
       }
-      // 评论
-      await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/comments`, {
-        method: "POST",
-        body: { body: buildReply(r) },
-      });
-      console.log(`#${issueNumber} 已评论（${r.fullName}）`);
-      // 挂 label
-      await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/labels`, {
-        method: "POST",
-        body: { labels: ["submission", "accepted"] },
-      }).catch((e) => console.warn(`#${issueNumber} label 失败: ${e.message}`));
-      // 关闭
-      await api(`/repos/${MARKET_REPO}/issues/${issueNumber}`, {
-        method: "PATCH",
-        body: { state: "closed" },
-      });
-      console.log(`#${issueNumber} 已关闭`);
     }
   }
   console.log("完成");

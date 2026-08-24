@@ -65,18 +65,13 @@ jobs:
           git config user.name "dsh-market-bot"
           git config user.email "dsh-market-bot@users.noreply.github.com"
           # data/ 在 .gitignore 中，用 -f 强制提交数据快照
-          # issue-replies.json 只在有 issue 收录时生成，不加入 add 清单（reply 步骤读不到会优雅跳过）
+          # issue-replies.json 随数据提交（独立 issue-reply workflow 于本地 08:00 读取回复，错开 API 限流）
           # banner 为本地手动维护的静态资产（scripts/compose-banner.mjs 生成），workflow 不重生成
           # packs.json 由人工通道（scripts/pack-add.ts）维护，独立 add（不存在时跳过，避免拖垮整条 add）
-          git add -f data/plugins.json data/zh-cache.json web/public/plugins.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
+          git add -f data/plugins.json data/zh-cache.json data/issue-replies.json web/public/plugins.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
           test -f data/packs.json && git add -f data/packs.json web/public/packs.json || true
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
           git push
-
-      - name: 自动回复提交插件 issue（已收录确认 + 徽章指引 + 关闭）
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: node scripts/reply-issues.mjs
 
       - name: 构建 Web
         run: npm run build -w web
