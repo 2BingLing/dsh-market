@@ -71,6 +71,8 @@ jobs:
           git add -f data/plugins.json data/zh-cache.json data/issue-replies.json web/public/plugins.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
           test -f data/packs.json && git add -f data/packs.json web/public/packs.json || true
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
+          # 并行会话/其他推送可能领先：先 rebase 再 push，避免非 fast-forward 失败（曾 exit 128 挂掉整个 run）
+          git pull --rebase origin master || true
           git push
 
       - name: 构建 Web
