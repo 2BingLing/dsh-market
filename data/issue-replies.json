@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-08-24T14:47:05.595Z",
+  "replies": [
+    {
+      "issueNumbers": [
+        70
+      ],
+      "fullName": "moyuer233/dsh-deepseek-monitor",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 56
+    },
+    {
+      "issueNumbers": [
+        67
+      ],
+      "fullName": "xtd1145/dsh-full-access-switch",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 34
+    },
+    {
+      "issueNumbers": [
+        66
+      ],
+      "fullName": "chidaic/dsh-light-memory",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 61
+    },
+    {
+      "issueNumbers": [
+        64
+      ],
+      "fullName": "XuXcode/dsh-loghud",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 55
+    },
+    {
+      "issueNumbers": [
+        68
+      ],
+      "fullName": "jmxsxwyzjdwl/dsh-mmroute",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 4
+    },
+    {
+      "issueNumbers": [
+        65
+      ],
+      "fullName": "MistyBridge/dsh-agent-bus",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 42
+    },
+    {
+      "issueNumbers": [
+        69
+      ],
+      "fullName": "jasonatgit/echomind_memory.skill",
+      "type": "skill",
+      "stars": 44,
+      "score": 35
+    }
+  ]
+}
