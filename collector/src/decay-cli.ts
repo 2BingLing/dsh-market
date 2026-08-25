@@ -18,15 +18,26 @@ async function main() {
   const raw = readFileSync(join(DATA_DIR, "plugins.json"), "utf8");
   const market = JSON.parse(raw) as MarketData;
   console.log("=== DSH Market · 失效条目扫描（只报不删）===");
-  console.log(`  收录 ${market.plugins.length}，开始探测…`);
+  console.log(`  收录 ${market.plugins.length}，开始探测…（每 200 条报一次进度）`);
 
-  const report = await scanDecay(market);
+  const t0 = Date.now();
+  const report = await scanDecay(market, {
+    // 给 Actions 日志喂进度：避免"几十秒零输出被误判卡死而手动取消"
+    onProgress: (done, total, errs) => {
+      const el = Math.round((Date.now() - t0) / 1000);
+      console.log(`  [进度] ${done}/${total}，发现 ${errs} 个探测错误，已用 ${el}s`);
+    },
+  });
+  const el = Math.round((Date.now() - t0) / 1000);
 
   mkdirSync(DATA_DIR, { recursive: true });
   writeFileSync(join(DATA_DIR, "decay-report.json"), JSON.stringify(report, null, 2), "utf8");
 
+  if (report.aborted) {
+    console.warn(`  ⚠️ 熔断：错误数超预算，提前终止（已查 ${report.checked}/${market.plugins.length}），下轮复查`);
+  }
   console.log(
-    `  检查 ${report.checked} · 健康 ${report.healthy} · 需关注 ${report.findings.length}`,
+    `  检查 ${report.checked} · 健康 ${report.healthy ?? "?"} · 需关注 ${report.findings.length} · 用时 ${el}s`,
   );
   for (const [k, n] of Object.entries(report.byKind)) console.log(`    ${k}: ${n}`);
   for (const f of report.findings.slice(0, 40)) {

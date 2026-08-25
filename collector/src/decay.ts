@@ -14,7 +14,6 @@
  *   - 按 id 去重后并发探测，避免同一仓库重复请求。
  */
 import type { DshPlugin, MarketData } from "@dsh-market/schema";
-import { runPool } from "./pool.js";
 
 export type DecayKind = "gone" | "archived" | "forked" | "dormant" | "error";
 
@@ -36,6 +35,8 @@ export interface DecayReport {
   healthy: number;
   byKind: Partial<Record<DecayKind, number>>;
   findings: DecayFinding[];
+  /** 是否因错误率过高提前熔断（只出了部分结果） */
+  aborted?: boolean;
 }
 
 /** GitHub repo 元数据的精简视图（探测函数返回） */
@@ -53,6 +54,11 @@ export interface ScanDecayOpts {
   /** 停更判定天数（默认 270） */
   dormantDays?: number;
   concurrency?: number;
+  /** 进度回调（第 done 个时调用；可用于给 Actions 日志喂进度，避免 30 分钟零输出被误 cancel） */
+  onProgress?: (done: number, total: number, errorCount: number) => void;
+  /** 熔断阈值：错误数 ≥ max(此值, 总条数×比例) 时提前终止，输出部分结果 */
+  abortErrors?: number;
+  abortErrorRatio?: number;
 }
 
 /** 默认探测：GitHub API /repos/{fullName}；404 → null（已删除） */
@@ -77,8 +83,11 @@ export async function scanDecay(
   opts: ScanDecayOpts = {},
 ): Promise<DecayReport> {
   const dormantDays = opts.dormantDays ?? 270;
-  const concurrency = opts.concurrency ?? 10;
+  const concurrency = (opts.concurrency ?? Number(process.env.DECAY_CONCURRENCY)) || 5;
   const fetchRepo = opts.fetchRepo ?? defaultFetchRepo;
+  const abortErrors = opts.abortErrors ?? 150;
+  const abortErrorRatio = opts.abortErrorRatio ?? 0.15;
+  const onProgress = opts.onProgress;
 
   // 按 id 去重（同仓库多路径/RESTORE 可能重复）
   const uniq = new Map<string, DshPlugin>();
@@ -86,8 +95,17 @@ export async function scanDecay(
     if (!uniq.has(p.id)) uniq.set(p.id, p);
   }
   const plugins = [...uniq.values()];
+  const n = plugins.length;
   const findings: DecayFinding[] = [];
   const now = Date.now();
+
+  // 熔断预算：错误数（error/网络/限流）累计超阈值即停
+  const errors: string[] = [];
+  let aborted = false;
+  let next = 0;
+  const isAborted = () =>
+    aborted ||
+    errors.length >= Math.max(abortErrors, Math.ceil(n * abortErrorRatio));
 
   const worker = async (p: DshPlugin) => {
     const stale = (p: DshPlugin): DecayFinding => {
@@ -175,6 +193,7 @@ export async function scanDecay(
       }
       // 健康
     } catch (err) {
+      errors.push((err as Error).message.slice(0, 120));
       findings.push({
         id: p.id,
         fullName: p.fullName,
@@ -187,16 +206,38 @@ export async function scanDecay(
     }
   };
 
-  await runPool(plugins, worker, concurrency);
+  // 可熔断的并发池（runPool 不支持提前停 → 内联实现）
+  async function run(): Promise<void> {
+    const runners = Array.from({ length: Math.min(concurrency, n) }, async () => {
+      while (!isAborted()) {
+        const i = next++;
+        if (i >= n) break;
+        await worker(plugins[i]);
+        if (isAborted()) {
+          aborted = true;
+        }
+        if (onProgress) {
+          const done = Math.min(next, n);
+          if (done % 200 === 0 || done === n) {
+            onProgress(done, n, errors.length);
+          }
+        }
+      }
+    });
+    await Promise.all(runners);
+    if (isAborted() && next < n) aborted = true;
+  }
+  await run();
 
   const byKind: Partial<Record<DecayKind, number>> = {};
   for (const f of findings) byKind[f.kind] = (byKind[f.kind] ?? 0) + 1;
 
   return {
     generatedAt: new Date().toISOString(),
-    checked: plugins.length,
-    healthy: plugins.length - findings.length,
+    checked: Math.min(next, n),
+    healthy: aborted ? undefined : plugins.length - findings.length,
     byKind,
+    aborted: aborted || undefined,
     findings: findings.sort((a, b) => a.fullName.localeCompare(b.fullName)),
   };
 }

@@ -20,6 +20,13 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    # 事故复盘（#1 run，2026-08-24）：5175 条扫了 32 分钟被取消，且烧光与每日 collect 共享的
+    # secrets.GITHUB_TOKEN 配额导致 06:00 管道失败。本次修复：
+    # ① 用 github.token（独立配额）→ 不再与 collect 抢额度（只读+issues 足够）
+    # ② env DECAY_CONCURRENCY=5 降并发 + decay.ts 错误熔断（超预算提前终止出部分结果）
+    # ③ decay-cli 每 200 条喂进度日志 → 不会零输出被误 cancel
+    # ④ 超时 40 分钟兜底
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
 
@@ -32,10 +39,11 @@ jobs:
 
       - name: 运行失效扫描（写 data/decay-report.json）
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+          DECAY_CONCURRENCY: "5"
         run: node --use-env-proxy --import tsx collector/src/decay-cli.ts
 
       - name: 汇总到跟踪 issue（只报不删；全部健康则关闭）
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/decay-report-issue.mjs

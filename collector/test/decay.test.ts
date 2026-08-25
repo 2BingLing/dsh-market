@@ -37,6 +37,49 @@ function market(plugins: DshPlugin[]): MarketData {
   return { schemaVersion: 2, generatedAt: new Date().toISOString(), plugins };
 }
 
+describe("scanDecay · 熔断（2026-08-24 事故回归）", () => {
+  it("错误数超预算 → aborted=true 且 checked < 总数（只出部分结果，不无限跑）", async () => {
+    // 20 个仓库，全部探测抛错（模拟限流风暴；加 5ms 延迟模拟真实请求节奏，让熔断来得及生效）
+    const plugins = Array.from({ length: 20 }, (_, i) => plugin(`band${i}/p${i}`));
+    const m = market(plugins);
+    const r = await scanDecay(m, {
+      fetchRepo: async () => {
+        await new Promise((res) => setTimeout(res, 5));
+        throw new Error("rate limited");
+      },
+      abortErrors: 5,   // 5 个错误即熔断
+      abortErrorRatio: 0, // 只看绝对阈值（0 → 不按比例放宽）
+      concurrency: 4,
+    });
+    expect(r.aborted).toBe(true);
+    expect(r.checked).toBeLessThan(plugins.length);
+    expect(r.findings.every((f) => f.kind === "error")).toBe(true);
+  });
+
+  it("正常完成（错误数低于预算）→ aborted 为 undefined，checked 等于总数", async () => {
+    const m = market([plugin("ok/a"), plugin("ok/b")]);
+    const r = await scanDecay(m, {
+      fetchRepo: async (full) => ({ full_name: full, archived: false, fork: false, pushed_at: new Date().toISOString() }),
+      abortErrors: 5,
+      concurrency: 2,
+    });
+    expect(r.aborted).toBeUndefined();
+    expect(r.checked).toBe(2);
+    expect(r.findings).toHaveLength(0);
+  });
+
+  it("onProgress 进度回调触发（>1 次）", async () => {
+    const m = market(Array.from({ length: 12 }, (_, i) => plugin(`ok${i}/p${i}`)));
+    let calls = 0;
+    await scanDecay(m, {
+      fetchRepo: async (full) => ({ full_name: full, archived: false, fork: false, pushed_at: new Date().toISOString() }),
+      concurrency: 3,
+      onProgress: () => { calls++; },
+    });
+    expect(calls).toBeGreaterThan(0);
+  });
+});
+
 describe("scanDecay", () => {
   it("健康仓库 → 无 finding，healthy=checked", async () => {
     const m = market([plugin("ok/a"), plugin("ok/b")]);
