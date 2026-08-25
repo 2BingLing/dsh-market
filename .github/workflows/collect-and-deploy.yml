@@ -80,7 +80,8 @@ jobs:
           # issue-replies.json 随数据提交（独立 issue-reply workflow 于本地 08:00 读取回复，错开 API 限流）
           # banner 为本地手动维护的静态资产（scripts/compose-banner.mjs 生成），workflow 不重生成
           # packs.json 由人工通道（scripts/pack-add.ts）维护，独立 add（不存在时跳过，避免拖垮整条 add）
-          git add -f data/plugins.json data/zh-cache.json data/issue-replies.json web/public/plugins.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
+          # 收录徽章用微型 count.json（sync-count.mjs 生成）；不拉整个 plugins.json，防 shields.io 超大小上限显示 invalid
+          git add -f data/plugins.json data/zh-cache.json data/issue-replies.json web/public/plugins.json web/public/count.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
           test -f data/packs.json && git add -f data/packs.json web/public/packs.json || true
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
           # 并行会话/其他推送可能领先：先 rebase 再 push，避免非 fast-forward 失败（曾 exit 128 挂掉整个 run）

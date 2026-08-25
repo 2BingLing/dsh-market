@@ -60,4 +60,12 @@ for (const t of targets) {
   }
 }
 
+// 输出微型 count.json 供 shields.io 动态徽章使用（不拉整个 plugins.json，避免超 shields 抓取大小上限 → invalid）
+{
+  const countJson = path.join(root, "web/public/count.json");
+  const updated = pluginData.generatedAt ?? new Date().toISOString();
+  writeFileSync(countJson, JSON.stringify({ plugins: count, updated }, null, 2), "utf8");
+  console.log(`sync-count: web/public/count.json → {plugins: ${count}}`);
+}
+
 console.log(changed ? "sync-count: 已完成同步" : "sync-count: 数量无变化，无需提交");
