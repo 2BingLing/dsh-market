@@ -1,50 +1,23 @@
 {
-  "generatedAt": "2026-08-25T23:30:04.306Z",
+  "generatedAt": "2026-08-26T04:59:48.721Z",
   "replies": [
     {
       "issueNumbers": [
-        74
+        80
       ],
-      "fullName": "10086ggqq/dsh_theme_terraria",
-      "type": "cordis-plugin",
-      "stars": 24,
-      "score": 77
-    },
-    {
-      "issueNumbers": [
-        75
-      ],
-      "fullName": "cyanTao/dsh-process-board",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 27
-    },
-    {
-      "issueNumbers": [
-        76
-      ],
-      "fullName": "EternalNight996/dsh-memory-eternal",
+      "fullName": "zuoyunlai/lunheng-article-pipeline-dsh",
       "type": "cordis-plugin",
       "stars": 3,
-      "score": 12
+      "score": 62
     },
     {
       "issueNumbers": [
-        72
+        79
       ],
-      "fullName": "142gg-GZX/unity-dsh-bridge",
+      "fullName": "2008924/dsh-progress-viz",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 34
-    },
-    {
-      "issueNumbers": [
-        73
-      ],
-      "fullName": "fengbin01/dsh-team-superflow",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 26
+      "stars": 1,
+      "score": 54
     }
   ]
 }
