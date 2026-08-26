@@ -650,17 +650,21 @@ function buildInstallPrompt(
   ].join('\n')
 }
 
-/** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获 */
+/** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。
+ *  平台适配（issue #78）：Win32 用 cmd.exe，POSIX（macOS/Linux）用 /bin/sh -c。 */
 import { execFile } from 'node:child_process'
+const isWin = process.platform === 'win32'
 
 function realRunner() {
   return {
     run(command: string, opts: { cwd?: string; timeoutMs?: number }) {
       return new Promise<{ exitCode: number; stdout: string; stderr: string }>((resolve, reject) => {
+        const file = isWin ? process.env.ComSpec ?? 'cmd.exe' : '/bin/sh'
+        const args = isWin ? ['/d', '/s', '/c', command] : ['-c', command]
         execFile(
-          process.env.ComSpec ?? 'cmd.exe',
-          ['/d', '/s', '/c', command],
-          { cwd: opts.cwd, timeout: opts.timeoutMs ?? 120000, windowsHide: true },
+          file,
+          args,
+          { cwd: opts.cwd, timeout: opts.timeoutMs ?? 120000, windowsHide: isWin },
           (err, stdout, stderr) => {
             if (err) {
               reject(new Error(stderr || stdout || err.message))

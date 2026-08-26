@@ -29,14 +29,21 @@ import { fetchCurrentUser, fetchStarred } from "./github.js";
 // 真实命令执行器（CLI 形态下直接使用 child_process）。
 // 注意：运行在 harness shell 沙箱下时，管道 stdio 的 spawn 会被拦（EPERM），
 // 因此使用 stdio: 'ignore' 只取退出码，不捕获输出。
+// 平台适配（issue #78）：Win32 用 cmd.exe，POSIX（macOS/Linux）用 /bin/sh -c。
+const isWin = process.platform === "win32";
 const realRunner: CommandRunner = {
   run(command, opts) {
     return new Promise((resolve, reject) => {
-      const child = spawn(
-        process.env.ComSpec ?? "cmd.exe",
-        ["/d", "/s", "/c", command],
-        { cwd: opts.cwd, windowsHide: true, stdio: "ignore" },
-      );
+      const child = isWin
+        ? spawn(process.env.ComSpec ?? "cmd.exe", ["/d", "/s", "/c", command], {
+            cwd: opts.cwd,
+            windowsHide: true,
+            stdio: "ignore",
+          })
+        : spawn("/bin/sh", ["-c", command], {
+            cwd: opts.cwd,
+            stdio: "ignore",
+          });
       const timer = setTimeout(() => {
         child.kill();
       }, opts.timeoutMs ?? 120000);

@@ -3,7 +3,8 @@ import { join } from "node:path";
 import { aggregateTags, applyUpdate, checkSelfUpdate, checkUpdates, detectPnpmMajor, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, parseBlockedBuilds, readProfile, readSettings, recommend, resolveConfig, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
-/** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获 */
+/** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。
+*  平台适配（issue #78）：Win32 用 cmd.exe，POSIX（macOS/Linux）用 /bin/sh -c。 */
 const name = "dsh-market";
 const inject = ["webServer"];
 /** 读取插件包与核心库版本（设置页「关于」显示） */
@@ -514,18 +515,20 @@ function buildInstallPrompt(plugin, targetProfile) {
 		`6. 遇到问题（网络、权限、命令失败）先尝试修复或换用 README 的备用安装方式；确实无法完成时如实报告失败原因和已尝试的方案。`
 	].join("\n");
 }
+const isWin = process.platform === "win32";
 function realRunner() {
 	return { run(command, opts) {
 		return new Promise((resolve, reject) => {
-			execFile(process.env.ComSpec ?? "cmd.exe", [
+			const file = isWin ? process.env.ComSpec ?? "cmd.exe" : "/bin/sh";
+			execFile(file, isWin ? [
 				"/d",
 				"/s",
 				"/c",
 				command
-			], {
+			] : ["-c", command], {
 				cwd: opts.cwd,
 				timeout: opts.timeoutMs ?? 12e4,
-				windowsHide: true
+				windowsHide: isWin
 			}, (err, stdout, stderr) => {
 				if (err) {
 					reject(new Error(stderr || stdout || err.message));
