@@ -14,6 +14,7 @@
  *   - 按 id 去重后并发探测，避免同一仓库重复请求。
  */
 import type { DshPlugin, MarketData } from "@dsh-market/schema";
+import { cacheGet } from "./cache.js";
 
 export type DecayKind = "gone" | "archived" | "forked" | "dormant" | "error";
 
@@ -32,7 +33,8 @@ export interface DecayFinding {
 export interface DecayReport {
   generatedAt: string;
   checked: number;
-  healthy: number;
+  /** aborted（熔断提前终止）时无完整健康数 */
+  healthy?: number;
   byKind: Partial<Record<DecayKind, number>>;
   findings: DecayFinding[];
   /** 是否因错误率过高提前熔断（只出了部分结果） */
@@ -123,6 +125,21 @@ export async function scanDecay(
     };
 
     try {
+      // 缓存短路：7 天内被 collect 检测过 = 仓库确定存在，无需 API 探测
+      //（周扫 5500+ 个逐个 API 会撞 installation 限流卡 40 分钟——复用检测缓存可降到几十次）
+      // 缓存期内的 gone/archived/fork 变化由缓存过期后的真实探测补报（滞后 ≤7 天，可接受）
+      const dc = cacheGet<{ pushedAt?: string }>("detect", p.id, 7 * 24 * 3600_000);
+      if (dc?.pushedAt) {
+        const pushed = new Date(dc.pushedAt).getTime();
+        if (now - pushed > dormantDays * 86_400_000) {
+          findings.push({
+            ...stale(p),
+            pushedAt: dc.pushedAt,
+            days: Math.floor((now - pushed) / 86_400_000),
+          });
+        }
+        return;
+      }
       const repo = await fetchRepo(p.fullName);
       if (repo === null) {
         findings.push({
