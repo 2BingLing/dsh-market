@@ -165,6 +165,13 @@ async function main() {
   }
 
   console.log("=== DSH Market collector v2 ===");
+  // 阶段计时：每个阶段开始时调用 stage("上一阶段名") 打印耗时
+  let stageT0 = Date.now();
+  const stage = (name: string) => {
+    const el = Math.round((Date.now() - stageT0) / 1000);
+    console.log(`  ⏱ ${name} 用时 ${el}s`);
+    stageT0 = Date.now();
+  };
   console.log("[1/5] 扫描数据源...");
 
   // 1. awesome 列表（人工策展）
@@ -238,6 +245,7 @@ async function main() {
   const all = [...candidates.values()];
   console.log(`  candidates: ${all.length}`);
 
+  stage("[1/5] 扫描数据源");
   console.log("[2/5] 特征检测 + 元数据抓取（并发 10，带缓存）...");
   const detected: Detected[] = [];
   const rejected: { fullName: string; reason: string }[] = [];
@@ -597,6 +605,7 @@ async function main() {
     console.log(`  [B2] 补回 ${restored}，确认移除 ${confirmedGone}（其余等下次扫描）`);
   }
 
+  stage("[2/5] 特征检测");
   console.log("[3/5] 实用五维评分...");
   const p99 = computeP99Stars(detected.map((d) => d.repo.stargazers_count));
   for (const d of detected) {
@@ -620,6 +629,7 @@ async function main() {
   }
   console.log(`  p99 stars = ${p99}`);
 
+  stage("[3/5] 实用五维评分");
   console.log("[3.5/5] 中文化（DeepSeek 增量翻译）...");
   const prevZh = loadPreviousZh();
   // A：持久化翻译缓存——跨天累积；首次/缺 cache 时从上次 plugins.json 播种
@@ -711,6 +721,7 @@ async function main() {
     console.log("  未配置 DEEPSEEK_API_KEY，跳过中文化（仅保留英文）");
   }
 
+  stage("[3.5/5] 中文化");
   console.log("[3.6/5] 标签归一化（合并同义词 + 移除宽泛标签）...");
   if (apiKey) {
     // 读取历史 alias（持久化复用，避免 LLM 输出波动导致合并丢失）
@@ -754,6 +765,7 @@ async function main() {
     console.log("  跳过（无 API key）");
   }
 
+  stage("[3.6/5] 标签归一化");
   console.log("[3.7/5] 整合包收集...");
   // 产品决策（2026-08-16）：生态尚无标准协议与工具，自动扫描暂缓。
   // 基础设施（schema v2 / Web 分区 / 插件端 Tab / 提交 issue 通道）已就绪，
@@ -815,6 +827,7 @@ async function main() {
     console.log(`  packs translated: ${translated}`);
   }
 
+  stage("[3.7/5] 整合包收集");
   console.log("[4/5] 生成数据文件...");
   const market: MarketData = {
     schemaVersion: 2,
@@ -900,7 +913,10 @@ async function main() {
     console.log("  issue-replies: 无（无待回复的 issue 收录）");
   }
 
+  stage("[4/5] 生成数据文件");
   console.log("[5/5] 完成");
+  const totalEl = Math.round((Date.now() - stageT0) / 1000);
+  console.log(`  ⏱ 管道总用时 ${totalEl}s`);
   const top5 = [...market.plugins]
     .sort((a, b) => b.score.total - a.score.total)
     .slice(0, 5)
