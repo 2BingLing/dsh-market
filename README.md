@@ -89,7 +89,7 @@ npx @deepseek-ai/dsh plugin --profile web add @dsh-market/plugin
 
 ## 特性
 
-- **持续收录** — 每天自动扫描 `dsh-plugin` / `dsh` 等 GitHub topic、社区精选列表，全量收录（当前 5870 个插件 + 整合包通道）
+- **持续收录** — 每天自动扫描 `dsh-plugin` / `dsh` 等 GitHub topic、社区精选列表，全量收录（当前 5861 个插件 + 整合包通道）
 - **实用五维评分** — 维护活跃 / 实用度 / 生态热度 / 便捷度 / 信号质量，加权几何平均融合，每个插件附「为什么推荐」解释
 - **中文体验** — 所有插件自动生成中文简介与中文功能标签，中文搜索、中文筛选
 - **一键安装** — 插件版确定性脚本路由：skill 型 `git clone`，cordis 型 `dsh plugin add`；失败可重试、可回滚
