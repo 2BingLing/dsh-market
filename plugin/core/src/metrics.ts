@@ -16,8 +16,8 @@ export interface InstallMetricEvent {
   pluginId: string;
   /** install=一键安装 · ai=AI 代理安装（路由式） */
   type: "install" | "ai";
-  /** already=已装跳过 · recipe=配方命中 · parsed=解析命令 · t1=子代理 · direct=一键安装 */
-  mode: "already" | "recipe" | "parsed" | "t1" | "direct";
+  /** already=已装跳过 · recipe=配方命中 · parsed=解析命令 · builtin=内置确定性兜底 · t1=子代理 · direct=一键安装 */
+  mode: "already" | "recipe" | "parsed" | "builtin" | "t1" | "direct";
   ok: boolean;
   /** ai 型 t1：启动/完成标记 */
   phase?: InstallMetricPhase;

@@ -475,7 +475,7 @@ export function apply(ctx: {
             pluginId: plugin.id,
             type: 'ai',
             // needAi=false 时 t0.mode 不可能为 'ai'
-            mode: t0.mode as 'already' | 'recipe' | 'parsed',
+            mode: t0.mode as "already" | "recipe" | "parsed" | "builtin",
             ok: t0.ok,
             alreadyInstalled: t0.alreadyInstalled,
             smokeFailed: t0.result?.smokeFailed ?? false,
