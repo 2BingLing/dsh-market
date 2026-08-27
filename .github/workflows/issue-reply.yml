@@ -6,7 +6,9 @@ name: issue-reply
 # 避免 reply 撞 collect 耗尽的配额（曾致 403 全链路失败）
 on:
   schedule:
-    - cron: "0 0 * * *" # 本地 08:00（北京时间）= UTC 00:00
+    # 本地 08:00 / 12:00 / 20:00（UTC 00:00/04:00/12:00）——多时段兜底：
+    # GitHub schedule 偶发延迟/跳过（曾 08:00 整点未触发导致当天无回复），脚本幂等（已回复跳过）
+    - cron: "0 0,4,12 * * *"
   workflow_dispatch: {}
 
 permissions:
