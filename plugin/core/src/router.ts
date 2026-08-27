@@ -4,9 +4,10 @@
  * 冒烟验证驱动升级：验证失败即视为"未通过"——不写配方、不更新 verifiedAt，交 AI 复核。
  */
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { homedir } from "node:os";
+import { join, normalize } from "node:path";
 import type { DshPlugin } from "@dsh-market/schema";
-import type { CommandRunner, InstallResult, StepCallback } from "./types.js";
+import type { CommandRunner, InstallResult, SmokeCheck, StepCallback } from "./types.js";
 import { installPlugin, installPackageName, skillsDestName } from "./installer.js";
 import type { ResolvedConfig } from "./config.js";
 import {
@@ -45,14 +46,45 @@ export interface RouteOptions {
   useRecipe?: boolean;
 }
 
-/** node 通用文件存在检查命令（Windows/POSIX 跨平台，DSH 环境必有 node） */
-function existsCmd(path: string): string {
-  return `node -e "process.exit(require('fs').existsSync(process.argv[1])?0:1)" ${JSON.stringify(path)}`;
+/** 展开 `~`（README 命令常见；Windows 上 cmd 的 ~ 展开不可靠，这里统一处理） */
+export function expandHome(p: string): string {
+  if (p === "~") return homedir();
+  if (p.startsWith("~/") || p.startsWith("~\\")) return join(homedir(), p.slice(2));
+  return p;
 }
 
-/** node 通用依赖包含检查命令（profile package.json 的 dependencies 是否含包名） */
-function depsCmd(pkgJsonPath: string, pkgName: string): string {
-  return `node -e "const p=require(process.argv[1]);process.exit(p.dependencies&&p.dependencies[process.argv[2]]?0:1)" ${JSON.stringify(pkgJsonPath)} ${JSON.stringify(pkgName)}`;
+/** 提取单条 git clone 命令的本地目标（末位参数，去引号；非 clone / 无目标 → null） */
+function cloneDestOf(command: string): string | null {
+  if (!/git\s+clone\b/i.test(command)) return null;
+  const tokens = command.trim().split(/\s+/).filter(Boolean);
+  if (tokens.length < 3) return null;
+  const dest = tokens[tokens.length - 1].replace(/^"+|"+$/g, "");
+  return dest && dest !== "-" ? dest : null;
+}
+
+/**
+ * skill 解析命令规范化（数据质量兜底）：
+ * 市场里大量 skill 的 README 命令把克隆目标写成 ~/.dsh/skills、~/.claude/skills 等，
+ * 与 harness 实际扫描的技能目录（cfg.skillsDir）不一致 → 装完不可见、冒烟必失败、误升级 AI。
+ * 仅处理"单条 git clone"形态；目标统一重定向为 <skillsDir>/<name>-latest（与已装检测/
+ * 冒烟/卸载约定一致）。其余形态（多命令脚本 / cordis 错分类等）原样交付，由冒烟失败 →
+ * T1 子代理兜底，不伪报成功。
+ */
+export function normalizeSkillCommands(
+  cfg: ResolvedConfig,
+  plugin: DshPlugin,
+  commands: string[],
+): string[] {
+  if (plugin.type !== "skill" || commands.length !== 1) return commands;
+  const dest = cloneDestOf(commands[0]);
+  if (!dest) return commands;
+  const canonical = join(cfg.skillsDir, skillsDestName(plugin));
+  if (normalize(expandHome(dest)) === normalize(canonical)) return commands;
+  const tokens = commands[0].trim().split(/\s+/);
+  // 不加引号：与内置 clone 路径一致（cmd/node 会剥引号但 git/msys 会把引号当字面量；
+  // 空格路径暂不支持——与 installer 既有约定相同）
+  tokens[tokens.length - 1] = canonical;
+  return [tokens.join(" ")];
 }
 
 /** 目标技能目录名（与 installer 的 <name>-latest 约定一致） */
@@ -60,19 +92,26 @@ function skillDest(cfg: ResolvedConfig, plugin: DshPlugin): string {
   return join(cfg.skillsDir, skillsDestName(plugin));
 }
 
-/** 推导冒烟命令：skill → 目录+SKILL.md 存在；cordis → profile 依赖含包名 */
+/** 推导冒烟检查（结构化，进程内执行——规避 cmd/sh 引号与 node -e 被打断的问题）：
+ *  skill → 技能目录含 SKILL.md；cordis → profile package.json 依赖含包名 */
 export function deriveSmokeCommands(
   cfg: ResolvedConfig,
   plugin: DshPlugin,
   profile: string,
-): string[] {
+): SmokeCheck[] {
   if (plugin.type === "skill") {
     const dest = skillDest(cfg, plugin);
-    return [existsCmd(dest), existsCmd(join(dest, "SKILL.md"))];
+    return [{ type: "exists", path: join(dest, "SKILL.md"), label: `技能目录 ${dest} 含 SKILL.md` }];
   }
   const pkgName = installPackageName(plugin);
-  const pkgJsonPath = join(cfg.profilesDir, profile, "package.json");
-  return [existsCmd(pkgJsonPath), depsCmd(pkgJsonPath, pkgName)];
+  return [
+    {
+      type: "deps",
+      pkgJsonPath: join(cfg.profilesDir, profile, "package.json"),
+      pkgName,
+      label: `profile「${profile}」依赖含 ${pkgName}`,
+    },
+  ];
 }
 
 /** 安装是否已完成（skill：目录存在；cordis：profile 依赖含包名） */
@@ -115,7 +154,7 @@ export async function routeInstall(
     return { mode: "already", ok: true, alreadyInstalled: true, needAi: false };
   }
 
-  const install = (commands: string[], smoke: string[]) =>
+  const install = (commands: string[], smoke: SmokeCheck[]) =>
     installPlugin(cfg, plugin, {
       commands,
       smoke,
@@ -152,10 +191,12 @@ export async function routeInstall(
   }
 
   // 2. collector 解析命令（plugins.json 的 install.commands；无则必须 AI）
-  const parsed = plugin.install?.commands ?? [];
-  if (parsed.length === 0) {
+  const parsedRaw = plugin.install?.commands ?? [];
+  if (parsedRaw.length === 0) {
     return { mode: "ai", ok: false, needAi: true, reason: "市场数据无解析安装命令" };
   }
+  // skill 单条 clone 命令规范化：目标重定向进 harness 实际扫描的技能目录（数据质量兜底）
+  const parsed = normalizeSkillCommands(cfg, plugin, parsedRaw);
 
   const smoke = deriveSmokeCommands(cfg, plugin, profile);
   const result = await install(parsed, smoke);
@@ -195,7 +236,7 @@ export function learnRecipe(
   profile: string,
   input: {
     commands: string[];
-    smoke?: string[];
+    smoke?: Recipe["smoke"];
     config?: Recipe["config"];
     learnedFrom?: Recipe["learnedFrom"];
   },

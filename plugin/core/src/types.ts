@@ -77,20 +77,26 @@ export interface InstallOptions {
   /** 覆盖内置安装步骤：逐条执行这些命令（collector 解析命令 / 配方命令），
    *  不参与内置 clone/add 与内置已装检测（调用方自行判断）；无回滚（任意命令不可安全逆操作）。 */
   commands?: string[];
-  /** 装后冒烟验证：命令退出码为 0 才算通过（全部通过 → !smokeFailed） */
-  smoke?: string[];
+  /** 装后冒烟验证：全部通过 → !smokeFailed（结构化检查进程内执行，命令字符串交给 shell） */
+  smoke?: SmokeCheck[];
   /** 执行器：真实环境由 UI 层注入（Host 子进程），测试注入 mock */
   runner: CommandRunner;
   /** 步骤回调 */
   onStep?: StepCallback;
 }
 
+/** 冒烟检查项：结构化检查（进程内执行，零 shell 依赖，跨平台可靠）或命令字符串（交给 shell） */
+export type SmokeCheck =
+  | { type: "exists"; path: string; label?: string }
+  | { type: "deps"; pkgJsonPath: string; pkgName: string; label?: string }
+  | string;
+
 /** 命令执行器接口（注入式，保持核心层可测） */
 export interface CommandRunner {
   /** 执行命令，返回退出码与输出；timeoutMs 超时抛错 */
   run(
     command: string,
-    opts: { cwd?: string; timeoutMs?: number },
+    opts: { cwd?: string; timeoutMs?: number; env?: Record<string, string> },
   ): Promise<{ exitCode: number; stdout: string; stderr: string }>;
 }
 

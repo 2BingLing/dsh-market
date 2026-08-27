@@ -15,6 +15,7 @@ import type {
   InstallResult,
   InstallSnapshot,
   InstallStep,
+  SmokeCheck,
   SmokeResult,
   StepStatus,
 } from "./types.js";
@@ -112,20 +113,54 @@ async function installByCommands(
   }
 }
 
-/** 冒烟验证：每条命令退出码 0 即通过（单次尝试；失败记录输出片段供排查） */
-async function runSmoke(commands: string[], runner: CommandRunner): Promise<SmokeResult[]> {
+/** 冒烟验证：结构化检查进程内直查（零 shell、跨平台可靠）；命令字符串交给 shell（退出码 0 即通过） */
+async function runSmoke(checks: SmokeCheck[], runner: CommandRunner): Promise<SmokeResult[]> {
   const out: SmokeResult[] = [];
-  for (const command of commands) {
-    try {
-      const r = await runner.run(command, { timeoutMs: 30_000 });
+  for (const check of checks) {
+    if (typeof check === "string") {
+      try {
+        const r = await runner.run(check, { timeoutMs: 30_000 });
+        out.push({
+          label: check,
+          command: check,
+          ok: r.exitCode === 0,
+          output: r.exitCode === 0 ? undefined : (r.stderr || r.stdout).slice(0, 300),
+        });
+      } catch (err) {
+        out.push({ label: check, command: check, ok: false, output: (err as Error).message.slice(0, 300) });
+      }
+      continue;
+    }
+    if (check.type === "exists") {
+      const ok = existsSync(check.path);
       out.push({
-        label: command,
-        command,
-        ok: r.exitCode === 0,
-        output: r.exitCode === 0 ? undefined : (r.stderr || r.stdout).slice(0, 300),
+        label: check.label ?? check.path,
+        command: `exists:${check.path}`,
+        ok,
+        output: ok ? undefined : `路径不存在：${check.path}`,
+      });
+      continue;
+    }
+    // deps：profile package.json 的 dependencies 含包名
+    const label = check.label ?? `deps:${check.pkgName}`;
+    try {
+      const pkg = JSON.parse(readFileSync(check.pkgJsonPath, "utf8")) as {
+        dependencies?: Record<string, string>;
+      };
+      const ok = pkg.dependencies?.[check.pkgName] != null;
+      out.push({
+        label,
+        command: `deps:${check.pkgJsonPath}#${check.pkgName}`,
+        ok,
+        output: ok ? undefined : `dependencies 不含 ${check.pkgName}`,
       });
     } catch (err) {
-      out.push({ label: command, command, ok: false, output: (err as Error).message.slice(0, 300) });
+      out.push({
+        label,
+        command: `deps:${check.pkgJsonPath}#${check.pkgName}`,
+        ok: false,
+        output: (err as Error).message.slice(0, 200),
+      });
     }
   }
   return out;

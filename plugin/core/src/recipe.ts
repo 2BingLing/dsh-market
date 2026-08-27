@@ -8,6 +8,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 import type { ResolvedConfig } from "./config.js";
+import type { SmokeCheck } from "./types.js";
 import { ensureDataDir } from "./config.js";
 
 /** 配方有效期：90 天（超期先重新冒烟，冒烟失败才重学） */
@@ -36,8 +37,8 @@ export interface Recipe {
   commands: string[];
   /** 前置检查（可选；预留，P1 未启用） */
   precheck?: string[];
-  /** 冒烟验证命令（全部退出码 0 才算验证通过） */
-  smoke: string[];
+  /** 冒烟检查（结构化项进程内直查；字符串命令交给 shell——T1 学习/用户提供时均为字符串） */
+  smoke: SmokeCheck[];
   /** 配置提供块 */
   config?: RecipeConfigBlock;
   /** 配方来源：parsed=collector 解析/一键安装 · t1/t2=子代理学习 */

@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { DshPlugin } from "@dsh-market/schema";
 import { resolveConfig } from "../src/config.js";
-import { deriveSmokeCommands, isInstalled, routeInstall } from "../src/router.js";
+import { deriveSmokeCommands, expandHome, isInstalled, normalizeSkillCommands, routeInstall } from "../src/router.js";
 import { envFingerprint, readRecipe, writeRecipe } from "../src/recipe.js";
 import type { CommandRunner } from "../src/types.js";
 import { makeMarket } from "./fixture.js";
@@ -25,15 +25,9 @@ function makeCfg() {
   });
 }
 
-function runnerMock(opts?: { fail?: boolean; failSmoke?: boolean }): CommandRunner {
+function runnerMock(opts?: { fail?: boolean }): CommandRunner {
   return {
-    run: vi.fn(async (command: string) => {
-      // 冒烟命令（node -e existsSync/dependencies 检查）单独可注入失败
-      if (command.includes("existsSync")) {
-        return opts?.failSmoke
-          ? { exitCode: 1, stdout: "", stderr: "smoke failed" }
-          : { exitCode: 0, stdout: "ok", stderr: "" };
-      }
+    run: vi.fn(async () => {
       if (opts?.fail) return { exitCode: 1, stdout: "", stderr: "simulated failure" };
       return { exitCode: 0, stdout: "ok", stderr: "" };
     }),
@@ -57,19 +51,35 @@ describe("routeInstall T0 路由", () => {
     expect(runner.run).not.toHaveBeenCalled();
   });
 
-  it("解析命令命中 → mode=parsed，写回配方", async () => {
+  it("解析命令命中 → mode=parsed，写回配方（skill clone 目标被规范化 + 结构化冒烟通过）", async () => {
     const cfg = makeCfg();
     const commands = [
       "git clone --depth 1 https://github.com/acme/web-scraper.git /tmp/x",
     ];
     const plugin = withCommands(skillPlugin, commands);
-    const r = await routeInstall(cfg, plugin, { profile: "web", runner: runnerMock() });
+    // mock 模拟 clone 真实落地：执行 git clone 时创建 <name>-latest/SKILL.md（结构化冒烟据此通过）
+    const dest = join(cfg.skillsDir, "web-scraper-latest");
+    const runner: CommandRunner = {
+      run: vi.fn(async (command: string) => {
+        if (/git\s+clone/.test(command)) {
+          mkdirSync(dest, { recursive: true });
+          writeFileSync(join(dest, "SKILL.md"), "skill", "utf8");
+        }
+        return { exitCode: 0, stdout: "ok", stderr: "" };
+      }),
+    };
+    const r = await routeInstall(cfg, plugin, { profile: "web", runner });
     expect(r.mode).toBe("parsed");
     expect(r.ok).toBe(true);
     expect(r.needAi).toBe(false);
     const recipe = readRecipe(cfg, plugin.id);
     expect(recipe?.learnedFrom).toBe("parsed");
-    expect(recipe?.commands).toEqual(commands);
+    // 目标已规范化：<skillsDir>/web-scraper-latest（与冒烟/卸载约定一致，不加引号同 installer 约定）
+    const expected = [
+      `git clone --depth 1 https://github.com/acme/web-scraper.git ${dest}`,
+    ];
+    expect(recipe?.commands).toEqual(expected);
+    expect(recipe?.commands).not.toContain("/tmp/x");
   });
 
   it("配方命中优先 → mode=recipe，执行配方命令", async () => {
@@ -110,25 +120,28 @@ describe("routeInstall T0 路由", () => {
     expect(r.reason).toContain("安装失败");
   });
 
-  it("冒烟失败 → 不写配方，needAi 升级", async () => {
+  it("冒烟失败（技能目录未落位）→ 不写配方，needAi 升级", async () => {
     const cfg = makeCfg();
+    // 不创建技能目录 → 结构化冒烟（SKILL.md 存在）自然失败
     const plugin = withCommands(skillPlugin, ["git clone --depth 1 https://github.com/acme/web-scraper.git /tmp/x"]);
-    const r = await routeInstall(cfg, plugin, { profile: "web", runner: runnerMock({ failSmoke: true }) });
+    const r = await routeInstall(cfg, plugin, { profile: "web", runner: runnerMock() });
     expect(r.ok).toBe(true);
     expect(r.result?.smokeFailed).toBe(true);
     expect(r.needAi).toBe(true);
     expect(readRecipe(cfg, plugin.id)).toBeNull();
   });
 
-  it("deriveSmokeCommands：skill → 目录+SKILL.md；cordis → package.json 依赖", () => {
+  it("deriveSmokeCommands：skill → SKILL.md 结构化检查；cordis → deps 结构化检查", () => {
     const cfg = makeCfg();
     const skillSmoke = deriveSmokeCommands(cfg, skillPlugin, "web");
-    expect(skillSmoke).toHaveLength(2);
-    expect(skillSmoke[0]).toContain("existsSync");
-    expect(skillSmoke[1]).toContain("SKILL.md");
+    expect(skillSmoke).toHaveLength(1);
+    expect(skillSmoke[0]).toMatchObject({
+      type: "exists",
+      path: join(cfg.skillsDir, "web-scraper-latest", "SKILL.md"),
+    });
     const cordisSmoke = deriveSmokeCommands(cfg, cordisPlugin, "web");
-    expect(cordisSmoke).toHaveLength(2);
-    expect(cordisSmoke[1]).toContain("dependencies");
+    expect(cordisSmoke).toHaveLength(1);
+    expect(cordisSmoke[0]).toMatchObject({ type: "deps", pkgName: "feishu-doc" });
   });
 
   it("isInstalled：cordis 依赖判断", async () => {
@@ -142,5 +155,45 @@ describe("routeInstall T0 路由", () => {
       "utf8",
     );
     expect(isInstalled(cfg, cordisPlugin, "web")).toBe(true);
+  });
+});
+
+describe("normalizeSkillCommands · skill 解析命令规范化", () => {
+  it("~/.dsh/skills 等外部目标 → 重定向进 cfg.skillsDir/<name>-latest", () => {
+    const cfg = makeCfg();
+    const out = normalizeSkillCommands(cfg, skillPlugin, [
+      "git clone --depth 1 https://github.com/acme/web-scraper.git ~/.dsh/skills/web-scraper",
+    ]);
+    const canonical = join(cfg.skillsDir, "web-scraper-latest");
+    expect(out[0]).toContain(canonical);
+    expect(out[0]).not.toContain("~/.dsh");
+    expect(out[0]).not.toContain('"');
+  });
+
+  it("目标已是规范位置 → 原样交付", () => {
+    const cfg = makeCfg();
+    const canonical = join(cfg.skillsDir, "web-scraper-latest");
+    const cmd = `git clone https://github.com/acme/web-scraper.git ${JSON.stringify(canonical)}`;
+    expect(normalizeSkillCommands(cfg, skillPlugin, [cmd])).toEqual([cmd]);
+  });
+
+  it("非 clone / 多命令 / 带引号目标 → 原样交付（交冒烟→AI 兜底）", () => {
+    const cfg = makeCfg();
+    const multi = ["git clone https://x/y.git a", "cd a && npm i"];
+    expect(normalizeSkillCommands(cfg, skillPlugin, multi)).toEqual(multi);
+    const notClone = ["echo hi"];
+    expect(normalizeSkillCommands(cfg, skillPlugin, notClone)).toEqual(notClone);
+  });
+
+  it("cordis 型不受影响", () => {
+    const cfg = makeCfg();
+    const cmd = ["dsh plugin --profile web add something"];
+    expect(normalizeSkillCommands(cfg, cordisPlugin, cmd)).toEqual(cmd);
+  });
+
+  it("expandHome：~/ 与 ~ 展开", () => {
+    expect(expandHome("~/.dsh/skills/x")).toBe(join(require("node:os").homedir(), ".dsh", "skills", "x"));
+    expect(expandHome("~")).toBe(require("node:os").homedir());
+    expect(expandHome("/abs/path")).toBe("/abs/path");
   });
 });

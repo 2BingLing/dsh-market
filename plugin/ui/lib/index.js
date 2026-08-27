@@ -682,7 +682,11 @@ function realRunner() {
 			] : ["-c", command], {
 				cwd: opts.cwd,
 				timeout: opts.timeoutMs ?? 12e4,
-				windowsHide: isWin
+				windowsHide: isWin,
+				env: opts.env ? {
+					...process.env,
+					...opts.env
+				} : void 0
 			}, (err, stdout, stderr) => {
 				if (err) {
 					reject(new Error(stderr || stdout || err.message));

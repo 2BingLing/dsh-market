@@ -858,14 +858,19 @@ const isWin = process.platform === 'win32'
 
 function realRunner() {
   return {
-    run(command: string, opts: { cwd?: string; timeoutMs?: number }) {
+    run(command: string, opts: { cwd?: string; timeoutMs?: number; env?: Record<string, string> }) {
       return new Promise<{ exitCode: number; stdout: string; stderr: string }>((resolve, reject) => {
         const file = isWin ? process.env.ComSpec ?? 'cmd.exe' : '/bin/sh'
         const args = isWin ? ['/d', '/s', '/c', command] : ['-c', command]
         execFile(
           file,
           args,
-          { cwd: opts.cwd, timeout: opts.timeoutMs ?? 120000, windowsHide: isWin },
+          {
+            cwd: opts.cwd,
+            timeout: opts.timeoutMs ?? 120000,
+            windowsHide: isWin,
+            env: opts.env ? { ...process.env, ...opts.env } : undefined,
+          },
           (err, stdout, stderr) => {
             if (err) {
               reject(new Error(stderr || stdout || err.message))

@@ -1,6 +1,6 @@
 {
   "name": "@dsh-market/core",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "type": "module",
   "description": "DSH Market 插件端核心层：纯 Node 模块，零 DSH API 依赖（数据/搜索/画像/推荐/安装），可独立测试",
   "main": "dist/index.js",
