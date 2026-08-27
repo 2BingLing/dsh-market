@@ -22,8 +22,8 @@ const H = 600;
 // 副标题数字（手动维护；后续想改数字只改这两行）
 const SUB_TITLE =
   LANG === "en"
-    ? "DeepSeek Harness plugin market · 1,000+ plugins daily"
-    : "DeepSeek Harness 插件市场 · 持续收录 1,000+ 个插件";
+    ? "DeepSeek Harness plugin market · 5,000+ plugins daily"
+    : "DeepSeek Harness 插件市场 · 持续收录 5,000+ 个插件";
 
 // 其余文案（中英）
 const COPY = LANG === "en"
