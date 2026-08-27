@@ -528,8 +528,10 @@ async function main() {
     for (const id of missing) {
       const prev = prevPlugins.get(id)!;
       const dc = cacheGet<DetectCache>("detect", id, DETECT_TTL);
-      if (dc && dc.pushedAt === prev.pushedAt) directRestore.push(id);
-      else needApi.push(id); // 无缓存或仓库近 7 天有变化 → 需 API 确认
+      // 有检测缓存（7 天内确认过存在）→ 直补（含 pushedAt 变化的：复用上次记录，元数据等下次扫描更新）
+      // 只有缓存完全缺失的才调 API 确认——避免每次对上大量"变化中"的仓库逐个请求撞限流（曾拖 58 分钟）
+      if (dc) directRestore.push(id);
+      else needApi.push(id);
     }
     // 1) 缓存直补（零 API）：检测缓存证明仓库存在且未变，直接复用上次记录
     for (const id of directRestore) {
@@ -544,9 +546,13 @@ async function main() {
       restored++;
     }
     if (restored > 0) console.log(`  [B2] 检测缓存直补 ${restored} 个（零 API）`);
-    // 2) API 确认（少数）
+    // 2) API 确认（少数）：上限 800 个/轮，超出留待下次 cron（防极端情况下再次拖 58 分钟）
+    if (needApi.length > 800) {
+      console.log(`  [B2] needApi ${needApi.length} 个超上限，本轮确认前 800 个，其余等下轮`);
+      needApi.length = 800;
+    }
     if (needApi.length > 0) {
-      console.log(`  [B2] ${needApi.length} 个需 API 确认（缓存缺失/变化）...`);
+      console.log(`  [B2] ${needApi.length} 个需 API 确认（缓存缺失）...`);
       await runPool(needApi, async (id) => {
         const prev = prevPlugins.get(id)!;
         try {
