@@ -298,15 +298,32 @@ function InstallModal(props: {
   const [phase, setPhase] = useState<'confirm' | 'running' | 'handedOff' | 'error'>('confirm')
   const [error, setError] = useState('')
   const [childSessionId, setChildSessionId] = useState<string | null>(null)
+  // T0 直装结果（零 LLM 完成时无子会话）
+  const [t0, setT0] = useState<{
+    mode?: string
+    ok?: boolean
+    alreadyInstalled?: boolean
+    smokeFailed?: boolean
+    error?: string | null
+  } | null>(null)
 
-  // AI 代理安装：交给 harness 的子代理（读 README → 确认配置 → 执行 → 验证）
+  // AI 代理安装（路由式）：T0 直装（零 LLM：已装/配方/解析命令）→ 需要时才交给协议子代理
   const startAi = async () => {
     setPhase('running')
     try {
-      const r = await api<{ started: boolean; childSessionId: string | null }>('ai:install', {
+      const r = await api<{
+        started: boolean
+        childSessionId: string | null
+        mode?: string
+        ok?: boolean
+        alreadyInstalled?: boolean
+        smokeFailed?: boolean
+        error?: string | null
+      }>('ai:install', {
         pluginId: plugin.id,
       })
       setChildSessionId(r.childSessionId)
+      if (!r.started) setT0(r)
       setPhase('handedOff')
     } catch (e) {
       setError((e as Error).message)
@@ -344,7 +361,7 @@ function InstallModal(props: {
         ? El('div', null,
             El('div', { className: styles.modalTitle }, `确认安装「${plugin.name}」`),
             El('div', { className: styles.modalDesc },
-              `将交给一个话题子代理去阅读 ${plugin.fullName} 的文档后自动安装；需要配置（API Key / Token）时会先向你确认。`,
+              `将先尝试零 LLM 直装（配方缓存 / README 解析命令 + 冒烟验证）；需要时才交给话题子代理。需要配置（API Key / Token）时会先向你确认。`,
             ),
             plugin.needsConfig
               ? El('p', { className: styles.warn },
@@ -374,11 +391,16 @@ function InstallModal(props: {
           : phase === 'handedOff'
             ? El('div', { className: styles.modalSuccess },
                 El('div', { className: styles.modalSuccessIcon }, El(Icon, { d: ICON_CHECK, size: 22 })),
-                El('div', { className: styles.modalSuccessTitle }, '已交给 AI 助手安装'),
+                El('div', { className: styles.modalSuccessTitle },
+                  childSessionId ? '已交给 AI 助手安装' : '安装完成（零 Token 直装）'),
                 El('p', { className: styles.modalDesc },
                   childSessionId
                     ? `AI 助手已开始工作（子会话 ${childSessionId.slice(0, 8)}…），请到会话中查看进度；需要配置时 AI 会向你确认。`
-                    : 'AI 助手已开始工作，请到会话中查看进度；需要配置时 AI 会向你确认。',
+                    : t0?.alreadyInstalled
+                      ? `「${plugin.name}」已在目标位置检测到安装，已跳过。`
+                      : t0?.ok && !t0.smokeFailed
+                        ? `已通过${t0.mode === 'recipe' ? '配方' : '解析命令'}直装完成，冒烟验证通过，无需 AI 介入。`
+                        : `直装未通过验证（${t0?.error ?? '冒烟失败'}），已转交 AI 助手处理。`,
                 ),
                 El('div', { className: styles.modalActions },
                   El('button', { className: `${styles.btn} ${styles.btnPrimary}`, onClick: () => { onDone(); onClose() } }, '知道了'),

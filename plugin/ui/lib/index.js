@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { aggregateTags, applyUpdate, checkSelfUpdate, checkUpdates, detectPnpmMajor, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, parseBlockedBuilds, readProfile, readSettings, recommend, resolveConfig, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
+import { aggregateTags, applyUpdate, canonicalCommands, checkSelfUpdate, checkUpdates, deriveSmokeCommands, detectPnpmMajor, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, learnRecipe, listRecipes, metricSummary, parseBlockedBuilds, parseInstallVerdict, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。
@@ -280,11 +280,28 @@ function apply(ctx) {
 				const plugin = (await market()).plugins.find((p) => p.id === args.pluginId);
 				if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
 				const profile = args.targetProfile ?? readSettings(cfg).profile;
+				const smoke = deriveSmokeCommands(cfg, plugin, profile);
 				const r = await installPlugin(cfg, plugin, {
 					dryRun: Boolean(args.dryRun),
 					force: Boolean(args.force),
 					targetProfile: profile,
-					runner: realRunner()
+					runner: realRunner(),
+					smoke
+				});
+				if (r.ok && !r.alreadyInstalled && !args.dryRun && !r.smokeFailed) learnRecipe(cfg, plugin, profile, {
+					commands: canonicalCommands(cfg, plugin, profile),
+					smoke,
+					learnedFrom: "parsed"
+				});
+				recordInstallMetric(cfg, {
+					ts: (/* @__PURE__ */ new Date()).toISOString(),
+					pluginId: plugin.id,
+					type: "install",
+					mode: "direct",
+					ok: r.ok,
+					alreadyInstalled: r.alreadyInstalled,
+					smokeFailed: r.smokeFailed,
+					recipeLearned: Boolean(r.ok && !r.alreadyInstalled && !args.dryRun && !r.smokeFailed)
 				});
 				if (r.ok && !r.alreadyInstalled && !args.dryRun) r.activation = verifyAfterInstall(cfg, plugin, { profile });
 				if (!r.ok) {
@@ -341,13 +358,40 @@ function apply(ctx) {
 			case "ai:install": {
 				const plugin = (await market()).plugins.find((p) => p.id === args.pluginId);
 				if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
+				const profile = args.targetProfile ?? readSettings(cfg).profile;
+				const t0 = await routeInstall(cfg, plugin, {
+					profile,
+					runner: realRunner(),
+					force: Boolean(args.force)
+				});
+				if (!t0.needAi) {
+					recordInstallMetric(cfg, {
+						ts: (/* @__PURE__ */ new Date()).toISOString(),
+						pluginId: plugin.id,
+						type: "ai",
+						mode: t0.mode,
+						ok: t0.ok,
+						alreadyInstalled: t0.alreadyInstalled,
+						smokeFailed: t0.result?.smokeFailed ?? false,
+						error: t0.result?.error ?? null
+					});
+					return {
+						started: false,
+						childSessionId: null,
+						mode: t0.mode,
+						ok: t0.ok,
+						alreadyInstalled: t0.alreadyInstalled ?? false,
+						smokeFailed: t0.result?.smokeFailed ?? false,
+						error: t0.result?.error ?? null
+					};
+				}
 				const agents = ctx.get("agents");
 				const subagents = ctx.get("subagents");
 				if (!subagents) throw new Error("子代理服务不可用");
 				const agent = agents?.list?.()?.[0];
 				if (!agent) throw new Error("当前会话代理不可用");
 				const provider = subagents.list().includes("spawn") ? "spawn" : subagents.list()[0];
-				const prompt = buildInstallPrompt(plugin, readSettings(cfg).profile);
+				const prompt = buildInstallPrompt(plugin, profile, t0.reason);
 				const run = await Promise.race([subagents.start(provider, {
 					label: `安装 ${plugin.name}`,
 					prompt: [{
@@ -357,11 +401,48 @@ function apply(ctx) {
 					parent: agent,
 					signal: AbortSignal.timeout(6e5)
 				}), new Promise((_, rej) => setTimeout(() => rej(/* @__PURE__ */ new Error("子代理启动超时")), 1e4))]);
+				const sessionId = run.sessionId ?? run.id ?? null;
+				recordInstallMetric(cfg, {
+					ts: (/* @__PURE__ */ new Date()).toISOString(),
+					pluginId: plugin.id,
+					type: "ai",
+					mode: "t1",
+					ok: false,
+					phase: "start",
+					error: t0.reason ?? null
+				});
+				if (sessionId) {
+					const sq = ctx.get("sessionQuery");
+					if (sq?.readSession) watchInstallVerdict({
+						cfg,
+						plugin,
+						profile,
+						sessionId,
+						readSession: sq.readSession
+					});
+				}
 				return {
 					started: true,
-					childSessionId: run.sessionId ?? run.id ?? null
+					childSessionId: sessionId,
+					mode: "t1",
+					reason: t0.reason ?? null
 				};
 			}
+			case "recipe:list": return listRecipes(cfg);
+			case "recipe:save": {
+				const plugin = (await market()).plugins.find((p) => p.id === args.pluginId);
+				if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
+				const commands = args.commands;
+				if (!commands || commands.length === 0) throw new Error("缺少 commands");
+				learnRecipe(cfg, plugin, args.targetProfile ?? readSettings(cfg).profile, {
+					commands,
+					smoke: args.smoke,
+					config: args.config,
+					learnedFrom: args.learnedFrom ?? "t1"
+				});
+				return { ok: true };
+			}
+			case "metrics:summary": return metricSummary(cfg);
 			case "gh:deviceCode": return (await fetch("https://github.com/login/device/code", {
 				method: "POST",
 				headers: {
@@ -492,28 +573,101 @@ function parsePicks(text) {
 		return [];
 	}
 }
-/** 生成 AI 安装任务的子代理提示词（Codex 式：读文档 → 确认 → 执行 → 验证） */
-function buildInstallPrompt(plugin, targetProfile) {
-	const cmdLine = plugin.install.commands && plugin.install.commands.length > 0 ? plugin.install.commands.join("\n    ") : "(无预解析命令，请阅读 README 确定)";
+/** 生成 AI 安装任务的子代理提示词（路由协议 T1：极简安装执行器）。
+*  协议而非散文：固定步骤 + 禁止清单 + 严格 JSON 输出，最小 token 完成安装。 */
+function buildInstallPrompt(plugin, targetProfile, reason) {
+	const cmdLine = plugin.install.commands && plugin.install.commands.length > 0 ? plugin.install.commands.join("\n    ") : "(无)";
 	return [
-		`请安装 DSH 插件「${plugin.name}」（${plugin.fullName}）。`,
+		`你是「极简安装执行器」，安装 DSH 插件「${plugin.name}」（${plugin.fullName}）。只做安装，不做别的。`,
 		``,
 		`【插件信息】`,
 		`- 类型：${plugin.type === "skill" ? "skill（技能）" : "cordis 插件"}（${plugin.type}）`,
 		`- 简介：${plugin.descriptionZh ?? "(无中文简介)"}`,
-		`- Stars：${plugin.stars}`,
 		`- 需要配置：${plugin.install.needsConfig ? "是（API Key / Token 等）" : "否"}`,
-		`- 参考安装命令（来自 README 解析，可能不精确）：`,
+		`- 目标 profile：${targetProfile}`,
+		`- 参考命令（collector 已从 README 解析，优先直接使用）：`,
 		`    ${cmdLine}`,
+		...reason ? [`- 前序尝试（T0 已失败，仅作线索，不要重复踩坑）：${reason}`] : [],
 		``,
-		`【安装要求】`,
-		`1. 先阅读仓库 README（https://github.com/${plugin.fullName}，可用 web_search 或抓取 raw README）确认真实安装方式，不要照搬上面可能过时的命令。`,
-		`2. ${plugin.type === "skill" ? `skill 型：按 README 指示安装到技能目录（通常 ~/.agents/skills，目录名建议 ${plugin.name} 或 ${plugin.name}-<版本>），常见方式是 git clone。` : `cordis 型：在目标 profile「${targetProfile}」执行 dsh plugin --profile ${targetProfile} add <真实包名或源>（npm 包名 / git 地址 / 本地目录均可）。`}`,
-		`3. 需要配置（API Key/Token/环境变量）时，先向用户询问确认，不要猜测或伪造配置。`,
-		`4. 安装前检查是否已装（skill 目录存在 / profile 依赖已含），已装则直接告知用户并停止。`,
-		`5. 安装完成后做最小验证（目录/依赖存在；能读到 README 或 main 入口），然后简洁汇报：装了什么、装在哪里、是否需要重启 harness、需要什么配置。`,
-		`6. 遇到问题（网络、权限、命令失败）先尝试修复或换用 README 的备用安装方式；确实无法完成时如实报告失败原因和已尝试的方案。`
+		`【协议（必须遵守）】`,
+		`1. 先执行参考命令（可做最少修正：包管理器 / 平台差异）。不要先读 README。`,
+		`2. 命令缺失或明显错误时：只读仓库 README 的安装段落（grep install/安装/代码块，前 200 行），禁止全文阅读。`,
+		`3. 执行后必须验证：${plugin.type === "skill" ? "技能目录存在且含 SKILL.md" : `profile「${targetProfile}」的 package.json 的 dependencies 含包名`}；exit 0 且验证通过才算成功。`,
+		`4. 失败时：重试 1 次 → 用错误文本 grep README → 仍失败则如实放弃并报告，不要无限尝试。`,
+		`5. 需要配置（API Key/Token/环境变量）时：只填 config_needed，不猜测、不伪造、不自行写入；先停下向用户确认。`,
+		`6. 全程禁止：思考过程、解释、总结散文、阅读文档其余部分、搜索网络（除非 README 明确引用必要的安装文档）。`,
+		``,
+		`【输出】严格 JSON，无其他文本：`,
+		`{"ok":true|false,"commands":["实际执行的命令"],"smoke":["执行并验证的命令"],"fail":"失败与已尝试方案（失败时）","config_needed":null|{"what":"需要什么配置","hint":"在哪获取"},"recipe":{"commands":["可用安装命令"],"smoke":["验证命令"]}}`
 	].join("\n");
+}
+/** T1 子代理验收（后台，不阻塞 RPC）：轮询子会话输出 → 解析 JSON verdict →
+*  ok 且带命令 → 学配方（learnedFrom=t1，含 config_needed）；记录完成度量（sessionChars 为 token 粗略代理）。
+*  终止条件：拿到 verdict（成功或失败）→ 停止；否则轮询到 10 分钟上限。 */
+async function watchInstallVerdict(opts) {
+	const { cfg, plugin, profile, sessionId, readSession } = opts;
+	const deadline = Date.now() + 6e5;
+	let chars = 0;
+	const tick = async () => {
+		let done = false;
+		try {
+			const text = collectSessionText((await readSession(sessionId))?.events ?? []);
+			chars = Math.max(chars, text.length);
+			const verdict = parseInstallVerdict(text);
+			if (verdict && verdict.ok && verdict.commands && verdict.commands.length > 0) {
+				const recipe = verdict.recipe ?? {
+					commands: verdict.commands,
+					smoke: verdict.smoke
+				};
+				learnRecipe(cfg, plugin, profile, {
+					commands: recipe.commands ?? verdict.commands,
+					smoke: recipe.smoke,
+					...verdict.configNeeded?.what ? { config: {
+						type: "env",
+						prompt: verdict.configNeeded.what
+					} } : {},
+					learnedFrom: "t1"
+				});
+				recordInstallMetric(cfg, {
+					ts: (/* @__PURE__ */ new Date()).toISOString(),
+					pluginId: plugin.id,
+					type: "ai",
+					mode: "t1",
+					ok: true,
+					phase: "done",
+					recipeLearned: true,
+					sessionChars: chars
+				});
+				done = true;
+			} else if (verdict && verdict.ok === false) {
+				recordInstallMetric(cfg, {
+					ts: (/* @__PURE__ */ new Date()).toISOString(),
+					pluginId: plugin.id,
+					type: "ai",
+					mode: "t1",
+					ok: false,
+					phase: "done",
+					sessionChars: chars,
+					error: verdict.fail
+				});
+				done = true;
+			}
+		} catch {}
+		if (!done && Date.now() < deadline) setTimeout(() => void tick(), 5e3);
+	};
+	setTimeout(() => void tick(), 5e3);
+}
+/** 从会话事件里收集全部文本（user/assistant/tool 的 content[i].text 与 data.text/text 字段） */
+function collectSessionText(events) {
+	const parts = [];
+	for (const e of events) {
+		const content = e?.data?.content;
+		if (Array.isArray(content)) {
+			for (const c of content) if (c && typeof c === "object" && c.type === "text" && typeof c.text === "string") parts.push(c.text);
+		} else if (typeof e?.data?.text === "string") parts.push(e.data.text);
+		else if (typeof e?.text === "string") parts.push(e.text);
+	}
+	return parts.join("\n");
 }
 const isWin = process.platform === "win32";
 function realRunner() {

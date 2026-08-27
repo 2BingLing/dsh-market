@@ -32,6 +32,14 @@ import {
   detectPnpmMajor,
   parseBlockedBuilds,
   writeBuildApprovals,
+  routeInstall,
+  deriveSmokeCommands,
+  canonicalCommands,
+  learnRecipe,
+  listRecipes,
+  recordInstallMetric,
+  metricSummary,
+  parseInstallVerdict,
   fetchCurrentUser,
   fetchStarred,
 } from '@dsh-market/core'
@@ -354,11 +362,33 @@ export function apply(ctx: {
         const plugin = data.plugins.find((p) => p.id === args.pluginId)
         if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
         const profile = (args.targetProfile as string) ?? readSettings(cfg).profile
+        // P1 冒烟验证：装后检查真实落位（skill 目录/SKILL.md；cordis profile 依赖）
+        const smoke = deriveSmokeCommands(cfg, plugin, profile)
         const r = await installPlugin(cfg, plugin, {
           dryRun: Boolean(args.dryRun),
           force: Boolean(args.force),
           targetProfile: profile,
           runner: realRunner(),
+          smoke,
+        })
+        // P1 配方学习：真实安装 + 冒烟通过 → 沉淀配方（后续 AI 安装/重装零 token 直装）
+        if (r.ok && !r.alreadyInstalled && !args.dryRun && !r.smokeFailed) {
+          learnRecipe(cfg, plugin, profile, {
+            commands: canonicalCommands(cfg, plugin, profile),
+            smoke,
+            learnedFrom: 'parsed',
+          })
+        }
+        // P1.5 度量：一键安装事件（T0 命中率分母的一部分）
+        recordInstallMetric(cfg, {
+          ts: new Date().toISOString(),
+          pluginId: plugin.id,
+          type: 'install',
+          mode: 'direct',
+          ok: r.ok,
+          alreadyInstalled: r.alreadyInstalled,
+          smokeFailed: r.smokeFailed,
+          recipeLearned: Boolean(r.ok && !r.alreadyInstalled && !args.dryRun && !r.smokeFailed),
         })
         // P0-1 装后四态验证：真实安装成功后附带 activation（dryRun / 已装跳过时不附）
         if (r.ok && !r.alreadyInstalled && !args.dryRun) {
@@ -426,11 +456,41 @@ export function apply(ctx: {
         })
       }
 
-      // AI 代理安装：启动子代理执行安装（读 README → 确认配置 → 执行 → 验证）
+      // AI 代理安装（路由式）：T0（零 LLM：已装 / 配方 / 解析命令）先行，
+      // 只有需要才派协议子代理（T1 极简安装执行器）
       case 'ai:install': {
         const data = await market()
         const plugin = data.plugins.find((p) => p.id === args.pluginId)
         if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
+        const profile = (args.targetProfile as string) ?? readSettings(cfg).profile
+        const t0 = await routeInstall(cfg, plugin, {
+          profile,
+          runner: realRunner(),
+          force: Boolean(args.force),
+        })
+        // T0 已搞定：零 token，不需要子代理
+        if (!t0.needAi) {
+          recordInstallMetric(cfg, {
+            ts: new Date().toISOString(),
+            pluginId: plugin.id,
+            type: 'ai',
+            // needAi=false 时 t0.mode 不可能为 'ai'
+            mode: t0.mode as 'already' | 'recipe' | 'parsed',
+            ok: t0.ok,
+            alreadyInstalled: t0.alreadyInstalled,
+            smokeFailed: t0.result?.smokeFailed ?? false,
+            error: t0.result?.error ?? null,
+          })
+          return {
+            started: false,
+            childSessionId: null,
+            mode: t0.mode,
+            ok: t0.ok,
+            alreadyInstalled: t0.alreadyInstalled ?? false,
+            smokeFailed: t0.result?.smokeFailed ?? false,
+            error: t0.result?.error ?? null,
+          }
+        }
         const agents = ctx.get('agents') as { list?: () => Array<{ sessionId?: string; id?: string }> } | undefined
         const subagents = ctx.get('subagents') as
           | {
@@ -450,7 +510,7 @@ export function apply(ctx: {
         const agent = agents?.list?.()?.[0]
         if (!agent) throw new Error('当前会话代理不可用')
         const provider = subagents.list().includes('spawn') ? 'spawn' : subagents.list()[0]
-        const prompt = buildInstallPrompt(plugin, readSettings(cfg).profile)
+        const prompt = buildInstallPrompt(plugin, profile, t0.reason)
         // start 的 promise 在 run 发布后 fulfill；只等发布（10s 超时保护）
         const run = await Promise.race([
           subagents.start(provider, {
@@ -463,8 +523,61 @@ export function apply(ctx: {
             setTimeout(() => rej(new Error('子代理启动超时')), 10000),
           ),
         ])
-        return { started: true, childSessionId: run.sessionId ?? run.id ?? null }
+        const sessionId = run.sessionId ?? run.id ?? null
+        // P1.5 度量：升级子代理
+        recordInstallMetric(cfg, {
+          ts: new Date().toISOString(),
+          pluginId: plugin.id,
+          type: 'ai',
+          mode: 't1',
+          ok: false,
+          phase: 'start',
+          error: t0.reason ?? null,
+        })
+        // P1.5 T1 输出自动落库（后台，不阻塞 RPC）：轮询子会话 → JSON verdict → 学配方 + 完成度量
+        if (sessionId) {
+          const sq = ctx.get('sessionQuery') as
+            | { readSession?(id: string): Promise<{ events?: Array<Record<string, any>> } | undefined> }
+            | undefined
+          if (sq?.readSession) {
+            void watchInstallVerdict({
+              cfg,
+              plugin,
+              profile,
+              sessionId,
+              readSession: sq.readSession,
+            })
+          }
+        }
+        return {
+          started: true,
+          childSessionId: sessionId,
+          mode: 't1',
+          reason: t0.reason ?? null,
+        }
       }
+
+      // 配方缓存（T0 的"学习成果"）：透明列表 + 手动学习（T1 验证后落库 / 用户修正）
+      case 'recipe:list':
+        return listRecipes(cfg)
+      case 'recipe:save': {
+        const data = await market()
+        const plugin = data.plugins.find((p) => p.id === args.pluginId)
+        if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
+        const commands = args.commands as string[] | undefined
+        if (!commands || commands.length === 0) throw new Error('缺少 commands')
+        learnRecipe(cfg, plugin, (args.targetProfile as string) ?? readSettings(cfg).profile, {
+          commands,
+          smoke: args.smoke as string[] | undefined,
+          config: args.config as never,
+          learnedFrom: (args.learnedFrom as 't1' | 't2') ?? 't1',
+        })
+        return { ok: true }
+      }
+
+      // 安装路由度量（设计稿 §10）：T0 命中率 / AI 参与率 / 成功率 / T1 会话量代理
+      case 'metrics:summary':
+        return metricSummary(cfg)
 
       case 'gh:deviceCode': {
         const r = await fetch('https://github.com/login/device/code', {
@@ -613,7 +726,8 @@ function parsePicks(text: string): Array<{ i: number; reason: string }> {
   }
 }
 
-/** 生成 AI 安装任务的子代理提示词（Codex 式：读文档 → 确认 → 执行 → 验证） */
+/** 生成 AI 安装任务的子代理提示词（路由协议 T1：极简安装执行器）。
+ *  协议而非散文：固定步骤 + 禁止清单 + 严格 JSON 输出，最小 token 完成安装。 */
 function buildInstallPrompt(
   plugin: {
     name: string
@@ -624,30 +738,117 @@ function buildInstallPrompt(
     stars: number
   },
   targetProfile: string,
+  reason?: string,
 ): string {
   const cmdLine =
     plugin.install.commands && plugin.install.commands.length > 0
       ? plugin.install.commands.join('\n    ')
-      : '(无预解析命令，请阅读 README 确定)'
+      : '(无)'
   return [
-    `请安装 DSH 插件「${plugin.name}」（${plugin.fullName}）。`,
+    `你是「极简安装执行器」，安装 DSH 插件「${plugin.name}」（${plugin.fullName}）。只做安装，不做别的。`,
     ``,
     `【插件信息】`,
     `- 类型：${plugin.type === 'skill' ? 'skill（技能）' : 'cordis 插件'}（${plugin.type}）`,
     `- 简介：${plugin.descriptionZh ?? '(无中文简介)'}`,
-    `- Stars：${plugin.stars}`,
     `- 需要配置：${plugin.install.needsConfig ? '是（API Key / Token 等）' : '否'}`,
-    `- 参考安装命令（来自 README 解析，可能不精确）：`,
+    `- 目标 profile：${targetProfile}`,
+    `- 参考命令（collector 已从 README 解析，优先直接使用）：`,
     `    ${cmdLine}`,
+    ...(reason ? [`- 前序尝试（T0 已失败，仅作线索，不要重复踩坑）：${reason}`] : []),
     ``,
-    `【安装要求】`,
-    `1. 先阅读仓库 README（https://github.com/${plugin.fullName}，可用 web_search 或抓取 raw README）确认真实安装方式，不要照搬上面可能过时的命令。`,
-    `2. ${plugin.type === 'skill' ? `skill 型：按 README 指示安装到技能目录（通常 ~/.agents/skills，目录名建议 ${plugin.name} 或 ${plugin.name}-<版本>），常见方式是 git clone。` : `cordis 型：在目标 profile「${targetProfile}」执行 dsh plugin --profile ${targetProfile} add <真实包名或源>（npm 包名 / git 地址 / 本地目录均可）。`}`,
-    `3. 需要配置（API Key/Token/环境变量）时，先向用户询问确认，不要猜测或伪造配置。`,
-    `4. 安装前检查是否已装（skill 目录存在 / profile 依赖已含），已装则直接告知用户并停止。`,
-    `5. 安装完成后做最小验证（目录/依赖存在；能读到 README 或 main 入口），然后简洁汇报：装了什么、装在哪里、是否需要重启 harness、需要什么配置。`,
-    `6. 遇到问题（网络、权限、命令失败）先尝试修复或换用 README 的备用安装方式；确实无法完成时如实报告失败原因和已尝试的方案。`,
+    `【协议（必须遵守）】`,
+    `1. 先执行参考命令（可做最少修正：包管理器 / 平台差异）。不要先读 README。`,
+    `2. 命令缺失或明显错误时：只读仓库 README 的安装段落（grep install/安装/代码块，前 200 行），禁止全文阅读。`,
+    `3. 执行后必须验证：${plugin.type === 'skill' ? '技能目录存在且含 SKILL.md' : `profile「${targetProfile}」的 package.json 的 dependencies 含包名`}；exit 0 且验证通过才算成功。`,
+    `4. 失败时：重试 1 次 → 用错误文本 grep README → 仍失败则如实放弃并报告，不要无限尝试。`,
+    `5. 需要配置（API Key/Token/环境变量）时：只填 config_needed，不猜测、不伪造、不自行写入；先停下向用户确认。`,
+    `6. 全程禁止：思考过程、解释、总结散文、阅读文档其余部分、搜索网络（除非 README 明确引用必要的安装文档）。`,
+    ``,
+    `【输出】严格 JSON，无其他文本：`,
+    `{"ok":true|false,"commands":["实际执行的命令"],"smoke":["执行并验证的命令"],"fail":"失败与已尝试方案（失败时）","config_needed":null|{"what":"需要什么配置","hint":"在哪获取"},"recipe":{"commands":["可用安装命令"],"smoke":["验证命令"]}}`,
   ].join('\n')
+}
+
+/** T1 子代理验收（后台，不阻塞 RPC）：轮询子会话输出 → 解析 JSON verdict →
+ *  ok 且带命令 → 学配方（learnedFrom=t1，含 config_needed）；记录完成度量（sessionChars 为 token 粗略代理）。
+ *  终止条件：拿到 verdict（成功或失败）→ 停止；否则轮询到 10 分钟上限。 */
+async function watchInstallVerdict(opts: {
+  cfg: ReturnType<typeof resolveConfig>
+  plugin: Awaited<ReturnType<typeof fetchMarketData>>['data']['plugins'][number]
+  profile: string
+  sessionId: string
+  readSession: (id: string) => Promise<{ events?: Array<Record<string, any>> } | undefined>
+}): Promise<void> {
+  const { cfg, plugin, profile, sessionId, readSession } = opts
+  const deadline = Date.now() + 10 * 60 * 1000
+  let chars = 0
+  const tick = async () => {
+    let done = false
+    try {
+      const s = await readSession(sessionId)
+      const text = collectSessionText(s?.events ?? [])
+      chars = Math.max(chars, text.length)
+      const verdict = parseInstallVerdict(text)
+      if (verdict && verdict.ok && verdict.commands && verdict.commands.length > 0) {
+        const recipe = verdict.recipe ?? { commands: verdict.commands, smoke: verdict.smoke }
+        learnRecipe(cfg, plugin, profile, {
+          commands: recipe.commands ?? verdict.commands,
+          smoke: recipe.smoke,
+          ...(verdict.configNeeded?.what
+            ? { config: { type: 'env' as const, prompt: verdict.configNeeded.what } }
+            : {}),
+          learnedFrom: 't1',
+        })
+        recordInstallMetric(cfg, {
+          ts: new Date().toISOString(),
+          pluginId: plugin.id,
+          type: 'ai',
+          mode: 't1',
+          ok: true,
+          phase: 'done',
+          recipeLearned: true,
+          sessionChars: chars,
+        })
+        done = true
+      } else if (verdict && verdict.ok === false) {
+        recordInstallMetric(cfg, {
+          ts: new Date().toISOString(),
+          pluginId: plugin.id,
+          type: 'ai',
+          mode: 't1',
+          ok: false,
+          phase: 'done',
+          sessionChars: chars,
+          error: verdict.fail,
+        })
+        done = true
+      }
+    } catch {
+      /* 会话读取失败：继续轮询 */
+    }
+    if (!done && Date.now() < deadline) setTimeout(() => void tick(), 5000)
+  }
+  setTimeout(() => void tick(), 5000)
+}
+
+/** 从会话事件里收集全部文本（user/assistant/tool 的 content[i].text 与 data.text/text 字段） */
+function collectSessionText(events: Array<Record<string, any>>): string {
+  const parts: string[] = []
+  for (const e of events) {
+    const content = e?.data?.content
+    if (Array.isArray(content)) {
+      for (const c of content) {
+        if (c && typeof c === 'object' && c.type === 'text' && typeof c.text === 'string') {
+          parts.push(c.text)
+        }
+      }
+    } else if (typeof e?.data?.text === 'string') {
+      parts.push(e.data.text)
+    } else if (typeof e?.text === 'string') {
+      parts.push(e.text)
+    }
+  }
+  return parts.join('\n')
 }
 
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。

@@ -74,6 +74,11 @@ export interface InstallOptions {
   targetProfile?: string;
   /** 已装项的本地名（卸载用：cordis = 依赖键名，skill = 目录名；比 plugin.name 推断更准） */
   localName?: string;
+  /** 覆盖内置安装步骤：逐条执行这些命令（collector 解析命令 / 配方命令），
+   *  不参与内置 clone/add 与内置已装检测（调用方自行判断）；无回滚（任意命令不可安全逆操作）。 */
+  commands?: string[];
+  /** 装后冒烟验证：命令退出码为 0 才算通过（全部通过 → !smokeFailed） */
+  smoke?: string[];
   /** 执行器：真实环境由 UI 层注入（Host 子进程），测试注入 mock */
   runner: CommandRunner;
   /** 步骤回调 */
@@ -122,6 +127,15 @@ export interface ActivationStatus {
   action?: string;
 }
 
+/** 冒烟验证条目结果 */
+export interface SmokeResult {
+  label: string;
+  command: string;
+  ok: boolean;
+  /** 失败时的输出片段（供排查） */
+  output?: string;
+}
+
 /** 安装结果 */
 export interface InstallResult {
   ok: boolean;
@@ -134,6 +148,10 @@ export interface InstallResult {
   activation?: ActivationStatus;
   snapshot?: InstallSnapshot;
   error?: string;
+  /** 装后冒烟结果（提供 smoke 选项时附带） */
+  smoke?: SmokeResult[];
+  /** 冒烟存在失败项（安装本身可能成功，但未通过验证） */
+  smokeFailed?: boolean;
 }
 
 /** 卸载结果 */

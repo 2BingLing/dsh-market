@@ -10,10 +10,12 @@ import type { DshPlugin } from "@dsh-market/schema";
 import type { ResolvedConfig } from "./config.js";
 import { snapshotDir } from "./config.js";
 import type {
+  CommandRunner,
   InstallOptions,
   InstallResult,
   InstallSnapshot,
   InstallStep,
+  SmokeResult,
   StepStatus,
 } from "./types.js";
 
@@ -53,14 +55,80 @@ export async function installPlugin(
   const fail = (error: string): InstallResult => ({ ok: false, steps, error });
 
   try {
-    if (plugin.type === "skill") {
-      return await installSkill(cfg, plugin, options, step, steps);
+    let r: InstallResult;
+    if (options.commands && options.commands.length > 0) {
+      r = await installByCommands(cfg, plugin, options, step, steps);
+    } else if (plugin.type === "skill") {
+      r = await installSkill(cfg, plugin, options, step, steps);
+    } else {
+      r = await installCordis(cfg, plugin, options, step, steps);
     }
-    return await installCordis(cfg, plugin, options, step, steps);
+    // 装后冒烟验证（dryRun 不执行；已装跳过场景也会验证存量健康）
+    if (r.ok && !options.dryRun && options.smoke && options.smoke.length > 0) {
+      r.smoke = await runSmoke(options.smoke, options.runner);
+      r.smokeFailed = r.smoke.some((s) => !s.ok);
+    }
+    return r;
   } catch (err) {
     step("failed", "安装失败", "failed", (err as Error).message);
     return fail((err as Error).message);
   }
+}
+
+/** 覆盖命令安装：逐条执行（collector 解析命令 / 配方命令）。
+ *  不做内置 clone/add、不做内置已装检测（调用方路由先行判断）；无回滚（任意命令不可安全逆操作）。 */
+async function installByCommands(
+  cfg: ResolvedConfig,
+  plugin: DshPlugin,
+  options: InstallOptions,
+  step: StepFn,
+  steps: InstallStep[],
+): Promise<InstallResult> {
+  const commands = options.commands ?? [];
+  const profile = options.targetProfile ?? cfg.defaultProfile;
+  const stepId = "install";
+  step(stepId, `执行 ${commands.length} 条安装命令`, "running");
+  const snapshot: InstallSnapshot = {
+    pluginId: plugin.id,
+    type: plugin.type === "skill" ? "skill" : "cordis-plugin",
+    target: profile,
+    installedAt: new Date().toISOString(),
+    existedBefore: false,
+    packageJsonBefore: null,
+  };
+  try {
+    for (let i = 0; i < commands.length; i++) {
+      const id = `cmd-${i}`;
+      step(id, commands[i], "running");
+      await runWithRetry(options, step, id, commands[i], PLUGIN_ADD_TIMEOUT);
+      step(id, commands[i], "done");
+    }
+    step(stepId, `执行 ${commands.length} 条安装命令`, "done");
+    saveSnapshot(cfg, snapshot);
+    return { ok: true, steps, snapshot, requiresRestart: plugin.type !== "skill" };
+  } catch (err) {
+    step(stepId, "执行安装命令", "failed", (err as Error).message);
+    return { ok: false, steps, error: (err as Error).message };
+  }
+}
+
+/** 冒烟验证：每条命令退出码 0 即通过（单次尝试；失败记录输出片段供排查） */
+async function runSmoke(commands: string[], runner: CommandRunner): Promise<SmokeResult[]> {
+  const out: SmokeResult[] = [];
+  for (const command of commands) {
+    try {
+      const r = await runner.run(command, { timeoutMs: 30_000 });
+      out.push({
+        label: command,
+        command,
+        ok: r.exitCode === 0,
+        output: r.exitCode === 0 ? undefined : (r.stderr || r.stdout).slice(0, 300),
+      });
+    } catch (err) {
+      out.push({ label: command, command, ok: false, output: (err as Error).message.slice(0, 300) });
+    }
+  }
+  return out;
 }
 
 /** skill 型：git clone 到 skills 目录（<name>-latest，无版本信息时） */
@@ -71,7 +139,7 @@ async function installSkill(
   step: StepFn,
   steps: InstallStep[],
 ): Promise<InstallResult> {
-  const destName = `${plugin.name}-latest`;
+  const destName = skillsDestName(plugin);
   const dest = join(cfg.skillsDir, destName);
   const repoUrl = `https://github.com/${plugin.fullName}.git`;
 
@@ -280,8 +348,13 @@ async function rollbackCordis(
   step("rollback", "回滚", "done");
 }
 
+/** skill 型安装目标目录名（<name>-latest；路由器冒烟推导/配方命令共用此约定） */
+export function skillsDestName(plugin: DshPlugin): string {
+  return `${plugin.name}-latest`;
+}
+
 /** 从插件推断 npm 包名（cordis 型）：优先 homepage npm 路径，其次 name */
-function installPackageName(plugin: DshPlugin): string {
+export function installPackageName(plugin: DshPlugin): string {
   const m = plugin.homepage?.match(/npmjs\.com\/package\/([\w@/-]+)/);
   if (m) return m[1];
   return plugin.name;
