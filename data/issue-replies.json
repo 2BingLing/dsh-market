@@ -1,77 +1,14 @@
 {
-  "generatedAt": "2026-08-27T03:57:11.466Z",
+  "generatedAt": "2026-08-28T05:39:22.646Z",
   "replies": [
     {
       "issueNumbers": [
-        88
+        92
       ],
-      "fullName": "AnonyJcy/dsh-plugin-j-space",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        85
-      ],
-      "fullName": "jyao-SUSE-power-group/dsh-provider-rate-limit",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 33
-    },
-    {
-      "issueNumbers": [
-        84
-      ],
-      "fullName": "yu-wenchao/dsh-free-models-hub",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 55
-    },
-    {
-      "issueNumbers": [
-        86
-      ],
-      "fullName": "exoticknight/dsh-theme-eink-retro",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        80
-      ],
-      "fullName": "zuoyunlai/lunheng-article-pipeline-dsh",
+      "fullName": "Dingpenghui-good/dsh-conversation-language",
       "type": "cordis-plugin",
       "stars": 3,
-      "score": 62
-    },
-    {
-      "issueNumbers": [
-        87
-      ],
-      "fullName": "jlzb-314/vibe-coding-skills",
-      "type": "skill",
-      "stars": 0,
-      "score": 16
-    },
-    {
-      "issueNumbers": [
-        82
-      ],
-      "fullName": "pharaohnie/dsh-rtk-tools",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        83
-      ],
-      "fullName": "pharaohnie/dsh-context-mode",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 56
+      "score": 8
     }
   ]
 }
