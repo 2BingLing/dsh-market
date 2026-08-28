@@ -1,6 +1,15 @@
 {
-  "generatedAt": "2026-08-28T05:39:22.646Z",
+  "generatedAt": "2026-08-28T06:02:48.736Z",
   "replies": [
+    {
+      "issueNumbers": [
+        93
+      ],
+      "fullName": "pipipigu/dsh-workspace-tree",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
+    },
     {
       "issueNumbers": [
         92
