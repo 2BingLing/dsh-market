@@ -551,6 +551,32 @@ async function main() {
         readmeContent: null,
         hasSkillMd: false,
       });
+      // 写回 detect 缓存：直补条目若不写缓存，下轮仍算"缓存缺失/过期"→ needApi 死循环
+      //（曾致每次 cron 检测 60 分钟 + 收录数不保）。构造与 prev 一致的 DetectCache 快照。
+      const existing = cacheGet<DetectCache>("detect", id, DETECT_TTL);
+      if (existing) {
+        cacheSet<DetectCache>("detect", id, { ...existing, pushedAt: prev.pushedAt });
+      } else {
+        cacheSet<DetectCache>("detect", id, {
+          pushedAt: prev.pushedAt,
+          detection: {
+            isPlugin: true,
+            type: prev.type,
+            installMethod: prev.install.method,
+            skillFiles: [],
+            evidence: ["B2 restore 缓存回写"],
+          },
+          isCordis: true,
+          needsConfig: prev.install.needsConfig,
+          readmeSummary: prev.readmeSummary,
+          installParsed: {
+            commands: prev.install.commands ?? [],
+            source: prev.install.commandSource ?? "",
+          },
+          hasSkillMd: prev.type === "skill",
+          subdir: null,
+        });
+      }
       restored++;
     }
     if (restored > 0) console.log(`  [B2] 检测缓存直补 ${restored} 个（零 API）`);
