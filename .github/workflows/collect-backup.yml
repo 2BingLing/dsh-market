@@ -1,0 +1,49 @@
+name: collect-backup
+
+# 兜底管道：北京时间 11:00（UTC 03:00）检查今天主档（北京时间 06:00 = UTC 22:00）是否已成功运行
+# ——GitHub Actions schedule 偶发跳过/延迟（主档曾整个不触发导致当天无数据），此档负责补跑
+# 判断：最近一次成功的 collect run 距今 < 12 小时 → 主档已跑，跳过；否则 dispatch 主管道
+on:
+  schedule:
+    - cron: "0 3 * * *" # 北京时间 11:00 = UTC 03:00
+  workflow_dispatch: {}
+
+permissions:
+  actions: write # dispatch 主 workflow 需要
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检查主档是否已在 12 小时内成功
+        id: check
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          WHICH=$(node -e "
+            const t = process.env.TOKEN;
+            fetch('https://api.github.com/repos/2BingLing/dsh-market/actions/workflows/collect-and-deploy.yml/runs?per_page=3&status=success', {
+              headers: { Authorization: 'Bearer ' + t, 'User-Agent': 'dsh-market' }
+            }).then(r => r.json()).then(j => {
+              const runs = j.workflow_runs || [];
+              const last = runs[0] ? new Date(runs[0].run_started_at || runs[0].created_at).getTime() : 0;
+              const fresh = Date.now() - last < 12 * 3600 * 1000;
+              console.log(fresh ? 'no' : 'yes');
+            });
+          ")
+          echo "should_run=$WHICH" >> "$GITHUB_OUTPUT"
+          echo "主档 12h 内已成功：$([ $WHICH = no ] && echo '是，跳过' || echo '否，补跑')"
+
+      - name: 补跑主管道（dispatch collect-and-deploy）
+        if: steps.check.outputs.should_run == 'yes'
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -s -X POST \
+            -H "Authorization: Bearer $TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/repos/2BingLing/dsh-market/actions/workflows/collect-and-deploy.yml/dispatches \
+            -d '{"ref":"master"}'
+          echo "已触发主管道补跑"
