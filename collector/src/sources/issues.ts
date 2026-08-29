@@ -66,7 +66,7 @@ export interface SubmissionMeta {
 /** 读取本仓库所有 open 的提交插件 issue：返回 fullName(lower) → 元数据（issue 号 + 作者自述） */
 export async function fetchSubmissionRepos(): Promise<Map<string, SubmissionMeta>> {
   return fetchSubmissionReposBy(
-    /^\[(提交插件|submit|plugin submission)\]/i,
+    /^\[(提交插件|提交工具|submit|plugin submission)\]/i,
     "submission",
     "issues:submission"
   );
