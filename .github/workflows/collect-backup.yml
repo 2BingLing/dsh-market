@@ -1,11 +1,12 @@
 name: collect-backup
 
-# 兜底管道：北京时间 11:00（UTC 03:00）检查今天主档（北京时间 06:00 = UTC 22:00）是否已成功运行
+# 兜底管道：北京时间 06:00（UTC 22:00）检查主档（北京时间 03:00 = UTC 19:00）是否已成功运行
 # ——GitHub Actions schedule 偶发跳过/延迟（主档曾整个不触发导致当天无数据），此档负责补跑
 # 判断：最近一次成功的 collect run 距今 < 12 小时 → 主档已跑，跳过；否则 dispatch 主管道
 on:
   schedule:
-    - cron: "0 3 * * *" # 北京时间 11:00 = UTC 03:00
+    # 兜底：北京时间 06:00 = UTC 22:00——检查主档（北京 03:00）是否已成功，未跑则补跑
+    - cron: "0 22 * * *"
   workflow_dispatch: {}
 
 permissions:

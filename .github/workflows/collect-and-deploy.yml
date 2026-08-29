@@ -2,8 +2,8 @@ name: collect-and-deploy
 
 on:
   schedule:
-    # 每天 UTC 22:00（北京时间 06:00）自动收录 + 发布
-    - cron: "0 22 * * *"
+    # 主档：北京时间 03:00 = UTC 19:00（每日自动收录 + 发布；06:00 由 collect-backup 兜底）
+    - cron: "0 19 * * *"
   workflow_dispatch: {}
 
 permissions:
