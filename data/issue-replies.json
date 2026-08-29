@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-08-28T06:02:48.736Z",
+  "generatedAt": "2026-08-29T03:37:09.804Z",
   "replies": [
     {
       "issueNumbers": [
-        93
+        90
       ],
-      "fullName": "pipipigu/dsh-workspace-tree",
+      "fullName": "Zhiyi-Zhao/file-brief",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
+      "stars": 1,
+      "score": 56
     },
     {
       "issueNumbers": [
-        92
+        97
       ],
-      "fullName": "Dingpenghui-good/dsh-conversation-language",
+      "fullName": "LZMW/dsh-memory",
       "type": "cordis-plugin",
-      "stars": 3,
-      "score": 8
+      "stars": 0,
+      "score": 37
     }
   ]
 }
