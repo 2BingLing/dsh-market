@@ -44,3 +44,15 @@ jobs:
               issue_number: issue.number,
               body,
             });
+            // 识别为插件提交 → 自动补 submission 标签（collector 的收录扫描依赖 label/标题前缀；
+            // 作者编辑标题去前缀后 label 依然保留，确保提交必进收录管道）
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ["submission"],
+              });
+            } catch (e) {
+              console.log("add label 失败（可能已存在）:", e.message);
+            }
