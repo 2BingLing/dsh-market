@@ -105,10 +105,10 @@ export async function detectSubdirBundle(
   const SKIP_DIRS =
     /^(docs?|assets?|test|tests|scripts?|tools?|examples?|images?|img|public|src|lib|dist|node_modules|vendor|\.github)$/i;
   const dirs = rootItems.filter((i) => i.type === "dir" && !SKIP_DIRS.test(i.name));
-  // monorepo 子目录优先（packages|apps 下的插件包，如 #52 的 packages/plugin）
+  // monorepo 子目录优先（packages|apps 下的插件包，如 #52 的 packages/plugin、#91 的 packages/deepc-link）
+  // 注意：apps 与 packages 可能并存（如 deepSea），全部探测——原实现 find 只取第一个曾漏掉 packages/deepc-link
   const candidates: { path: string }[] = [];
-  const mono = dirs.find((d) => /^(packages|apps)$/i.test(d.name));
-  if (mono) {
+  for (const mono of dirs.filter((d) => /^(packages|apps)$/i.test(d.name))) {
     const subs = await fetchRepoRoot(fullName, branch, mono.path);
     for (const s of subs.filter((x) => x.type === "dir")) {
       candidates.push({ path: `${mono.path}/${s.name}` });
