@@ -84,7 +84,9 @@ export async function detectPlugin(
     };
   }
 
-  const type: PluginType = isSkill ? "skill" : "cordis-plugin";
+  // SKILL.md 与 cordis 标记并存 → cordis 优先（#95 dsh-genui：npm 发布的 cordis 插件带 SKILL.md 被误判 skill）
+  const type: PluginType =
+    isSkill && hasCordisMarker ? "cordis-plugin" : isSkill ? "skill" : "cordis-plugin";
   const installMethod: InstallMethod = type === "skill" ? "skills-add" : "pnpm-profile";
 
   return { isPlugin: true, type, installMethod, skillFiles, evidence };

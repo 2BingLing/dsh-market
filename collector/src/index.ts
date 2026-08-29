@@ -339,6 +339,16 @@ async function main() {
           );
         }
         isCordis = isCordisPackageJson(packageJsonContent);
+        // skill 型但 package.json 声明 cordis 结构（npm 发布的 cordis 插件常附带 SKILL.md 当文档）→ 改判 cordis-plugin（#95）
+        if (detection.type === "skill" && isCordis) {
+          detection = {
+            isPlugin: true,
+            type: "cordis-plugin",
+            installMethod: "pnpm-profile",
+            skillFiles: [],
+            evidence: [...detection.evidence, "package.json cordis（SKILL.md 改判）"],
+          };
+        }
         // dsh-manifest.json 声明式插件：manifest 本身就是插件证据，跳过 package.json 二次确认（#53 类）
         const hasManifest = rootItems.some(
           (i) => i.name.toLowerCase() === "dsh-manifest.json"
