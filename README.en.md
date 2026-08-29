@@ -89,7 +89,7 @@ The plugin market lives in your DSH sidebar: **up and running in 3 minutes, and 
 
 ## Features
 
-- **Continuous collection** — scans `dsh-plugin` / `dsh` GitHub topics and curated community lists every day, collecting everything (currently 5120 plugins + packs channel)
+- **Continuous collection** — scans `dsh-plugin` / `dsh` GitHub topics and curated community lists every day, collecting everything (currently 5407 plugins + packs channel)
 - **Practical 5-dimension scoring** — maintenance activity / usefulness / ecosystem heat / convenience / signal quality, fused with a weighted geometric mean; every plugin comes with a "why recommended" explanation
 - **Chinese experience** — auto-generated Chinese summaries and feature tags; Chinese search & filters
 - **One-click install** — deterministic routing in the plugin edition: `git clone` for skill plugins, `dsh plugin add` for cordis plugins; retry & rollback on failure

@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-08-29T03:37:09.804Z",
+  "generatedAt": "2026-08-29T21:44:01.884Z",
   "replies": [
     {
       "issueNumbers": [
-        90
+        100
       ],
-      "fullName": "Zhiyi-Zhao/file-brief",
+      "fullName": "Jokasa7/dsh-product-subagent-console",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 56
+      "score": 46
     },
     {
       "issueNumbers": [
-        97
+        91
       ],
-      "fullName": "LZMW/dsh-memory",
+      "fullName": "evil7/deepSea",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 37
+      "stars": 4,
+      "score": 64
     }
   ]
 }
