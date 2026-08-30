@@ -3,7 +3,7 @@
  * 视图：home（推荐分区 + 全部插件）/ detail / guide（评分体系）/ quiz（冷启动问卷）
  * 筛选：搜索 + 标签多选 AND + 类型/分数段/配置/星星多维筛选
  */
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Fuse from "fuse.js";
 import type { DshPlugin, DshPack, MarketData } from "@dsh-market/schema";
 import PluginCard from "./components/PluginCard";
@@ -43,6 +43,8 @@ function loadFavorites(): string[] {
 }
 
 export default function App() {
+  // 列表滚动位置（#103：进入详情/指南前保存，浏览器返回时恢复）
+  const scrollYRef = useRef(0);
   const [plugins, setPlugins] = useState<DshPlugin[]>([]);
   const [packs, setPacks] = useState<DshPack[]>([]);
   const [loading, setLoading] = useState(true);
@@ -93,31 +95,58 @@ export default function App() {
   }, []);
 
   const openDetail = useCallback((p: DshPlugin) => {
+    scrollYRef.current = window.scrollY; // 记录列表滚动位置（返回时恢复）
     setSelected(p);
     setView("detail");
     window.scrollTo({ top: 0 });
+    history.pushState({ v: "detail" }, "");
   }, []);
 
   const openPackDetail = useCallback((p: DshPack) => {
+    scrollYRef.current = window.scrollY;
     setSelectedPack(p);
     setView("packDetail");
     window.scrollTo({ top: 0 });
+    history.pushState({ v: "packDetail" }, "");
   }, []);
 
   const backHome = useCallback(() => {
-    setView("home");
-    setSelected(null);
-    setSelectedPack(null);
+    // 浏览器后退（触发 popstate → 恢复 home + 列表位置）；入口页直进时栈底则直接回 home
+    if (history.state?.v) history.back();
+    else {
+      setView("home");
+      setSelected(null);
+      setSelectedPack(null);
+    }
   }, []);
 
   const openGuide = useCallback(() => {
+    scrollYRef.current = window.scrollY;
     setView("guide");
     window.scrollTo({ top: 0 });
+    history.pushState({ v: "guide" }, "");
   }, []);
 
   const openQuiz = useCallback(() => {
+    scrollYRef.current = window.scrollY;
     setView("quiz");
     window.scrollTo({ top: 0 });
+    history.pushState({ v: "quiz" }, "");
+  }, []);
+
+  /** 浏览器前进/后退：恢复视图 + 返回列表时还原滚动位置（#103） */
+  useEffect(() => {
+    const onPop = () => {
+      const s = history.state as { v?: string } | null;
+      if (s?.v === "detail" || s?.v === "packDetail" || s?.v === "guide" || s?.v === "quiz") return; // 前进进入子视图，状态不变
+      // 后退回到列表：恢复 home 视图 + 滚动位置
+      setSelected(null);
+      setSelectedPack(null);
+      setView("home");
+      requestAnimationFrame(() => window.scrollTo({ top: scrollYRef.current }));
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
   }, []);
 
   // 防抖搜索词（避免每次按键都触发全量搜索）
