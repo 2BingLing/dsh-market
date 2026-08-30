@@ -10,7 +10,7 @@ import { getOpen, setOpen, subscribe, toggle } from './store.ts'
 import { MarketLogo } from './logo.tsx'
 import styles from './styles.module.css'
 
-/** 入口按钮：侧边栏底部「设置」旁的图标按钮 */
+/** 入口按钮：侧边栏底部「设置」旁的图标按钮（issue #101：独占一行 + 16px 图标对齐官方） */
 function MarketTrigger(props: { wide: boolean }): React.ReactNode {
   const open = useSyncExternalStore(subscribe, getOpen, getOpen)
   return createElement(
@@ -26,10 +26,8 @@ function MarketTrigger(props: { wide: boolean }): React.ReactNode {
       'span',
       { className: styles.triggerIcon },
       createElement(MarketLogo, {
-        size: 24,
-        color: open
-          ? 'var(--dsw-alias-brand-primary, #2864A9)'
-          : 'var(--dsw-alias-label-secondary, #5F6670)',
+        size: 16,
+        color: open ? 'currentColor' : 'currentColor',
       }),
     ),
     props.wide ? createElement('span', { className: styles.triggerLabel }, '插件市场') : null,

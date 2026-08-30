@@ -11,32 +11,53 @@
   box-sizing: border-box;
 }
 
-/* ---------- 入口按钮（sidebar.footer.action） ---------- */
+/* ---------- 入口按钮（sidebar.footer.action） ----------
+ * issue #101 适配：官方 footerActions 容器 flex nowrap，dsh-chat-import 等
+ * 插件按钮 flex:0 0 100% 会占满整行把本按钮挤出侧边栏。
+ * 方案：① 容器级规则把槽位包裹层改为 flex wrap（各按钮上下堆叠）
+ *      ② 本按钮独占一行（flex:0 0 100%）
+ *      ③ 图标 16×16、颜色走主题变量（不写死浅色值） */
+:global([data-slot='sidebar.footer.action']) {
+  display: flex !important;
+  flex-wrap: wrap;
+  width: 100%;
+  row-gap: 4px;
+}
 .trigger {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  height: 100%;
-  padding: 0 12px;
+  flex: 0 0 100%;
+  width: 100%;
+  min-height: 34px;
+  padding: 0 10px;
   background: transparent;
   border: none;
-  color: #5f6670;
+  color: var(--dsw-alias-label-secondary, #5f6670);
   cursor: pointer;
-  font-size: 14px;
-  border-radius: 6px;
+  font-size: 13px;
+  border-radius: 8px;
+  box-sizing: border-box;
 }
 .trigger:hover {
-  color: #252525;
-  background: #edeef1;
+  color: var(--dsw-alias-label-primary, #252525);
+  background: var(--dsw-alias-interactive-bg-hover, #edeef1);
 }
 .trigger[data-active] {
-  color: #4d6bfe;
-  background: #edeef1;
+  color: var(--dsw-alias-brand-primary, #4d6bfe);
+  background: var(--dsw-alias-interactive-bg-hover, #edeef1);
 }
 .triggerIcon {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   line-height: 1;
+}
+.triggerIcon svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
 }
 .triggerLabel {
   white-space: nowrap;
