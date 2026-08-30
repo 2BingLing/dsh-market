@@ -17,7 +17,8 @@ export function MarketLogo(props: {
     {
       width: size,
       height: size,
-      viewBox: '0 0 120 120',
+      // viewBox 裁剪四周留白（图形实际范围 x≈21-110 / y≈13-97），小尺寸渲染时鲸鱼视觉充满
+      viewBox: '14 8 98 102',
       'aria-label': 'DSH Market',
       style: { display: 'block' },
     },

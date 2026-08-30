@@ -1,6 +1,6 @@
 {
   "name": "@dsh-market/plugin",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "DSH Market 插件端：cordis 侧边栏插件（浏览/搜索/猜你喜欢/一键安装/已装管理），核心逻辑来自 @dsh-market/core",
   "type": "module",
   "main": "lib/index.js",
