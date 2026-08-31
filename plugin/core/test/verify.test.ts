@@ -123,14 +123,14 @@ describe("verifyActivation · cordis 型", () => {
 describe("verifyActivation · skill 型", () => {
   it("live：目录存在", () => {
     const cfg = makeCfg();
-    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
-    const r = verifyActivation(cfg, { type: "skill", name: "web-scraper-latest" });
+    mkdirSync(join(cfg.skillsDir, "web-scraper"), { recursive: true });
+    const r = verifyActivation(cfg, { type: "skill", name: "web-scraper" });
     expect(r.state).toBe("live");
   });
 
   it("broken：目录缺失", () => {
     const cfg = makeCfg();
-    const r = verifyActivation(cfg, { type: "skill", name: "web-scraper-latest" });
+    const r = verifyActivation(cfg, { type: "skill", name: "web-scraper" });
     expect(r.state).toBe("broken");
   });
 });

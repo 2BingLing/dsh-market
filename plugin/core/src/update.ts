@@ -12,7 +12,7 @@ import type { ResolvedConfig } from "./config.js";
 import type { CommandRunner, InstalledPlugin } from "./types.js";
 import { getScalar, setScalar } from "./yaml-block.js";
 import { readInstalledVersionForProfile, readLocalHeadCommit } from "./installed.js";
-import { installPlugin, isLockFailure } from "./installer.js";
+import { installPlugin, isLockFailure, skillsDestName } from "./installer.js";
 import { resolveInstallName, verifyAfterInstall } from "./verify.js";
 
 export interface UpdateCheckResult {
@@ -409,7 +409,7 @@ export async function applyUpdate(
   const profile = opts.profile ?? cfg.defaultProfile;
 
   if (plugin.type === "skill") {
-    const dest = join(cfg.skillsDir, `${plugin.name}-latest`);
+    const dest = join(cfg.skillsDir, skillsDestName(plugin));
     const before = await readLocalHeadCommit(opts.runner, dest);
     const r = await installPlugin(cfg, plugin, {
       force: true,

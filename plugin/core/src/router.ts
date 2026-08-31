@@ -89,8 +89,8 @@ function smokePkgName(plugin: DshPlugin, parsed: string[]): string {
  * skill 解析命令规范化（数据质量兜底）：
  * 市场里大量 skill 的 README 命令把克隆目标写成 ~/.dsh/skills、~/.claude/skills 等，
  * 与 harness 实际扫描的技能目录（cfg.skillsDir）不一致 → 装完不可见、冒烟必失败、误升级 AI。
- * 仅处理"单条 git clone"形态；目标统一重定向为 <skillsDir>/<name>-latest（与已装检测/
- * 冒烟/卸载约定一致）。其余形态（多命令脚本 / cordis 错分类等）原样交付，由冒烟失败 →
+ * 仅处理"单条 git clone"形态；目标统一重定向为 <skillsDir>/<name>（与已装检测/
+ * 冒烟/卸载约定一致，issue #102）。其余形态（多命令脚本 / cordis 错分类等）原样交付，由冒烟失败 →
  * T1 子代理兜底，不伪报成功。
  */
 export function normalizeSkillCommands(
@@ -110,13 +110,19 @@ export function normalizeSkillCommands(
   return [tokens.join(" ")];
 }
 
-/** 目标技能目录名（与 installer 的 <name>-latest 约定一致） */
+/** 目标技能目录名（与 installer 的 skillsDestName 唯一出口一致，issue #102 后为 <name>） */
 function skillDest(cfg: ResolvedConfig, plugin: DshPlugin): string {
   return join(cfg.skillsDir, skillsDestName(plugin));
 }
 
+/** 旧约定残留目录（<name>-latest，issue #102 修复前的安装） */
+function legacySkillDest(cfg: ResolvedConfig, plugin: DshPlugin): string {
+  return join(cfg.skillsDir, `${plugin.name}-latest`);
+}
+
 /** 推导冒烟检查（结构化，进程内执行——规避 cmd/sh 引号与 node -e 被打断的问题）：
- *  skill → 技能目录含 SKILL.md；cordis → profile package.json 依赖含包名
+ *  skill → 技能目录含 SKILL.md（优先新约定 <name>；旧 <name>-latest 残留也认，过渡期兼容）；
+ *  cordis → profile package.json 依赖含包名
  *  pkgName：解析命令提取的真实包名优先（name 字段常为 owner/repo，installPackageName 猜不准） */
 export function deriveSmokeCommands(
   cfg: ResolvedConfig,
@@ -125,8 +131,15 @@ export function deriveSmokeCommands(
   pkgName?: string,
 ): SmokeCheck[] {
   if (plugin.type === "skill") {
-    const dest = skillDest(cfg, plugin);
-    return [{ type: "exists", path: join(dest, "SKILL.md"), label: `技能目录 ${dest} 含 SKILL.md` }];
+    const canonicalFile = join(skillDest(cfg, plugin), "SKILL.md");
+    const legacyFile = join(legacySkillDest(cfg, plugin), "SKILL.md");
+    // 冒烟目标是"当前实际存在的那份技能"：<name> 优先，旧 <name>-latest 兜底；都不存在则查 <name> 如实失败
+    const target = existsSync(canonicalFile)
+      ? canonicalFile
+      : existsSync(legacyFile)
+        ? legacyFile
+        : canonicalFile;
+    return [{ type: "exists", path: target, label: `技能目录含 SKILL.md（${plugin.name}）` }];
   }
   const name = pkgName ?? installPackageName(plugin);
   return [
@@ -139,14 +152,16 @@ export function deriveSmokeCommands(
   ];
 }
 
-/** 安装是否已完成（skill：目录存在；cordis：profile 依赖含包名；pkgName 同上优先级） */
+/** 安装是否已完成（skill：<name> 或旧 <name>-latest 存在；cordis：profile 依赖含包名；pkgName 同上优先级） */
 export function isInstalled(
   cfg: ResolvedConfig,
   plugin: DshPlugin,
   profile: string,
   pkgName?: string,
 ): boolean {
-  if (plugin.type === "skill") return existsSync(skillDest(cfg, plugin));
+  if (plugin.type === "skill") {
+    return existsSync(skillDest(cfg, plugin)) || existsSync(legacySkillDest(cfg, plugin));
+  }
   const pkgJsonPath = join(cfg.profilesDir, profile, "package.json");
   try {
     if (!existsSync(pkgJsonPath)) return false;
@@ -227,7 +242,7 @@ export async function routeInstall(
   // 2. collector 解析命令（有则优先执行；无则内置确定性路径兜底——两者都零 LLM）
   const smoke = deriveSmokeCommands(cfg, plugin, profile, pkgName);
   const useParsed = parsed.length > 0;
-  // 内置兜底：skill → git clone <repo> <skillsDir>/<name>-latest；cordis → dsh plugin add <pkgName>
+  // 内置兜底：skill → git clone <repo> <skillsDir>/<name>；cordis → dsh plugin add <pkgName>
   const result = useParsed
     ? await install(parsed, smoke)
     : await installPlugin(cfg, plugin, {

@@ -42,7 +42,7 @@ const withCommands = (plugin: DshPlugin, commands: string[]): DshPlugin => ({
 describe("routeInstall T0 路由", () => {
   it("已装 → mode=already，零命令执行", async () => {
     const cfg = makeCfg();
-    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
+    mkdirSync(join(cfg.skillsDir, "web-scraper"), { recursive: true });
     const runner = runnerMock();
     const r = await routeInstall(cfg, skillPlugin, { profile: "web", runner });
     expect(r.mode).toBe("already");
@@ -58,7 +58,7 @@ describe("routeInstall T0 路由", () => {
     ];
     const plugin = withCommands(skillPlugin, commands);
     // mock 模拟 clone 真实落地：执行 git clone 时创建 <name>-latest/SKILL.md（结构化冒烟据此通过）
-    const dest = join(cfg.skillsDir, "web-scraper-latest");
+    const dest = join(cfg.skillsDir, "web-scraper");
     const runner: CommandRunner = {
       run: vi.fn(async (command: string) => {
         if (/git\s+clone/.test(command)) {
@@ -74,7 +74,7 @@ describe("routeInstall T0 路由", () => {
     expect(r.needAi).toBe(false);
     const recipe = readRecipe(cfg, plugin.id);
     expect(recipe?.learnedFrom).toBe("parsed");
-    // 目标已规范化：<skillsDir>/web-scraper-latest（与冒烟/卸载约定一致，不加引号同 installer 约定）
+    // 目标已规范化：<skillsDir>/web-scraper（与冒烟/卸载约定一致，不加引号同 installer 约定）
     const expected = [
       `git clone --depth 1 https://github.com/acme/web-scraper.git ${dest}`,
     ];
@@ -140,7 +140,7 @@ describe("routeInstall T0 路由", () => {
 
   it("无解析命令 skill → builtin 兜底：内置 clone + SKILL.md 冒烟通过 → 配方", async () => {
     const cfg = makeCfg();
-    const dest = join(cfg.skillsDir, "web-scraper-latest");
+    const dest = join(cfg.skillsDir, "web-scraper");
     const runner: CommandRunner = {
       run: vi.fn(async (command: string) => {
         if (/git\s+clone/.test(command)) {
@@ -156,7 +156,7 @@ describe("routeInstall T0 路由", () => {
     expect(r.needAi).toBe(false);
     const recipe = readRecipe(cfg, skillPlugin.id);
     expect(recipe?.commands[0]).toContain("git clone");
-    expect(recipe?.commands[0]).toContain("web-scraper-latest");
+    expect(recipe?.commands[0]).toContain("web-scraper");
   });
 
   it("解析命令失败 → ok=false，needAi 升级并附原因", async () => {
@@ -186,7 +186,7 @@ describe("routeInstall T0 路由", () => {
     expect(skillSmoke).toHaveLength(1);
     expect(skillSmoke[0]).toMatchObject({
       type: "exists",
-      path: join(cfg.skillsDir, "web-scraper-latest", "SKILL.md"),
+      path: join(cfg.skillsDir, "web-scraper", "SKILL.md"),
     });
     const cordisSmoke = deriveSmokeCommands(cfg, cordisPlugin, "web");
     expect(cordisSmoke).toHaveLength(1);
@@ -247,12 +247,12 @@ describe("routeInstall T0 路由", () => {
 });
 
 describe("normalizeSkillCommands · skill 解析命令规范化", () => {
-  it("~/.dsh/skills 等外部目标 → 重定向进 cfg.skillsDir/<name>-latest", () => {
+  it("~/.dsh/skills 等外部目标 → 重定向进 cfg.skillsDir/<name>（issue #102 无后缀）", () => {
     const cfg = makeCfg();
     const out = normalizeSkillCommands(cfg, skillPlugin, [
       "git clone --depth 1 https://github.com/acme/web-scraper.git ~/.dsh/skills/web-scraper",
     ]);
-    const canonical = join(cfg.skillsDir, "web-scraper-latest");
+    const canonical = join(cfg.skillsDir, "web-scraper");
     expect(out[0]).toContain(canonical);
     expect(out[0]).not.toContain("~/.dsh");
     expect(out[0]).not.toContain('"');
@@ -260,7 +260,7 @@ describe("normalizeSkillCommands · skill 解析命令规范化", () => {
 
   it("目标已是规范位置 → 原样交付", () => {
     const cfg = makeCfg();
-    const canonical = join(cfg.skillsDir, "web-scraper-latest");
+    const canonical = join(cfg.skillsDir, "web-scraper");
     const cmd = `git clone https://github.com/acme/web-scraper.git ${JSON.stringify(canonical)}`;
     expect(normalizeSkillCommands(cfg, skillPlugin, [cmd])).toEqual([cmd]);
   });
@@ -283,5 +283,42 @@ describe("normalizeSkillCommands · skill 解析命令规范化", () => {
     expect(expandHome("~/.dsh/skills/x")).toBe(join(require("node:os").homedir(), ".dsh", "skills", "x"));
     expect(expandHome("~")).toBe(require("node:os").homedir());
     expect(expandHome("/abs/path")).toBe("/abs/path");
+  });
+});
+
+describe("issue #102 · skill 目录约定回归（<name> 无后缀 + 旧 -latest 残留兼容）", () => {
+  it("isInstalled：旧 <name>-latest 残留也视为已装（避免重复安装）", () => {
+    const cfg = makeCfg();
+    expect(isInstalled(cfg, skillPlugin, "web")).toBe(false);
+    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
+    expect(isInstalled(cfg, skillPlugin, "web")).toBe(true);
+  });
+
+  it("isInstalled：新约定 <name> 目录识别", () => {
+    const cfg = makeCfg();
+    mkdirSync(join(cfg.skillsDir, "web-scraper"), { recursive: true });
+    expect(isInstalled(cfg, skillPlugin, "web")).toBe(true);
+  });
+
+  it("deriveSmokeCommands：仅旧残留存在时冒烟指向残留（过渡期兼容）", () => {
+    const cfg = makeCfg();
+    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
+    writeFileSync(join(cfg.skillsDir, "web-scraper-latest", "SKILL.md"), "x");
+    const smoke = deriveSmokeCommands(cfg, skillPlugin, "web");
+    expect(smoke[0]).toMatchObject({
+      type: "exists",
+      path: join(cfg.skillsDir, "web-scraper-latest", "SKILL.md"),
+    });
+  });
+
+  it("deriveSmokeCommands：新约定 <name>/SKILL.md 优先", () => {
+    const cfg = makeCfg();
+    mkdirSync(join(cfg.skillsDir, "web-scraper"), { recursive: true });
+    writeFileSync(join(cfg.skillsDir, "web-scraper", "SKILL.md"), "x");
+    const smoke = deriveSmokeCommands(cfg, skillPlugin, "web");
+    expect(smoke[0]).toMatchObject({
+      type: "exists",
+      path: join(cfg.skillsDir, "web-scraper", "SKILL.md"),
+    });
   });
 });

@@ -3,7 +3,7 @@ import { mkdtempSync, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { resolveConfig } from "../src/config.js";
-import { installPlugin, isLockFailure, uninstallPlugin } from "../src/installer.js";
+import { installPlugin, isLockFailure, skillsDestName, uninstallPlugin } from "../src/installer.js";
 import type { CommandRunner, InstallStep } from "../src/types.js";
 import { makeMarket } from "./fixture.js";
 
@@ -49,7 +49,7 @@ describe("installPlugin · skill 型", () => {
   it("已装检测：目录存在 → alreadyInstalled 跳过", async () => {
     const cfg = makeCfg();
     const { mkdirSync } = await import("node:fs");
-    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
+    mkdirSync(join(cfg.skillsDir, "web-scraper"), { recursive: true });
     const r = await installPlugin(cfg, skillPlugin, { runner: runnerMock() });
     expect(r.alreadyInstalled).toBe(true);
   });
@@ -63,7 +63,7 @@ describe("installPlugin · skill 型", () => {
     // 重试次数 = MAX_RETRY + 1 次调用
     expect(runner.run).toHaveBeenCalledTimes(3);
     // 回滚：目标目录不存在
-    expect(existsSync(join(cfg.skillsDir, "web-scraper-latest"))).toBe(false);
+    expect(existsSync(join(cfg.skillsDir, "web-scraper"))).toBe(false);
   });
 
   it("文件占用（EPERM）类失败：不重试，立即失败并带可操作提示", async () => {
@@ -144,10 +144,10 @@ describe("uninstallPlugin", () => {
   it("skill 型：删除目录", async () => {
     const cfg = makeCfg();
     const { mkdirSync } = await import("node:fs");
-    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
+    mkdirSync(join(cfg.skillsDir, "web-scraper"), { recursive: true });
     const r = await uninstallPlugin(cfg, skillPlugin, { runner: runnerMock() });
     expect(r.ok).toBe(true);
-    expect(existsSync(join(cfg.skillsDir, "web-scraper-latest"))).toBe(false);
+    expect(existsSync(join(cfg.skillsDir, "web-scraper"))).toBe(false);
   });
 
   it("cordis 型：调用 dsh plugin remove", async () => {
@@ -206,5 +206,22 @@ describe("uninstallPlugin", () => {
     });
     expect(r.ok).toBe(false);
     expect(r.error).toBeTruthy();
+  });
+});
+
+describe("skillsDestName · issue #102 目录约定（<name> 无后缀）", () => {
+  it("返回 <name>（与 harness 扫描一致，splitNameVersion 可识别）", () => {
+    expect(skillsDestName(skillPlugin)).toBe("web-scraper");
+  });
+
+  it("卸载顺带清理旧约定残留 <name>-latest，避免双份技能", async () => {
+    const cfg = makeCfg();
+    const { mkdirSync } = await import("node:fs");
+    mkdirSync(join(cfg.skillsDir, "web-scraper"), { recursive: true });
+    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
+    const r = await uninstallPlugin(cfg, skillPlugin, { runner: runnerMock() });
+    expect(r.ok).toBe(true);
+    expect(existsSync(join(cfg.skillsDir, "web-scraper"))).toBe(false);
+    expect(existsSync(join(cfg.skillsDir, "web-scraper-latest"))).toBe(false);
   });
 });

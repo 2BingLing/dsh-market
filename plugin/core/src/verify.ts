@@ -17,6 +17,7 @@ import { join } from "node:path";
 import type { DshPlugin } from "@dsh-market/schema";
 import type { ResolvedConfig } from "./config.js";
 import type { ActivationState, ActivationStatus } from "./types.js";
+import { skillsDestName } from "./installer.js";
 
 interface ProfilePackage {
   dependencies?: Record<string, string>;
@@ -240,7 +241,7 @@ export function verifyAfterInstall(
   opts: { profile?: string; skillDirName?: string },
 ): ActivationStatus {
   if (plugin.type === "skill") {
-    const dirName = opts.skillDirName ?? `${plugin.name}-latest`;
+    const dirName = opts.skillDirName ?? skillsDestName(plugin);
     return verifyActivation(cfg, { type: "skill", name: dirName });
   }
   // cordis：真实依赖键名 = npm 包名（含 scope）

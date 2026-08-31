@@ -31,6 +31,10 @@ export function scanInstalled(
       const plugin =
         byName.get(baseName.toLowerCase()) ??
         byName.get(name.toLowerCase()) ??
+        // issue #102 旧约定残留：<name>-latest（市场条目 name=<name>，去掉后缀可识别）
+        (baseName.endsWith("-latest")
+          ? byName.get(baseName.slice(0, -"-latest".length).toLowerCase())
+          : null) ??
         null;
       found.push({
         pluginId: plugin?.id ?? null,

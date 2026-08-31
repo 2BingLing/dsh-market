@@ -196,14 +196,14 @@ describe("checkUpdates", () => {
   it("skill 型：远端有新提交（pushedAt > 本地 mtime）→ hasUpdate，kind=github", async () => {
     const cfg = makeCfg();
     mkdirSync(cfg.skillsDir, { recursive: true });
-    const dir = join(cfg.skillsDir, "web-scraper-latest");
+    const dir = join(cfg.skillsDir, "web-scraper");
     mkdirSync(dir, { recursive: true });
     writeFileSync(join(dir, "SKILL.md"), "x");
     const oldTime = new Date("2026-01-01T00:00:00Z").getTime() / 1000;
     utimesSync(dir, oldTime, oldTime);
     const plugin = market.plugins.find((p) => p.id === "acme/web-scraper")!;
     const installed: InstalledPlugin[] = [
-      { pluginId: plugin.id, localName: "web-scraper-latest", version: null, source: "skills", plugin },
+      { pluginId: plugin.id, localName: "web-scraper", version: null, source: "skills", plugin },
     ];
     const results = await checkUpdates(
       cfg,
@@ -217,13 +217,13 @@ describe("checkUpdates", () => {
   it("skill 型：本地 mtime 晚于远端提交 → 已最新", async () => {
     const cfg = makeCfg();
     mkdirSync(cfg.skillsDir, { recursive: true });
-    const dir = join(cfg.skillsDir, "web-scraper-latest");
+    const dir = join(cfg.skillsDir, "web-scraper");
     mkdirSync(dir, { recursive: true });
     const freshTime = Date.now() / 1000;
     utimesSync(dir, freshTime, freshTime);
     const plugin = market.plugins.find((p) => p.id === "acme/web-scraper")!;
     const installed: InstalledPlugin[] = [
-      { pluginId: plugin.id, localName: "web-scraper-latest", version: null, source: "skills", plugin },
+      { pluginId: plugin.id, localName: "web-scraper", version: null, source: "skills", plugin },
     ];
     const results = await checkUpdates(
       cfg,
@@ -399,7 +399,7 @@ describe("applyUpdate · skill 型（HEAD 对比）", () => {
     const plugin = market.plugins.find((p) => p.id === "acme/web-scraper")!;
     const item: InstalledPlugin = {
       pluginId: plugin.id,
-      localName: "web-scraper-latest",
+      localName: "web-scraper",
       version: null,
       source: "skills",
       plugin,

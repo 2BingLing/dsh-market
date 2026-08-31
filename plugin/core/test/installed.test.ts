@@ -137,3 +137,21 @@ describe("scanInstalled · scoped 依赖（issue #56 回归）", () => {
     expect(found.some((i) => i.pluginId === "acme/plain-dsh-tool")).toBe(true);
   });
 });
+
+describe("scanInstalled · skill 目录约定（issue #102 回归）", () => {
+  it("<name> 目录与旧 <name>-latest 残留都能匹配市场条目", () => {
+    const cfg = makeCfg();
+    const skill = plugin({ id: "acme/web-scraper", name: "web-scraper" });
+    const market: MarketData = {
+      schemaVersion: 2,
+      generatedAt: new Date().toISOString(),
+      plugins: [skill],
+    };
+    mkdirSync(join(cfg.skillsDir, "web-scraper"), { recursive: true });
+    mkdirSync(join(cfg.skillsDir, "web-scraper-latest"), { recursive: true });
+    const found = scanInstalled(cfg, market).filter((i) => i.source === "skills");
+    expect(found.map((i) => i.localName).sort()).toEqual(["web-scraper", "web-scraper-latest"]);
+    expect(found.find((i) => i.localName === "web-scraper")?.pluginId).toBe("acme/web-scraper");
+    expect(found.find((i) => i.localName === "web-scraper-latest")?.pluginId).toBe("acme/web-scraper");
+  });
+});

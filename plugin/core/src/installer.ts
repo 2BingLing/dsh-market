@@ -166,7 +166,7 @@ async function runSmoke(checks: SmokeCheck[], runner: CommandRunner): Promise<Sm
   return out;
 }
 
-/** skill 型：git clone 到 skills 目录（<name>-latest，无版本信息时） */
+/** skill 型：git clone 到 skills 目录（<name>，与 harness 扫描约定一致，issue #102） */
 async function installSkill(
   cfg: ResolvedConfig,
   plugin: DshPlugin,
@@ -383,9 +383,16 @@ async function rollbackCordis(
   step("rollback", "回滚", "done");
 }
 
-/** skill 型安装目标目录名（<name>-latest；路由器冒烟推导/配方命令共用此约定） */
+/**
+ * 技能目录命名约定（issue #102）：与 harness 实际扫描/加载一致——无版本后缀。
+ * 曾用 `<name>-latest`（旧），导致：装完 harness 可见性/冒烟/已装匹配全部错位、
+ * splitNameVersion 也解析不了 `-latest`。所有路径一律走 skillsDestName 唯一出口。
+ */
+export const SKILL_DEST_SUFFIX = "";
+
+/** skill 型安装目标目录名（唯一出口：installer/router/verify/update 共用） */
 export function skillsDestName(plugin: DshPlugin): string {
-  return `${plugin.name}-latest`;
+  return `${plugin.name}${SKILL_DEST_SUFFIX}`;
 }
 
 /** 从插件推断 npm 包名（cordis 型）：优先 homepage npm 路径，其次 name */
@@ -445,10 +452,15 @@ export async function uninstallPlugin(
       // 优先用已装目录名（localName），与 scanInstalled 的目录名一致
       const dest = options.localName
         ? join(cfg.skillsDir, options.localName)
-        : join(cfg.skillsDir, `${plugin.name}-latest`);
+        : join(cfg.skillsDir, skillsDestName(plugin));
       if (!existsSync(dest)) return { ok: true };
       if (options.dryRun) return { ok: true };
       await removeDirWithRetry(dest, options);
+      // 旧约定残留目录（<name>-latest，issue #102 修复前的安装）一并清理，避免"双份技能"
+      const legacy = join(cfg.skillsDir, `${plugin.name}-latest`);
+      if (legacy !== dest && existsSync(legacy)) {
+        await removeDirWithRetry(legacy, options);
+      }
       return { ok: true };
     }
     const profile = options.targetProfile ?? cfg.defaultProfile;
