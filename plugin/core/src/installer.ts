@@ -433,9 +433,28 @@ async function removeDirWithRetry(
     if (!existsSync(dest)) return;
     if (i < attempts - 1) await new Promise((r) => setTimeout(r, 800));
   }
-  // fs 失败后系统命令兜底
-  const cmd = process.platform === "win32" ? `rmdir /s /q "${dest}"` : `rm -rf "${dest}"`;
-  await options.runner.run(cmd, { timeoutMs: 60000 });
+  // fs 失败后系统命令兜底（Windows：路径经环境变量传给子进程——把命令面保持纯 ASCII，
+  // 绕开 cmd 引号经 execFile 二次引号化 / ANSI 重编码破坏非 ASCII 路径的问题，见坑 #70）
+  if (process.platform === "win32") {
+    if (!dest.includes(" ")) {
+      // 无空格路径：rd 无引号直接展开环境变量（实测中文路径可用）
+      await options.runner.run("rd /s /q %DSH_RM_TARGET%", {
+        timeoutMs: 60000,
+        env: { DSH_RM_TARGET: dest },
+      });
+    } else {
+      // 含空格路径：powershell -EncodedCommand（UTF-16LE base64，彻底绕开 cmd 引号/ANSI）
+      const ps =
+        'Remove-Item -LiteralPath "$env:DSH_RM_TARGET" -Recurse -Force';
+      const encoded = Buffer.from(ps, "utf16le").toString("base64");
+      await options.runner.run(`powershell -NoProfile -EncodedCommand ${encoded}`, {
+        timeoutMs: 60000,
+        env: { DSH_RM_TARGET: dest },
+      });
+    }
+  } else {
+    await options.runner.run(`rm -rf "${dest}"`, { timeoutMs: 60000 });
+  }
   if (existsSync(dest)) {
     throw new Error(`目录删除失败（可能被占用）: ${dest}`);
   }
