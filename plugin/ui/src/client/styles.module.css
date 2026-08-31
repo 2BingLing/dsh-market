@@ -16,19 +16,23 @@
  * 白底表面类由文件尾深色块按类覆盖（#fff 还兼做主按钮文字色，不能无脑替换）。 */
 :global(:root) {
   --mkt-text: #252525;
-  --mkt-text2: var(--mkt-text2);
+  --mkt-text2: #5f6670;
   --mkt-text3: #8a919f;
   --mkt-brand: #4d6bfe;
-  --mkt-brand-strong: var(--mkt-brand-strong);
+  --mkt-brand-strong: #2e4bd8;
   --mkt-brand-tint: #eaf2fb;
-  --mkt-brand-soft: var(--mkt-brand-soft);
+  --mkt-brand-soft: #c9d4f5;
   --mkt-border: #e5e7eb;
-  --mkt-border-strong: var(--mkt-border-strong);
+  --mkt-border-strong: #d4d7dc;
   --mkt-divider: #eef0f2;
   --mkt-selected: #f3f4f6;
-  --mkt-hover: var(--mkt-hover);
-  --mkt-bg: var(--mkt-bg);
+  --mkt-hover: #edeef1;
+  --mkt-bg: #f6f8fb;
   --mkt-inverse: #252525;
+  /* 表面层级（白底类专用）：一级=面板 · 二级=卡片/弹窗 · 三级=按钮/输入/胶囊 */
+  --mkt-surface-a: #ffffff;
+  --mkt-surface-b: #ffffff;
+  --mkt-surface-c: #ffffff;
 }
 
 /* ---------- 入口按钮（sidebar.footer.action） ----------
@@ -68,8 +72,8 @@
   background: var(--dsw-alias-interactive-bg-hover, var(--mkt-hover));
 }
 .trigger[data-active] {
-  color: var(--dsw-alias-brand-primary, #4d6bfe);
-  background: var(--dsw-alias-interactive-bg-hover, var(--mkt-hover));
+  color: var(--mkt-brand);
+  background: var(--mkt-hover);
 }
 /* 深色主题（issue #101：勿写死浅色值；深色下需浅色文字保可见——
  * 文本颜色不依赖 harness token 解析，直接固定浅色） */
@@ -1622,33 +1626,61 @@
     --mkt-hover: #2a2e35;
     --mkt-bg: #171a1f;
     --mkt-inverse: #31353d;
+    --mkt-surface-a: #1b1e24;
+    --mkt-surface-b: #21252c;
+    --mkt-surface-c: #262a32;
   }
-  /* 面板主表面：一级底（面板）→ 二级底（卡片/弹窗）→ 三级底（按钮/输入/胶囊） */
   .panel {
-    background: #1b1e24;
     color-scheme: dark;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   }
-  .card,
-  .settingCard,
-  .quizCard,
-  .modal {
-    background: #21252c;
-  }
-  .btn,
-  .iconBtn,
-  .favBtn,
-  .repoBtn,
-  .searchInput,
-  .select,
-  .deviceCode,
-  .filterChip,
-  .semanticToggle,
-  .semanticSwitch,
-  .hotTag,
-  .loadMore,
-  .quizChip,
-  .stepDot {
-    background: #262a32;
-  }
+}
+
+/* 深色信号②：harness 设置切深色（官方 dsh-client-ui-theme 写 <html style="color-scheme: dark">，
+ * Desktop 切深色主路径——prefers-color-scheme 只在 preference=system 且 OS 深色时才翻转） */
+:global(:root[style*='color-scheme: dark']) {
+  --mkt-text: #e8eaed;
+  --mkt-text2: #9aa1a8;
+  --mkt-text3: #7d8794;
+  --mkt-brand: #6d8bff;
+  --mkt-brand-strong: #8aa5ff;
+  --mkt-brand-tint: rgba(109, 139, 255, 0.16);
+  --mkt-brand-soft: rgba(109, 139, 255, 0.24);
+  --mkt-border: #2b2f37;
+  --mkt-border-strong: #3a3f49;
+  --mkt-divider: #262a31;
+  --mkt-selected: #2e323a;
+  --mkt-hover: #2a2e35;
+  --mkt-bg: #171a1f;
+  --mkt-inverse: #31353d;
+  --mkt-surface-a: #1b1e24;
+  --mkt-surface-b: #21252c;
+  --mkt-surface-c: #262a32;
+}
+:global(:root[style*='color-scheme: dark']) .panel {
+  color-scheme: dark;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+/* 侧边栏入口：harness 切深色时也切浅色文字（与媒体查询分支等价） */
+:global(:root[style*='color-scheme: dark']) .trigger {
+  color: #e8eaed;
+}
+:global(:root[style*='color-scheme: dark']) .trigger:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+:global(:root[style*='color-scheme: dark']) .trigger[data-active] {
+  color: var(--mkt-brand);
+  background: var(--mkt-hover);
+}
+
+/* ---------- 表面底色令牌化（放文件最末，覆盖原始白底规则；深色值由两处信号块翻转） ---------- */
+.panel {
+  background: var(--mkt-surface-a);
+}
+.card,
+.settingCard,
+.quizCard,
+.modal {
+  background: var(--mkt-surface-b);
 }
