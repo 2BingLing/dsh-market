@@ -326,8 +326,8 @@
   cursor: not-allowed;
 }
 .btnPrimary {
-  background: #4d6bfe;
-  border-color: #4d6bfe;
+  background: var(--mkt-brand);
+  border-color: var(--mkt-brand);
   color: #ffffff;
   box-shadow: 0 1px 3px rgba(77, 107, 254, 0.35);
 }
@@ -354,11 +354,11 @@
 }
 .btnDanger {
   color: var(--mkt-text-danger);
-  border-color: #f3c8c8;
+  border-color: var(--mkt-chip-red-border);
 }
 .btnDanger:hover {
-  background: #fdeeee;
-  border-color: #f3c8c8;
+  background: var(--mkt-chip-red-bg);
+  border-color: var(--mkt-chip-red-border);
 }
 
 /* ---------- 插件卡片（B：.plugin-card） ---------- */
@@ -414,7 +414,7 @@
 .cardStars > svg {
   width: 13px;
   height: 13px;
-  color: #f59e0b;
+  color: var(--mkt-chip-warn-text);
 }
 .cardDesc {
   font-size: 13px;
@@ -442,7 +442,7 @@
 .reason {
   font-size: 11px;
   color: var(--mkt-chip-green-text);
-  background: #eef8f3;
+  background: var(--mkt-chip-green-bg);
   padding: 2px 6px;
   border-radius: 8px;
 }
@@ -560,7 +560,7 @@
 /* ---------- 标签（B：.tag 灰底深字；tagOn 选中态） ---------- */
 .tag {
   font-size: 11px;
-  color: #4a5460;
+  color: var(--mkt-text3);
   background: #f3f4f6;
   padding: 2px 6px;
   border-radius: 8px;
@@ -1096,7 +1096,7 @@
   padding: 3px 8px;
   border-radius: 10px;
   background: var(--mkt-chip-warn-bg);
-  border: 1px dashed #e3c997;
+  border: 1px dashed var(--mkt-chip-gold-border);
   color: var(--mkt-chip-warn-text);
 }
 .unmatchedMore {
@@ -1142,8 +1142,8 @@
   padding: 1px 8px;
   border-radius: 10px;
   margin-top: 5px;
-  background: #eef2ff;
-  border: 1px solid #d6defa;
+  background: var(--mkt-brand-tint);
+  border: 1px solid var(--mkt-brand-soft);
   color: #4d6bfe;
 }
 .activationLive {
@@ -1159,7 +1159,7 @@
 .activationInert {
   background: #f3f4f6;
   border: 1px solid var(--mkt-border-strong);
-  color: #6b7280;
+  color: var(--mkt-text3);
 }
 
 /* ---------- 插件自身更新提示条（面板顶部，所有 tab 之上） ---------- */
@@ -1247,7 +1247,7 @@
   border-radius: 9px;
 }
 .statusOk {
-  background: #eef8f3;
+  background: var(--mkt-chip-green-bg);
   color: var(--mkt-text-ok);
 }
 .statusOff {
@@ -1483,7 +1483,7 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #eef8f3;
+  background: var(--mkt-chip-green-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1729,7 +1729,7 @@
   background: var(--mkt-hover);
 }
 
-/* ---------- 表面底色令牌化（放文件最末，覆盖原始白底规则；深色值由两处信号块翻转） ---------- */
+/* ---------- 表面底色令牌化（放文件最末：默认规则覆盖原白底；变体重申紧随其后，不被默认覆盖 ---------- */
 .panel {
   background: var(--mkt-surface-a);
 }
@@ -1754,4 +1754,20 @@
 .select,
 .stepDot {
   background: var(--mkt-surface-c);
+}
+/* 变体重申（位于默认规则之后，同特异性后胜 → 自定义底不被默认表面覆盖） */
+.btnPrimary,
+.btnPrimary:hover,
+.btnPrimary:active {
+  background: var(--mkt-brand);
+  border-color: var(--mkt-brand);
+}
+.btnPrimary:hover {
+  background: var(--mkt-brand-strong);
+  border-color: var(--mkt-brand-strong);
+}
+.btnDanger {
+  background: var(--mkt-chip-red-bg);
+  color: var(--mkt-text-danger);
+  border-color: var(--mkt-chip-red-border);
 }
