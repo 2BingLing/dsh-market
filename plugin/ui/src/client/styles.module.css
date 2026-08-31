@@ -1,9 +1,9 @@
 /* ============================================================
  * DSH Market 插件市场面板 · 方向 B「克制增强」
  * 全部样式值迁移自 design-ref/ui-redesign/direction-B-克制增强.html
- * 设计令牌：--text #252525 / --text-2 #5F6670 / --text-3 #8A919F / --text-4 #9299A3
- *           --brand #4D6BFE / --brand-tint #EAF2FB / --border #E5E7EB / --divider #EEF0F2
- *           --selected #F3F4F6 / 阴影 card 0 1px 3px .06 / hover 0 2px 8px .10
+ * 设计令牌：--text var(--mkt-text) / --text-2 var(--mkt-text2) / --text-3 var(--mkt-text3) / --text-4 var(--mkt-text3)
+ *           --brand var(--mkt-brand) / --brand-tint var(--mkt-brand-tint) / --border var(--mkt-border) / --divider var(--mkt-divider)
+ *           --selected var(--mkt-selected) / 阴影 card 0 1px 3px .06 / hover 0 2px 8px .10
  *           radius-card 11px / radius-btn 8px
  * ============================================================ */
 
@@ -11,12 +11,34 @@
   box-sizing: border-box;
 }
 
+/* ---------- 设计令牌（默认浅色；深色主题覆盖见文件尾 @media prefers-color-scheme: dark） ----------
+ * 面板整体主题适配（2026-08-30）：颜色值统一走 --mkt-* 变量；
+ * 白底表面类由文件尾深色块按类覆盖（#fff 还兼做主按钮文字色，不能无脑替换）。 */
+:global(:root) {
+  --mkt-text: #252525;
+  --mkt-text2: var(--mkt-text2);
+  --mkt-text3: #8a919f;
+  --mkt-brand: #4d6bfe;
+  --mkt-brand-strong: var(--mkt-brand-strong);
+  --mkt-brand-tint: #eaf2fb;
+  --mkt-brand-soft: var(--mkt-brand-soft);
+  --mkt-border: #e5e7eb;
+  --mkt-border-strong: var(--mkt-border-strong);
+  --mkt-divider: #eef0f2;
+  --mkt-selected: #f3f4f6;
+  --mkt-hover: var(--mkt-hover);
+  --mkt-bg: var(--mkt-bg);
+  --mkt-inverse: #252525;
+}
+
 /* ---------- 入口按钮（sidebar.footer.action） ----------
  * issue #101 适配：官方 footerActions 容器 flex nowrap，dsh-chat-import 等
  * 插件按钮 flex:0 0 100% 会占满整行把本按钮挤出侧边栏。
  * 方案：① 容器级规则把槽位包裹层改为 flex wrap（各按钮上下堆叠）
  *      ② 本按钮独占一行（flex:0 0 100%）
- *      ③ 图标 16×16、颜色走主题变量（不写死浅色值） */
+ *      ③ 图标 16×16、颜色走主题变量（不写死浅色值）
+ * 用户定案（2026-08-30）：logo 与文字常驻深色（浅色主题下默认即深色主色，与官方
+ *      设置按钮一致，不再等 hover）；背景保持透明；深色主题下文字换浅色（issue #101）。 */
 :global([data-slot='sidebar.footer.action']) {
   display: flex !important;
   flex-wrap: wrap;
@@ -34,19 +56,31 @@
   padding: 0 12px;
   background: transparent;
   border: none;
-  color: var(--dsw-alias-label-secondary, #5f6670);
+  /* 常驻深色：图标与文字默认即深色主色（浅色主题） */
+  color: var(--dsw-alias-label-primary, var(--mkt-text));
   cursor: pointer;
   font-size: 13px;
   border-radius: 8px;
   box-sizing: border-box;
 }
 .trigger:hover {
-  color: var(--dsw-alias-label-primary, #252525);
-  background: var(--dsw-alias-interactive-bg-hover, #edeef1);
+  color: var(--dsw-alias-label-primary, var(--mkt-text));
+  background: var(--dsw-alias-interactive-bg-hover, var(--mkt-hover));
 }
 .trigger[data-active] {
   color: var(--dsw-alias-brand-primary, #4d6bfe);
-  background: var(--dsw-alias-interactive-bg-hover, #edeef1);
+  background: var(--dsw-alias-interactive-bg-hover, var(--mkt-hover));
+}
+/* 深色主题（issue #101：勿写死浅色值；深色下需浅色文字保可见——
+ * 文本颜色不依赖 harness token 解析，直接固定浅色） */
+@media (prefers-color-scheme: dark) {
+  .trigger {
+    color: #e8eaed;
+  }
+  .trigger:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
 }
 .triggerIcon {
   display: inline-flex;
@@ -91,7 +125,7 @@
   pointer-events: auto;
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
-  color: #252525;
+  color: var(--mkt-text);
   font-size: 13px;
   -webkit-font-smoothing: antialiased;
 }
@@ -119,7 +153,7 @@
   font-weight: 600;
 }
 .subtitle {
-  color: #2e4bd8;
+  color: var(--mkt-brand-strong);
   background: #eaf2fb;
   padding: 2px 8px;
   border-radius: 10px;
@@ -142,7 +176,7 @@
 }
 .headerClose:hover {
   background: #f3f4f6;
-  color: #252525;
+  color: var(--mkt-text);
 }
 .headerClose svg {
   width: 16px;
@@ -162,17 +196,17 @@
   padding: 10px 4px;
   margin: 0 8px;
   font-size: 13px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   cursor: pointer;
   background: none;
   border: none;
   white-space: nowrap;
 }
 .tab:hover {
-  color: #252525;
+  color: var(--mkt-text);
 }
 .tabOn {
-  color: #252525;
+  color: var(--mkt-text);
   font-weight: 600;
 }
 .tabOn::after {
@@ -193,13 +227,13 @@
   overflow-y: auto;
   padding: 16px 16px 20px;
   scrollbar-width: thin;
-  scrollbar-color: #d4d7dc transparent;
+  scrollbar-color: var(--mkt-border-strong) transparent;
 }
 .body::-webkit-scrollbar {
   width: 6px;
 }
 .body::-webkit-scrollbar-thumb {
-  background: #d4d7dc;
+  background: var(--mkt-border-strong);
   border-radius: 3px;
 }
 .body::-webkit-scrollbar-track {
@@ -238,7 +272,7 @@
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: #252525;
+  color: var(--mkt-text);
 }
 .sectionNote {
   margin-left: auto;
@@ -254,7 +288,7 @@
   border-radius: 8px;
   border: 1px solid #e5e7eb;
   background: #ffffff;
-  color: #252525;
+  color: var(--mkt-text);
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   transition: background-color 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
@@ -262,7 +296,7 @@
 }
 .btn:hover {
   background: #f3f4f6;
-  border-color: #d8dbe1;
+  border-color: var(--mkt-border-strong);
 }
 .btn:disabled {
   opacity: 0.5;
@@ -275,8 +309,8 @@
   box-shadow: 0 1px 3px rgba(77, 107, 254, 0.35);
 }
 .btnPrimary:hover {
-  background: #3652e6;
-  border-color: #3652e6;
+  background: var(--mkt-brand-strong);
+  border-color: var(--mkt-brand-strong);
 }
 .btnPrimary:disabled {
   opacity: 0.5;
@@ -285,11 +319,11 @@
 .btnGhost {
   border-color: transparent;
   box-shadow: none;
-  color: #5f6670;
+  color: var(--mkt-text2);
 }
 .btnGhost:hover {
   background: #f3f4f6;
-  color: #252525;
+  color: var(--mkt-text);
 }
 .btnSm {
   padding: 4px 11px;
@@ -321,7 +355,7 @@
 .card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
-  border-color: #dadde3;
+  border-color: var(--mkt-border-strong);
 }
 .cardHead {
   display: flex;
@@ -331,7 +365,7 @@
 .cardName {
   font-size: 14px;
   font-weight: 600;
-  color: #252525;
+  color: var(--mkt-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -342,7 +376,7 @@
   padding: 1px 7px;
   border-radius: 10px;
   background: #eaf2fb;
-  color: #2e4bd8;
+  color: var(--mkt-brand-strong);
   flex: 0 0 auto;
 }
 .cardStars {
@@ -351,7 +385,7 @@
   align-items: center;
   gap: 4px;
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   flex: 0 0 auto;
 }
 .cardStars > svg {
@@ -361,7 +395,7 @@
 }
 .cardDesc {
   font-size: 13px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   line-height: 1.55;
   margin: 8px 0 9px;
   display: -webkit-box;
@@ -391,7 +425,7 @@
 }
 .reasonAi {
   font-size: 11px;
-  color: #2e4bd8;
+  color: var(--mkt-brand-strong);
   background: #eaf2fb;
   padding: 2px 6px;
   border-radius: 8px;
@@ -421,7 +455,7 @@
   height: 28px;
   flex: 0 0 auto;
   border-radius: 7px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--mkt-border-strong);
   background: #ffffff;
   display: flex;
   align-items: center;
@@ -434,7 +468,7 @@
 }
 .iconBtn:hover {
   color: #4d6bfe;
-  border-color: #c9d4f5;
+  border-color: var(--mkt-brand-soft);
 }
 .iconBtn:disabled {
   opacity: 0.5;
@@ -446,7 +480,7 @@
 }
 .iconBtnOn {
   color: #4d6bfe;
-  border-color: #c9d4f5;
+  border-color: var(--mkt-brand-soft);
 }
 /* 收藏按钮（文字「收藏」固定，图标随状态变实心/空心 + 变色；宽度自适应不挤压同行） */
 .favBtn {
@@ -455,10 +489,10 @@
   justify-content: center;
   gap: 4px;
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   padding: 4px 9px;
   border-radius: 7px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--mkt-border-strong);
   background: #ffffff;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -468,11 +502,11 @@
 }
 .favBtn:hover {
   color: #4d6bfe;
-  border-color: #c9d4f5;
+  border-color: var(--mkt-brand-soft);
 }
 .favBtnOn {
   color: #4d6bfe;
-  border-color: #c9d4f5;
+  border-color: var(--mkt-brand-soft);
   background: #eaf2fb;
 }
 /* 仓库链接按钮（B：.link-btn） */
@@ -481,10 +515,10 @@
   align-items: center;
   gap: 5px;
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   padding: 4px 9px;
   border-radius: 7px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--mkt-border-strong);
   background: #ffffff;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
@@ -497,7 +531,7 @@
 }
 .repoBtn:hover {
   color: #4d6bfe;
-  border-color: #c9d4f5;
+  border-color: var(--mkt-brand-soft);
 }
 
 /* ---------- 标签（B：.tag 灰底深字；tagOn 选中态） ---------- */
@@ -513,11 +547,11 @@
   transition: background-color 0.12s ease, color 0.12s ease;
 }
 .tag:hover {
-  color: #2e4bd8;
+  color: var(--mkt-brand-strong);
   background: #eaf2fb;
 }
 .tagOn {
-  color: #2e4bd8;
+  color: var(--mkt-brand-strong);
   background: #eaf2fb;
   font-weight: 500;
 }
@@ -529,7 +563,7 @@
   align-items: center;
   gap: 8px;
   background: #eaf2fb;
-  border: 1px solid #d6e4f8;
+  border: 1px solid var(--mkt-brand-tint);
   border-radius: 11px;
   padding: 9px 12px;
   margin-bottom: 4px;
@@ -546,7 +580,7 @@
 }
 .recommendHint {
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   line-height: 1.5;
   flex: 1;
 }
@@ -588,7 +622,7 @@
 }
 .quizDesc {
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   margin: 0 0 12px;
 }
 .quizTags {
@@ -599,7 +633,7 @@
 }
 .quizChip {
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   border: 1px solid #e5e7eb;
   background: #ffffff;
   padding: 5px 11px;
@@ -609,13 +643,13 @@
   transition: all 0.14s ease;
 }
 .quizChip:hover {
-  border-color: #c9d4f5;
+  border-color: var(--mkt-brand-soft);
   color: #4d6bfe;
 }
 .quizChipOn {
   background: #eaf2fb;
-  border-color: #aec1f0;
-  color: #2e4bd8;
+  border-color: var(--mkt-brand-soft);
+  color: var(--mkt-brand-strong);
   font-weight: 500;
 }
 .quizActions {
@@ -670,7 +704,7 @@
 }
 .sceneDesc {
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   line-height: 1.5;
 }
 .sceneHint {
@@ -739,12 +773,12 @@
 .searchInput {
   width: 100%;
   height: 38px;
-  border: 1px solid #d9dce1;
+  border: 1px solid var(--mkt-border-strong);
   border-radius: 10px;
   padding: 0 34px;
   font-size: 13px;
   font-family: inherit;
-  color: #252525;
+  color: var(--mkt-text);
   background: #ffffff;
   outline: none;
   transition: border-color 0.16s ease, box-shadow 0.16s ease;
@@ -790,7 +824,7 @@
 }
 .filterChip {
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   border: 1px solid #e5e7eb;
   background: #ffffff;
   padding: 4px 11px;
@@ -801,12 +835,12 @@
 }
 .filterChip:hover {
   color: #4d6bfe;
-  border-color: #c9d4f5;
+  border-color: var(--mkt-brand-soft);
 }
 .filterChipOn {
   background: #eaf2fb;
-  border-color: #aec1f0;
-  color: #2e4bd8;
+  border-color: var(--mkt-brand-soft);
+  color: var(--mkt-brand-strong);
   font-weight: 500;
 }
 
@@ -849,7 +883,7 @@
   width: 34px;
   height: 20px;
   border-radius: 10px;
-  background: #d4d7dc;
+  background: var(--mkt-border-strong);
   cursor: not-allowed;
   flex: 0 0 auto;
   opacity: 0.7;
@@ -880,7 +914,7 @@
 }
 .hotTag {
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   border: 1px solid #e5e7eb;
   background: #ffffff;
   padding: 5px 11px;
@@ -890,13 +924,13 @@
   transition: all 0.14s ease;
 }
 .hotTag:hover {
-  border-color: #c9d4f5;
+  border-color: var(--mkt-brand-soft);
   color: #4d6bfe;
 }
 .hotTagOn {
   background: #eaf2fb;
-  border-color: #aec1f0;
-  color: #2e4bd8;
+  border-color: var(--mkt-brand-soft);
+  color: var(--mkt-brand-strong);
   font-weight: 500;
 }
 .tagMoreRow {
@@ -921,11 +955,11 @@
 }
 .resultCount {
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   margin: 2px 0 10px;
 }
 .resultCount b {
-  color: #252525;
+  color: var(--mkt-text);
 }
 .loadMoreRow {
   margin: 14px 0 6px;
@@ -938,7 +972,7 @@
   border-radius: 8px;
   border: 1px solid #e5e7eb;
   background: #ffffff;
-  color: #252525;
+  color: var(--mkt-text);
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   transition: background-color 0.14s ease, border-color 0.14s ease;
@@ -946,7 +980,7 @@
 }
 .loadMore:hover {
   background: #f3f4f6;
-  border-color: #d8dbe1;
+  border-color: var(--mkt-border-strong);
 }
 .semanticResult {
   display: flex;
@@ -966,7 +1000,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 12px;
-  color: #d4d7dc;
+  color: var(--mkt-border-strong);
 }
 .emptyIcon > svg {
   width: 44px;
@@ -976,7 +1010,7 @@
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 5px;
-  color: #252525;
+  color: var(--mkt-text);
 }
 .emptyDesc {
   font-size: 12px;
@@ -1012,7 +1046,7 @@
 .installedName {
   font-size: 14px;
   font-weight: 600;
-  color: #252525;
+  color: var(--mkt-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1101,7 +1135,7 @@
 }
 .activationInert {
   background: #f3f4f6;
-  border: 1px solid #d6d9df;
+  border: 1px solid var(--mkt-border-strong);
   color: #6b7280;
 }
 
@@ -1171,7 +1205,7 @@
 }
 .versionLabel {
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   flex: 0 0 auto;
 }
 .versionCode {
@@ -1181,7 +1215,7 @@
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   padding: 2px 8px;
-  color: #252525;
+  color: var(--mkt-text);
 }
 .settingStatus {
   margin-left: auto;
@@ -1207,13 +1241,13 @@
   gap: 8px;
 }
 .settingsLabel {
-  color: #5f6670;
+  color: var(--mkt-text2);
   font-size: 12px;
   white-space: nowrap;
 }
 .ghTip {
   margin: 0;
-  color: #5f6670;
+  color: var(--mkt-text2);
   font-size: 12px;
   line-height: 1.7;
 }
@@ -1246,7 +1280,7 @@
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
 }
 .deviceCode {
   font-size: 18px;
@@ -1262,7 +1296,7 @@
 .ghPollState {
   margin: 0;
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
 }
 .deviceFlow a {
   color: #4d6bfe;
@@ -1295,19 +1329,19 @@
 .fieldLabel {
   display: block;
   font-size: 12px;
-  color: #5f6670;
+  color: var(--mkt-text2);
   margin-bottom: 5px;
 }
 .input,
 .select {
   width: 100%;
   height: 34px;
-  border: 1px solid #d9dce1;
+  border: 1px solid var(--mkt-border-strong);
   border-radius: 9px;
   padding: 0 10px;
   font-size: 13px;
   font-family: inherit;
-  color: #252525;
+  color: var(--mkt-text);
   background: #ffffff;
   outline: none;
   transition: border-color 0.16s ease, box-shadow 0.16s ease;
@@ -1391,7 +1425,7 @@
 }
 .modalClose:hover {
   background: #f3f4f6;
-  color: #252525;
+  color: var(--mkt-text);
 }
 .modalClose svg {
   width: 16px;
@@ -1404,7 +1438,7 @@
 }
 .modalDesc {
   margin: 0;
-  color: #5f6670;
+  color: var(--mkt-text2);
   font-size: 12.5px;
   line-height: 1.6;
 }
@@ -1440,7 +1474,7 @@
 .modalSuccessTitle {
   font-weight: 600;
   font-size: 14px;
-  color: #252525;
+  color: var(--mkt-text);
 }
 .modalError {
   display: flex;
@@ -1480,7 +1514,7 @@
   border-radius: 8px;
   font-size: 12px;
   font-family: ui-monospace, Menlo, monospace;
-  color: #5f6670;
+  color: var(--mkt-text2);
   line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-all;
@@ -1505,7 +1539,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 1.5px solid #d4d7dc;
+  border: 1.5px solid var(--mkt-border-strong);
   background: #ffffff;
   display: flex;
   align-items: center;
@@ -1516,14 +1550,14 @@
   transition: all 0.2s ease;
 }
 .stepActive {
-  color: #252525;
+  color: var(--mkt-text);
 }
 .stepActive .stepDot {
   border-color: #4d6bfe;
   color: #4d6bfe;
 }
 .stepDone {
-  color: #252525;
+  color: var(--mkt-text);
 }
 .stepDone .stepDot {
   background: #4d6bfe;
@@ -1533,7 +1567,7 @@
 .stepBar {
   flex: 1;
   height: 1.5px;
-  background: #e7e9ed;
+  background: var(--mkt-border-strong);
   margin: 0 6px;
   border-radius: 1px;
 }
@@ -1547,7 +1581,7 @@
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: #252525;
+  background: var(--mkt-inverse);
   color: #ffffff;
   font-size: 12.5px;
   padding: 8px 16px;
@@ -1565,5 +1599,56 @@
   to {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ---------- 深色主题：面板整体适配（2026-08-30） ----------
+ * 机制：@media prefers-color-scheme: dark —— DSH Desktop 深色/跟随 OS 时命中
+ * （web 构建恒浅色，实测 html color-scheme: light 不受影响）。
+ * 文字/边框/品牌色已令牌化 → 只换令牌；白底表面按类覆盖；彩色 pill 强调色保留。 */
+@media (prefers-color-scheme: dark) {
+  :global(:root) {
+    --mkt-text: #e8eaed;
+    --mkt-text2: #9aa1a8;
+    --mkt-text3: #7d8794;
+    --mkt-brand: #6d8bff;
+    --mkt-brand-strong: #8aa5ff;
+    --mkt-brand-tint: rgba(109, 139, 255, 0.16);
+    --mkt-brand-soft: rgba(109, 139, 255, 0.24);
+    --mkt-border: #2b2f37;
+    --mkt-border-strong: #3a3f49;
+    --mkt-divider: #262a31;
+    --mkt-selected: #2e323a;
+    --mkt-hover: #2a2e35;
+    --mkt-bg: #171a1f;
+    --mkt-inverse: #31353d;
+  }
+  /* 面板主表面：一级底（面板）→ 二级底（卡片/弹窗）→ 三级底（按钮/输入/胶囊） */
+  .panel {
+    background: #1b1e24;
+    color-scheme: dark;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+  .card,
+  .settingCard,
+  .quizCard,
+  .modal {
+    background: #21252c;
+  }
+  .btn,
+  .iconBtn,
+  .favBtn,
+  .repoBtn,
+  .searchInput,
+  .select,
+  .deviceCode,
+  .filterChip,
+  .semanticToggle,
+  .semanticSwitch,
+  .hotTag,
+  .loadMore,
+  .quizChip,
+  .stepDot {
+    background: #262a32;
   }
 }

@@ -1415,7 +1415,7 @@ function PacksTab(props: {
                 ),
                 El('div', { className: styles.cardName }, p.name),
                 El('div', { className: styles.cardDesc }, p.descriptionZh ?? '（无简介）'),
-                El('div', { style: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: rate >= 80 ? '#1E7A46' : rate >= 50 ? '#B26A00' : '#B33A3A', padding: '4px 8px', borderRadius: 6, background: '#F6F8FB', marginBottom: 8 } },
+                El('div', { style: { display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: rate >= 80 ? '#1E7A46' : rate >= 50 ? '#B26A00' : '#B33A3A', padding: '4px 8px', borderRadius: 6, background: 'var(--mkt-bg)', marginBottom: 8 } },
                   `✓ ${ok}/${total} 条目可解析 · ${inMarket} 已在市场`,
                   El('b', {}, `${rate}%`),
                 ),
@@ -1427,7 +1427,7 @@ function PacksTab(props: {
                   }, open ? '收起条目' : '查看条目'),
                 ),
                 open
-                  ? El('div', { style: { display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8, paddingTop: 8, borderTop: '1px solid #EEF2F7' } },
+                  ? El('div', { style: { display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--mkt-border)' } },
                       ...p.entries.map((e, i) =>
                         El('div', {
                           key: `${e.id}-${i}`,
@@ -1438,8 +1438,8 @@ function PacksTab(props: {
                         },
                           El('span', {}, e.resolved?.ok ? '✓' : '✗'),
                           El('code', { style: { fontSize: 10.5 } }, e.id),
-                          El('span', { style: { fontSize: 10, color: '#8CA3BB' } }, e.type),
-                          El('span', { style: { marginLeft: 'auto', fontSize: 10, color: '#8CA3BB' } },
+                          El('span', { style: { fontSize: 10, color: 'var(--mkt-text3)' } }, e.type),
+                          El('span', { style: { marginLeft: 'auto', fontSize: 10, color: 'var(--mkt-text3)' } },
                             e.resolved?.ok
                               ? (e.resolved.inMarket ? '已在市场' : '可安装')
                               : (e.resolved?.reason ?? '解析失败')),
@@ -1651,7 +1651,7 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
     El('div', { className: styles.panel, onClick: (e: MouseEvent) => e.stopPropagation() },
       El('div', { className: styles.header },
         El('span', { className: styles.titleIcon },
-          El(MarketLogo, { size: 24, color: '#4D6BFE', eyeColor: '#FFFFFF' }),
+          El(MarketLogo, { size: 24, color: 'var(--mkt-brand)', eyeColor: '#FFFFFF' }),
         ),
         El('span', { className: styles.title }, '插件市场'),
         El('span', { className: styles.subtitle }, `${plugins.length} 个插件`),
