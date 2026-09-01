@@ -1,14 +1,32 @@
 {
-  "generatedAt": "2026-09-01T05:51:19.337Z",
+  "generatedAt": "2026-09-01T21:49:10.577Z",
   "replies": [
     {
       "issueNumbers": [
-        104
+        110
       ],
-      "fullName": "moononnn/DeepSeek-Harness-Hanako-Memory",
+      "fullName": "kongshan-zhuyu/dsh-balance-quota",
       "type": "cordis-plugin",
-      "stars": 2,
-      "score": 58
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        114
+      ],
+      "fullName": "mhxy13867806343/my-dsh-desktop-extra",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 17
+    },
+    {
+      "issueNumbers": [
+        115
+      ],
+      "fullName": "Breathay/dsh-chat-turn-fold",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 17
     }
   ]
 }
