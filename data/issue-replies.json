@@ -1,50 +1,14 @@
 {
-  "generatedAt": "2026-09-01T00:17:13.708Z",
+  "generatedAt": "2026-09-01T05:51:19.337Z",
   "replies": [
     {
       "issueNumbers": [
-        108
+        104
       ],
-      "fullName": "Haniubub/seo-toolkit",
-      "type": "skill",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        109
-      ],
-      "fullName": "Crosery/dsh-viewer",
+      "fullName": "moononnn/DeepSeek-Harness-Hanako-Memory",
       "type": "cordis-plugin",
       "stars": 2,
       "score": 58
-    },
-    {
-      "issueNumbers": [
-        107
-      ],
-      "fullName": "yuioi666/dsh-conversation-nav-dots",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 26
-    },
-    {
-      "issueNumbers": [
-        106
-      ],
-      "fullName": "yuioi666/dsh-plugin-model-capability",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 51
-    },
-    {
-      "issueNumbers": [
-        105
-      ],
-      "fullName": "EternalNight996/memory-eternal",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 57
     }
   ]
 }
