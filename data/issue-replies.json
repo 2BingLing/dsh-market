@@ -1,23 +1,50 @@
 {
-  "generatedAt": "2026-08-29T21:44:01.884Z",
+  "generatedAt": "2026-09-01T00:17:13.708Z",
   "replies": [
     {
       "issueNumbers": [
-        100
+        108
       ],
-      "fullName": "Jokasa7/dsh-product-subagent-console",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 46
+      "fullName": "Haniubub/seo-toolkit",
+      "type": "skill",
+      "stars": 2,
+      "score": 61
     },
     {
       "issueNumbers": [
-        91
+        109
       ],
-      "fullName": "evil7/deepSea",
+      "fullName": "Crosery/dsh-viewer",
       "type": "cordis-plugin",
-      "stars": 4,
-      "score": 64
+      "stars": 2,
+      "score": 58
+    },
+    {
+      "issueNumbers": [
+        107
+      ],
+      "fullName": "yuioi666/dsh-conversation-nav-dots",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 26
+    },
+    {
+      "issueNumbers": [
+        106
+      ],
+      "fullName": "yuioi666/dsh-plugin-model-capability",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 51
+    },
+    {
+      "issueNumbers": [
+        105
+      ],
+      "fullName": "EternalNight996/memory-eternal",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 57
     }
   ]
 }
