@@ -114,10 +114,11 @@ export async function detectSubdirBundle(
       candidates.push({ path: `${mono.path}/${s.name}` });
     }
   }
-  // 原有规则：与仓库同名 / dsh 开头 / cordis|plugin|bundle|client 开头
+  // 原有规则：与仓库同名 / dsh 开头 / cordis|plugin|bundle|client|web 开头
+  //（web 开头如 web-plugin 也是常见插件子目录名——#111-113 UnKnownFish 系列插件都放 web-plugin/）
   for (const d of dirs) {
     const n = d.name.toLowerCase();
-    if (n === repoName || /^(dsh|cordis|plugin|bundle|client)/.test(n)) {
+    if (n === repoName || /^(dsh|cordis|plugin|bundle|client|web)/.test(n)) {
       candidates.push({ path: d.path });
     }
   }
