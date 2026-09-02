@@ -565,7 +565,13 @@ async function main() {
       //（曾致每次 cron 检测 60 分钟 + 收录数不保）。构造与 prev 一致的 DetectCache 快照。
       const existing = cacheGet<DetectCache>("detect", id, DETECT_TTL);
       if (existing) {
-        cacheSet<DetectCache>("detect", id, { ...existing, pushedAt: prev.pushedAt });
+        // 强制 isPlugin: true——B2 直补的必然是已收录插件；若旧缓存是 isPlugin:false
+        //（某轮误判 non-plugin），保留它会致下轮直接 reject（"no plugin markers (cached)"）把插件挤出市场
+        cacheSet<DetectCache>("detect", id, {
+          ...existing,
+          pushedAt: prev.pushedAt,
+          detection: { ...existing.detection, isPlugin: true },
+        });
       } else {
         cacheSet<DetectCache>("detect", id, {
           pushedAt: prev.pushedAt,
