@@ -1,32 +1,68 @@
 {
-  "generatedAt": "2026-09-01T21:49:10.577Z",
+  "generatedAt": "2026-09-02T22:47:18.480Z",
   "replies": [
     {
       "issueNumbers": [
-        110
+        111
       ],
-      "fullName": "kongshan-zhuyu/dsh-balance-quota",
+      "fullName": "UnKnownFish125/dsh-deepmemory",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 52
+    },
+    {
+      "issueNumbers": [
+        112
+      ],
+      "fullName": "UnKnownFish125/dsh-literature",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 29
+    },
+    {
+      "issueNumbers": [
+        119
+      ],
+      "fullName": "10086ggqq/dsh_theme_Minecraft",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 54
+    },
+    {
+      "issueNumbers": [
+        116
+      ],
+      "fullName": "VioletScar-Hui/dsh-chat-history",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 54
+    },
+    {
+      "issueNumbers": [
+        117
+      ],
+      "fullName": "ningbonb/dsh-client-ui-brand",
+      "type": "cordis-plugin",
+      "stars": 4,
+      "score": 13
+    },
+    {
+      "issueNumbers": [
+        113
+      ],
+      "fullName": "UnKnownFish125/dsh-livetaskboard",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 35
     },
     {
       "issueNumbers": [
-        114
+        118
       ],
-      "fullName": "mhxy13867806343/my-dsh-desktop-extra",
+      "fullName": "ningbonb/dsh-web-desktop",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 17
-    },
-    {
-      "issueNumbers": [
-        115
-      ],
-      "fullName": "Breathay/dsh-chat-turn-fold",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 17
+      "stars": 1,
+      "score": 11
     }
   ]
 }
