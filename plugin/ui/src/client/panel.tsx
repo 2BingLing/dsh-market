@@ -298,6 +298,8 @@ function InstallModal(props: {
   const [phase, setPhase] = useState<'confirm' | 'running' | 'handedOff' | 'error'>('confirm')
   const [error, setError] = useState('')
   const [childSessionId, setChildSessionId] = useState<string | null>(null)
+  // 安全模式（2026-09）：开启后跳过 T0 直装，强制 AI 扫描 + 安装（供给侧防御，见 QVD-2026-57410）
+  const [security, setSecurity] = useState(false)
   // T0 直装结果（零 LLM 完成时无子会话）
   const [t0, setT0] = useState<{
     mode?: string
@@ -307,7 +309,8 @@ function InstallModal(props: {
     error?: string | null
   } | null>(null)
 
-  // AI 代理安装（路由式）：T0 直装（零 LLM：已装/配方/解析命令）→ 需要时才交给协议子代理
+  // AI 代理安装（路由式）：T0 直装（零 LLM：已装/配方/解析命令）→ 需要时才交给协议子代理。
+  // 安全模式（security=true）：跳过 T0，强制 AI 先扫描再安装。
   const startAi = async () => {
     setPhase('running')
     try {
@@ -319,8 +322,10 @@ function InstallModal(props: {
         alreadyInstalled?: boolean
         smokeFailed?: boolean
         error?: string | null
+        security?: boolean
       }>('ai:install', {
         pluginId: plugin.id,
+        security,
       })
       setChildSessionId(r.childSessionId)
       if (!r.started) setT0(r)
@@ -378,9 +383,29 @@ function InstallModal(props: {
               El('p', { className: styles.advancedTip },
                 '提示：手动命令仅供参考，不一定正确，请以该项目 README 为准。'),
             ),
+            // 安全模式开关（2026-09）：针对 DSH 供应链漏洞（QVD-2026-57410 CVSS 9.8 等）
+            El('label', {
+              className: styles.securityRow,
+              style: { display: 'flex', alignItems: 'center', gap: 8, marginTop: 4, cursor: 'pointer' },
+            },
+              El('input', {
+                type: 'checkbox',
+                checked: security,
+                onChange: (e: { target: { checked: boolean } }) => setSecurity(e.target.checked),
+              }),
+              El('span', { style: { fontSize: 13, fontWeight: 600 } }, '🛡 安全模式'),
+              El('span', { className: styles.securityDesc, style: { fontSize: 11.5, color: '#8a919f' } },
+                security ? '开启：AI 安装前扫描（危险命令/信息收集/配置篡改/来源），发现风险即中止，不直接安装' : '关闭：快速安装（零 LLM 直装优先）'),
+            ),
+            security
+              ? El('p', { className: styles.warn, style: { fontSize: 12 } },
+                  El(Icon, { d: ICON_WARN, size: 13, className: styles.inlineIcon }),
+                  '安全模式会消耗 token（AI 扫描），且跳过零 LLM 直装；来源不明的插件建议开启。')
+              : null,
             El('div', { className: styles.modalActions },
               El('button', { className: styles.btn, onClick: onClose }, '取消'),
-              El('button', { className: `${styles.btn} ${styles.btnPrimary}`, onClick: () => void startAi() }, '确认安装'),
+              El('button', { className: `${styles.btn} ${styles.btnPrimary}`, onClick: () => void startAi() },
+                security ? '🛡 安全安装' : '确认安装'),
             ),
           )
         : phase === 'running'

@@ -457,19 +457,24 @@ export function apply(ctx: {
       }
 
       // AI 代理安装（路由式）：T0（零 LLM：已装 / 配方 / 解析命令）先行，
-      // 只有需要才派协议子代理（T1 极简安装执行器）
+      // 只有需要才派协议子代理（T1 极简安装执行器）。
+      // security=true（安全模式，2026-09 新增）：跳过 T0 直装，强制 AI 扫描 + 安装
+      // ——针对 DSH 供应链漏洞（QVD-2026-57410 CVSS 9.8 等）的防御选项。
       case 'ai:install': {
         const data = await market()
         const plugin = data.plugins.find((p) => p.id === args.pluginId)
         if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
         const profile = (args.targetProfile as string) ?? readSettings(cfg).profile
-        const t0 = await routeInstall(cfg, plugin, {
-          profile,
-          runner: realRunner(),
-          force: Boolean(args.force),
-        })
-        // T0 已搞定：零 token，不需要子代理
-        if (!t0.needAi) {
+        const security = Boolean(args.security)
+        const t0 = security
+          ? null
+          : await routeInstall(cfg, plugin, {
+              profile,
+              runner: realRunner(),
+              force: Boolean(args.force),
+            })
+        // T0 已搞定：零 token，不需要子代理（安全模式下跳过 T0，不走这里）
+        if (!security && t0 && !t0.needAi) {
           recordInstallMetric(cfg, {
             ts: new Date().toISOString(),
             pluginId: plugin.id,
@@ -510,7 +515,7 @@ export function apply(ctx: {
         const agent = agents?.list?.()?.[0]
         if (!agent) throw new Error('当前会话代理不可用')
         const provider = subagents.list().includes('spawn') ? 'spawn' : subagents.list()[0]
-        const prompt = buildInstallPrompt(plugin, profile, t0.reason)
+        const prompt = buildInstallPrompt(plugin, profile, t0?.reason, { security })
         // start 的 promise 在 run 发布后 fulfill；只等发布（10s 超时保护）
         const run = await Promise.race([
           subagents.start(provider, {
@@ -553,7 +558,8 @@ export function apply(ctx: {
           started: true,
           childSessionId: sessionId,
           mode: 't1',
-          reason: t0.reason ?? null,
+          reason: t0?.reason ?? null,
+          security,
         }
       }
 
@@ -727,7 +733,8 @@ function parsePicks(text: string): Array<{ i: number; reason: string }> {
 }
 
 /** 生成 AI 安装任务的子代理提示词（路由协议 T1：极简安装执行器）。
- *  协议而非散文：固定步骤 + 禁止清单 + 严格 JSON 输出，最小 token 完成安装。 */
+ *  协议而非散文：固定步骤 + 禁止清单 + 严格 JSON 输出，最小 token 完成安装。
+ *  security=true（安全模式）：安装前先做供应链安全检查，发现风险先报告不安装。 */
 function buildInstallPrompt(
   plugin: {
     name: string
@@ -739,13 +746,32 @@ function buildInstallPrompt(
   },
   targetProfile: string,
   reason?: string,
+  opts?: { security?: boolean },
 ): string {
   const cmdLine =
     plugin.install.commands && plugin.install.commands.length > 0
       ? plugin.install.commands.join('\n    ')
       : '(无)'
+  const security = opts?.security === true
+  const securitySection = security
+    ? [
+        ``,
+        `【⛔ 安全模式：安装前必须先扫描（2026-09 新增，针对 DSH 供应链漏洞 QVD-2026-57410 等）】`,
+        `在【协议】第 1 步执行命令**之前**，先完成以下安全检查：`,
+        `1. 读插件仓库 README 全文关键段 + 安装用的脚本/清单（cordis.patch.yml / dsh.bundle / install.sh / package.json 等），逐个核对：`,
+        `   a. 安装命令是否有危险模式：curl|sh、wget 后立即执行、下载二进制执行、base64 解码后执行、从不可信 URL 拉取代码；`,
+        `   b. 是否收集/回传敏感信息：读取 API Key / Token / 环境变量（GITHUB_TOKEN、DEEPSEEK_API_KEY、OPENAI_API_KEY 等）并发送到外部地址；`,
+        `   c. 是否篡改配置：patch 覆盖 harness 自身配置（sandbox/approval/权限）或把自身混入系统目录；`,
+        `   d. 来源信号：仓库年龄与维护活跃、star 量级、是否近期新建（<30 天且低活跃的高危）；`,
+        `2. 结论必须明确：`,
+        `   - 无风险 → 继续按【协议】安装；`,
+        `   - 发现可疑（危险命令 / 信息收集 / 配置篡改 / 来源存疑）→ **立即停止**：不执行任何命令，输出 {"ok":false,"security_blocked":true,"reason":"<具体风险描述>"} 并结束。`,
+        `3. 需要配置时（协议第 5 条触发）：确认配置只写入本机（环境变量 / profile），不发送到任何外部地址。`,
+        `4. 安装完成后把扫描要点与结论写入 recipe 的 "security" 字段（无风险也写 "no risk detected"）。`,
+      ].join('\n')
+    : []
   return [
-    `你是「极简安装执行器」，安装 DSH 插件「${plugin.name}」（${plugin.fullName}）。只做安装，不做别的。`,
+    `你是「极简安装执行器」，安装 DSH 插件「${plugin.name}」（${plugin.fullName}）。只做安装，不做别的。${security ? '本次为【安全模式】。' : ''}`,
     ``,
     `【插件信息】`,
     `- 类型：${plugin.type === 'skill' ? 'skill（技能）' : 'cordis 插件'}（${plugin.type}）`,
@@ -755,9 +781,10 @@ function buildInstallPrompt(
     `- 参考命令（collector 已从 README 解析，优先直接使用）：`,
     `    ${cmdLine}`,
     ...(reason ? [`- 前序尝试（T0 已失败，仅作线索，不要重复踩坑）：${reason}`] : []),
+    ...securitySection,
     ``,
     `【协议（必须遵守）】`,
-    `1. 先执行参考命令（可做最少修正：包管理器 / 平台差异）。不要先读 README。`,
+    `1. 先执行参考命令（可做最少修正：包管理器 / 平台差异）。不要先读 README。${security ? '【安全模式下：先完成上方扫描，再执行本条】' : ''}`,
     `2. 命令缺失或明显错误时：只读仓库 README 的安装段落（grep install/安装/代码块，前 200 行），禁止全文阅读。`,
     `3. 执行后必须验证：${plugin.type === 'skill' ? '技能目录存在且含 SKILL.md' : `profile「${targetProfile}」的 package.json 的 dependencies 含包名`}；exit 0 且验证通过才算成功。`,
     `4. 失败时：重试 1 次 → 用错误文本 grep README → 仍失败则如实放弃并报告，不要无限尝试。`,
@@ -765,7 +792,7 @@ function buildInstallPrompt(
     `6. 全程禁止：思考过程、解释、总结散文、阅读文档其余部分、搜索网络（除非 README 明确引用必要的安装文档）。`,
     ``,
     `【输出】严格 JSON，无其他文本：`,
-    `{"ok":true|false,"commands":["实际执行的命令"],"smoke":["执行并验证的命令"],"fail":"失败与已尝试方案（失败时）","config_needed":null|{"what":"需要什么配置","hint":"在哪获取"},"recipe":{"commands":["可用安装命令"],"smoke":["验证命令"]}}`,
+    `{"ok":true|false,"commands":["实际执行的命令"],"smoke":["执行并验证的命令"],"fail":"失败与已尝试方案（失败时）","config_needed":null|{"what":"需要什么配置","hint":"在哪获取"},"recipe":{"commands":["可用安装命令"],"smoke":["验证命令"]}${security ? `,"security_blocked":false|true,"security_reason":"安全扫描结论或风险描述"` : ''}}`,
   ].join('\n')
 }
 
