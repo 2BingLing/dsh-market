@@ -1,68 +1,32 @@
 {
-  "generatedAt": "2026-09-02T22:47:18.480Z",
+  "generatedAt": "2026-09-03T21:46:20.591Z",
   "replies": [
     {
       "issueNumbers": [
-        111
+        122
       ],
-      "fullName": "UnKnownFish125/dsh-deepmemory",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 52
-    },
-    {
-      "issueNumbers": [
-        112
-      ],
-      "fullName": "UnKnownFish125/dsh-literature",
+      "fullName": "shangdi178/dsh-versions",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 29
+      "score": 36
     },
     {
       "issueNumbers": [
-        119
+        121
       ],
-      "fullName": "10086ggqq/dsh_theme_Minecraft",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 54
-    },
-    {
-      "issueNumbers": [
-        116
-      ],
-      "fullName": "VioletScar-Hui/dsh-chat-history",
+      "fullName": "Aealen/dsh-coding-workspace",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 54
+      "score": 39
     },
     {
       "issueNumbers": [
-        117
+        120
       ],
-      "fullName": "ningbonb/dsh-client-ui-brand",
-      "type": "cordis-plugin",
-      "stars": 4,
-      "score": 13
-    },
-    {
-      "issueNumbers": [
-        113
-      ],
-      "fullName": "UnKnownFish125/dsh-livetaskboard",
+      "fullName": "Lohaslee/dsh-super-pm",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 35
-    },
-    {
-      "issueNumbers": [
-        118
-      ],
-      "fullName": "ningbonb/dsh-web-desktop",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 11
     }
   ]
 }
