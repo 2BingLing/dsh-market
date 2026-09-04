@@ -1,32 +1,14 @@
 {
-  "generatedAt": "2026-09-03T21:46:20.591Z",
+  "generatedAt": "2026-09-04T21:30:01.519Z",
   "replies": [
     {
       "issueNumbers": [
-        122
+        125
       ],
-      "fullName": "shangdi178/dsh-versions",
+      "fullName": "huenjie/dsh-paste-collapse",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        121
-      ],
-      "fullName": "Aealen/dsh-coding-workspace",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 39
-    },
-    {
-      "issueNumbers": [
-        120
-      ],
-      "fullName": "Lohaslee/dsh-super-pm",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
+      "stars": 2,
+      "score": 72
     }
   ]
 }
