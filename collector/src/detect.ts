@@ -29,6 +29,7 @@ const CORDIS_MARKERS = [
   "cordis.patch.yml",
   "dsh.profile.yml",
   "dsh-manifest.json", // DSH 声明式插件清单（name/entry/tools），新生态形态
+  "dsh.plugin.json", // DSH 官方插件清单（id/main/engines/contributes），#123 dsh-reasoning-bridge 同款
 ];
 
 export async function detectPlugin(
