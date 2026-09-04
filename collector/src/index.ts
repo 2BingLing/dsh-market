@@ -431,6 +431,7 @@ async function main() {
             subdir,
           });
         }
+      }
 
       // 评分用的 readmeContent：检测缓存命中时从 readmes 缓存补取（不重新抓取）
       if (readmeContent === null) {
