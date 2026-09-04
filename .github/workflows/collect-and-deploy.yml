@@ -35,8 +35,8 @@ jobs:
           path: |
             data/cache
             data/tag-alias.json
-          key: detect-cache-${{ github.run_id }}
-          restore-keys: detect-cache-
+          key: detect-cache-v2-${{ github.run_id }}
+          restore-keys: detect-cache-v2-
 
       - name: Install deps
         run: npm ci
@@ -61,7 +61,7 @@ jobs:
           path: |
             data/cache
             data/tag-alias.json
-          key: detect-cache-${{ github.run_id }}
+          key: detect-cache-v2-${{ github.run_id }}
 
       - name: 同步数据到 Web
         run: |

@@ -417,18 +417,20 @@ async function main() {
         installParsed = parseInstallCommands(readmeContent);
         hasSkillMd = detection.skillFiles.length > 0;
 
-        // 写入检测缓存（含派生产物）
-        cacheSet<DetectCache>("detect", candidate.fullName, {
-          pushedAt: repo.pushed_at,
-          detection,
-          isCordis,
-          needsConfig,
-          readmeSummary,
-          installParsed,
-          hasSkillMd,
-          subdir,
-        });
-      }
+        // 写入检测缓存（含派生产物）——仅插件命中时写；非插件（isPlugin:false）不写缓存，
+        // 避免"误判无标记"被缓存固化（作者补标记后仍 stuck 7 天，#123 dsh-reasoning-bridge 教训）
+        if (detection.isPlugin) {
+          cacheSet<DetectCache>("detect", candidate.fullName, {
+            pushedAt: repo.pushed_at,
+            detection,
+            isCordis,
+            needsConfig,
+            readmeSummary,
+            installParsed,
+            hasSkillMd,
+            subdir,
+          });
+        }
 
       // 评分用的 readmeContent：检测缓存命中时从 readmes 缓存补取（不重新抓取）
       if (readmeContent === null) {
