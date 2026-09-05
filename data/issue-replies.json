@@ -1,11 +1,21 @@
 {
-  "generatedAt": "2026-09-05T06:39:40.044Z",
+  "generatedAt": "2026-09-05T21:11:20.965Z",
   "replies": [
     {
       "issueNumbers": [
-        123
+        128
       ],
-      "fullName": "shangdi178/dsh-reasoning-bridge",
+      "fullName": "Pasumao/dsh-plugin-context-trim",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 38
+    },
+    {
+      "issueNumbers": [
+        127,
+        126
+      ],
+      "fullName": "GiantAxeint/DSH-P2M",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 35
