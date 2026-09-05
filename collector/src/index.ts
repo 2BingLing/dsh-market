@@ -642,6 +642,26 @@ async function main() {
               hasSkillMd: false,
             });
             restored++;
+            // 写回缓存：确认成功的不写缓存会"下次又 needApi → 2500 截断 → 永远等下次"（用户发现的循环）
+            cacheSet<DetectCache>("detect", id, {
+              pushedAt: prev.pushedAt,
+              detection: {
+                isPlugin: true,
+                type: prev.type,
+                installMethod: prev.install.method,
+                skillFiles: [],
+                evidence: ["B2 API 确认缓存回写"],
+              },
+              isCordis: true,
+              needsConfig: prev.install.needsConfig,
+              readmeSummary: prev.readmeSummary,
+              installParsed: {
+                commands: prev.install.commands ?? [],
+                source: prev.install.commandSource ?? "",
+              },
+              hasSkillMd: prev.type === "skill",
+              subdir: null,
+            });
           }
           // pushedAt 变了：等下次扫描进池正常重检测，本次不补
         } catch (err) {
