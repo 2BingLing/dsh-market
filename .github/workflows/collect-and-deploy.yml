@@ -35,8 +35,10 @@ jobs:
           path: |
             data/cache
             data/tag-alias.json
-          key: detect-cache-v2-${{ github.run_id }}
-          restore-keys: detect-cache-v2-
+          # 回 v1：v2 升级曾致旧缓存全废 → 全量冷检测撞限流 → 收录 6031→3694 暴跌（修复事故）
+          # 非插件不写缓存（aed60b3 后）已防止误判固化，v1 缓存可直接复用
+          key: detect-cache-${{ github.run_id }}
+          restore-keys: detect-cache-
 
       - name: Install deps
         run: npm ci
@@ -61,7 +63,7 @@ jobs:
           path: |
             data/cache
             data/tag-alias.json
-          key: detect-cache-v2-${{ github.run_id }}
+          key: detect-cache-${{ github.run_id }}
 
       - name: 同步数据到 Web
         run: |
