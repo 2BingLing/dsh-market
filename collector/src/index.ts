@@ -349,9 +349,11 @@ async function main() {
             evidence: [...detection.evidence, "package.json cordis（SKILL.md 改判）"],
           };
         }
-        // dsh-manifest.json 声明式插件：manifest 本身就是插件证据，跳过 package.json 二次确认（#53 类）
+        // dsh-manifest.json / dsh.plugin.json 声明式插件：清单本身就是插件证据，跳过 package.json 二次确认（#53/#123 类）
         const hasManifest = rootItems.some(
-          (i) => i.name.toLowerCase() === "dsh-manifest.json"
+          (i) =>
+            i.name.toLowerCase() === "dsh-manifest.json" ||
+            i.name.toLowerCase() === "dsh.plugin.json"
         );
         if (detection.type === "cordis-plugin" && !isCordis && !hasManifest) {
           // monorepo / 子目录兜底：根 package.json 是 workspace 根（非插件），插件在子目录（#52 类）
