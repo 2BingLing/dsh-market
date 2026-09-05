@@ -599,10 +599,10 @@ async function main() {
       restored++;
     }
     if (restored > 0) console.log(`  [B2] 检测缓存直补 ${restored} 个（零 API）`);
-    // 2) API 确认（少数）：上限 800 个/轮，超出留待下次 cron（防极端情况下再次拖 58 分钟）
-    if (needApi.length > 800) {
-      console.log(`  [B2] needApi ${needApi.length} 个超上限，本轮确认前 800 个，其余等下轮`);
-      needApi.length = 800;
+    // 2) API 确认（少数）：上限 2500 个/轮，超出留待下次 cron（v2 缓存重建期需要更大恢复量；PAT 双配额已上线）
+    if (needApi.length > 2500) {
+      console.log(`  [B2] needApi ${needApi.length} 个超上限，本轮确认前 2500 个，其余等下轮`);
+      needApi.length = 2500;
     }
     if (needApi.length > 0) {
       console.log(`  [B2] ${needApi.length} 个需 API 确认（缓存缺失）...`);
