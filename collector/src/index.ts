@@ -276,8 +276,8 @@ async function main() {
       let readmeContent: string | null;
       let subdir: string | null = null;
 
-      if (cachedDetect && cachedDetect.pushedAt === repo.pushed_at) {
-        // 命中：仓库未变化，直接复用检测产物（零网络调用）
+      if (cachedDetect && cachedDetect.pushedAt === repo.pushed_at && cachedDetect.detection.isPlugin) {
+        // 命中：仓库未变化且缓存为插件，直接复用检测产物（零网络调用）
         detection = cachedDetect.detection;
         isCordis = cachedDetect.isCordis;
         needsConfig = cachedDetect.needsConfig;
@@ -286,12 +286,12 @@ async function main() {
         hasSkillMd = cachedDetect.hasSkillMd;
         subdir = cachedDetect.subdir ?? null;
         readmeContent = null; // 评分用：下面从 readmes 缓存取（24h 内必有）
-        if (!detection.isPlugin) {
-          rejected.push({ fullName: candidate.fullName, reason: "no plugin markers (cached)" });
-          return;
-        }
       } else {
-        // 未命中/仓库变化：完整检测流程
+        // 未命中/仓库变化/缓存为 false（历史遗留误判如 #123 reasoning-bridge）：
+        // false 缓存不信任（新代码 aed60b3 后不写 false 缓存）→ 完整重检覆盖
+        if (cachedDetect && !cachedDetect.detection.isPlugin) {
+          console.warn(`  [cache] ${candidate.fullName} 缓存为 false（历史遗留），重检覆盖`);
+        }
         // 根目录文件列表（缓存 24h）
         const rootItems = await cached(
           "roots",
