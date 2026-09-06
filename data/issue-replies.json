@@ -1,24 +1,14 @@
 {
-  "generatedAt": "2026-09-05T21:11:20.965Z",
+  "generatedAt": "2026-09-06T21:18:33.604Z",
   "replies": [
     {
       "issueNumbers": [
-        128
+        129
       ],
-      "fullName": "Pasumao/dsh-plugin-context-trim",
+      "fullName": "HorusJiang/dsh-map-tools",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 38
-    },
-    {
-      "issueNumbers": [
-        127,
-        126
-      ],
-      "fullName": "GiantAxeint/DSH-P2M",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
+      "stars": 3,
+      "score": 41
     }
   ]
 }
