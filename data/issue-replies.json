@@ -1,14 +1,32 @@
 {
-  "generatedAt": "2026-09-06T21:18:33.604Z",
+  "generatedAt": "2026-09-07T22:06:29.005Z",
   "replies": [
     {
       "issueNumbers": [
-        129
+        131
       ],
-      "fullName": "HorusJiang/dsh-map-tools",
+      "fullName": "Coco-king/dsh-x-opencode-session",
       "type": "cordis-plugin",
-      "stars": 3,
-      "score": 41
+      "stars": 1,
+      "score": 38
+    },
+    {
+      "issueNumbers": [
+        130
+      ],
+      "fullName": "Maple-Bamboo-Team/dsh-plugin-winnotify",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 34
+    },
+    {
+      "issueNumbers": [
+        132
+      ],
+      "fullName": "Coco-king/dsh-monitor",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 32
     }
   ]
 }
