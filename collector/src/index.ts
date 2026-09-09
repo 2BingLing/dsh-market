@@ -217,6 +217,11 @@ async function main() {
           ...new Set([...(existing.issueNumbers ?? []), ...meta.issueNumbers]),
         ];
       }
+      // issue 里的「作者自述」同样要并入：候选多由 topic 扫描先创建，
+      // 此前该字段只在首次创建时写入 → 已收录插件的自述永远进不来
+      if (meta?.introByAuthor && !existing.introByAuthor) {
+        existing.introByAuthor = meta.introByAuthor;
+      }
       return;
     }
     candidates.set(key, {
@@ -249,6 +254,8 @@ async function main() {
   console.log("[2/5] 特征检测 + 元数据抓取（并发 10，带缓存）...");
   const detected: Detected[] = [];
   const rejected: { fullName: string; reason: string }[] = [];
+  // 上次收录记录：B2 延续性 + 作者自述持久化（见下）
+  const prevPlugins = loadPreviousPlugins();
 
   const detectOne = async (candidate: Candidate) => {
     try {
@@ -466,7 +473,11 @@ async function main() {
         createdAt: repo!.created_at,
         updatedAt: repo!.updated_at,
         readmeSummary,
-        introByAuthor: candidate.introByAuthor,
+        // 作者自述：issue 是唯一来源，且采集只读 open issue——收录确认后 issue 会被自动关闭，
+        // 因此关闭后沿用上次抓到的自述，否则自述会在次日随 issue 关闭一起消失
+        introByAuthor:
+          candidate.introByAuthor ??
+          prevPlugins.get(candidate.fullName.toLowerCase())?.introByAuthor,
         submissionIssue: candidate.issueNumbers?.[0],
         install: {
           method: installMethod,
@@ -539,7 +550,6 @@ async function main() {
   // [B2] 已收录延续性：上次收录但本次未扫描到的仓库补回（防边界抖动消失；404 确认真删除才移除）
   // 优化：检测缓存证明仓库存在且 pushedAt 未变的直接补回（零 API）；只有缓存缺失/变化的才逐个调 repos API
   // ——避免每次对上干个 miss 逐个请求撞限流（曾让 cron 从 10 分钟涨到 2 小时）
-  const prevPlugins = loadPreviousPlugins();
   const currentIds = new Set(detected.map((d) => d.plugin.id.toLowerCase()));
   const missing = [...prevPlugins.keys()].filter((id) => !currentIds.has(id));
   let restored = 0;

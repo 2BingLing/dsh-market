@@ -1,5 +1,28 @@
 import { describe, expect, it } from "vitest";
-import { extractRepoFromText, extractIntroByAuthor } from "../src/sources/issues.js";
+import {
+  extractRepoFromText,
+  extractIntroByAuthor,
+  SUBMISSION_TITLE_RE,
+} from "../src/sources/issues.js";
+
+describe("SUBMISSION_TITLE_RE", () => {
+  it("识别提交类标题", () => {
+    expect(SUBMISSION_TITLE_RE.test("[提交插件] dsh-proxy")).toBe(true);
+    expect(SUBMISSION_TITLE_RE.test("[提交工具] 某工具")).toBe(true);
+    expect(SUBMISSION_TITLE_RE.test("[submit] foo")).toBe(true);
+  });
+
+  it("识别 [数据修正] 标题（已收录插件补写作者自述的官方写法）", () => {
+    expect(SUBMISSION_TITLE_RE.test("[数据修正] dsh-quote-followup 补写作者自述")).toBe(true);
+    expect(SUBMISSION_TITLE_RE.test("[数据修正] 安装命令有误")).toBe(true);
+  });
+
+  it("不误伤普通 issue 标题", () => {
+    expect(SUBMISSION_TITLE_RE.test("插件安装失败")).toBe(false);
+    expect(SUBMISSION_TITLE_RE.test("[提问] 如何安装")).toBe(false);
+    expect(SUBMISSION_TITLE_RE.test("提交插件但没加方括号")).toBe(false);
+  });
+});
 
 describe("extractRepoFromText", () => {
   it("从 issue 正文提取仓库地址", () => {
