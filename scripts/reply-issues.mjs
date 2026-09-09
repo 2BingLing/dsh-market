@@ -39,6 +39,21 @@ function buildReply(r) {
   ].join("\n");
 }
 
+/** `[数据修正]` issue 专用回复：不说「已收录」，强调修正已应用 */
+function buildFixReply(r) {
+  const listedUrl = `https://dsh.market/?q=${encodeURIComponent(r.fullName)}`;
+  return [
+    `> ⚙️ **自动回复** · DSH Market Bot`,
+    ``,
+    `✅ **已应用数据修正** \`${r.fullName}\``,
+    ``,
+    `- 你提交的作者自述 / 简介修正已进入市场数据，**次日 06:00 更新**后可在 [DSH Market](https://dsh.market/) 查看（${listedUrl}）。`,
+    `- 安装命令 / 类型等复杂字段的修正，建议直接重新提交一个 \`[提交插件]\` issue（附新的仓库信息），会自动进入收录流程。`,
+    ``,
+    `> 本 issue 已自动关闭。如需再次修正，重新打开或提交新 \`[数据修正]\` issue。`,
+  ].join("\n");
+}
+
 async function api(path, opts = {}) {
   const res = await fetch(`https://api.github.com${path}`, {
     method: opts.method ?? "GET",
@@ -91,9 +106,16 @@ async function main() {
     }
     for (const issueNumber of r.issueNumbers) {
       try {
-        // 防重复回复：检查是否已有 bot 评论
+        // 按标题区分 `[数据修正]` issue：回复「已应用数据修正」而不是「已收录」
+        const issue = await api(`/repos/${MARKET_REPO}/issues/${issueNumber}`);
+        const isDataFix = /^\[数据修正\]/i.test(issue?.title ?? "");
+        const marker = isDataFix ? "已应用数据修正" : "已收录";
+        // 防重复回复：检查是否已有 bot 评论（修正类/收录类各自独立，互不误判）
         const comments = await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/comments`);
-        const already = (comments ?? []).some((c) => (c.body ?? "").includes("已收录"));
+        const already = (comments ?? []).some((c) => {
+          const b = c.body ?? "";
+          return b.includes(marker) || (!isDataFix && b.includes("已收录"));
+        });
         if (already) {
           console.log(`#${issueNumber} 已回复过，跳过`);
           continue;
@@ -101,9 +123,9 @@ async function main() {
         // 评论
         await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/comments`, {
           method: "POST",
-          body: { body: buildReply(r) },
+          body: { body: isDataFix ? buildFixReply(r) : buildReply(r) },
         });
-        console.log(`#${issueNumber} 已评论（${r.fullName}）`);
+        console.log(`#${issueNumber} 已评论（${r.fullName}，${isDataFix ? "数据修正" : "收录"}）`);
         // 挂 label
         await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/labels`, {
           method: "POST",

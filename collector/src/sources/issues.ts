@@ -5,6 +5,12 @@
  */
 
 import { githubFetch } from "../github.js";
+import {
+  DATA_FIX_TITLE_RE,
+  extractCorrections,
+  mergeCorrections,
+  type DataCorrections,
+} from "./corrections.js";
 
 /** 本仓库（提交插件 issue 所在） */
 const MARKET_REPO = "2BingLing/dsh-market";
@@ -61,6 +67,8 @@ export interface SubmissionMeta {
   issueNumbers: number[];
   /** 作者自述简介（可选） */
   introByAuthor?: string;
+  /** 数据修正（来自 `[数据修正]` issue）：作者自述清空 / 简介修正 */
+  corrections?: DataCorrections;
 }
 
 /**
@@ -100,10 +108,15 @@ async function fetchSubmissionReposBy(
       counted++;
       const text = `${issue.title}\n${issue.body ?? ""}`;
       const introByAuthor = extractIntroByAuthor(issue.body ?? null);
+      // `[数据修正]` issue 走宽松解析：自由书写的方括号自述（#135 风格）+ 简介修正
+      const corrections = DATA_FIX_TITLE_RE.test(issue.title)
+        ? extractCorrections(issue.body ?? null)
+        : undefined;
       for (const fn of extractRepoFromText(text)) {
         const meta = out.get(fn) ?? { issueNumbers: [] };
         if (!meta.issueNumbers.includes(issue.number)) meta.issueNumbers.push(issue.number);
         meta.introByAuthor = meta.introByAuthor ?? introByAuthor;
+        meta.corrections = mergeCorrections(meta.corrections, corrections);
         out.set(fn, meta);
       }
     }

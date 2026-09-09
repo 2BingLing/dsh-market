@@ -23,6 +23,7 @@ import {
 import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
 import { fetchSubmissionRepos, fetchPackSubmissionRepos } from "./sources/issues.js";
+import { mergeCorrections, type DataCorrections } from "./sources/corrections.js";
 import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectSubdirBundle } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
@@ -70,6 +71,8 @@ interface Candidate {
   issueNumbers?: number[];
   /** 作者自述简介（提交 issue 时提供，可选；存到 plugin.introByAuthor） */
   introByAuthor?: string;
+  /** 数据修正（`[数据修正]` issue）：覆盖作者自述/中文简介等 */
+  corrections?: DataCorrections;
 }
 
 interface Detected {
@@ -204,7 +207,7 @@ async function main() {
     fullName: string,
     repo: GithubRepo | null,
     source: string,
-    meta?: { name?: string; description?: string; issueNumbers?: number[]; introByAuthor?: string }
+    meta?: { name?: string; description?: string; issueNumbers?: number[]; introByAuthor?: string; corrections?: DataCorrections }
   ) => {
     const key = fullName.toLowerCase();
     if (EXCLUDED_REPOS.has(key)) return;
@@ -222,6 +225,8 @@ async function main() {
       if (meta?.introByAuthor && !existing.introByAuthor) {
         existing.introByAuthor = meta.introByAuthor;
       }
+      // 数据修正并入：逐字段合并（后到 issue 的修正覆盖先到的，含「无」清空）
+      existing.corrections = mergeCorrections(existing.corrections, meta?.corrections);
       return;
     }
     candidates.set(key, {
@@ -232,6 +237,7 @@ async function main() {
       awesomeDescription: meta?.description,
       issueNumbers: meta?.issueNumbers,
       introByAuthor: meta?.introByAuthor,
+      corrections: meta?.corrections,
     });
   };
   for (const fn of awesomeByFullName.keys()) {
@@ -244,6 +250,7 @@ async function main() {
     addCandidate(fn, null, "issue-submission", {
       issueNumbers: meta.issueNumbers,
       introByAuthor: meta.introByAuthor,
+      corrections: meta.corrections,
     });
   }
 
@@ -451,6 +458,19 @@ async function main() {
         installParsed.commands.length > 0 ? installParsed.commands : undefined;
       const installMethod = detection.installMethod!;
 
+      // 作者自述：issue 是唯一来源，且采集只读 open issue——收录确认后 issue 会被自动关闭，
+      // 因此关闭后沿用上次抓到的自述，否则自述会在次日随 issue 关闭一起消失；
+      // `[数据修正]` issue 的修正（含「无」清空）拥有最高优先级
+      const corr = candidate.corrections;
+      let introByAuthor =
+        candidate.introByAuthor ?? prevPlugins.get(candidate.fullName.toLowerCase())?.introByAuthor;
+      if (corr && corr.introByAuthor !== undefined) {
+        introByAuthor = corr.introByAuthor ?? undefined; // 作者自述：无 → 清空
+      }
+      // 中文简介/文案修正（数据修正 issue 提供时覆盖；否则 M3 阶段 DeepSeek 生成）
+      let descriptionZh: string | null = null;
+      if (corr?.descriptionZh) descriptionZh = corr.descriptionZh;
+
       const plugin: DshPlugin = {
         id: repo!.full_name,
         type: detection.type!,
@@ -463,7 +483,7 @@ async function main() {
         openIssues: repo!.open_issues_count,
         language: repo!.language,
         description: candidate.awesomeDescription ?? repo!.description ?? "",
-        descriptionZh: null, // M3: DeepSeek 生成
+        descriptionZh, // 数据修正优先；否则 M3: DeepSeek 生成
         tags: [...repo!.topics],
         curated: false,
         homepage: repo!.homepage,
@@ -473,11 +493,7 @@ async function main() {
         createdAt: repo!.created_at,
         updatedAt: repo!.updated_at,
         readmeSummary,
-        // 作者自述：issue 是唯一来源，且采集只读 open issue——收录确认后 issue 会被自动关闭，
-        // 因此关闭后沿用上次抓到的自述，否则自述会在次日随 issue 关闭一起消失
-        introByAuthor:
-          candidate.introByAuthor ??
-          prevPlugins.get(candidate.fullName.toLowerCase())?.introByAuthor,
+        introByAuthor,
         submissionIssue: candidate.issueNumbers?.[0],
         install: {
           method: installMethod,
