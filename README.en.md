@@ -8,6 +8,7 @@
 
 <div align="center">
 
+[![DSH](https://img.shields.io/badge/DSH-%E2%89%A5_0.1.5-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://dsh.market/)
 [![Contribute](https://img.shields.io/badge/Contribute-Submit%20a%20plugin-2EA043?style=flat-square&logo=github&logoColor=white)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
 [![Stars](https://img.shields.io/github/stars/2BingLing/dsh-market?style=flat-square&logo=github&label=Stars&color=4D6BFE)](https://github.com/2BingLing/dsh-market)
@@ -48,23 +49,25 @@ The DSH ecosystem is growing fast, and plugins & skills are scattered across Git
 
 | Dependency | Requirement |
 |---|---|
-| DSH (DeepSeek Harness) | **≥ 0.0.1-rc.5** |
+| **DSH (DeepSeek Harness)** | **≥ 0.1.5** (currently available as `0.1.5-rc.1`) |
 | Node.js | ≥ 20 |
 
 **The panel entry switches automatically with the DSH version.** One single artifact supports both generations — no version-specific build:
 
-| DSH version | Panel entry |
-|---|---|
-| **≥ 0.1.5-rc.1** | Standard entry `sidebar.panellist` + `main` — the icon joins the left nav rail and the panel opens in the central column |
-| **< 0.1.5** (incl. 0.1.1-rc.2 / 0.1.2-rc.1 / 0.0.1-rc.5) | Legacy entry `sidebar.footer.action` + `shell.overlay` — a button at the sidebar foot plus a centered overlay |
+| DSH version | Panel entry | Support status |
+|---|---|---|
+| **≥ 0.1.5-rc.1** | Standard entry `sidebar.panellist` + `main` — the icon joins the left nav rail and the panel opens in the central column | ✅ **Recommended**; new features are adapted here only |
+| **< 0.1.5** (incl. 0.1.2-rc.1 / 0.1.1-rc.2 / 0.0.1-rc.5) | Legacy entry `sidebar.footer.action` + `shell.overlay` — a button at the sidebar foot plus a centered overlay | ⚠️ **Maintenance mode**: kept working, no new-feature adaptation, **removed in 0.5.0** |
 
 Detection is a runtime capability probe on `layout.selectPanel` (added in 0.1.5; the older `layout` service only exposes `attachPanels` / `toggleSidebar` / `openDetails` / `closeDetails`). Both generations `provide('layout')`, so the probe can neither misdetect nor park the plugin.
 
 **Version basis**
 
-- **Minimum 0.0.1-rc.5**: all four prerequisites verified version by version — the client module system parsing `dsh.client`, the `sidebar.footer.action` + `shell.overlay` slot contract, the `layout` service, and the `webServer.register({ kind: 'prefix' })` signature. Earlier versions were not checked.
+- **Recommended baseline `≥ 0.1.5`**: the standard panel entry plus the full set of newer capabilities — and the version this project actively adapts to and tests against. The newest DSH release is currently `0.1.5-rc.1` (an rc precedes the final release under semver), and it is covered by our verification.
+- **Hard code floor `0.0.1-rc.5`**: all four prerequisites verified version by version — the client module system parsing `dsh.client`, the `sidebar.footer.action` + `shell.overlay` slot contract, the `layout` service, and the `webServer.register({ kind: 'prefix' })` signature. Earlier versions were not checked. Runs on the legacy entry, in maintenance mode.
 - **Actually exercised**: 0.1.1-rc.2 (legacy entry), 0.1.5-rc.1 (standard entry).
-- **Recommended ≥ 0.1.5-rc.1**: the standard panel entry plus the full set of newer capabilities.
+
+> **Version support policy**: the ecosystem moves fast and the share of users on older DSH builds drops quickly. This project follows **new version adapted first → old version moved to maintenance → removed in a major bump**: new features target the standard entry only; the legacy entry receives blocking fixes only and is **scheduled for removal in 0.5.0** (together with the runtime probe branch), at which point the minimum becomes `≥ 0.1.5`.
 
 ## Quick Start
 

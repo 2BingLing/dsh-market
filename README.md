@@ -8,6 +8,7 @@
 
 <div align="center">
 
+[![DSH](https://img.shields.io/badge/DSH-%E2%89%A5_0.1.5-4D6BFE?style=flat-square&logo=deepseek&logoColor=white)](https://github.com/deepseek-ai/deepseek-harness)
 [![在线体验](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E4%BD%93%E9%AA%8C-4D6BFE?style=flat-square&logo=githubpages&logoColor=white)](https://dsh.market/)
 [![提交插件](https://img.shields.io/badge/Contribute-%E6%8F%90%E4%BA%A4%E6%8F%92%E4%BB%B6-2EA043?style=flat-square&logo=github&logoColor=white)](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md)
 [![Stars](https://img.shields.io/github/stars/2BingLing/dsh-market?style=flat-square&logo=github&label=Stars&color=4D6BFE)](https://github.com/2BingLing/dsh-market)
@@ -48,23 +49,25 @@ DSH 生态增长极快，插件与技能散落在 GitHub 各处 —— **不知�
 
 | 依赖 | 要求 |
 |---|---|
-| DSH（DeepSeek Harness） | **≥ 0.0.1-rc.5** |
+| **DSH（DeepSeek Harness）** | **≥ 0.1.5**（当前可用 `0.1.5-rc.1`） |
 | Node.js | ≥ 20 |
 
 **面板入口按 DSH 版本自动切换**，同一份产物兼容两代，不需要按版本换装：
 
-| DSH 版本 | 面板入口 |
-|---|---|
-| **≥ 0.1.5-rc.1** | 标准入口 `sidebar.panellist` + `main` —— 图标进左侧导航栏，面板在中央列展开 |
-| **< 0.1.5**（含 0.1.1-rc.2 / 0.1.2-rc.1 / 0.0.1-rc.5） | 旧入口 `sidebar.footer.action` + `shell.overlay` —— 侧边栏底部按钮 + 居中浮层 |
+| DSH 版本 | 面板入口 | 支持状态 |
+|---|---|---|
+| **≥ 0.1.5-rc.1** | 标准入口 `sidebar.panellist` + `main` —— 图标进左侧导航栏，面板在中央列展开 | ✅ **推荐**，新功能只在此路径适配 |
+| **< 0.1.5**（含 0.1.2-rc.1 / 0.1.1-rc.2 / 0.0.1-rc.5） | 旧入口 `sidebar.footer.action` + `shell.overlay` —— 侧边栏底部按钮 + 居中浮层 | ⚠️ **维护模式**，仅保证可用、不再适配新特性，**0.5.0 起移除** |
 
 判定方式为运行时探测 `layout.selectPanel`（0.1.5 新增；旧版 layout 服务只有 `attachPanels` / `toggleSidebar` / `openDetails` / `closeDetails`）。两代都 `provide('layout')`，因此不会误判，也不会因等待服务而挂死。
 
 **版本依据**
 
-- **最低 0.0.1-rc.5**：四项前提已逐版核对通过 —— 客户端模块系统解析 `dsh.client`、`sidebar.footer.action` + `shell.overlay` 的 slot 契约、`layout` 服务、`webServer.register({ kind: 'prefix' })` 签名。更早版本未核对。
+- **推荐基线 `≥ 0.1.5`**：标准面板入口 + 右侧 Sidebar 等新能力完整可用，也是本项目主动适配与测试的目标版本。当前 DSH 最新发布为 `0.1.5-rc.1`（semver 上 rc 早于正式版），已在其中实测通过。
+- **代码硬下限 `0.0.1-rc.5`**：四项前提逐版核对通过 —— 客户端模块系统解析 `dsh.client`、`sidebar.footer.action` + `shell.overlay` 的 slot 契约、`layout` 服务、`webServer.register({ kind: 'prefix' })` 签名。更早版本未核对。走旧入口，处于维护模式。
 - **实测运行**：0.1.1-rc.2（旧入口）、0.1.5-rc.1（标准入口）。
-- **推荐 ≥ 0.1.5-rc.1**：标准面板入口 + 右侧 Sidebar 等新能力完整可用。
+
+> **版本支持策略**：生态迭代很快，旧版 DSH 的用户占比会迅速下降。本项目按「**新版优先适配 → 旧版转维护模式 → 大版本移除**」推进：新功能只在标准入口适配；旧入口仅修阻塞性缺陷，**计划于 0.5.0 移除**（连同运行时探测分支），届时最低要求提升为 `≥ 0.1.5`。
 
 ## 快速开始
 

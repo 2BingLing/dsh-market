@@ -2,6 +2,20 @@
 
 本项目采用 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 风格。标题按版本号与日期排序，最新在上。
 
+## [Unreleased]
+
+### 文档：DSH 版本支持策略
+
+**README 新增 `DSH ≥ 0.1.5` 徽章，并确立「新版优先适配 → 旧版转维护模式 → 大版本移除」策略**
+
+- `README.md` / `README.en.md` 徽章区新增 `DSH ≥ 0.1.5`（shields.io，`logo=deepseek`，URL 已验证渲染）。
+- 环境要求表改为三列（版本 / 面板入口 / 支持状态）：
+  - **≥ 0.1.5-rc.1** —— 标准入口 `sidebar.panellist` + `main`，✅ 推荐，**新功能只在此路径适配**
+  - **< 0.1.5** —— 旧入口 `sidebar.footer.action` + `shell.overlay`，⚠️ 维护模式（仅修阻塞性缺陷），**0.5.0 起移除**
+- 明确两层版本口径，避免误读：**推荐基线 `≥ 0.1.5`**（对外要求，也是主动适配与测试的目标）vs **代码硬下限 `0.0.1-rc.5`**（旧入口，维护模式）。注：DSH 当前最新发布为 `0.1.5-rc.1`，semver 上 rc 早于正式版，已在其中实测通过。
+- `plugin/ui/README.md`（npm 包页面）同步该策略。
+- **待办**：需发布新版本才能让 npm 包页面上的 README 同步（纯文档变更，未占版本号）。
+
 ## [0.4.7] - 2026-09-10
 
 ### 插件端（`@dsh-market/plugin@0.4.7` / `@dsh-market/core@0.4.6`）
