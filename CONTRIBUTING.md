@@ -16,8 +16,8 @@ DSH Market 每日 06:00 自动扫描收录 DSH 生态插件，两种方式任选
 **Web 详情页**的「作者自述」专区（带作者标识），用你自己的话介绍插件，比自动
 生成的中文简介更有温度、更有说服力。已收录的插件想补写 / 修正，可提交一个
 [`[数据修正]` issue](https://github.com/2BingLing/dsh-market/issues/new?template=data_fix.md)，
-支持**作者自述**（方括号自由书写）与**简介**（`简介：` 后文本）两类修正，次日自动应用；
-想清空已收录的作者自述写 `作者自述：无`。安装命令 / 类型等复杂修正请直接重提一个提交插件 issue。
+支持**作者自述**（方括号自由书写）、**简介**（`简介：` 后文本）、**安装命令**（`安装命令：` 后文本或 sh 代码块），
+次日自动应用；想清空已收录的作者自述写 `作者自述：无`。类型等复杂修正请直接重提一个提交插件 issue。
 
 **提交后会发生什么**：
 
@@ -38,8 +38,8 @@ DSH Market 每日 06:00 自动扫描收录 DSH 生态插件，两种方式任选
 **收录后可以**：
 
 - 在 README 顶部挂[收录徽章](./PLUGIN-BADGE.md)（已收录 / 高分精选两档）
-- 数据有误（作者自述 / 简介）→ 提交 [`[数据修正]` issue](https://github.com/2BingLing/dsh-market/issues/new?template=data_fix.md)，说明仓库与修正内容，通常次日自动应用
-- 安装命令 / 类型 / 评分等复杂数据有误 → 重新提交一个[提交插件 issue](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md) 覆盖旧数据
+- 数据有误（作者自述 / 简介 / 安装命令）→ 提交 [`[数据修正]` issue](https://github.com/2BingLing/dsh-market/issues/new?template=data_fix.md)，说明仓库与修正内容，通常次日自动应用
+- 类型 / 评分等复杂数据有误 → 重新提交一个[提交插件 issue](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md) 覆盖旧数据
 
 ## 二、开发者：改进项目
 

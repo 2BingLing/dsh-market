@@ -10,8 +10,9 @@ labels: ["submission"]
 - **GitHub 仓库地址**：(必填，如 https://github.com/owner/repo)
 - **作者自述**：[可多行，放在方括号内即可，如：这是我自己的话，介绍这个插件解决什么问题。]（可选，会展示在市场详情页的「作者自述」专区；**想清空已收录的自述，写 `作者自述：无`**）
 - **简介**：[修正后的中文简介/文案，可多行]（可选；不填则保留现有简介）
+- **安装命令**：(可选；如过时版本需更新，写 `安装命令：` 后跟新命令，或放一个 ` ```sh ` 代码块里。例如 `安装命令：dsh plugin --profile web add -w ...`)
 
 ## 说明
 
-> 💡 本模板只支持修正**作者自述**和**简介**两类字段，次日 06:00 自动应用。
-> 若要修正**安装命令 / 类型 / license** 等更复杂的数据，请直接重新提交一个 [提交插件](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md) issue（附新的仓库信息），会自动进入收录流程覆盖旧数据。
+> 💡 本模板支持修正**作者自述**、**简介**、**安装命令**三类字段，次日 06:00 自动应用。
+> 若要修正**类型 / 评分 / license** 等更复杂的数据，请直接重新提交一个 [提交插件](https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md) issue（附新的仓库信息），会自动进入收录流程覆盖旧数据。

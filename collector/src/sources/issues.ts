@@ -8,6 +8,7 @@ import { githubFetch } from "../github.js";
 import {
   DATA_FIX_TITLE_RE,
   extractCorrections,
+  extractRepoFromDataFixText,
   mergeCorrections,
   type DataCorrections,
 } from "./corrections.js";
@@ -108,11 +109,13 @@ async function fetchSubmissionReposBy(
       counted++;
       const text = `${issue.title}\n${issue.body ?? ""}`;
       const introByAuthor = extractIntroByAuthor(issue.body ?? null);
-      // `[数据修正]` issue 走宽松解析：自由书写的方括号自述（#135 风格）+ 简介修正
-      const corrections = DATA_FIX_TITLE_RE.test(issue.title)
-        ? extractCorrections(issue.body ?? null)
-        : undefined;
-      for (const fn of extractRepoFromText(text)) {
+      // `[数据修正]` issue 走宽松解析：自由书写的方括号自述（#135 风格）+ 简介修正 + 安装命令修正；
+      // 正文常只写反引号包裹的裸 `owner/repo`（如 #135），严格 URL 提取为空时用裸写法兜底
+      const isDataFix = DATA_FIX_TITLE_RE.test(issue.title);
+      const corrections = isDataFix ? extractCorrections(issue.body ?? null) : undefined;
+      const fromText = extractRepoFromText(text);
+      const fns = fromText.length > 0 ? fromText : (isDataFix ? extractRepoFromDataFixText(text) : []);
+      for (const fn of fns) {
         const meta = out.get(fn) ?? { issueNumbers: [] };
         if (!meta.issueNumbers.includes(issue.number)) meta.issueNumbers.push(issue.number);
         meta.introByAuthor = meta.introByAuthor ?? introByAuthor;

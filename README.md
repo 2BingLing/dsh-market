@@ -221,7 +221,7 @@ npm run build -w @dsh-market/plugin  # 插件包（lib/index.js + lib/client.js�
 ```
 
 - **修正数据**：评分 / 描述 / 安装命令有误，提 issue 或 PR
-- **作者自述**：提交时附上「作者自述简介」，会展示在市场详情页的「作者自述」专区（带作者标识）——用你自己的话介绍插件，比自动简介更有温度。已收录插件可提交 [`[数据修正]` issue](https://github.com/2BingLing/dsh-market/issues/new?template=data_fix.md) 补写或修正（支持作者自述 / 简介，次日自动应用；想清空已收录的自述写 `作者自述：无`；安装命令 / 类型等复杂修正建议直接重提一个提交插件 issue）
+- **作者自述**：提交时附上「作者自述简介」，会展示在市场详情页的「作者自述」专区（带作者标识）——用你自己的话介绍插件，比自动简介更有温度。已收录插件可提交 [`[数据修正]` issue](https://github.com/2BingLing/dsh-market/issues/new?template=data_fix.md) 补写或修正（支持作者自述 / 简介 / 安装命令，次日自动应用；想清空已收录的自述写 `作者自述：无`；类型等复杂修正建议直接重提一个提交插件 issue）
 - **挂收录徽章**：被收录的插件作者可在 README 顶部挂 DSH Market 收录徽章，让用户一眼认出：
 
   [![已收录](assets/readme/badge-listed-zh.svg)](https://dsh.market/) [![高分精选](assets/readme/badge-top-rated.svg)](https://dsh.market/)

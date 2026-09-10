@@ -470,6 +470,9 @@ async function main() {
       // 中文简介/文案修正（数据修正 issue 提供时覆盖；否则 M3 阶段 DeepSeek 生成）
       let descriptionZh: string | null = null;
       if (corr?.descriptionZh) descriptionZh = corr.descriptionZh;
+      // 安装命令修正（数据修正 issue 提供时覆盖 README 解析结果，#137）
+      let commandSource = installParsed.source === "template" ? undefined : installParsed.source;
+      if (corr?.installCommands) commandSource = "issue-correction";
 
       const plugin: DshPlugin = {
         id: repo!.full_name,
@@ -499,8 +502,8 @@ async function main() {
           method: installMethod,
           target: detection.type === "skill" ? "~/.agents/skills" : undefined,
           needsConfig,
-          commands: installCommands,
-          commandSource: installParsed.source === "template" ? undefined : installParsed.source,
+          commands: corr?.installCommands ?? installCommands,
+          commandSource,
         },
         score: undefined as unknown as DshPlugin["score"],
         sources: candidate.sources,

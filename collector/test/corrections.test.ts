@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   DATA_FIX_TITLE_RE,
   extractCorrections,
+  extractRepoFromDataFixText,
   mergeCorrections,
 } from "../src/sources/corrections.js";
 
@@ -90,8 +91,55 @@ describe("mergeCorrections", () => {
       mergeCorrections({ introByAuthor: "旧自述" }, { descriptionZh: "新简介" })?.descriptionZh
     ).toBe("新简介");
   });
+  it("安装命令后到覆盖先到", () => {
+    const m = mergeCorrections(
+      { installCommands: ["dsh plugin --profile web add a"] },
+      { installCommands: ["dsh plugin --profile web add -w https://x/y/z.tgz"] }
+    );
+    expect(m?.installCommands).toEqual(["dsh plugin --profile web add -w https://x/y/z.tgz"]);
+  });
   it("空修正不覆盖", () => {
     expect(mergeCorrections({ introByAuthor: "旧" }, {})?.introByAuthor).toBe("旧");
     expect(mergeCorrections(undefined, {})).toBeUndefined();
+  });
+});
+
+describe("extractCorrections · 安装命令", () => {
+  it("```sh 代码块 → installCommands", () => {
+    const c = extractCorrections([
+      "安装命令过时，应更新为：",
+      "```sh",
+      "dsh plugin --profile web add -w https://github.com/LiPu-jpg/Openwrite/releases/download/v0.2.8/dsh-openwrite-0.2.8.tgz",
+      "```",
+    ].join("\n"));
+    expect(c.installCommands).toEqual([
+      "dsh plugin --profile web add -w https://github.com/LiPu-jpg/Openwrite/releases/download/v0.2.8/dsh-openwrite-0.2.8.tgz",
+    ]);
+  });
+  it("`安装命令：` 单行 → installCommands", () => {
+    const c = extractCorrections("安装命令：npm install dsh-foo");
+    expect(c.installCommands).toEqual(["npm install dsh-foo"]);
+    expect(extractCorrections("安装：dsh plugin --profile web add dsh-bar")?.installCommands).toEqual([
+      "dsh plugin --profile web add dsh-bar",
+    ]);
+  });
+  it("非安装指令文本不当作命令", () => {
+    const c = extractCorrections("这个插件需要在 Web 端使用，配置见 README。");
+    expect(c.installCommands).toBeUndefined();
+  });
+});
+
+describe("extractRepoFromDataFixText · 裸 owner/repo", () => {
+  it("#135 正文风格：反引号裸 owner/repo → 命中目标仓库", () => {
+    const body = `已收录插件 \`tr1v3r/dsh-quote-followup\` 补写「作者自述」...
+[这个插件来自我自己的日常痒点：长对话里想针对模型前面说的某一段追问，只能整段复制粘贴。]`;
+    expect(extractRepoFromDataFixText(body)).toEqual(["tr1v3r/dsh-quote-followup"]);
+  });
+  it("过滤纯数字/日期/文件路径噪声", () => {
+    expect(extractRepoFromDataFixText("2026/09/10 更新，见 docs/README.md")).toEqual([]);
+  });
+  it("有完整 URL 时不走裸写法（交给 extractRepoFromText）", () => {
+    const body = "仓库：https://github.com/LiPu-jpg/Openwrite 请修正安装命令";
+    expect(extractRepoFromDataFixText(body)).toEqual([]);
   });
 });
