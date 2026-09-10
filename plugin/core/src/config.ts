@@ -13,6 +13,13 @@ import type { CoreConfig, GitHubBinding, UserProfile } from "./types.js";
 const DEFAULT_REMOTE_URL =
   "https://2bingling.github.io/dsh-market/plugins.json";
 
+// 瘦身索引：collector 额外产出的 plugins-lite.json，只保留插件端真正读取的字段
+// （去掉 readmeSummary / topics / score.breakdown / score.explanation 等，
+//  gzip 传输量约降到全量的 43%）。插件端优先取它，404 时自动回退全量索引——
+// 这样在数据管道尚未产出该文件时也不会把插件打挂。
+const DEFAULT_LITE_URL =
+  "https://2bingling.github.io/dsh-market/plugins-lite.json";
+
 export interface ResolvedConfig {
   dshHome: string;
   skillsDir: string;
@@ -20,6 +27,8 @@ export interface ResolvedConfig {
   dataDir: string;
   defaultProfile: string;
   remoteUrl: string;
+  /** 瘦身索引地址；与 remoteUrl 相同表示不启用 */
+  liteUrl: string;
   localDataPath: string | null;
   cacheTtlMs: number;
 }
@@ -53,6 +62,7 @@ export function resolveConfig(config: CoreConfig = {}): ResolvedConfig {
     dataDir,
     defaultProfile: config.defaultProfile ?? "web",
     remoteUrl: config.dataSource?.remoteUrl ?? DEFAULT_REMOTE_URL,
+    liteUrl: config.dataSource?.liteUrl ?? DEFAULT_LITE_URL,
     localDataPath: config.dataSource?.localPath ?? null,
     cacheTtlMs: config.dataSource?.cacheTtlMs ?? 60 * 60 * 1000,
   };

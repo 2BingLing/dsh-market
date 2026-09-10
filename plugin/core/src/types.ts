@@ -170,6 +170,8 @@ export interface UninstallResult {
 export interface DataSourceConfig {
   /** 远程数据 URL（线上 GitHub Pages） */
   remoteUrl: string;
+  /** 瘦身索引 URL（可选；缺省用内置默认值，设为与 remoteUrl 相同即禁用） */
+  liteUrl?: string;
   /** 本地兜底文件路径（开发用 data/plugins.json） */
   localPath?: string;
   /** 缓存目录（本地缓存市场数据） */

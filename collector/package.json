@@ -8,6 +8,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@dsh-market/core": "*",
     "@dsh-market/schema": "*"
   },
   "devDependencies": {

@@ -10,6 +10,7 @@ import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { DshPlugin, DshPack, MarketData } from "@dsh-market/schema";
+import { toLiteMarketData } from "@dsh-market/core";
 import "./env.js"; // 加载仓库根 .env（GITHUB_TOKEN）
 import {
   githubFetch,
@@ -933,6 +934,15 @@ async function main() {
   };
   mkdirSync(DATA_DIR, { recursive: true });
   writeFileSync(join(DATA_DIR, "plugins.json"), JSON.stringify(market, null, 2), "utf-8");
+  // 瘦身索引：插件端只需要一部分字段，全量索引 gzip 已 ~2.8 MB，插件端每个进程首次
+  // 打开面板都要拉一遍（实测 6-8s）。这里额外产出一份裁剪版供插件端优先使用
+  // （缺字段判据与安全网见 plugin/core/src/lite.ts）。Web 端仍读全量 plugins.json。
+  const lite = toLiteMarketData(market);
+  writeFileSync(join(DATA_DIR, "plugins-lite.json"), JSON.stringify(lite), "utf-8");
+  console.log(
+    `  plugins-lite.json: ${lite.plugins.length} plugins` +
+      `（${(JSON.stringify(lite).length / 1048576).toFixed(2)} MB vs 全量 ${(JSON.stringify(market).length / 1048576).toFixed(2)} MB）`
+  );
   // 独立 packs 数据文件（Web 单独加载，schemaVersion 1）：
   // 扫描关闭时不覆盖——data/packs.json 由人工通道（scripts/pack-add.ts）维护，
   // 每日管道只负责把已提交的文件同步到 web/public 并部署。

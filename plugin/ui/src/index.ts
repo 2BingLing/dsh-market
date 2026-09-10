@@ -15,6 +15,7 @@ import {
   readSettings,
   writeSettings,
   fetchMarketData,
+  loadMarketData,
   fetchPacksData,
   scanInstalled,
   updateProfile,
@@ -126,7 +127,7 @@ export function apply(ctx: {
   get(name: string): unknown
 }): void {
   const cfg = resolveConfig()
-  let cached: Awaited<ReturnType<typeof fetchMarketData>> | null = null
+  let cached: Awaited<ReturnType<typeof loadMarketData>> | null = null
 
   /** 用 settings.json 的 modeOverride 覆盖画像（settings 是用户覆盖的单一来源） */
   function withSettingsMode(profile: ReturnType<typeof readProfile>) {
@@ -135,8 +136,20 @@ export function apply(ctx: {
     return { ...profile, modeOverride: s.modeOverride ?? profile.modeOverride }
   }
 
+  /**
+   * 取市场数据：缓存优先（stale-while-revalidate）。
+   * 命中未过期缓存直接返回、不发网络请求——这是「打开面板要等 6-8 秒」的修复点：
+   * 旧实现是远程优先，每个进程首次打开都要重下整份索引。
+   * 过期缓存会先返回旧数据，同时后台刷新，完成后更新这里的快照，下次打开即最新。
+   */
   async function market() {
-    if (!cached) cached = await fetchMarketData(cfg)
+    if (!cached) {
+      cached = await loadMarketData(cfg, {
+        revalidate: (fresh) => {
+          cached = fresh
+        },
+      })
+    }
     return cached.data
   }
 
@@ -158,9 +171,23 @@ export function apply(ctx: {
         return readSettings(cfg)
 
       case 'data': {
-        const r = args.refresh ? await fetchMarketData(cfg) : cached ?? await fetchMarketData(cfg)
-        if (args.refresh) cached = r
-        return { source: r.source, generatedAt: r.data.generatedAt, count: r.data.plugins.length }
+        if (args.refresh || !cached) {
+          cached = args.refresh
+            ? await fetchMarketData(cfg)
+            : await loadMarketData(cfg, {
+                revalidate: (fresh) => {
+                  cached = fresh
+                },
+              })
+        }
+        return {
+          source: cached.source,
+          // 过期缓存 + 后台刷新中：UI 可据此提示"数据可能不是最新"
+          stale: cached.stale ?? false,
+          ageMs: cached.ageMs ?? 0,
+          generatedAt: cached.data.generatedAt,
+          count: cached.data.plugins.length,
+        }
       }
       case 'plugins':
         return (await market()).plugins.map(lite)

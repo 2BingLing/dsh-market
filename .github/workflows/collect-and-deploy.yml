@@ -43,6 +43,12 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      # collector 产出瘦身索引时依赖 @dsh-market/core 的瘦身投影（toLiteMarketData）。
+      # dist/ 被 .gitignore 忽略、CI 里 npm ci 不会产出它，所以必须显式构建，
+      # 否则 collect 会以 "Cannot find module '@dsh-market/core'" 失败、当日无数据更新。
+      - name: 构建核心层（collector 依赖其 dist 产物）
+        run: npm run build -w @dsh-market/core
+
       - name: 运行数据管道（扫描/检测/评分/中文化）
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }} # collector 检测用 PAT（独立 5000/h 配额，与 installation 分桶——双配额扩容）
@@ -68,6 +74,9 @@ jobs:
       - name: 同步数据到 Web
         run: |
           cp data/plugins.json web/public/plugins.json
+          # 瘦身索引：插件端优先取它（只含插件端读取的字段，gzip 约为全量 43%）；
+          # 缺了它插件会自动回退全量 plugins.json，所以这一步失败不致命但会变慢
+          cp data/plugins-lite.json web/public/plugins-lite.json
           # 整合包通道：只有启用扫描/手工生成后才同步（未生成则不部署该文件）
           test -f data/packs.json && cp data/packs.json web/public/packs.json || true
 
@@ -83,7 +92,7 @@ jobs:
           # banner 为本地手动维护的静态资产（scripts/compose-banner.mjs 生成），workflow 不重生成
           # packs.json 由人工通道（scripts/pack-add.ts）维护，独立 add（不存在时跳过，避免拖垮整条 add）
           # 收录徽章用微型 count.json（sync-count.mjs 生成）；不拉整个 plugins.json，防 shields.io 超大小上限显示 invalid
-          git add -f data/plugins.json data/zh-cache.json data/issue-replies.json web/public/plugins.json web/public/count.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
+          git add -f data/plugins.json data/plugins-lite.json data/zh-cache.json data/issue-replies.json web/public/plugins.json web/public/plugins-lite.json web/public/count.json assets/readme/hero.svg scripts/sync-count.mjs README.md README.en.md
           test -f data/packs.json && git add -f data/packs.json web/public/packs.json || true
           git commit -m "data: 每日自动收录更新" || echo "no data changes"
           # 并行会话/其他推送可能领先：先 rebase 再 push，避免非 fast-forward 失败（曾 exit 128 挂掉整个 run）

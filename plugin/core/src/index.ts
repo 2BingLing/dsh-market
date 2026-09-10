@@ -5,6 +5,7 @@
 export * from "./types.js";
 export * from "./config.js";
 export * from "./data.js";
+export * from "./lite.js";
 export * from "./tags.js";
 export * from "./search.js";
 export * from "./installed.js";

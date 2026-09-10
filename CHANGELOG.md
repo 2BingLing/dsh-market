@@ -2,6 +2,36 @@
 
 本项目采用 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 风格。标题按版本号与日期排序，最新在上。
 
+## [0.4.7] - 2026-09-10
+
+### 插件端（`@dsh-market/plugin@0.4.7` / `@dsh-market/core@0.4.6`）
+
+修「打开面板要等 6–8 秒」：**有过期缓存时前台 59ms 返回**（旧实现同场景要重下整份索引，实测 8461ms），冷启动传输量降 56%。
+
+**修复：磁盘缓存写了却从不读（首次打开的 6–8 秒等待）**
+- `fetchMarketData` 是**远程优先**，磁盘缓存只在远程失败时兜底 —— 于是每个 DSH 进程首次打开面板都要重新下载整份索引。缓存设施（`writeCache`/`readCache`/`cacheAge`/`cacheTtlMs`）其实早已就绪，但 `readCachedData` **在生产代码里没有任何调用点**（只有它自己的定义和一个单测引用）。等于读路径从未接线。
+- 新增 `loadMarketData()`（stale-while-revalidate）并接入插件宿主：未过期缓存直接返回、**不发网络请求**；过期缓存立即返回旧数据 + 后台刷新（下次打开即最新）；无缓存才前台等。实测过期缓存场景前台 **59ms** 返回。`data` RPC 新增 `stale`/`ageMs` 便于 UI 提示。
+- 远程地址记忆从模块级变量改为按 cfg 的 `WeakMap`，避免不同数据源/测试之间互相污染。
+
+**新增：瘦身索引 `plugins-lite.json`（冷启动传输 -56%）**
+- 全量索引已达 12.49 MB 原始 / **2.79 MB gzip**，而插件端只读取其中一部分字段。新增 `core/lite.ts` 的裁剪投影，collector 额外产出 `plugins-lite.json`：**4.17 MB 原始 / 1.20 MB gzip（原始 -66%、gzip -56%）**。
+- 裁剪判据不是拍脑袋：对 `plugin/core/src`、`plugin/ui/src`、`schema/src` 逐字段做 `.字段名` 属性访问扫描（剔除注释），**零访问**的字段才裁剪（`readmeSummary` 一项就占全量 17.4%，另有 `topics`/`score.breakdown`/`score.explanation`/`createdAt`/`updatedAt`/`repo`/`language` 等）。
+- **漂移安全网**：`core/test/lite.test.ts` 用等价性测试锁死 —— 同一批插件分别喂全量与瘦身数据，`recommend()` 与 `search()` 的结果（含 relevance / tagHits / reasons）必须逐项一致。将来谁新读了被裁字段，测试立刻变红。
+- **上线顺序安全**：插件端**优先取 lite、404 自动回退全量**，所以在数据管道尚未产出该文件时不会把插件打挂；命中的地址按 cfg 记忆，不会每次重撞 404。
+- 顺带修正 `fetchPacksData` 的地址推导：旧写法 `replace(/plugins\.json/)` 在 lite 地址上不命中，会去把 `plugins-lite.json` 当成 packs 拉。
+
+**修复：`plugin/ui` 的类型检查一直校验的是已发布的旧 core**
+- `node_modules/@dsh-market/core` 存在一份 registry 实体副本（0.4.2，早期 `plugin/core` 版本低于 `^0.4.0` 时 npm 嵌套所致），**遮蔽了工作区链接** —— 于是 `plugin/ui` 的 typecheck 从未真正校验本地 core 源码。已清理该嵌套副本与 lockfile 中对应条目，现解析到 `plugin/core/dist`。
+- 运行时不受影响（profile 里是 junction，本来就指向本地）；仅类型检查失真。
+
+**构建/CI**
+- `plugin/core/dist` 被 `.gitignore` 忽略，而 CI 是 `npm ci` → `npm run collect`、无构建步骤；collector 现在运行时依赖 core 的构建产物，故 workflow 显式补上 `npm run build -w @dsh-market/core`（否则 collect 会以找不到模块失败、当日无数据更新）。
+- workflow 同步 `plugins-lite.json` 到 `web/public` 并纳入 `git add`。
+
+**文档**
+- 补齐**最低 DSH 版本要求**（原先 README 完全没写）：`README.md` 新增 `## 环境要求`、`README.en.md` 新增 `## Requirements`。
+- 新建 `plugin/ui/README.md` —— 该文件原先不存在（`files` 里列着它），导致 npm 包页面一直空白。
+
 ## [0.4.6] - 2026-09-10
 
 ### 插件端（`@dsh-market/plugin@0.4.6` / `@dsh-market/core@0.4.5`）

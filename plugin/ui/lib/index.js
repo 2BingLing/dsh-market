@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { aggregateTags, applyUpdate, canonicalCommands, checkSelfUpdate, checkUpdates, deriveSmokeCommands, detectPnpmMajor, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, learnRecipe, listRecipes, metricSummary, parseBlockedBuilds, parseInstallVerdict, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
+import { aggregateTags, applyUpdate, canonicalCommands, checkSelfUpdate, checkUpdates, deriveSmokeCommands, detectPnpmMajor, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, learnRecipe, listRecipes, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。
@@ -80,8 +80,16 @@ function apply(ctx) {
 			modeOverride: s.modeOverride ?? profile.modeOverride
 		};
 	}
+	/**
+	* 取市场数据：缓存优先（stale-while-revalidate）。
+	* 命中未过期缓存直接返回、不发网络请求——这是「打开面板要等 6-8 秒」的修复点：
+	* 旧实现是远程优先，每个进程首次打开都要重下整份索引。
+	* 过期缓存会先返回旧数据，同时后台刷新，完成后更新这里的快照，下次打开即最新。
+	*/
 	async function market() {
-		if (!cached) cached = await fetchMarketData(cfg);
+		if (!cached) cached = await loadMarketData(cfg, { revalidate: (fresh) => {
+			cached = fresh;
+		} });
 		return cached.data;
 	}
 	async function dispatch(method, args = {}) {
@@ -98,15 +106,17 @@ function apply(ctx) {
 			case "settings:update":
 				writeSettings(cfg, args.patch ?? {});
 				return readSettings(cfg);
-			case "data": {
-				const r = args.refresh ? await fetchMarketData(cfg) : cached ?? await fetchMarketData(cfg);
-				if (args.refresh) cached = r;
+			case "data":
+				if (args.refresh || !cached) cached = args.refresh ? await fetchMarketData(cfg) : await loadMarketData(cfg, { revalidate: (fresh) => {
+					cached = fresh;
+				} });
 				return {
-					source: r.source,
-					generatedAt: r.data.generatedAt,
-					count: r.data.plugins.length
+					source: cached.source,
+					stale: cached.stale ?? false,
+					ageMs: cached.ageMs ?? 0,
+					generatedAt: cached.data.generatedAt,
+					count: cached.data.plugins.length
 				};
-			}
 			case "plugins": return (await market()).plugins.map(lite);
 			case "plugin:get": return (await market()).plugins.find((p) => p.id === args.pluginId) ?? null;
 			case "packs": return (await fetchPacksData(cfg)).map(litePack);

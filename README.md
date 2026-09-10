@@ -44,6 +44,28 @@ DSH 生态增长极快，插件与技能散落在 GitHub 各处 —— **不知�
 |---|---|
 | ![Web 版截图](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-web.jpg) | ![插件版截图](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-plugin.jpg) |
 
+## 环境要求
+
+| 依赖 | 要求 |
+|---|---|
+| DSH（DeepSeek Harness） | **≥ 0.0.1-rc.5** |
+| Node.js | ≥ 20 |
+
+**面板入口按 DSH 版本自动切换**，同一份产物兼容两代，不需要按版本换装：
+
+| DSH 版本 | 面板入口 |
+|---|---|
+| **≥ 0.1.5-rc.1** | 标准入口 `sidebar.panellist` + `main` —— 图标进左侧导航栏，面板在中央列展开 |
+| **< 0.1.5**（含 0.1.1-rc.2 / 0.1.2-rc.1 / 0.0.1-rc.5） | 旧入口 `sidebar.footer.action` + `shell.overlay` —— 侧边栏底部按钮 + 居中浮层 |
+
+判定方式为运行时探测 `layout.selectPanel`（0.1.5 新增；旧版 layout 服务只有 `attachPanels` / `toggleSidebar` / `openDetails` / `closeDetails`）。两代都 `provide('layout')`，因此不会误判，也不会因等待服务而挂死。
+
+**版本依据**
+
+- **最低 0.0.1-rc.5**：四项前提已逐版核对通过 —— 客户端模块系统解析 `dsh.client`、`sidebar.footer.action` + `shell.overlay` 的 slot 契约、`layout` 服务、`webServer.register({ kind: 'prefix' })` 签名。更早版本未核对。
+- **实测运行**：0.1.1-rc.2（旧入口）、0.1.5-rc.1（标准入口）。
+- **推荐 ≥ 0.1.5-rc.1**：标准面板入口 + 右侧 Sidebar 等新能力完整可用。
+
 ## 快速开始
 
 ### Web 版

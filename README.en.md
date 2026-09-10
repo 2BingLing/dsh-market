@@ -44,6 +44,28 @@ The DSH ecosystem is growing fast, and plugins & skills are scattered across Git
 |---|---|
 | ![Web edition screenshot](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-web.jpg) | ![Plugin edition screenshot](https://raw.githubusercontent.com/2BingLing/dsh-market/master/web/public/screenshot-plugin.jpg) |
 
+## Requirements
+
+| Dependency | Requirement |
+|---|---|
+| DSH (DeepSeek Harness) | **≥ 0.0.1-rc.5** |
+| Node.js | ≥ 20 |
+
+**The panel entry switches automatically with the DSH version.** One single artifact supports both generations — no version-specific build:
+
+| DSH version | Panel entry |
+|---|---|
+| **≥ 0.1.5-rc.1** | Standard entry `sidebar.panellist` + `main` — the icon joins the left nav rail and the panel opens in the central column |
+| **< 0.1.5** (incl. 0.1.1-rc.2 / 0.1.2-rc.1 / 0.0.1-rc.5) | Legacy entry `sidebar.footer.action` + `shell.overlay` — a button at the sidebar foot plus a centered overlay |
+
+Detection is a runtime capability probe on `layout.selectPanel` (added in 0.1.5; the older `layout` service only exposes `attachPanels` / `toggleSidebar` / `openDetails` / `closeDetails`). Both generations `provide('layout')`, so the probe can neither misdetect nor park the plugin.
+
+**Version basis**
+
+- **Minimum 0.0.1-rc.5**: all four prerequisites verified version by version — the client module system parsing `dsh.client`, the `sidebar.footer.action` + `shell.overlay` slot contract, the `layout` service, and the `webServer.register({ kind: 'prefix' })` signature. Earlier versions were not checked.
+- **Actually exercised**: 0.1.1-rc.2 (legacy entry), 0.1.5-rc.1 (standard entry).
+- **Recommended ≥ 0.1.5-rc.1**: the standard panel entry plus the full set of newer capabilities.
+
 ## Quick Start
 
 ### Web edition
