@@ -1,14 +1,41 @@
 {
-  "generatedAt": "2026-09-08T21:51:37.003Z",
+  "generatedAt": "2026-09-10T21:38:28.808Z",
   "replies": [
     {
       "issueNumbers": [
-        134
+        137
       ],
-      "fullName": "tr1v3r/dsh-proxy",
+      "fullName": "LiPu-jpg/Openwrite",
+      "type": "cordis-plugin",
+      "stars": 708,
+      "score": 86
+    },
+    {
+      "issueNumbers": [
+        140
+      ],
+      "fullName": "bbqisbbq/dsh-tiddlywiki",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 40
+    },
+    {
+      "issueNumbers": [
+        135
+      ],
+      "fullName": "tr1v3r/dsh-quote-followup",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 54
+    },
+    {
+      "issueNumbers": [
+        138
+      ],
+      "fullName": "chaoxxx/dsh-liangwenfeng-moment",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 35
+      "score": 17
     }
   ]
 }
