@@ -2,6 +2,39 @@
 
 本项目采用 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/) 风格。标题按版本号与日期排序，最新在上。
 
+## [0.4.6] - 2026-09-10
+
+### 插件端（`@dsh-market/plugin@0.4.6` / `@dsh-market/core@0.4.5`）
+
+适配 DSH 0.1.5：**同一份产物同时兼容 ≤0.1.4 与 0.1.5+**，新版走标准面板入口，旧版行为不变。
+
+**新增：双路面板入口 —— 新版走标准入口，旧版保持原样（同一份产物）**
+- client half 按宿主能力探测后二选一注册，互斥：
+  - **0.1.5+**（`layout.selectPanel` 存在）→ `sidebar.panellist`（左栏导航图标）+ `main`（中央面板，`key` 与 panellist 的 `id` 同名 `dsh-market`）。这就是 0.1.5 更新日志所说的「面向插件作者的标准化 web ui 扩展入口」。
+  - **≤0.1.4**（layout 只有 `attachPanels/toggleSidebar/openDetails/closeDetails`）→ `sidebar.footer.action` + `shell.overlay`，行为与升级前完全一致。
+- 探测点选 `layout.selectPanel`：两代 `root` slot 的子节点也不同（旧版 `conversation`/`details`，新版 `main`/`rightbar`），若只看 slot 名会误判；`selectPanel` 是 0.1.5 独有的方法，判据干净。`inject` 增加 `layout`，保证探测时它已就绪（两代都 `provide('layout')`，不会把插件挂死在等待上）。
+- `MarketPanel` 增加 `mode: 'overlay' | 'main'`：main 模式嵌进中央列（无遮罩、卡片填满、`onClose` → `layout.selectPanel(null)` 回对话），overlay 模式保持原居中模态。原有 `if (!open) return null` 与各 `useEffect` 的 `open` 依赖在两代都成立（main 模式由 layout 决定挂载，恒为打开）。
+- 新增 `plugin/ui/test/client-dual-path.mjs`：直接加载构建产物 `lib/client.js`，用两代假 ctx 各 apply 一次，断言注册的 slot 名、`panellist.id === main.key`（契约硬约束，对不上点击会抛错）、两路互斥、layout 缺失时安全降级、以及 bundle 未引入 `react` 以外的外部模块。`plugin/ui` 的 `npm test` 已接入（`pretest` 先构建）。
+
+**修复：场景推荐丢失会话标题（0.1.5 上的静默退化）**
+- `sessionQuery.readTitle()` 在 0.1.5 改为**直接返回标题字符串**（旧版返回 `{ title }`）。原写法 `t?.title ?? ''` 在字符串上取 `.title` 恒为 `undefined`，导致「猜你喜欢」的标题信号永久丢失且不报错。现按两种形态兼容取值。
+
+**修复：安全模式（`ai:install` + `security: true`）必崩**
+- 该分支跳过 T0 时 `t0` 为 `null`，而度量上报里写的是 `t0.reason` → `TypeError`。已改为 `t0?.reason`（同函数下方本就用可选链）。
+
+**改进：子代理归属改用 `agents.roots()`**
+- 0.1.5 起 `agents.list()` 含可继续对话的子代理，`list()[0]` 可能取到子代理；`roots()` 只返回顶层 agent。两处调用点改为 `roots?.() ?? list?.() ?? []`（旧版无 `roots` 时自动回退，向后兼容）。
+
+**清理：过时/失效的插件元数据与构建外部清单**
+- `package.json`：移除顶层 `dshClient` 字段——DSH 的 `parseDshClient` 只读 `pkg.dsh.client`（0.1.0-rc.8 / 0.1.1-rc.2 / 0.1.5-rc.1 三版均已核对），该字段从未被读取。
+- `package.json`：`dsh.client.inject` 由 `[dsh-client-runtime, dsh-client-locale, dsh-client-ui-slots]` 清空——这两个包在 0.1.5 已不存在（旧版也从不消费该字段），插件的 client bundle 实际只 `require("react")`。
+- `tsdown.config.ts`：外部清单对齐 0.1.5 壳层真实静态种子表（`react*` / `@deepseek-ai/cordis` / `dsh-client-store` / `dsh-client-ui-slots` / `dsh-client-ui-primitives` / `dsh-client-ui-dockkit`），移除已消失的 `dsh-client-runtime` 与 `dsh-client-web-react`，裸 `cordis` 改为 `@deepseek-ai/cordis`。
+
+**改进：市场插件判定不再认 `dshClient`**
+- `collector`：`isCordisPackageJson` 移除 `dshClient` 分支——只有该字段的包在 DSH 上不会被加载，列为可用插件属误报（同时含 `dsh.bundle.patch` 或 cordis 依赖的仓库仍照常命中）。
+- `core/verify`：装后四态验证的 `hasClient` 只认 `dsh.client`；仅有 `dshClient` 的包不再被判成 `restart`（"重启后生效"），而是 `inert` 并明确提示「旧版声明字段，装上不会生效」。
+- 新增测试：`collector/test/detect.test.ts`、`plugin/core/test/verify.test.ts` 各补一例锁定新语义。
+
 ## [0.3.1] - 2026-08-21
 
 ### 插件端（`@dsh-market/plugin` / `@dsh-market/core`）

@@ -140,7 +140,11 @@ function verifyCordis(
   }
 
   const hasBundle = Boolean(installed.dsh?.bundle);
-  const hasClient = Boolean(installed.dsh?.client) || Boolean(installed.dshClient);
+  // 只认 dsh.client：顶层 dshClient 字段已不被 DSH 读取——dsh-client-modules 的
+  // parseDshClient 只取 pkg.dsh.client（0.1.1-rc.2 与 0.1.5-rc.1 两版均已核对）。
+  // 若把 dshClient 也算作 client 声明，会把"装了也不会生效"的包判成正常。
+  const hasClient = Boolean(installed.dsh?.client);
+  const legacyClientOnly = !hasClient && Boolean(installed.dshClient);
 
   // 普通依赖：无 dsh.bundle / dsh.client → 不会成为插件层
   if (!hasBundle && !hasClient) {
@@ -149,8 +153,15 @@ function verifyCordis(
       inBundles,
       hasBundle,
       hasClient,
-      reasons: ["该依赖未声明 dsh.bundle / dsh.client", "作为普通依赖安装，不会成为 DSH 插件层"],
-      action: "这不是可用的 DSH 插件包，建议卸载",
+      reasons: legacyClientOnly
+        ? [
+            "该包只声明了顶层 dshClient 字段",
+            "DSH 只读 dsh.client，dshClient 已被忽略 → 装上也不会生效",
+          ]
+        : ["该依赖未声明 dsh.bundle / dsh.client", "作为普通依赖安装，不会成为 DSH 插件层"],
+      action: legacyClientOnly
+        ? "旧版声明字段：需插件作者迁移到 dsh.client，或联系维护者反馈"
+        : "这不是可用的 DSH 插件包，建议卸载",
     };
   }
 

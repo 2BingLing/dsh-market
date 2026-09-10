@@ -1,6 +1,6 @@
 {
   "name": "@dsh-market/plugin",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "DSH Market 插件端：cordis 侧边栏插件（浏览/搜索/猜你喜欢/一键安装/已装管理），核心逻辑来自 @dsh-market/core",
   "type": "module",
   "main": "lib/index.js",
@@ -26,26 +26,15 @@
       "patch": "./cordis.patch.yml"
     },
     "client": {
-      "inject": [
-        "@deepseek-ai/dsh-client-runtime",
-        "@deepseek-ai/dsh-client-locale",
-        "@deepseek-ai/dsh-client-ui-slots"
-      ],
+      "inject": [],
       "platform": "web"
     }
-  },
-  "dshClient": {
-    "inject": [
-      "@deepseek-ai/dsh-client-runtime",
-      "@deepseek-ai/dsh-client-locale",
-      "@deepseek-ai/dsh-client-ui-slots"
-    ],
-    "platform": "web"
   },
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"ui tests: see plugin/core\"",
+    "pretest": "npm run build",
+    "test": "node test/client-dual-path.mjs",
     "prepublishOnly": "npm run build"
   },
   "dependencies": {

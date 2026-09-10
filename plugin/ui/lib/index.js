@@ -171,7 +171,8 @@ function apply(ctx) {
 			case "tags:hot": return hotTags((await market()).plugins, args.n ?? 12);
 			case "tags:all": return aggregateTags((await market()).plugins);
 			case "scene:context": {
-				const agent = ctx.get("agents")?.list?.()?.[0];
+				const agents = ctx.get("agents");
+				const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0];
 				const sessionId = agent?.sessionId ?? agent?.id;
 				const sq = ctx.get("sessionQuery");
 				if (!sessionId || !sq) return {
@@ -182,7 +183,8 @@ function apply(ctx) {
 				const msgs = [];
 				const tools = [];
 				try {
-					title = (await sq.readTitle?.(sessionId))?.title ?? "";
+					const t = await sq.readTitle?.(sessionId);
+					title = typeof t === "string" ? t : t?.title ?? "";
 					const evts = (await sq.readSession?.(sessionId))?.events ?? [];
 					for (const e of evts.slice(-60)) if (e.type === "user/message") {
 						const txt = (e.data?.content ?? []).filter((c) => c.type === "text").map((c) => c.text ?? "").join(" ");
@@ -389,7 +391,7 @@ function apply(ctx) {
 				const agents = ctx.get("agents");
 				const subagents = ctx.get("subagents");
 				if (!subagents) throw new Error("子代理服务不可用");
-				const agent = agents?.list?.()?.[0];
+				const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0];
 				if (!agent) throw new Error("当前会话代理不可用");
 				const provider = subagents.list().includes("spawn") ? "spawn" : subagents.list()[0];
 				const prompt = buildInstallPrompt(plugin, profile, t0?.reason, { security });
@@ -410,7 +412,7 @@ function apply(ctx) {
 					mode: "t1",
 					ok: false,
 					phase: "start",
-					error: t0.reason ?? null
+					error: t0?.reason ?? null
 				});
 				if (sessionId) {
 					const sq = ctx.get("sessionQuery");

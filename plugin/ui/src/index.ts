@@ -250,13 +250,19 @@ export function apply(ctx: {
       // 场景推荐信号：当前会话标题 + 最近用户消息 + 最近工具调用 → 匹配插件标签（零 token）
       case 'scene:context': {
         const agents = ctx.get('agents') as
-          | { list?: () => Array<{ sessionId?: string; id?: string }> }
+          | {
+              list?: () => Array<{ sessionId?: string; id?: string }>
+              /** 0.1.5+：只返回顶层 agent（可继续对话的子代理不计入） */
+              roots?: () => Array<{ sessionId?: string; id?: string }>
+            }
           | undefined
-        const agent = agents?.list?.()?.[0]
+        // 优先 roots()：0.1.5 起 list() 含子代理，取 [0] 可能命中子代理而非当前会话
+        const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0]
         const sessionId = agent?.sessionId ?? agent?.id
         const sq = ctx.get('sessionQuery') as
           | {
-              readTitle?(id: string): Promise<{ title?: string } | undefined>
+              /** 0.1.5+ 直接返回标题字符串；≤0.1.4 返回 { title }——两种形态都吃 */
+              readTitle?(id: string): Promise<string | { title?: string } | undefined>
               readSession?(id: string): Promise<{ events?: Array<Record<string, any>> }>
             }
           | undefined
@@ -266,7 +272,9 @@ export function apply(ctx: {
         const tools: string[] = []
         try {
           const t = await sq.readTitle?.(sessionId)
-          title = t?.title ?? ''
+          // 版本兼容：0.1.5 起 readTitle 直接返回字符串；旧版返回 { title }。
+          // 旧写法 `t?.title ?? ''` 在新版下字符串取 .title 恒为 undefined → 标题静默丢失。
+          title = typeof t === 'string' ? t : (t?.title ?? '')
           const s = await sq.readSession?.(sessionId)
           const evts = s?.events ?? []
           for (const e of evts.slice(-60)) {
@@ -496,7 +504,13 @@ export function apply(ctx: {
             error: t0.result?.error ?? null,
           }
         }
-        const agents = ctx.get('agents') as { list?: () => Array<{ sessionId?: string; id?: string }> } | undefined
+        const agents = ctx.get('agents') as
+          | {
+              list?: () => Array<{ sessionId?: string; id?: string }>
+              /** 0.1.5+：只返回顶层 agent */
+              roots?: () => Array<{ sessionId?: string; id?: string }>
+            }
+          | undefined
         const subagents = ctx.get('subagents') as
           | {
               list(): string[]
@@ -512,7 +526,8 @@ export function apply(ctx: {
             }
           | undefined
         if (!subagents) throw new Error('子代理服务不可用')
-        const agent = agents?.list?.()?.[0]
+        // 优先 roots()：安装子代理要挂在「当前根会话」下，不能挂到别的子代理上
+        const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0]
         if (!agent) throw new Error('当前会话代理不可用')
         const provider = subagents.list().includes('spawn') ? 'spawn' : subagents.list()[0]
         const prompt = buildInstallPrompt(plugin, profile, t0?.reason, { security })
@@ -537,7 +552,8 @@ export function apply(ctx: {
           mode: 't1',
           ok: false,
           phase: 'start',
-          error: t0.reason ?? null,
+          // t0 在安全模式下为 null（跳过 T0 直装）——同函数下方 reason 用的是 t0?.reason
+          error: t0?.reason ?? null,
         })
         // P1.5 T1 输出自动落库（后台，不阻塞 RPC）：轮询子会话 → JSON verdict → 学配方 + 完成度量
         if (sessionId) {

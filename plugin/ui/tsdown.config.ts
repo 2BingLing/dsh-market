@@ -14,12 +14,26 @@ import { transform } from 'lightningcss'
 
 const PLUGIN_ID = '@dsh-market/plugin'
 
+/**
+ * 0.1.5 壳层静态种子表（web boot 的 staticModules，权威来源是
+ * dsh-web-frontend 里 `My()` 的返回对象）。列在这里的 specifier 由 shell 直接
+ * 应答，构建期必须留作 external；其余一律内联。
+ *
+ * 0.1.5 变更：`@deepseek-ai/dsh-client-runtime` 与 `@deepseek-ai/dsh-client-web-react`
+ * 已从运行时消失（前者职责拆给 dsh-client-modules + dsh-cordis-client-runner）。
+ * 留在清单里会让未来的 import 产出一个无法解析的 require()，到运行时才炸。
+ * 裸 `cordis` 也一并改为种子表里的真实名 `@deepseek-ai/cordis`。
+ */
 const PLATFORM_MODULES = [
-  'react', 'react/jsx-runtime', 'react-dom', 'react-dom/client', 'cordis',
+  'react',
+  'react/jsx-runtime',
+  'react-dom',
+  'react-dom/client',
+  '@deepseek-ai/cordis',
+  '@deepseek-ai/dsh-client-store',
   '@deepseek-ai/dsh-client-ui-slots',
-  '@deepseek-ai/dsh-client-web-react',
   '@deepseek-ai/dsh-client-ui-primitives',
-  '@deepseek-ai/dsh-client-runtime/client',
+  '@deepseek-ai/dsh-client-ui-dockkit',
 ] as const
 
 const EXTERNALS: readonly string[] = [...PLATFORM_MODULES]

@@ -105,13 +105,23 @@ describe("isCordisPackageJson", () => {
     expect(isCordisPackageJson(pkg)).toBe(true);
   });
 
-  it("dshClient 顶层字段（With-With 案例形态）判定为插件", () => {
+  it("dshClient 顶层字段不参与判定；该案例仍靠 dsh.bundle.patch 命中（With-With 形态）", () => {
     const pkg = JSON.stringify({
       name: "dsh-hindsight-plugins",
       dsh: { bundle: { patch: "./cordis.patch.yml" } },
       dshClient: { inject: ["@deepseek-ai/dsh-client-runtime"], platform: "web" },
     });
     expect(isCordisPackageJson(pkg)).toBe(true);
+  });
+
+  it("只有 dshClient 顶层字段（无 dsh.client / bundle / cordis 依赖）判定为非插件", () => {
+    // DSH 的 parseDshClient 只读 pkg.dsh.client；dshClient 从未被任何 0.1.x 读取，
+    // 这类包装上去不会被加载，不该进市场清单。
+    const pkg = JSON.stringify({
+      name: "some-legacy-client-plugin",
+      dshClient: { inject: ["@deepseek-ai/dsh-client-runtime"], platform: "web" },
+    });
+    expect(isCordisPackageJson(pkg)).toBe(false);
   });
 
   it("无任何 DSH/cordis 标记的普通包判定为非插件", () => {

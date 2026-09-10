@@ -1519,9 +1519,13 @@ function FavoritesTab(props: {
 
 // ---------- 主面板 ----------
 
-export function MarketPanel(props: { onClose: () => void }): ReactNode {
-  const { onClose } = props
-  const open = useSyncExternalStore(subscribe, getOpen, getOpen)
+export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'main' }): ReactNode {
+  const { onClose, mode = 'overlay' } = props
+  const storeOpen = useSyncExternalStore(subscribe, getOpen, getOpen)
+  // main 模式（0.1.5 标准入口）由 layout 决定挂载——选中才渲染，故恒为「打开」；
+  // overlay 模式（≤0.1.4 旧入口）面板常驻 shell.overlay，用 store 开关控制显隐。
+  // 下面 if (!open) return null 与各 useEffect 的 open 依赖因此两代都成立。
+  const open = mode === 'main' ? true : storeOpen
   const [tab, setTab] = useState<'recommend' | 'search' | 'packs' | 'favorites' | 'installed' | 'settings'>('recommend')
   const [plugins, setPlugins] = useState<LitePlugin[]>([])
   const [profile, setProfile] = useState<UserProfile | null>(null)
@@ -1672,8 +1676,17 @@ export function MarketPanel(props: { onClose: () => void }): ReactNode {
     { id: 'settings', label: '设置' },
   ]
 
-  return El('div', { className: styles.backdrop, onClick: onClose },
-    El('div', { className: styles.panel, onClick: (e: MouseEvent) => e.stopPropagation() },
+  // main 模式：面板嵌在中央列里（无遮罩、无固定定位），卡片填满可用区域；
+  // overlay 模式：保持原有居中模态（近透明遮罩 + 点击外部关闭）。
+  const inMain = mode === 'main'
+  return El('div',
+    inMain
+      ? { className: styles.mainHost }
+      : { className: styles.backdrop, onClick: onClose },
+    El('div',
+      inMain
+        ? { className: `${styles.panel} ${styles.panelInMain}` }
+        : { className: styles.panel, onClick: (e: MouseEvent) => e.stopPropagation() },
       El('div', { className: styles.header },
         El('span', { className: styles.titleIcon },
           El(MarketLogo, { size: 24, color: 'var(--mkt-brand)', eyeColor: '#FFFFFF' }),

@@ -153,6 +153,31 @@
   -webkit-font-smoothing: antialiased;
 }
 
+/* ---------- 0.1.5 主面板模式（sidebar.panellist + main）----------
+ * 面板不再浮在遮罩上，而是嵌进中央列：宿主铺满、卡片填满可用高度。
+ * 安装弹窗等内部模态用的是 .modalBackdrop（position:fixed; z-index:120），
+ * 即使渲染在中央列内部也照常覆盖整个视口，无需改动。 */
+.mainHost {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: 16px;
+  overflow: hidden;
+}
+
+/* 沿用 .panel 的卡片外观，只覆盖尺寸约束——必须排在上方 .panel 之后（同特异性后胜） */
+.panelInMain {
+  width: 100%;
+  max-width: 960px;
+  height: 100%;
+  max-height: none;
+  margin: 0 auto;
+}
+
 /* ---------- 标题栏（B：.market-head） ---------- */
 .header {
   flex: 0 0 auto;

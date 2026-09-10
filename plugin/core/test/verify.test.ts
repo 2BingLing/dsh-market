@@ -23,7 +23,7 @@ function setupCordis(
     inDeps?: boolean;
     inBundles?: boolean;
     installed?: boolean;
-    dshKind?: "bundle" | "client" | "none" | "absent";
+    dshKind?: "bundle" | "client" | "none" | "absent" | "legacyClient";
     patchApplied?: boolean;
   } = {},
 ) {
@@ -47,6 +47,8 @@ function setupCordis(
     const ipkg: Record<string, unknown> = { name, version: "1.2.3", main: "index.js" };
     if (dshKind === "bundle") ipkg.dsh = { bundle: { patch: "./cordis.patch.yml" } };
     if (dshKind === "client") ipkg.dsh = { client: { platform: "web" } };
+    // 旧版社区写法：顶层 dshClient（DSH 的 parseDshClient 只读 pkg.dsh.client，从不读它）
+    if (dshKind === "legacyClient") ipkg.dshClient = { platform: "web", inject: [] };
     writeFileSync(join(nm, "package.json"), JSON.stringify(ipkg), "utf8");
   }
 
@@ -97,6 +99,15 @@ describe("verifyActivation · cordis 型", () => {
     setupCordis(cfg, "lodash", { inDeps: true, inBundles: false, dshKind: "none" });
     const r = verifyActivation(cfg, { type: "cordis-plugin", profile: "web", name: "lodash" });
     expect(r.state).toBe("inert");
+  });
+
+  it("inert：只有顶层 dshClient 字段 → 不得判成 restart（DSH 只读 dsh.client）", () => {
+    const cfg = makeCfg();
+    setupCordis(cfg, "dsh-legacy-client", { inDeps: true, inBundles: false, dshKind: "legacyClient" });
+    const r = verifyActivation(cfg, { type: "cordis-plugin", profile: "web", name: "dsh-legacy-client" });
+    expect(r.state).toBe("inert");
+    expect(r.hasClient).toBe(false);
+    expect(r.reasons.join(" ")).toContain("dshClient");
   });
 
   it("broken：依赖未写入（安装未生效）", () => {
