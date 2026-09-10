@@ -12,6 +12,7 @@
  */
 
 import type { PracticalScore, PracticalScoreBreakdown } from "@dsh-market/schema";
+import { parseInstallCommands } from "./install-parse.js";
 
 export interface ScoreInput {
   stars: number;
@@ -125,7 +126,10 @@ export function scoreEase(readmeContent: string | null, needsConfig: boolean): n
   let s = 0;
   const text = readmeContent ?? "";
   // 有明确安装命令
-  if (/(git clone|pnpm add|npm install -g|npx skills add|npm i -g|pip install)/i.test(text)) {
+  const hasDshInstall = parseInstallCommands(text).commands.some(command =>
+    /^dsh\s+plugin(?:\s+--profile\s+\S+)?\s+(?:add|i)\s+\S/i.test(command)
+  );
+  if (hasDshInstall || /(git clone|pnpm add|npm install -g|npx skills add|npm i -g|pip install)/i.test(text)) {
     s += 35;
   } else if (/(install|安装)/i.test(text)) {
     s += 15;
@@ -133,7 +137,7 @@ export function scoreEase(readmeContent: string | null, needsConfig: boolean): n
   // 无需额外配置
   if (!needsConfig) s += 35;
   // 有结构说明（README 顶部有徽章/描述）
-  if (/^#\s+.+/m.test(text) && text.length > 100) s += 30;
+  if ((/^#\s+.+/m.test(text) || /<h1\b[^>]*>[^<]*\S[\s\S]*?<\/h1>/i.test(text)) && text.length > 100) s += 30;
 
   return Math.round(clip(s));
 }
