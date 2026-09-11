@@ -784,7 +784,7 @@ function buildInstallPrompt(
     fullName: string
     type: string
     descriptionZh: string | null
-    install: { method?: string; commands?: string[]; needsConfig?: boolean; target?: string }
+    install: { method?: string; commands?: string[]; needsConfig?: boolean; usageNeedsConfig?: boolean; target?: string }
     stars: number
   },
   targetProfile: string,
@@ -819,7 +819,7 @@ function buildInstallPrompt(
     `【插件信息】`,
     `- 类型：${plugin.type === 'skill' ? 'skill（技能）' : 'cordis 插件'}（${plugin.type}）`,
     `- 简介：${plugin.descriptionZh ?? '(无中文简介)'}`,
-    `- 需要配置：${plugin.install.needsConfig ? '是（API Key / Token 等）' : '否'}`,
+    `- 需要配置：${plugin.install.needsConfig ? '是（API Key / Token 等）' : plugin.install.usageNeedsConfig ? '安装无需；使用时需配置模型（可能产生费用）' : '否'}`,
     `- 目标 profile：${targetProfile}`,
     `- 参考命令（collector 已从 README 解析，优先直接使用）：`,
     `    ${cmdLine}`,

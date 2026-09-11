@@ -72,7 +72,9 @@ export function buildInstallPrompt(p: DshPlugin): string {
   const typeDesc = p.type === "skill" ? "skill（技能，装到 ~/.agents/skills 目录）" : "cordis 插件（装到 DSH profile）";
   const configNote = p.install.needsConfig
     ? "注意：该插件可能需要额外配置（API Key / Token 等），装完后请告诉我如何配置。"
-    : "该插件开箱即用，无需额外配置。";
+    : p.install.usageNeedsConfig
+      ? "注意：安装无需配置，但使用时需配置模型（API Key 等，可能产生费用），装完后请告诉我如何配置。"
+      : "该插件开箱即用，无需额外配置。";
   return [
     `请帮我安装 DeepSeek Harness 插件「${p.name}」：`,
     `- GitHub 仓库：${p.fullName}（${`https://github.com/${p.fullName}`}）`,

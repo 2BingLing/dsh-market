@@ -40,8 +40,10 @@ export interface InstallInfo {
   method: InstallMethod;
   /** skill 型：~/.agents/skills；cordis 型：profile 名 */
   target?: string;
-  /** 是否需要 token / API key 等额外配置 */
+  /** 是否需要 token / API key 等额外配置（安装 + 使用合并口径，评分用） */
   needsConfig: boolean;
+  /** 使用/运行时是否需要配置模型或 API Key（区别于安装配置；安装免配置但使用需模型时为 true，#137） */
+  usageNeedsConfig?: boolean;
   /** 从 README 安装章节解析出的真实安装命令（精确命令优先于模板） */
   commands?: string[];
   /** 命令来源（README 安装章节 / 模板兜底） */

@@ -25,7 +25,7 @@ import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
 import { fetchSubmissionRepos, fetchPackSubmissionRepos } from "./sources/issues.js";
 import { mergeCorrections, type DataCorrections } from "./sources/corrections.js";
-import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectSubdirBundle } from "./detect.js";
+import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectSubdirBundle } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
 import { runPool } from "./pool.js";
@@ -47,6 +47,8 @@ interface DetectCache {
   };
   isCordis: boolean;
   needsConfig: boolean;
+  /** 使用/运行时需配置模型（旧缓存缺省 undefined，读取时按 false） */
+  usageNeedsConfig?: boolean;
   readmeSummary: string | null;
   installParsed: { commands: string[]; source: string };
   hasSkillMd: boolean;
@@ -285,6 +287,7 @@ async function main() {
       let detection: Awaited<ReturnType<typeof detectPlugin>>;
       let isCordis: boolean;
       let needsConfig: boolean;
+      let usageNeedsConfig: boolean;
       let readmeSummary: string | null;
       let installParsed: { commands: string[]; source: string };
       let hasSkillMd: boolean;
@@ -296,6 +299,7 @@ async function main() {
         detection = cachedDetect.detection;
         isCordis = cachedDetect.isCordis;
         needsConfig = cachedDetect.needsConfig;
+        usageNeedsConfig = cachedDetect.usageNeedsConfig ?? false;
         readmeSummary = cachedDetect.readmeSummary;
         installParsed = cachedDetect.installParsed;
         hasSkillMd = cachedDetect.hasSkillMd;
@@ -426,6 +430,7 @@ async function main() {
         }
 
         needsConfig = detectNeedsConfig(readmeContent);
+        usageNeedsConfig = detectUsageNeedsConfig(readmeContent);
         readmeSummary = readmeContent
           ? summarizeReadme(readmeContent)
           : skillMd
@@ -442,6 +447,7 @@ async function main() {
             detection,
             isCordis,
             needsConfig,
+            usageNeedsConfig,
             readmeSummary,
             installParsed,
             hasSkillMd,
@@ -503,6 +509,7 @@ async function main() {
           method: installMethod,
           target: detection.type === "skill" ? "~/.agents/skills" : undefined,
           needsConfig,
+          usageNeedsConfig,
           commands: corr?.installCommands ?? installCommands,
           commandSource,
         },
@@ -619,6 +626,7 @@ async function main() {
           },
           isCordis: true,
           needsConfig: prev.install.needsConfig,
+          usageNeedsConfig: prev.install.usageNeedsConfig,
           readmeSummary: prev.readmeSummary,
           installParsed: {
             commands: prev.install.commands ?? [],
@@ -684,6 +692,7 @@ async function main() {
               },
               isCordis: true,
               needsConfig: prev.install.needsConfig,
+              usageNeedsConfig: prev.install.usageNeedsConfig,
               readmeSummary: prev.readmeSummary,
               installParsed: {
                 commands: prev.install.commands ?? [],
@@ -720,6 +729,7 @@ async function main() {
         readmeContent: d.readmeContent,
         hasSkillMd: d.hasSkillMd,
         needsConfig: d.plugin.install.needsConfig,
+        usageNeedsConfig: d.plugin.install.usageNeedsConfig ?? false,
       },
       p99
     );

@@ -80,7 +80,7 @@ export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen 
       </div>
       <div className="foot">
         <span className="star">{fmt(plugin.stars)}</span>
-        <span>{plugin.install.needsConfig ? "需配置" : "开箱即用"}</span>
+        <span>{plugin.install.needsConfig ? "需配置" : plugin.install.usageNeedsConfig ? "装后需配模型" : "开箱即用"}</span>
         <span>{plugin.install.method === "skills-add" ? "一键安装" : "pnpm 安装"}</span>
       </div>
     </article>

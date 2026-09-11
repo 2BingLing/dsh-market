@@ -199,11 +199,36 @@ const CONFIG_KEY_RE =
 const NEGATION_RE =
   /(?:不需要|无需|不用|免[^。；\n]{0,10}(?:配置|token|key)|no (?:api ?key|token|config|setup|configuration)|without (?:(?:any|an?) )?(?:api ?key|token|config)|no configuration required|zero-?config|works (?:out of the box|without))/i;
 
+/** 子句拆分（句读 + but/however/但/但是）——否定只作用于所在子句 */
+const CLAUSE_SPLIT_RE = /[。；;\n.!?！？]|\bbut\b|\bhowever\b|但是|但/i;
+
+/** 使用/模型调用语境（区别于纯安装配置） */
+const USAGE_CTX_RE =
+  /(生成|对话|使用|调用|评审|模型|推理|创作|聊天|问答|chat|generat|infer|usage|model|review|prompt|completion)/i;
+
+/** 安装语境（key 仅为安装服务时不计入使用配置） */
+const INSTALL_CTX_RE = /(安装|install|setup|部署|deploy|依赖|环境变量|env(ironment)? var)/i;
+
+function isKeyRequirement(clause: string): boolean {
+  return CONFIG_KEY_RE.test(clause) && !NEGATION_RE.test(clause);
+}
+
 export function detectNeedsConfig(readmeContent: string | null): boolean {
   if (!readmeContent) return false;
   // Check clauses independently: a key-free installer must not hide a key
   // required by another feature, and negated key mentions are not requirements.
-  return readmeContent.split(/[。；;\n.!?！？]|\bbut\b|\bhowever\b|但是|但/i).some(clause =>
-    CONFIG_KEY_RE.test(clause) && !NEGATION_RE.test(clause)
+  return readmeContent.split(CLAUSE_SPLIT_RE).some(clause => isKeyRequirement(clause));
+}
+
+/**
+ * 使用/运行时是否需要配置模型或 API Key（区别于安装配置，#137 第三点）：
+ * - key 出现在使用/模型语境（"生成前需配置 API Key"）→ true
+ * - key 语境不明（大多数插件提到 key 即指使用配置）→ true（保守，展示上宁可提示）
+ * - key 仅出现在安装语境（如 GITHUB_TOKEN 仅为拉取依赖）→ false
+ */
+export function detectUsageNeedsConfig(readmeContent: string | null): boolean {
+  if (!readmeContent) return false;
+  return readmeContent.split(CLAUSE_SPLIT_RE).some(clause =>
+    isKeyRequirement(clause) && (USAGE_CTX_RE.test(clause) || !INSTALL_CTX_RE.test(clause))
   );
 }

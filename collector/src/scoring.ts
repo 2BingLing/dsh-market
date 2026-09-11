@@ -26,6 +26,8 @@ export interface ScoreInput {
   readmeContent: string | null;
   hasSkillMd: boolean;
   needsConfig: boolean;
+  /** 使用/运行时需配置模型（区别于安装配置；缺省按 false 处理，#137） */
+  usageNeedsConfig?: boolean;
 }
 
 const WEIGHTS = {
@@ -186,7 +188,8 @@ function confidence(input: ScoreInput): number {
 export function generateExplanation(
   breakdown: PracticalScoreBreakdown,
   stars: number,
-  pushedAt: string
+  pushedAt: string,
+  config?: { needsConfig: boolean; usageNeedsConfig: boolean }
 ): string {
   const reasons: string[] = [];
   const days = Math.round((Date.now() - new Date(pushedAt).getTime()) / 86_400_000);
@@ -201,7 +204,16 @@ export function generateExplanation(
     reasons.push(`${stars} stars，社区认可度高`);
   }
   if (breakdown.ease >= 70) {
-    reasons.push("无需额外配置即可安装，开箱即用");
+    // 口径如实区分安装与使用前提（#137 第三点）：
+    // - 安装需配置 → 不宣称开箱即用（此前 ease=70 的需配置插件也会误标"开箱即用"）
+    // - 安装免配置但使用需模型 → 只说"安装开箱即用"，并如实提示使用前提
+    if (!config || config.needsConfig) {
+      reasons.push("安装步骤清晰，按 README 即可完成安装");
+    } else if (config.usageNeedsConfig) {
+      reasons.push("安装开箱即用；使用需配置模型（可能产生费用）");
+    } else {
+      reasons.push("无需额外配置即可安装，开箱即用");
+    }
   }
   if (breakdown.signal >= 70) {
     reasons.push("项目信息完整（license/文档/主题齐全）");
@@ -240,7 +252,10 @@ export function computePracticalScore(
     total,
     breakdown,
     confidence: Math.round(conf * 100) / 100,
-    explanation: generateExplanation(breakdown, input.stars, input.pushedAt),
+    explanation: generateExplanation(breakdown, input.stars, input.pushedAt, {
+      needsConfig: input.needsConfig,
+      usageNeedsConfig: input.usageNeedsConfig ?? false,
+    }),
   };
 }
 
