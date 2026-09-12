@@ -5,7 +5,7 @@ name: decay-scan
 
 on:
   schedule:
-    # 周一 03:21 UTC（避开每日 collect 的 06:00 与整点）
+    # 周一 03:21 UTC（避开每日 collect 的 19:00 UTC 与整点）
     - cron: "21 3 * * 1"
   workflow_dispatch: {}
 
@@ -20,13 +20,19 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    # 事故复盘（#1 run，2026-08-24）：5175 条扫了 32 分钟被取消，且烧光与每日 collect 共享的
-    # secrets.GITHUB_TOKEN 配额导致 06:00 管道失败。本次修复：
-    # ① 用 github.token（独立配额）→ 不再与 collect 抢额度（只读+issues 足够）
-    # ② env DECAY_CONCURRENCY=5 降并发 + decay.ts 错误熔断（超预算提前终止出部分结果）
-    # ③ decay-cli 每 200 条喂进度日志 → 不会零输出被误 cancel
-    # ④ 超时 40 分钟兜底
-    timeout-minutes: 40
+    # 事故复盘（2026-09-12，连续 4 周失败：run #1-#4 全部在 40 分钟处被 cancel）：
+    #   真因不是"配额被 collect 抢走"，而是**逐仓库 REST 探测本身不可行**：
+    #   ① data/cache 未入库（.gitignore）→ CI 全新 checkout 缓存恒空 →
+    #      decay.ts 里"7 天检测缓存短路"在 CI 从不命中（本地有效，线上零效果）；
+    #   ② 于是 5572 个仓库 = 5572 次 REST 请求；配额在第 ~4800 次见底；
+    #   ③ githubFetch 遇 403 会 sleep≤60s 重试 3 次 → 单个请求耗 ~180s，
+    #      日志实证：4800 条只用 219s，之后 30 分钟只推进 200 条；
+    #   ④ 熔断阈值 max(150, 15%)=836 个错误，按 ~1.7 错误/分钟永远够不到 → 撞 40 分钟超时被 cancel；
+    #   ⑤ step 6（汇总 issue）被 skip → 跟踪 issue 从未更新，每周静默失败。
+    # 修复：改用 GraphQL 批量探测（100 仓库/请求，5572 → ~56 次请求），
+    #   批失败即停不再 sleep 重试，并加 12 分钟墙钟预算 + 报告步骤 always()。
+    #   请求数降两个数量级后，github.token 已绰绰有余，也不存在与 collect 抢配额的问题。
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -40,10 +46,16 @@ jobs:
       - name: 运行失效扫描（写 data/decay-report.json）
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          DECAY_CONCURRENCY: "5"
+          # 批量探测：100 仓库/请求、3 批并发、12 分钟预算（超时即停并出部分结果）
+          DECAY_BATCH_SIZE: "100"
+          DECAY_CONCURRENCY: "3"
+          DECAY_BUDGET_MS: "720000"
         run: node --use-env-proxy --import tsx collector/src/decay-cli.ts
 
+      # always()：哪怕探测层失败/部分结果，也要把"覆盖度 + 未核实条目"写进跟踪 issue。
+      # 不这么写就会出现"job 挂了但没人知道目录里已经烂了"的静默失败（旧版正是如此）。
       - name: 汇总到跟踪 issue（只报不删；全部健康则关闭）
+        if: always()
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/decay-report-issue.mjs

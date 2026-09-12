@@ -130,12 +130,12 @@ describe("scanDecay", () => {
     expect(r.findings[0].days).toBeGreaterThan(270);
   });
 
-  it("仓库改名/转移 → gone（由每日扫描重新收录）", async () => {
+  it("仓库改名/转移 → renamed（单列，处置是重新收录而非移除）", async () => {
     const m = market([plugin("old/name")]);
     const r = await scanDecay(m, {
       fetchRepo: async () => ({ full_name: "new/name", archived: false, fork: false, pushed_at: "" }),
     });
-    expect(r.findings[0].kind).toBe("gone");
+    expect(r.findings[0].kind).toBe("renamed");
     expect(r.findings[0].detail).toContain("new/name");
   });
 
