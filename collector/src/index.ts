@@ -28,6 +28,7 @@ import { mergeCorrections, type DataCorrections } from "./sources/corrections.js
 import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectSubdirBundle, extractDshEngines } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
+import { batchProbeRepos } from "./decay-probe.js";
 import { runPool } from "./pool.js";
 import { translateWithDeepSeek } from "./llm.js";
 import { parseInstallCommands } from "./install-parse.js";
@@ -57,6 +58,10 @@ interface DetectCache {
   /** 声明的 DSH 宿主版本要求（N2；旧缓存缺省 undefined = 未知，不迁移、靠 TTL 自然刷新） */
   dshEngines?: string | null;
   dshEnginesSource?: string;
+  /** 存在性最近一次被真实核实的时间（扫描命中 / API 确认 / 批量探测）。
+   *  直补回写缓存**不刷新**它——这是 D5 直补门禁的依据：超过 14 天未核实就必须重新查 existence，
+   *  防止已删除仓库靠"直补→刷新 mtime→永不过期"的自续命循环永久留位。 */
+  lastVerifiedAt?: string;
 }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -474,6 +479,8 @@ async function main() {
             subdir,
             dshEngines,
             dshEnginesSource,
+            // 本次来自实时扫描命中 = 存在性刚被核实（D5 lastVerifiedAt 的三个写入点之一）
+            lastVerifiedAt: new Date().toISOString(),
           });
         }
       }
@@ -600,27 +607,37 @@ async function main() {
   }
 
   // [B2] 已收录延续性：上次收录但本次未扫描到的仓库补回（防边界抖动消失；404 确认真删除才移除）
-  // 优化：检测缓存证明仓库存在且 pushedAt 未变的直接补回（零 API）；只有缓存缺失/变化的才逐个调 repos API
-  // ——避免每次对上干个 miss 逐个请求撞限流（曾让 cron 从 10 分钟涨到 2 小时）
+  // 直补（零 API）只对 14 天内被真实核实过存在性的条目开放（D5 门禁，见 VERIFY_INTERVAL）；
+  // 缓存缺失/门禁到期的分别走 REST 逐个确认 / GraphQL 批量复核——避免对上千 miss 逐个请求撞限流（曾让 cron 从 10 分钟涨到 2 小时）
   const currentIds = new Set(detected.map((d) => d.plugin.id.toLowerCase()));
   const missing = [...prevPlugins.keys()].filter((id) => !currentIds.has(id));
   let restored = 0;
   let confirmedGone = 0;
   if (missing.length > 0) {
     const DETECT_TTL = 7 * 24 * 3600_000;
+    /** D5 强制复核间隔：缓存里的存在性超过这么久没被真实核实 → 直补前必须重新查
+     *  （检测数据 7 天 TTL 管的是"内容有没有变"，lastVerifiedAt 管的是"仓库还在不在"，两者独立） */
+    const VERIFY_INTERVAL = 14 * 24 * 3600_000;
     const directRestore: string[] = [];
+    const needVerify: string[] = [];
     const needApi: string[] = [];
     for (const id of missing) {
-      const prev = prevPlugins.get(id)!;
       const dc = cacheGet<DetectCache>("detect", id, DETECT_TTL);
-      // 有检测缓存（7 天内确认过存在）→ 直补（含 pushedAt 变化的：复用上次记录，元数据等下次扫描更新）
-      // 只有缓存完全缺失的才调 API 确认——避免每次对上大量"变化中"的仓库逐个请求撞限流（曾拖 58 分钟）
-      if (dc) directRestore.push(id);
-      else needApi.push(id);
+      if (!dc) {
+        needApi.push(id);
+        continue;
+      }
+      // D5 门禁：直补只续命 14 天。lastVerifiedAt 只在真实核实（扫描命中/API 确认/批量探测）时写入，
+      // 直补回写不刷新它 → 已删除仓库至多 14 天必被核实一次，无法再靠直补永久留位
+      const lastV = dc.lastVerifiedAt ? Date.parse(dc.lastVerifiedAt) : NaN;
+      if (Number.isFinite(lastV) && Date.now() - lastV < VERIFY_INTERVAL) directRestore.push(id);
+      else needVerify.push(id);
     }
-    // 1) 缓存直补（零 API）：检测缓存证明仓库存在且未变，直接复用上次记录
-    for (const id of directRestore) {
-      const prev = prevPlugins.get(id)!;
+    /** B2 补回公共体：复用上次记录进 detected + 回写检测缓存。
+     *  verified=true 表示本次经过了真实存在性核实 → 写入 lastVerifiedAt（直补传 false，不刷新时间戳）。
+     *  写回缓存的原因：直补条目若不写缓存，下轮仍算"缓存缺失/过期"→ needApi 死循环
+     *  （曾致每次 cron 检测 60 分钟 + 收录数不保）。 */
+    const pushRestore = (id: string, prev: DshPlugin, verified: boolean, evidence: string) => {
       detected.push({
         candidate: { fullName: id, repo: null, sources: ["restore"] },
         plugin: { ...prev, lastCheckedAt: new Date().toISOString() },
@@ -628,8 +645,6 @@ async function main() {
         readmeContent: null,
         hasSkillMd: false,
       });
-      // 写回 detect 缓存：直补条目若不写缓存，下轮仍算"缓存缺失/过期"→ needApi 死循环
-      //（曾致每次 cron 检测 60 分钟 + 收录数不保）。构造与 prev 一致的 DetectCache 快照。
       const existing = cacheGet<DetectCache>("detect", id, DETECT_TTL);
       if (existing) {
         // 强制 isPlugin: true——B2 直补的必然是已收录插件；若旧缓存是 isPlugin:false
@@ -638,6 +653,7 @@ async function main() {
           ...existing,
           pushedAt: prev.pushedAt,
           detection: { ...existing.detection, isPlugin: true },
+          ...(verified ? { lastVerifiedAt: new Date().toISOString() } : {}),
         });
       } else {
         cacheSet<DetectCache>("detect", id, {
@@ -647,7 +663,7 @@ async function main() {
             type: prev.type,
             installMethod: prev.install.method,
             skillFiles: [],
-            evidence: ["B2 restore 缓存回写"],
+            evidence: [evidence],
           },
           isCordis: true,
           needsConfig: prev.install.needsConfig,
@@ -662,11 +678,61 @@ async function main() {
           // N2：沿用已收录条目的宿主版本要求——不回填会把上一轮已抓到的值抹掉
           dshEngines: prev.install.dshEngines ?? null,
           dshEnginesSource: prev.install.dshEnginesSource,
+          ...(verified ? { lastVerifiedAt: new Date().toISOString() } : {}),
         });
       }
       restored++;
+    };
+    // 1) 缓存直补（零 API）：14 天内被真实核实过的条目，直接复用上次记录
+    for (const id of directRestore) {
+      pushRestore(id, prevPlugins.get(id)!, false, "B2 restore 缓存回写");
     }
-    if (restored > 0) console.log(`  [B2] 检测缓存直补 ${restored} 个（零 API）`);
+    if (directRestore.length > 0) console.log(`  [B2] 检测缓存直补 ${directRestore.length} 个（零 API）`);
+    // 1.5) D5 强制复核（GraphQL 批量，100 个/请求，复用 decay 探测层）：
+    // 门禁到期的条目重新核实存在性——已删除的在此自动移除（旧逻辑直补路径永远轮不到核实 → 僵尸条目永久留位）
+    if (needVerify.length > 0) {
+      console.log(`  [B2] ${needVerify.length} 个存在性超过 14 天未核实，批量复核（GraphQL）...`);
+      const probe = await batchProbeRepos(needVerify, { budgetMs: 8 * 60_000 });
+      let verifiedAlive = 0;
+      let verifiedArchived = 0;
+      let probeGone = 0;
+      const fallback: string[] = [];
+      for (const id of needVerify) {
+        const snap = probe.map.get(id);
+        if (snap === undefined) {
+          // 未覆盖（批失败/限流/预算耗尽）：按原样直补保收录，下轮再复核——探测失败绝不能把条目挤掉
+          fallback.push(id);
+          continue;
+        }
+        if (snap === null) {
+          confirmedGone++; // GraphQL NOT_FOUND：确认已删除 → 自动移除（D5 核心）
+          probeGone++;
+          continue;
+        }
+        if (snap.full_name && snap.full_name.toLowerCase() !== id.toLowerCase()) {
+          confirmedGone++; // 改名/转移：旧名不补，新名由扫描收录走正常检测（与 REST 路径同口径）
+          probeGone++;
+          continue;
+        }
+        if (snap.fork) {
+          confirmedGone++; // 与 needApi REST 路径同口径：转成 fork 内容已变，移除、等扫描重收
+          probeGone++;
+          continue;
+        }
+        // 归档 ≠ 坏：保留在市场，decay 周报继续提示，去留走数据修正通道由人决定
+        if (snap.archived) verifiedArchived++;
+        else verifiedAlive++;
+        pushRestore(id, prevPlugins.get(id)!, true, "B2 复核存活缓存回写");
+      }
+      for (const id of fallback) {
+        pushRestore(id, prevPlugins.get(id)!, false, "B2 restore 缓存回写");
+      }
+      console.log(
+        `  [B2] 复核结果：存活 ${verifiedAlive + verifiedArchived}（归档保留 ${verifiedArchived}）` +
+          `· 确认移除 ${probeGone} · 未覆盖回退直补 ${fallback.length}` +
+          `（${probe.stats.requests} 次请求，${Math.round(probe.stats.elapsedMs / 1000)}s）`
+      );
+    }
     // 2) API 确认（少数）：上限 2500 个/轮，超出留待下次 cron（v2 缓存重建期需要更大恢复量；PAT 双配额已上线）
     if (needApi.length > 2500) {
       console.log(`  [B2] needApi ${needApi.length} 个超上限，本轮确认前 2500 个，其余等下轮`);
@@ -731,6 +797,8 @@ async function main() {
               // N2：同上，沿用已收录条目的宿主版本要求
               dshEngines: prev.install.dshEngines ?? null,
               dshEnginesSource: prev.install.dshEnginesSource,
+              // REST 逐个确认 = 存在性刚被核实（D5 lastVerifiedAt 写入点之二；之三在扫描命中处）
+              lastVerifiedAt: new Date().toISOString(),
             });
           }
           // pushedAt 变了：等下次扫描进池正常重检测，本次不补
