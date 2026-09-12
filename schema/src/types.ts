@@ -48,6 +48,20 @@ export interface InstallInfo {
   commands?: string[];
   /** 命令来源（README 安装章节 / 模板兜底） */
   commandSource?: string;
+  /**
+   * 插件声明的 DSH 宿主版本要求（package.json 的 `engines.dsh`，如 `">=0.1.5"`）。
+   *
+   * 语义约定（重要）：
+   *   - `undefined` / `null` = **未知**（不是"兼容"也不是"不兼容"）——
+   *     历史条目在功能上线前收录，没有这个字段；UI 必须按"未知"处理，**不得据此拦截安装**；
+   *   - 有值时才做版本判定（见 plugin/core 的 `checkDshCompat`）。
+   *
+   * 增量策略：只在「新检测 / 仓库有推送」的条目上写入，不做全量回填，
+   * 旧条目靠检测缓存 7 天 TTL 与 pushedAt 变化自然刷新。
+   */
+  dshEngines?: string | null;
+  /** dshEngines 的来源（engines.dsh / peer-dep / dev-dep，便于排障与可信度判断） */
+  dshEnginesSource?: string;
 }
 
 export interface DshPlugin {

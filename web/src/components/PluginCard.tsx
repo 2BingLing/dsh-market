@@ -4,6 +4,7 @@
 import type { DshPlugin } from "@dsh-market/schema";
 import RadarChart, { RADAR_ORDER, RADAR_LABELS } from "./RadarChart";
 import CommunityBadge, { isCommunitySubmitted } from "./CommunityBadge";
+import { formatDshRequirement } from "../lib/dsh-compat";
 
 function fmt(n: number): string {
   return n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
@@ -26,6 +27,7 @@ interface Props {
 
 export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen }: Props) {
   const b = plugin.score.breakdown;
+  const dshReq = formatDshRequirement(plugin.install.dshEngines);
   return (
     <article className="card" onClick={() => onOpen(plugin)}>
       <div className="card-top">
@@ -82,6 +84,8 @@ export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen 
         <span className="star">{fmt(plugin.stars)}</span>
         <span>{plugin.install.needsConfig ? "需配置" : plugin.install.usageNeedsConfig ? "装后需配模型" : "开箱即用"}</span>
         <span>{plugin.install.method === "skills-add" ? "一键安装" : "pnpm 安装"}</span>
+        {/* N2 · 宿主版本要求（Web 只展示需求，本机是否装得上由插件端判定） */}
+        {dshReq ? <span title={plugin.install.dshEngines ?? undefined}>{dshReq}</span> : null}
       </div>
     </article>
   );

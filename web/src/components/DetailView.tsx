@@ -3,6 +3,7 @@
  */
 import { useMemo, useState } from "react";
 import type { DshPlugin } from "@dsh-market/schema";
+import { formatDshRequirement } from "../lib/dsh-compat";
 import RadarChart, { RADAR_ORDER, RADAR_LABELS } from "./RadarChart";
 import CommunityBadge, { isCommunitySubmitted } from "./CommunityBadge";
 
@@ -75,10 +76,15 @@ export function buildInstallPrompt(p: DshPlugin): string {
     : p.install.usageNeedsConfig
       ? "注意：安装无需配置，但使用时需配置模型（API Key 等，可能产生费用），装完后请告诉我如何配置。"
       : "该插件开箱即用，无需额外配置。";
+  const dshReq = formatDshRequirement(p.install.dshEngines);
+  const compatNote = dshReq
+    ? `注意：该插件声明 ${dshReq}。安装前请先确认我的 DSH 版本是否满足；不满足请告诉我，不要强行安装。`
+    : null;
   return [
     `请帮我安装 DeepSeek Harness 插件「${p.name}」：`,
     `- GitHub 仓库：${p.fullName}（${`https://github.com/${p.fullName}`}）`,
     `- 类型：${typeDesc}`,
+    ...(compatNote ? [`- ${compatNote}`] : []),
     `- ${configNote}`,
     ``,
     `请先查看仓库 README 确认安装步骤，然后按官方方式安装（skill 型克隆到 ~/.agents/skills，cordis 型用 dsh plugin 装到我的 profile）。装完后告诉我怎么使用。`,
@@ -87,6 +93,7 @@ export function buildInstallPrompt(p: DshPlugin): string {
 
 export default function DetailView({ plugin, favorite, onToggleFavorite, onBack }: Props) {
   const b = plugin.score.breakdown;
+  const dshReq = formatDshRequirement(plugin.install.dshEngines);
   const [copied, setCopied] = useState<string | null>(null);
 
   const installCmd = buildInstallCommand(plugin);
@@ -192,6 +199,17 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                   {copied === "cmd" ? "✓ 已复制" : "复制命令"}
                 </button>
               </div>
+
+              {/* N2 · 宿主版本要求：Web 只说明"这插件要什么"（本机是否满足由插件端判定） */}
+              {dshReq ? (
+                <p className="dsh-req" title={plugin.install.dshEngines ?? undefined}>
+                  <span className="dsh-req-tag">DSH 版本</span>
+                  {dshReq}
+                  {plugin.install.dshEnginesSource && plugin.install.dshEnginesSource !== "engines"
+                    ? "（据 package.json 依赖推断，仅供参考）"
+                    : ""}
+                </p>
+              ) : null}
 
               {/* 复制提示词 + 说明 + 提交者讨论（同行） */}
               <div className="prompt-row">

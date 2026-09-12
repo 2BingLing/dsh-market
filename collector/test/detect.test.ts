@@ -2,7 +2,7 @@
  * detectSubdirBundle 单元测试：子目录 bundle 探测（根目录无标记、插件在子目录）
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { detectPlugin, detectSubdirBundle, isCordisPackageJson } from "../src/detect.js";
+import { detectPlugin, detectSubdirBundle, isCordisPackageJson, extractDshEngines } from "../src/detect.js";
 import { fetchRepoRoot, fetchFileViaApi } from "../src/github.js";
 
 vi.mock("../src/github.js", () => ({
@@ -217,5 +217,66 @@ describe("detectPlugin manifest + detectSubdirBundle monorepo", () => {
     });
     const r = await detectSubdirBundle("someone/some-repo", root as never, "main");
     expect(r).toBeNull();
+  });
+});
+
+/**
+ * extractDshEngines（N2 · Host-aware 兼容门禁的数据来源）
+ * 原则：宁缺勿错 —— 拿不准就返回 null（= 未知），绝不用猜测的版本去拦截安装。
+ */
+describe("extractDshEngines", () => {
+  const pkg = (o: Record<string, unknown>) => JSON.stringify(o);
+
+  it("engines.dsh 优先，来源标 engines", () => {
+    expect(extractDshEngines(pkg({ engines: { dsh: ">=0.1.5" } }))).toEqual({
+      range: ">=0.1.5",
+      source: "engines",
+    });
+  });
+
+  it("engines.dsh 优先于依赖约束（即使依赖也在）", () => {
+    const r = extractDshEngines(
+      pkg({
+        engines: { dsh: "^0.1.2" },
+        peerDependencies: { "@deepseek-ai/dsh-web-app": ">=0.1.5" },
+      }),
+    );
+    expect(r).toEqual({ range: "^0.1.2", source: "engines" });
+  });
+
+  it("无 engines 时退 peerDependencies，再退 devDependencies", () => {
+    expect(
+      extractDshEngines(pkg({ peerDependencies: { "@deepseek-ai/dsh-base": ">=0.1.5" } })),
+    ).toEqual({ range: ">=0.1.5", source: "peer-dep" });
+    expect(
+      extractDshEngines(pkg({ devDependencies: { "@deepseek-ai/dsh-client-ui-layout": "~0.1.2" } })),
+    ).toEqual({ range: "~0.1.2", source: "dev-dep" });
+  });
+
+  it("只看 @deepseek-ai/dsh 前缀的包（cordis / 其他 scope 不算）", () => {
+    expect(extractDshEngines(pkg({ dependencies: { cordis: "^3.0.0" } }))).toBeNull();
+    expect(extractDshEngines(pkg({ dependencies: { "@other/dsh-thing": "^1.0.0" } }))).toBeNull();
+  });
+
+  it("通配/空/非 npm 源声明一律视为未知（避免拿 `*` 当范围）", () => {
+    expect(extractDshEngines(pkg({ engines: { dsh: "*" } }))).toBeNull();
+    expect(extractDshEngines(pkg({ engines: { dsh: "" } }))).toBeNull();
+    expect(extractDshEngines(pkg({ engines: { dsh: 5 } }))).toBeNull();
+    expect(
+      extractDshEngines(pkg({ peerDependencies: { "@deepseek-ai/dsh-base": "link:../dsh" } })),
+    ).toBeNull();
+  });
+
+  it("解析失败 / 空内容 → null（绝不抛错影响检测主流程）", () => {
+    expect(extractDshEngines(null)).toBeNull();
+    expect(extractDshEngines("{ 坏 json")).toBeNull();
+    expect(extractDshEngines(pkg({ name: "x" }))).toBeNull();
+  });
+
+  it("engines.dsh 存在但不是合法范围 → 不在 engines 上勉强命中，继续看依赖", () => {
+    const r = extractDshEngines(
+      pkg({ engines: { dsh: "见 README" }, peerDependencies: { "@deepseek-ai/dsh": ">=0.1.5" } }),
+    );
+    expect(r).toEqual({ range: ">=0.1.5", source: "peer-dep" });
   });
 });

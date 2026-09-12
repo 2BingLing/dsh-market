@@ -19,6 +19,23 @@ export interface LitePlugin {
   installMethod: string
   installCommands: string[]
   installTarget?: string
+  /**
+   * N2 · 宿主兼容信息（Host 侧用本机 DSH 版本算好后下发）。
+   * **只在插件声明了 DSH 版本要求时才有值**——未声明时该键直接不存在。
+   * 客户端只渲染，不做任何版本判断（版本逻辑唯一实现在 core/compat.ts）。
+   */
+  dshCompat?: {
+    status: 'ok' | 'incompatible' | 'unknown'
+    /** 人话版要求，如 "DSH ≥ 0.1.5" */
+    label: string
+    required: string
+    reason: string
+    /** 是否应阻止安装（作者显式声明且不兼容） */
+    block: boolean
+    /** 是否为依赖推断来的软提示 */
+    soft: boolean
+    local: string | null
+  }
 }
 
 export interface Recommendation {

@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { aggregateTags, applyUpdate, canonicalCommands, checkSelfUpdate, checkUpdates, deriveSmokeCommands, detectPnpmMajor, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, learnRecipe, listRecipes, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
+import { aggregateTags, applyUpdate, canonicalCommands, checkSelfUpdate, checkUpdates, deriveSmokeCommands, detectPnpmMajor, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。
@@ -39,7 +39,8 @@ function lite(p) {
 		needsConfig: p.install?.needsConfig ?? false,
 		installMethod: p.install?.method,
 		installCommands: p.install?.commands ?? [],
-		installTarget: p.install?.target
+		installTarget: p.install?.target,
+		dshCompat: liteDshCompat(p)
 	};
 }
 /** 精简整合包字段（条目 + 解析率 + 评分） */
@@ -614,7 +615,7 @@ function buildInstallPrompt(plugin, targetProfile, reason, opts) {
 		`【插件信息】`,
 		`- 类型：${plugin.type === "skill" ? "skill（技能）" : "cordis 插件"}（${plugin.type}）`,
 		`- 简介：${plugin.descriptionZh ?? "(无中文简介)"}`,
-		`- 需要配置：${plugin.install.needsConfig ? "是（API Key / Token 等）" : "否"}`,
+		`- 需要配置：${plugin.install.needsConfig ? "是（API Key / Token 等）" : plugin.install.usageNeedsConfig ? "安装无需；使用时需配置模型（可能产生费用）" : "否"}`,
 		`- 目标 profile：${targetProfile}`,
 		`- 参考命令（collector 已从 README 解析，优先直接使用）：`,
 		`    ${cmdLine}`,

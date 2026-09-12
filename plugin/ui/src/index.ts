@@ -25,6 +25,7 @@ import {
   aggregateTags,
   installPlugin,
   uninstallPlugin,
+  liteDshCompat,
   checkUpdates,
   checkSelfUpdate,
   applyUpdate,
@@ -96,6 +97,9 @@ function lite(p: any): Record<string, unknown> {
     installMethod: p.install?.method,
     installCommands: p.install?.commands ?? [],
     installTarget: p.install?.target,
+    // N2 · 宿主兼容：Host 侧按本机 DSH 版本算好（客户端不做版本逻辑）。
+    // 未声明要求的插件返回 undefined → JSON 序列化时该键直接消失，不撑大载荷
+    dshCompat: liteDshCompat(p),
   }
 }
 

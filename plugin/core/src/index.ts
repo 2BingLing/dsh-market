@@ -20,3 +20,6 @@ export * from "./verify.js";
 export * from "./builds.js";
 export * from "./yaml-block.js";
 export * from "./github.js";
+export * from "./version.js";
+export * from "./host.js";
+export * from "./compat.js";

@@ -229,6 +229,14 @@ function PluginCard(props: {
     El('div', { className: styles.cardHead },
       El('span', { className: styles.cardName, title: plugin.fullName }, plugin.name),
       El('span', { className: styles.cardBadge }, plugin.type === 'skill' ? '技能' : '插件'),
+      // N2 · 宿主版本要求：仅在插件声明的才有（未声明时 dshCompat 不存在）
+      plugin.dshCompat
+        ? El('span', {
+            className: styles.compatChip,
+            'data-status': plugin.dshCompat.status,
+            title: plugin.dshCompat.reason,
+          }, plugin.dshCompat.label)
+        : null,
       El('span', { className: styles.cardStars },
         El(Icon, { d: ICON_STAR, size: 13 }),
         fmtStars(plugin.stars),
@@ -300,6 +308,12 @@ function InstallModal(props: {
   const [childSessionId, setChildSessionId] = useState<string | null>(null)
   // 安全模式（2026-09）：开启后跳过 T0 直装，强制 AI 扫描 + 安装（供给侧防御，见 QVD-2026-57410）
   const [security, setSecurity] = useState(false)
+  // N2 · 宿主兼容门禁：作者显式声明不兼容时默认拦住，需用户显式勾选"仍然安装"才放行。
+  // 为什么默认拦：宿主版本不匹配是插件坏掉的头号原因，装完的典型症状是 harness 启动异常/面板空白，
+  // 用户很难自己归因到"版本不对"。但"未知"（未声明 / 本机读不到）绝不拦（见 core/compat.ts）。
+  const [forceCompat, setForceCompat] = useState(false)
+  const compat = plugin.dshCompat
+  const compatBlocked = Boolean(compat?.block) && !forceCompat
   // T0 直装结果（零 LLM 完成时无子会话）
   const [t0, setT0] = useState<{
     mode?: string
@@ -373,6 +387,28 @@ function InstallModal(props: {
                   El(Icon, { d: ICON_WARN, size: 13, className: styles.inlineIcon }),
                   '该插件需要额外配置（API Key / Token），AI 会向你询问。')
               : null,
+            // N2 · 宿主版本要求：不兼容时红字警告 + 强制勾选确认
+            compat
+              ? El('p', { className: compat.status === 'incompatible' ? styles.warn : styles.ghTip },
+                  compat.status === 'incompatible'
+                    ? El(Icon, { d: ICON_WARN, size: 13, className: styles.inlineIcon })
+                    : null,
+                  compat.reason,
+                )
+              : null,
+            compat?.block
+              ? El('label', {
+                  className: styles.securityRow,
+                  style: { display: 'flex', alignItems: 'center', gap: 8, marginTop: 4, cursor: 'pointer' },
+                },
+                  El('input', {
+                    type: 'checkbox',
+                    checked: forceCompat,
+                    onChange: (e: { target: { checked: boolean } }) => setForceCompat(e.target.checked),
+                  }),
+                  El('span', { style: { fontSize: 12.5 } }, '仍然安装（版本不匹配可能导致 harness 启动异常）'),
+                )
+              : null,
             El('p', { className: styles.ghTip },
               plugin.type === 'skill'
                 ? '目标：装到技能目录（~/.agents/skills），装完即可用。'
@@ -404,7 +440,12 @@ function InstallModal(props: {
               : null,
             El('div', { className: styles.modalActions },
               El('button', { className: styles.btn, onClick: onClose }, '取消'),
-              El('button', { className: `${styles.btn} ${styles.btnPrimary}`, onClick: () => void startAi() },
+              El('button', {
+                className: `${styles.btn} ${styles.btnPrimary}`,
+                disabled: compatBlocked,
+                title: compatBlocked ? '该插件要求更高的 DSH 版本，请先勾选上方"仍然安装"' : undefined,
+                onClick: () => void startAi(),
+              },
                 security ? '🛡 安全安装' : '确认安装'),
             ),
           )

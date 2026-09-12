@@ -25,7 +25,7 @@ import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
 import { fetchSubmissionRepos, fetchPackSubmissionRepos } from "./sources/issues.js";
 import { mergeCorrections, type DataCorrections } from "./sources/corrections.js";
-import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectSubdirBundle } from "./detect.js";
+import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectSubdirBundle, extractDshEngines } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
 import { runPool } from "./pool.js";
@@ -54,6 +54,9 @@ interface DetectCache {
   hasSkillMd: boolean;
   /** 子目录 bundle 的插件子目录路径（如 dsh-pet/），null = 常规根目录插件 */
   subdir: string | null;
+  /** 声明的 DSH 宿主版本要求（N2；旧缓存缺省 undefined = 未知，不迁移、靠 TTL 自然刷新） */
+  dshEngines?: string | null;
+  dshEnginesSource?: string;
 }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -293,6 +296,9 @@ async function main() {
       let hasSkillMd: boolean;
       let readmeContent: string | null;
       let subdir: string | null = null;
+      /** DSH 宿主版本要求（N2）；未知即 null，UI 按"未知"处理 */
+      let dshEngines: string | null = null;
+      let dshEnginesSource: string | undefined;
 
       if (cachedDetect && cachedDetect.pushedAt === repo.pushed_at && cachedDetect.detection.isPlugin) {
         // 命中：仓库未变化且缓存为插件，直接复用检测产物（零网络调用）
@@ -304,6 +310,9 @@ async function main() {
         installParsed = cachedDetect.installParsed;
         hasSkillMd = cachedDetect.hasSkillMd;
         subdir = cachedDetect.subdir ?? null;
+        // 旧缓存没有 dshEngines 字段 → undefined/null = 未知；等 TTL 过期或仓库有推送时自然补上
+        dshEngines = cachedDetect.dshEngines ?? null;
+        dshEnginesSource = cachedDetect.dshEnginesSource;
         readmeContent = null; // 评分用：下面从 readmes 缓存取（24h 内必有）
       } else {
         // 未命中/仓库变化/缓存为 false（历史遗留误判如 #123 reasoning-bridge）：
@@ -358,6 +367,8 @@ async function main() {
           );
         }
         isCordis = isCordisPackageJson(packageJsonContent);
+        // 实际生效的 package.json（子目录 bundle 兜底时会换成子目录那份）——N2 的 engines 提取以它为准
+        let effectivePkgJson = packageJsonContent;
         // skill 型但 package.json 声明 cordis 结构（npm 发布的 cordis 插件常附带 SKILL.md 当文档）→ 改判 cordis-plugin（#95）
         if (detection.type === "skill" && isCordis) {
           detection = {
@@ -397,6 +408,7 @@ async function main() {
               }
             );
             isCordis = isCordisPackageJson(subPkg);
+            effectivePkgJson = subPkg;
             if (!isCordis) {
               rejected.push({ fullName: candidate.fullName, reason: "package.json not cordis" });
               return;
@@ -405,6 +417,14 @@ async function main() {
             rejected.push({ fullName: candidate.fullName, reason: "package.json not cordis" });
             return;
           }
+        }
+
+        // N2 · DSH 宿主版本要求：从生效的 package.json 提取（engines.dsh 优先，DSH 依赖约束兜底）。
+        // 拿不准就是 null（未知）—— 绝不用猜测的版本去拦截安装
+        const engines = extractDshEngines(effectivePkgJson);
+        if (engines) {
+          dshEngines = engines.range;
+          dshEnginesSource = engines.source;
         }
 
         // README（缓存 24h）
@@ -452,6 +472,8 @@ async function main() {
             installParsed,
             hasSkillMd,
             subdir,
+            dshEngines,
+            dshEnginesSource,
           });
         }
       }
@@ -512,6 +534,9 @@ async function main() {
           usageNeedsConfig,
           commands: corr?.installCommands ?? installCommands,
           commandSource,
+          // N2：宿主版本要求。dshEngines=null 时**不写字段**（保持"未知"语义，
+          // 避免把这个键写满全量数据却不带信息量），这样 web/public/*.json 体积也不膨胀
+          ...(dshEngines ? { dshEngines, dshEnginesSource } : {}),
         },
         score: undefined as unknown as DshPlugin["score"],
         sources: candidate.sources,
@@ -634,6 +659,9 @@ async function main() {
           },
           hasSkillMd: prev.type === "skill",
           subdir: null,
+          // N2：沿用已收录条目的宿主版本要求——不回填会把上一轮已抓到的值抹掉
+          dshEngines: prev.install.dshEngines ?? null,
+          dshEnginesSource: prev.install.dshEnginesSource,
         });
       }
       restored++;
@@ -700,6 +728,9 @@ async function main() {
               },
               hasSkillMd: prev.type === "skill",
               subdir: null,
+              // N2：同上，沿用已收录条目的宿主版本要求
+              dshEngines: prev.install.dshEngines ?? null,
+              dshEnginesSource: prev.install.dshEnginesSource,
             });
           }
           // pushedAt 变了：等下次扫描进池正常重检测，本次不补
@@ -1039,6 +1070,20 @@ async function main() {
     .map((p) => `${p.id}(${p.score.total})`)
     .join(", ");
   console.log(`  plugins.json: ${market.plugins.length} plugins`);
+  // N2 · 宿主版本要求覆盖率（可观测性）：这个字段是**增量补全**的——
+  // 只在"仓库有推送"或"检测缓存 7 天 TTL 过期"的条目上写入，不做全量回填。
+  // 日志把覆盖率打出来，才能一眼看出它有没有在爬升（否则又是一个"以为在跑其实没跑"的静默失败）。
+  const withEngines = market.plugins.filter((p) => p.install?.dshEngines).length;
+  const bySource = market.plugins.reduce<Record<string, number>>((acc, p) => {
+    const s = p.install?.dshEnginesSource;
+    if (s) acc[s] = (acc[s] ?? 0) + 1;
+    return acc;
+  }, {});
+  const pct = market.plugins.length ? ((withEngines / market.plugins.length) * 100).toFixed(1) : "0.0";
+  console.log(
+    `  dshEngines 覆盖: ${withEngines}/${market.plugins.length} (${pct}%)` +
+      (Object.keys(bySource).length ? ` · 来源 ${JSON.stringify(bySource)}` : ""),
+  );
   console.log(`  top5: ${top5}`);
 }
 

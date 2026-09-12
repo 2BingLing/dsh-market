@@ -427,6 +427,30 @@
   color: var(--mkt-brand-strong);
   flex: 0 0 auto;
 }
+/* N2 · 宿主版本要求胶囊（只在插件声明了要求时出现）
+   三态走设计令牌：ok=中性灰、unknown=提醒黄、incompatible=危险红。
+   刻意不做成"越权吓人"的样式：ok/unknown 只是信息，只有 incompatible 才该被注意到。 */
+.compatChip {
+  font-size: 10.5px;
+  font-weight: 500;
+  padding: 1px 6px;
+  border-radius: 8px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  background: var(--mkt-surface-c);
+  color: var(--mkt-text3);
+  border: 1px solid transparent;
+}
+.compatChip[data-status='unknown'] {
+  background: var(--mkt-chip-warn-bg);
+  color: var(--mkt-chip-warn-text);
+  border-color: var(--mkt-chip-warn-border, transparent);
+}
+.compatChip[data-status='incompatible'] {
+  background: var(--mkt-chip-red-bg);
+  color: var(--mkt-chip-red-text);
+  border-color: var(--mkt-chip-red-border);
+}
 .cardStars {
   margin-left: auto;
   display: flex;

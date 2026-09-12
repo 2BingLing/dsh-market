@@ -15,6 +15,7 @@ import { resolveConfig } from "./config.js";
 import { fetchMarketData } from "./data.js";
 import { scanInstalled } from "./installed.js";
 import { readProfile, writeProfile, readBinding, writeBinding, readSettings, writeSettings } from "./config.js";
+import { liteDshCompat } from "./compat.js";
 import { updateProfile, topTags } from "./profile.js";
 import { recommend } from "./recommend.js";
 import { search } from "./search.js";
@@ -97,6 +98,9 @@ function lite(p: any) {
     installMethod: p.install?.method,
     installCommands: p.install?.commands ?? [],
     installTarget: p.install?.target,
+    // N2 · 宿主兼容：Host 侧按本机 DSH 版本算好（客户端不做版本逻辑）。
+    // 未声明要求的插件返回 undefined → JSON 序列化时该键直接消失，不撑大载荷
+    dshCompat: liteDshCompat(p),
   };
 }
 

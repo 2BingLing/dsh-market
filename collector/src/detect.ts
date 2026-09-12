@@ -191,9 +191,67 @@ export function isCordisPackageJson(content: string | null): boolean {
   }
 }
 
+/** DSH 宿主包前缀（engines.dsh / 依赖里出现的都是这个 scope） */
+const DSH_PKG_PREFIX = "@deepseek-ai/dsh";
+
+/** 能安全落库的版本范围形状：只接受 semver 范围里常见的字符，防止把奇怪的字符串当范围用 */
+const SAFE_RANGE_RE = /^[v\s]*[0-9xX*^~<>=.|,\s-]*[0-9xX*]+[0-9a-zA-Z.\-+]*$/;
+
+/**
+ * 解析插件声明的 **DSH 宿主版本要求**（N2 · Host-aware 兼容门禁的数据来源）。
+ *
+ * 优先 `engines.dsh`（最明确、作者有意声明）；没有时退而看依赖里的 DSH 包约束
+ * （`peerDependencies` 优先于 `devDependencies`，因为 peer 才是"我要跑在哪个宿主上"的语义）。
+ *
+ * 设计取舍：
+ *   - **只做保守提取**，拿不准就返回 null（= 未知），绝不用猜测的版本去拦截安装；
+ *   - 依赖兜底会挑**第一个** DSH 包约束，多包约束不一致时可能出现偏差 → 因此把来源一并返回，
+ *     UI 只对 `engines` 来源做强提示（见 plugin/core 的 checkDshCompat）。
+ */
+export function extractDshEngines(
+  content: string | null,
+): { range: string; source: "engines" | "peer-dep" | "dev-dep" } | null {
+  if (!content) return null;
+  let pkg: Record<string, unknown>;
+  try {
+    pkg = JSON.parse(content) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+
+  const clean = (v: unknown): string | null => {
+    if (typeof v !== "string") return null;
+    const t = v.trim();
+    // 过滤空值、通配全部（`*` 等于没声明）、以及明显不是范围的字符串
+    if (!t || t === "*" || t.startsWith("http") || t.startsWith("file:") || t.startsWith("link:")) {
+      return null;
+    }
+    return SAFE_RANGE_RE.test(t) ? t : null;
+  };
+
+  // 1) engines.dsh（作者显式声明，最可信）
+  const engines = pkg.engines as Record<string, unknown> | undefined;
+  const fromEngines = clean(engines?.dsh);
+  if (fromEngines) return { range: fromEngines, source: "engines" };
+
+  // 2) 依赖兜底：peerDependencies → devDependencies
+  for (const [field, source] of [
+    ["peerDependencies", "peer-dep"],
+    ["devDependencies", "dev-dep"],
+  ] as const) {
+    const deps = pkg[field] as Record<string, unknown> | undefined;
+    if (!deps || typeof deps !== "object") continue;
+    for (const key of Object.keys(deps)) {
+      if (!key.startsWith(DSH_PKG_PREFIX)) continue;
+      const range = clean(deps[key]);
+      if (range) return { range, source };
+    }
+  }
+  return null;
+}
+
 /** 检测 README/SKILL 内容中的"需要配置"信号（具体环境变量名） */
-const CONFIG_KEY_RE =
-  /(?:^|[^A-Za-z])(GITHUB_TOKEN|GH_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|DEEPSEEK_API_KEY|LLM_API_KEY|API[ _-]?KEY|CLAUDE_API_KEY|AZURE_OPENAI|AWS_ACCESS_KEY|STRIPE_API_KEY|WEBHOOK_SECRET|SESSION_KEY)(?:[^A-Za-z]|$)/i;
+const CONFIG_KEY_RE =  /(?:^|[^A-Za-z])(GITHUB_TOKEN|GH_TOKEN|OPENAI_API_KEY|ANTHROPIC_API_KEY|DEEPSEEK_API_KEY|LLM_API_KEY|API[ _-]?KEY|CLAUDE_API_KEY|AZURE_OPENAI|AWS_ACCESS_KEY|STRIPE_API_KEY|WEBHOOK_SECRET|SESSION_KEY)(?:[^A-Za-z]|$)/i;
 
 /** 否定语境（"不需要 API key"等）——命中则先摘除，避免误报 */
 const NEGATION_RE =
