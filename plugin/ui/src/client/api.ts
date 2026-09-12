@@ -116,6 +116,8 @@ export interface InstallResultView {
   requiresRestart?: boolean
   activation?: ActivationStatus
   blockedBuilds?: string[]
+  /** P6：失败分类（人话原因 + 建议动作 + 关键行） */
+  classified?: FailureClassView
 }
 
 /** 插件自身更新检测结果（core/update.ts checkSelfUpdate） */
@@ -147,13 +149,30 @@ export interface InstallStepView {
   detail?: string
 }
 
+/** P6 错误分类（Host 侧 classifyFailure 的下发形状） */
+export interface FailureClassView {
+  code: string
+  title: string
+  hint: string
+  keyLines: string[]
+}
+
+/** P6：RPC 错误附分类（人话原因 + 建议动作），不再是干巴巴的原始报错 */
+export class RpcError extends Error {
+  classified?: FailureClassView
+  constructor(message: string, classified?: FailureClassView) {
+    super(message)
+    this.classified = classified
+  }
+}
+
 export async function api<T = unknown>(method: string, args?: unknown): Promise<T> {
   const res = await fetch('/market/api', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ method, args: args ?? {} }),
   })
-  const data = (await res.json()) as { ok: boolean; result?: T; error?: string }
-  if (!data.ok) throw new Error(data.error ?? 'RPC failed')
+  const data = (await res.json()) as { ok: boolean; result?: T; error?: string; classified?: FailureClassView }
+  if (!data.ok) throw new RpcError(data.error ?? 'RPC failed', data.classified)
   return data.result as T
 }

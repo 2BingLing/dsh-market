@@ -25,6 +25,7 @@ import { checkUpdates, checkSelfUpdate, applyUpdate, readMinimumReleaseAge, writ
 import { verifyAfterInstall } from "./verify.js";
 import { detectPnpmMajor, isBuildBlockedFailure, parseBlockedBuilds, writeBuildApprovals } from "./builds.js";
 import { buildDiagSnapshot } from "./diag.js";
+import { readOpLogTail, exportLogText } from "./log.js";
 import type { CommandRunner } from "./types.js";
 import { fetchCurrentUser, fetchStarred } from "./github.js";
 
@@ -280,6 +281,9 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
   },
   // P12 诊断快照（出路面板「一键导出诊断」的数据源；只读本地、绝不抛错）
   "diag:snapshot": () => buildDiagSnapshot(cfg, pluginVersion()),
+  // P6 操作日志（调试通道对等：读尾部 / 导出全文）
+  "log:tail": (args) => readOpLogTail(cfg, Number(args?.n ?? 200)),
+  "log:export": () => exportLogText(cfg, { "@dsh-market/core": pluginVersion() ?? "?" }),
   uninstall: async (args) => {
     const data = await market();
     const plugin = data.plugins.find((p) => p.id === args.pluginId);

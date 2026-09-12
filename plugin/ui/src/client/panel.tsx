@@ -6,8 +6,10 @@ import { createElement, useEffect, useMemo, useRef, useState, useSyncExternalSto
 import type { ReactNode } from 'react'
 import {
   api,
+  RpcError,
   type ActivationStatus,
   type ApplyUpdateResult,
+  type FailureClassView,
   type InstalledItem,
   type LitePack,
   type LitePlugin,
@@ -18,7 +20,7 @@ import {
 } from './api.ts'
 import { getOpen, setOpen, subscribe } from './store.ts'
 import { MarketLogo } from './logo.tsx'
-import { Boundary, ErrorOutlet } from './error-outlet.tsx'
+import { Boundary, ErrorOutlet, buildDiagnostics, copyText } from './error-outlet.tsx'
 import styles from './styles.module.css'
 
 /** GitHub 设备流 client_id（dsh-market GitHub App，公开值非机密） */
@@ -306,6 +308,9 @@ function InstallModal(props: {
   const { plugin, onDone, onClose } = props
   const [phase, setPhase] = useState<'confirm' | 'running' | 'handedOff' | 'error'>('confirm')
   const [error, setError] = useState('')
+  // P6：RPC 错误的人话分类（title/hint/keyLines）
+  const [errorClass, setErrorClass] = useState<FailureClassView | null>(null)
+  const [diagCopied, setDiagCopied] = useState(false)
   const [childSessionId, setChildSessionId] = useState<string | null>(null)
   // 安全模式（2026-09）：开启后跳过 T0 直装，强制 AI 扫描 + 安装（供给侧防御，见 QVD-2026-57410）
   const [security, setSecurity] = useState(false)
@@ -322,6 +327,7 @@ function InstallModal(props: {
     alreadyInstalled?: boolean
     smokeFailed?: boolean
     error?: string | null
+    classified?: FailureClassView | null
   } | null>(null)
 
   // AI 代理安装（路由式）：T0 直装（零 LLM：已装/配方/解析命令）→ 需要时才交给协议子代理。
@@ -338,6 +344,7 @@ function InstallModal(props: {
         smokeFailed?: boolean
         error?: string | null
         security?: boolean
+        classified?: FailureClassView | null
       }>('ai:install', {
         pluginId: plugin.id,
         security,
@@ -347,7 +354,22 @@ function InstallModal(props: {
       setPhase('handedOff')
     } catch (e) {
       setError((e as Error).message)
+      // P6：RPC 错误自带分类 → 展示人话原因与建议，而不是裸报错
+      setErrorClass(e instanceof RpcError ? e.classified ?? null : null)
+      setDiagCopied(false)
       setPhase('error')
+    }
+  }
+
+  /** P6：错误阶段一键复制诊断（含分类 + 环境快照 + 堆栈） */
+  const copyErrorDiag = async () => {
+    const text = await buildDiagnostics(`安装弹窗（${plugin.name}）`, new Error(error))
+    const ok = await copyText(text)
+    if (ok) {
+      setDiagCopied(true)
+      setTimeout(() => setDiagCopied(false), 2000)
+    } else {
+      toast('复制失败：诊断文本过长，请重试一次', 3000)
     }
   }
 
@@ -465,8 +487,15 @@ function InstallModal(props: {
                     ? `AI 助手已开始工作（子会话 ${childSessionId.slice(0, 8)}…），请到会话中查看进度；需要配置时 AI 会向你确认。`
                     : t0?.alreadyInstalled
                       ? `「${plugin.name}」已在目标位置检测到安装，已跳过。`
-                      : t0?.ok && !t0.smokeFailed
-                        ? `已通过${t0.mode === 'recipe' ? '配方' : '解析命令'}直装完成，冒烟验证通过，无需 AI 介入。`
+                    : t0?.ok && !t0.smokeFailed
+                      ? `已通过${t0.mode === 'recipe' ? '配方' : '解析命令'}直装完成，冒烟验证通过，无需 AI 介入。`
+                      : t0?.classified
+                        ? El('span', null,
+                            // P6：T0 失败展示人话原因 + 建议动作（保留"转交 AI"语义）
+                            `直装未通过：${t0.classified.title}，已转交 AI 助手处理。`,
+                            El('span', { className: styles.modalDesc, style: { display: 'block', marginTop: 6, fontSize: 12, color: '#8a919f' } },
+                              `原因：${t0.error ?? ''}。建议：${t0.classified.hint}`),
+                          )
                         : `直装未通过验证（${t0?.error ?? '冒烟失败'}），已转交 AI 助手处理。`,
                 ),
                 El('div', { className: styles.modalActions },
@@ -474,11 +503,23 @@ function InstallModal(props: {
                 ),
               )
             : El('div', null,
+                // P6：有分类 → 人话标题 + 建议动作；原始报错降级为次要信息
                 El('div', { className: styles.modalError },
                   El(Icon, { d: ICON_CLOSE, size: 14, className: styles.inlineIcon }),
-                  `启动失败：${error}`),
+                  errorClass ? `${errorClass.title}` : `启动失败：${error}`),
+                errorClass
+                  ? El('div', { className: styles.modalDesc, style: { marginTop: 8, fontSize: 12.5 } },
+                      `建议：${errorClass.hint}`,
+                      El('span', {
+                        className: styles.updateHint,
+                        style: { display: 'block', marginTop: 6, wordBreak: 'break-all' },
+                        title: error,
+                      }, `原始报错：${error.slice(0, 120)}`))
+                  : null,
                 El('div', { className: styles.modalActions },
                   El('button', { className: styles.btn, onClick: () => setPhase('confirm') }, '重试'),
+                  El('button', { className: styles.btn, onClick: () => void copyErrorDiag() },
+                    diagCopied ? '已复制诊断 ✓' : '复制诊断'),
                   El('button', { className: `${styles.btn} ${styles.btnPrimary}`, onClick: onClose }, '关闭'),
                 ),
               ),
@@ -1051,6 +1092,21 @@ function InstalledTab(props: {
             El('div', { className: styles.installedHead },
               El('span', { className: styles.installedName }, i.plugin?.name ?? i.localName),
               El('span', { className: styles.cardBadge }, i.source === 'skills' ? '技能' : '插件'),
+              // 已装 Tab 兼容徽标（N2 待做②）：作者声明了 DSH 版本要求才显示，
+              // 措辞按"推荐使用 xxx 版本"——中性的信息，不是吓人的警告；
+              // 不匹配时才补当前版本对照（红色提示），未声明（unknown）不打扰
+              i.plugin?.dshCompat && i.plugin.dshCompat.status !== 'unknown'
+                ? El('span', {
+                    className: styles.compatChip,
+                    'data-status': i.plugin.dshCompat.status,
+                    title: i.plugin.dshCompat.reason,
+                  },
+                  `推荐 ${i.plugin.dshCompat.label}`,
+                  i.plugin.dshCompat.status === 'incompatible' && i.plugin.dshCompat.local
+                    ? `（当前 ${i.plugin.dshCompat.local}）`
+                    : '',
+                )
+              : null,
             ),
             El('div', { className: styles.installedMeta },
               `${i.version ?? '未知版本'} · ${i.source === 'skills' ? 'skill' : 'profile'}`,
@@ -1139,6 +1195,8 @@ function SettingsTab(props: {
   const [profileName, setProfileName] = useState('web')
   // 版本信息（设置页「关于」显示；Host config 读取已装包版本）
   const [versions, setVersions] = useState<Record<string, string>>({})
+  // P6：操作日志导出（复制到剪贴板；头自带宿主版本+探测来源+时区）
+  const [logState, setLogState] = useState<'' | 'copying' | 'copied' | 'failed'>('')
 
   useEffect(() => {
     setMode(profile?.modeOverride ?? 'auto')
@@ -1426,6 +1484,30 @@ function SettingsTab(props: {
             ),
           )
         : null,
+      // P6 就地日志导出：安装/更新/卸载的操作记录（含失败分类），粘给 AI 或他人排查用
+      El('div', { className: styles.versionRow },
+        El('button', {
+          className: `${styles.btn} ${styles.btnSm}`,
+          disabled: logState === 'copying',
+          onClick: () => void (async () => {
+            setLogState('copying')
+            try {
+              const text = await api<string>('log:export')
+              const ok = await copyText(text)
+              setLogState(ok ? 'copied' : 'failed')
+            } catch {
+              setLogState('failed')
+            }
+            setTimeout(() => setLogState(''), 2200)
+          })(),
+        }, logState === 'copying' ? '导出中…' : '导出操作日志'),
+        El('span', { className: styles.updateHint },
+          logState === 'copied'
+            ? '已复制到剪贴板 ✓（含宿主版本/时区/最近 200 条）'
+            : logState === 'failed'
+              ? '复制失败，请重试'
+              : '复制安装/更新/卸载记录，粘给 AI 可大幅加速排查'),
+      ),
     ),
   )
 }

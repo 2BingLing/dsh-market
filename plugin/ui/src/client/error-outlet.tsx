@@ -13,7 +13,7 @@
  */
 import { Component, createElement, useState } from 'react'
 import type { ReactNode } from 'react'
-import { api } from './api.ts'
+import { api, RpcError } from './api.ts'
 import styles from './styles.module.css'
 
 function El(
@@ -56,6 +56,11 @@ function truncate(s: string, max: number): string {
   return s.length > max ? `${s.slice(0, max)}…（截断）` : s
 }
 
+/** 组装诊断全文（RPC 失败时降级：仍带上客户端已知的错误与位置）。P6 安装弹窗「复制诊断」复用。 */
+export async function buildDiagnostics(label: string, error: Error): Promise<string> {
+  return buildDiagText(label, error)
+}
+
 /** 组装诊断全文（RPC 失败时降级：仍带上客户端已知的错误与位置） */
 async function buildDiagText(label: string, error: Error): Promise<string> {
   let snap = ''
@@ -65,19 +70,25 @@ async function buildDiagText(label: string, error: Error): Promise<string> {
   } catch (e) {
     snap = `（诊断 RPC 失败：${(e as Error).message}——Host 可能已无响应）`
   }
-  return [
-    '【插件市场诊断】',
-    `出错位置: ${label}`,
-    `时间: ${new Date().toISOString()}`,
-    '',
-    '— 环境（Host 侧快照）—',
-    snap,
-    '',
-    '— 错误 —',
-    `${error.name}: ${error.message}`,
-    error.stack ? truncate(error.stack, 1200) : '（无堆栈）',
-  ].join('\n')
-}
+    return [
+      '【插件市场诊断】',
+      `出错位置: ${label}`,
+      `时间: ${new Date().toISOString()}`,
+      '',
+      '— 环境（Host 侧快照）—',
+      snap,
+      '',
+      '— 错误 —',
+      `${error.name}: ${error.message}`,
+      // P6：RPC 错误自带分类 → 人话原因/建议一并进诊断
+      error instanceof RpcError && error.classified
+        ? `分类: ${error.classified.code} — ${error.classified.title}\n建议: ${error.classified.hint}`
+        : '',
+      error.stack ? truncate(error.stack, 1200) : '（无堆栈）',
+    ]
+      .filter((l) => l !== '')
+      .join('\n')
+  }
 
 /** 修复提示词：把诊断嵌进一段可直接粘贴给 AI 的话 */
 async function buildFixPrompt(label: string, error: Error): Promise<string> {
@@ -96,7 +107,8 @@ async function buildFixPrompt(label: string, error: Error): Promise<string> {
   ].join('\n')
 }
 
-async function copyText(text: string): Promise<boolean> {
+/** 写剪贴板；不可用返回 false（调用方降级为手动复制）。P6 设置 Tab 导出日志复用。 */
+export async function copyText(text: string): Promise<boolean> {
   try {
     if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(text)

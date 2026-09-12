@@ -44,6 +44,10 @@ import {
   parseInstallVerdict,
   fetchCurrentUser,
   fetchStarred,
+  classifyFailure,
+  appendOpLog,
+  readOpLogTail,
+  exportLogText,
 } from '@dsh-market/core'
 
 export const name = 'dsh-market'
@@ -437,6 +441,26 @@ export function apply(ctx: {
         if (!r.ok) {
           const blocked = parseBlockedBuilds(r.error ?? '')
           if (blocked.length > 0) (r as { blockedBuilds?: string[] }).blockedBuilds = blocked
+          // P6 错误分类：附人话原因 + 建议动作 + 关键行（UI 优先用 blockedBuilds 流程，其余展示分类）
+          const cls = classifyFailure(r.error ?? '')
+          ;(r as { classified?: unknown }).classified = cls
+          // P6 操作日志：失败也留痕（含分类 code 与输出尾部，log:export 可导出）
+          appendOpLog(cfg, {
+            t: new Date().toISOString(),
+            op: 'install',
+            ok: false,
+            code: cls.code,
+            msg: cls.title,
+            target: plugin.id,
+            detail: r.error ?? '',
+          })
+        } else {
+          appendOpLog(cfg, {
+            t: new Date().toISOString(),
+            op: 'install',
+            ok: true,
+            target: plugin.id,
+          })
         }
         return r
       }
@@ -462,10 +486,27 @@ export function apply(ctx: {
             source: 'profile',
             plugin,
           }
-        return applyUpdate(cfg, plugin, item, {
+        const r = await applyUpdate(cfg, plugin, item, {
           runner: realRunner(),
           profile: (args.targetProfile as string) ?? readSettings(cfg).profile,
         })
+        // P6：更新失败 → 分类留痕
+        if (!r.applied) {
+          const cls = classifyFailure(r.error ?? r.reason ?? '')
+          ;(r as { classified?: unknown }).classified = cls
+          appendOpLog(cfg, {
+            t: new Date().toISOString(),
+            op: 'update',
+            ok: false,
+            code: cls.code,
+            msg: cls.title,
+            target: plugin.id,
+            detail: r.error ?? r.reason ?? '',
+          })
+        } else {
+          appendOpLog(cfg, { t: new Date().toISOString(), op: 'update', ok: true, target: plugin.id })
+        }
+        return r
       }
       // P0-3 放宽 pnpm 发布年龄门槛（minimumReleaseAge: 0）——被门槛挡住时一键处理
       case 'update:relax': {
@@ -488,11 +529,28 @@ export function apply(ctx: {
         // 传已装项的 localName（依赖键名/目录名）——pnpm remove 对键名大小写敏感，
         // plugin.name 是 GitHub 原始大小写（如 DSH-better-sidebar），直接推断会卸载失败
         const item = scanInstalled(cfg, data).find((i) => i.pluginId === args.pluginId)
-        return uninstallPlugin(cfg, plugin, {
+        const r = await uninstallPlugin(cfg, plugin, {
           targetProfile: (args.targetProfile as string) ?? readSettings(cfg).profile,
           runner: realRunner(),
           localName: item?.localName,
         })
+        // P6：卸载结果留痕（失败附分类）
+        if (!r.ok) {
+          const cls = classifyFailure(r.error ?? '')
+          ;(r as { classified?: unknown }).classified = cls
+          appendOpLog(cfg, {
+            t: new Date().toISOString(),
+            op: 'uninstall',
+            ok: false,
+            code: cls.code,
+            msg: cls.title,
+            target: plugin.id,
+            detail: r.error ?? '',
+          })
+        } else {
+          appendOpLog(cfg, { t: new Date().toISOString(), op: 'uninstall', ok: true, target: plugin.id })
+        }
+        return r
       }
 
       // AI 代理安装（路由式）：T0（零 LLM：已装 / 配方 / 解析命令）先行，
@@ -533,6 +591,8 @@ export function apply(ctx: {
             alreadyInstalled: t0.alreadyInstalled ?? false,
             smokeFailed: t0.result?.smokeFailed ?? false,
             error: t0.result?.error ?? null,
+            // P6：T0 直装失败 → 附人话分类（UI 在"直装未通过验证"处展示原因+建议）
+            classified: !t0.ok && t0.result?.error ? classifyFailure(t0.result.error) : undefined,
           }
         }
         const agents = ctx.get('agents') as
@@ -632,6 +692,12 @@ export function apply(ctx: {
       case 'metrics:summary':
         return metricSummary(cfg)
 
+      // P6 操作日志：读尾部 / 导出全文（导出头自带宿主版本+探测来源+时区）
+      case 'log:tail':
+        return readOpLogTail(cfg, Number(args.n ?? 200))
+      case 'log:export':
+        return exportLogText(cfg, readVersions())
+
       case 'gh:deviceCode': {
         const r = await fetch('https://github.com/login/device/code', {
           method: 'POST',
@@ -711,7 +777,9 @@ export function apply(ctx: {
           res.end(JSON.stringify({ ok: true, result }))
         } catch (err) {
           res.writeHead(200, { 'content-type': 'application/json' })
-          res.end(JSON.stringify({ ok: false, error: (err as Error).message }))
+          // P6：所有 RPC 错误统一附人话分类（客户端 RpcError.classified 取用）
+          const msg = (err as Error).message ?? 'unknown error'
+          res.end(JSON.stringify({ ok: false, error: msg, classified: classifyFailure(msg) }))
         }
       },
     }),

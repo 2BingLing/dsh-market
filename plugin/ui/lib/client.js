@@ -6,6 +6,14 @@ window.__ModuleLoader__.load({
 		Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
 		let react = require("react");
 		//#region src/client/api.ts
+		/** P6：RPC 错误附分类（人话原因 + 建议动作），不再是干巴巴的原始报错 */
+		var RpcError = class extends Error {
+			classified;
+			constructor(message, classified) {
+				super(message);
+				this.classified = classified;
+			}
+		};
 		async function api(method, args) {
 			const data = await (await fetch("/market/api", {
 				method: "POST",
@@ -15,7 +23,7 @@ window.__ModuleLoader__.load({
 					args: args ?? {}
 				})
 			})).json();
-			if (!data.ok) throw new Error(data.error ?? "RPC failed");
+			if (!data.ok) throw new RpcError(data.error ?? "RPC failed", data.classified);
 			return data.result;
 		}
 		//#endregion
@@ -105,189 +113,189 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var styles_module_css_default = {
-			"selfUpdateText": "_LI32q_selfUpdateText",
-			"tagMoreRow": "_LI32q_tagMoreRow",
-			"ghDone": "_LI32q_ghDone",
-			"loading": "_LI32q_loading",
-			"fieldLabel": "_LI32q_fieldLabel",
-			"sectionHead": "_LI32q_sectionHead",
-			"btnGhost": "_LI32q_btnGhost",
-			"quizCard": "_LI32q_quizCard",
-			"modal": "_LI32q_modal",
-			"modalError": "_LI32q_modalError",
-			"outlet": "_LI32q_outlet",
-			"searchInput": "_LI32q_searchInput",
-			"emptyState": "_LI32q_emptyState",
-			"tagOn": "_LI32q_tagOn",
-			"toast": "_LI32q_toast",
-			"toastIn": "_LI32q_toastIn",
-			"btnDanger": "_LI32q_btnDanger",
-			"sceneDesc": "_LI32q_sceneDesc",
 			"headerClose": "_LI32q_headerClose",
-			"hotTag": "_LI32q_hotTag",
-			"semanticTitle": "_LI32q_semanticTitle",
-			"section": "_LI32q_section",
-			"recommendToolbar": "_LI32q_recommendToolbar",
-			"settingIc": "_LI32q_settingIc",
-			"statusWarn": "_LI32q_statusWarn",
-			"deviceFlow": "_LI32q_deviceFlow",
-			"quizActions": "_LI32q_quizActions",
-			"sceneInfo": "_LI32q_sceneInfo",
-			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
-			"outletMsg": "_LI32q_outletMsg",
 			"sceneList": "_LI32q_sceneList",
-			"semanticPill": "_LI32q_semanticPill",
-			"loadMore": "_LI32q_loadMore",
-			"settingsRow": "_LI32q_settingsRow",
-			"cardBadge": "_LI32q_cardBadge",
-			"backdrop": "_LI32q_backdrop",
-			"repoBtn": "_LI32q_repoBtn",
-			"quizChipOn": "_LI32q_quizChipOn",
-			"ghLink": "_LI32q_ghLink",
-			"deviceCode": "_LI32q_deviceCode",
-			"warn": "_LI32q_warn",
-			"input": "_LI32q_input",
-			"settingHead": "_LI32q_settingHead",
-			"modalDesc": "_LI32q_modalDesc",
-			"semanticInfo": "_LI32q_semanticInfo",
-			"installedNote": "_LI32q_installedNote",
-			"sectionNote": "_LI32q_sectionNote",
-			"stateHint": "_LI32q_stateHint",
-			"select": "_LI32q_select",
-			"field": "_LI32q_field",
-			"advancedTip": "_LI32q_advancedTip",
-			"steps": "_LI32q_steps",
-			"outletManual": "_LI32q_outletManual",
-			"emptyDesc": "_LI32q_emptyDesc",
-			"outletManualTitle": "_LI32q_outletManualTitle",
-			"needConfig": "_LI32q_needConfig",
-			"cardReasons": "_LI32q_cardReasons",
-			"activationLive": "_LI32q_activationLive",
-			"cardName": "_LI32q_cardName",
-			"statusOff": "_LI32q_statusOff",
-			"favBtnOn": "_LI32q_favBtnOn",
-			"advanced": "_LI32q_advanced",
-			"semanticToggle": "_LI32q_semanticToggle",
-			"ghPollState": "_LI32q_ghPollState",
-			"tag": "_LI32q_tag",
-			"outletActions": "_LI32q_outletActions",
-			"quizDesc": "_LI32q_quizDesc",
-			"reason": "_LI32q_reason",
-			"grid2": "_LI32q_grid2",
-			"tabOn": "_LI32q_tabOn",
-			"ghTip": "_LI32q_ghTip",
-			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
-			"selfUpdateBar": "_LI32q_selfUpdateBar",
-			"filterChip": "_LI32q_filterChip",
-			"triggerLabel": "_LI32q_triggerLabel",
-			"quizHead": "_LI32q_quizHead",
-			"installedActions": "_LI32q_installedActions",
-			"semanticSwitch": "_LI32q_semanticSwitch",
-			"latestChip": "_LI32q_latestChip",
-			"outletHint": "_LI32q_outletHint",
-			"compatChip": "_LI32q_compatChip",
-			"body": "_LI32q_body",
-			"unmatchedMore": "_LI32q_unmatchedMore",
-			"settingTitle": "_LI32q_settingTitle",
-			"updateChip": "_LI32q_updateChip",
-			"activationInert": "_LI32q_activationInert",
+			"tagOn": "_LI32q_tagOn",
 			"statusOk": "_LI32q_statusOk",
-			"favBtn": "_LI32q_favBtn",
-			"ghRow": "_LI32q_ghRow",
-			"modalTitle": "_LI32q_modalTitle",
-			"installedMeta": "_LI32q_installedMeta",
-			"sectionTitle": "_LI32q_sectionTitle",
-			"semanticDesc": "_LI32q_semanticDesc",
-			"header": "_LI32q_header",
-			"btn": "_LI32q_btn",
-			"modeSwitchRow": "_LI32q_modeSwitchRow",
-			"sceneRow": "_LI32q_sceneRow",
-			"emptyIcon": "_LI32q_emptyIcon",
-			"unmatched": "_LI32q_unmatched",
-			"trigger": "_LI32q_trigger",
-			"filterRow": "_LI32q_filterRow",
-			"searchWrapIcon": "_LI32q_searchWrapIcon",
-			"cardStars": "_LI32q_cardStars",
-			"reasonAi": "_LI32q_reasonAi",
-			"semanticResult": "_LI32q_semanticResult",
-			"versionLabel": "_LI32q_versionLabel",
-			"settingStatus": "_LI32q_settingStatus",
-			"updateHint": "_LI32q_updateHint",
-			"installedRow": "_LI32q_installedRow",
-			"modalBody": "_LI32q_modalBody",
-			"outletTitle": "_LI32q_outletTitle",
-			"quizTitle": "_LI32q_quizTitle",
-			"versionRow": "_LI32q_versionRow",
-			"recommendHint": "_LI32q_recommendHint",
-			"cardActionHint": "_LI32q_cardActionHint",
-			"activationChip": "_LI32q_activationChip",
-			"panel": "_LI32q_panel",
-			"btnSm": "_LI32q_btnSm",
-			"tagCloud": "_LI32q_tagCloud",
-			"results": "_LI32q_results",
-			"quizChip": "_LI32q_quizChip",
-			"unmatchedChip": "_LI32q_unmatchedChip",
-			"installedHead": "_LI32q_installedHead",
-			"triggerIcon": "_LI32q_triggerIcon",
-			"loadMoreRow": "_LI32q_loadMoreRow",
-			"titleIcon": "_LI32q_titleIcon",
-			"cardTags": "_LI32q_cardTags",
-			"emptyTitle": "_LI32q_emptyTitle",
-			"settingCard": "_LI32q_settingCard",
-			"stepBar": "_LI32q_stepBar",
-			"filterChipOn": "_LI32q_filterChipOn",
-			"resultCount": "_LI32q_resultCount",
-			"hotTagOn": "_LI32q_hotTagOn",
-			"spacer": "_LI32q_spacer",
-			"searchClear": "_LI32q_searchClear",
-			"quizHeadIcon": "_LI32q_quizHeadIcon",
-			"stepBarDone": "_LI32q_stepBarDone",
-			"modalBackdrop": "_LI32q_modalBackdrop",
-			"fieldRow": "_LI32q_fieldRow",
-			"stepDone": "_LI32q_stepDone",
-			"subtitle": "_LI32q_subtitle",
-			"dividerLine": "_LI32q_dividerLine",
-			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
-			"searchWrap": "_LI32q_searchWrap",
-			"sceneEmpty": "_LI32q_sceneEmpty",
-			"deviceFlowTip": "_LI32q_deviceFlowTip",
-			"installedInfo": "_LI32q_installedInfo",
-			"step": "_LI32q_step",
-			"outletManualText": "_LI32q_outletManualText",
-			"error": "_LI32q_error",
-			"advancedCmd": "_LI32q_advancedCmd",
-			"quizCta": "_LI32q_quizCta",
-			"btnPrimary": "_LI32q_btnPrimary",
-			"settingsLabel": "_LI32q_settingsLabel",
-			"hotTagsTitle": "_LI32q_hotTagsTitle",
-			"iconBtnOn": "_LI32q_iconBtnOn",
-			"quizCount": "_LI32q_quizCount",
-			"tab": "_LI32q_tab",
-			"mainHost": "_LI32q_mainHost",
-			"installedName": "_LI32q_installedName",
-			"inlineIcon": "_LI32q_inlineIcon",
+			"advanced": "_LI32q_advanced",
+			"settingsRow": "_LI32q_settingsRow",
 			"card": "_LI32q_card",
-			"versionCode": "_LI32q_versionCode",
-			"ghLogin": "_LI32q_ghLogin",
-			"quizTags": "_LI32q_quizTags",
-			"sceneHint": "_LI32q_sceneHint",
-			"tabBody": "_LI32q_tabBody",
-			"modalHead": "_LI32q_modalHead",
-			"cardActions": "_LI32q_cardActions",
-			"activationBroken": "_LI32q_activationBroken",
-			"modalActions": "_LI32q_modalActions",
-			"tabs": "_LI32q_tabs",
-			"sectionIcon": "_LI32q_sectionIcon",
-			"stepActive": "_LI32q_stepActive",
-			"sceneName": "_LI32q_sceneName",
-			"modalSuccess": "_LI32q_modalSuccess",
-			"cardDesc": "_LI32q_cardDesc",
+			"modalBody": "_LI32q_modalBody",
+			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
 			"cardHead": "_LI32q_cardHead",
-			"iconBtn": "_LI32q_iconBtn",
+			"triggerIcon": "_LI32q_triggerIcon",
+			"sceneDesc": "_LI32q_sceneDesc",
+			"tagCloud": "_LI32q_tagCloud",
+			"cardDesc": "_LI32q_cardDesc",
+			"sceneRow": "_LI32q_sceneRow",
+			"installedActions": "_LI32q_installedActions",
+			"stateHint": "_LI32q_stateHint",
+			"recommendToolbar": "_LI32q_recommendToolbar",
+			"updateHint": "_LI32q_updateHint",
+			"activationChip": "_LI32q_activationChip",
+			"stepBarDone": "_LI32q_stepBarDone",
+			"quizHeadIcon": "_LI32q_quizHeadIcon",
+			"btn": "_LI32q_btn",
+			"unmatchedChip": "_LI32q_unmatchedChip",
+			"warn": "_LI32q_warn",
+			"loading": "_LI32q_loading",
+			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
+			"semanticTitle": "_LI32q_semanticTitle",
+			"cardReasons": "_LI32q_cardReasons",
+			"titleIcon": "_LI32q_titleIcon",
+			"quizCard": "_LI32q_quizCard",
+			"resultCount": "_LI32q_resultCount",
+			"activationInert": "_LI32q_activationInert",
+			"settingsLabel": "_LI32q_settingsLabel",
+			"cardName": "_LI32q_cardName",
+			"inlineIcon": "_LI32q_inlineIcon",
+			"backdrop": "_LI32q_backdrop",
+			"searchClear": "_LI32q_searchClear",
+			"settingIc": "_LI32q_settingIc",
+			"cardActions": "_LI32q_cardActions",
+			"field": "_LI32q_field",
+			"ghTip": "_LI32q_ghTip",
+			"outletManual": "_LI32q_outletManual",
+			"tag": "_LI32q_tag",
+			"activationBroken": "_LI32q_activationBroken",
+			"deviceCode": "_LI32q_deviceCode",
+			"semanticResult": "_LI32q_semanticResult",
+			"fieldRow": "_LI32q_fieldRow",
+			"quizChip": "_LI32q_quizChip",
 			"title": "_LI32q_title",
-			"modalClose": "_LI32q_modalClose",
+			"sceneName": "_LI32q_sceneName",
+			"tabOn": "_LI32q_tabOn",
+			"searchWrap": "_LI32q_searchWrap",
+			"semanticToggle": "_LI32q_semanticToggle",
+			"emptyDesc": "_LI32q_emptyDesc",
+			"selfUpdateText": "_LI32q_selfUpdateText",
+			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
+			"recommendHint": "_LI32q_recommendHint",
+			"repoBtn": "_LI32q_repoBtn",
+			"quizActions": "_LI32q_quizActions",
+			"installedMeta": "_LI32q_installedMeta",
+			"semanticInfo": "_LI32q_semanticInfo",
+			"ghLink": "_LI32q_ghLink",
+			"error": "_LI32q_error",
+			"modeSwitchRow": "_LI32q_modeSwitchRow",
+			"header": "_LI32q_header",
+			"hotTagOn": "_LI32q_hotTagOn",
+			"select": "_LI32q_select",
+			"sectionNote": "_LI32q_sectionNote",
+			"semanticSwitch": "_LI32q_semanticSwitch",
+			"favBtn": "_LI32q_favBtn",
+			"body": "_LI32q_body",
+			"quizTitle": "_LI32q_quizTitle",
+			"settingCard": "_LI32q_settingCard",
+			"ghRow": "_LI32q_ghRow",
+			"spacer": "_LI32q_spacer",
+			"modalHead": "_LI32q_modalHead",
+			"quizChipOn": "_LI32q_quizChipOn",
+			"stepActive": "_LI32q_stepActive",
+			"modalTitle": "_LI32q_modalTitle",
+			"triggerLabel": "_LI32q_triggerLabel",
+			"sceneEmpty": "_LI32q_sceneEmpty",
+			"deviceFlow": "_LI32q_deviceFlow",
+			"installedNote": "_LI32q_installedNote",
+			"panelInMain": "_LI32q_panelInMain",
+			"iconBtn": "_LI32q_iconBtn",
+			"modal": "_LI32q_modal",
+			"settingStatus": "_LI32q_settingStatus",
+			"btnGhost": "_LI32q_btnGhost",
+			"outletMsg": "_LI32q_outletMsg",
+			"searchWrapIcon": "_LI32q_searchWrapIcon",
+			"reason": "_LI32q_reason",
+			"subtitle": "_LI32q_subtitle",
+			"filterChip": "_LI32q_filterChip",
+			"sectionIcon": "_LI32q_sectionIcon",
+			"semanticDesc": "_LI32q_semanticDesc",
+			"unmatched": "_LI32q_unmatched",
+			"latestChip": "_LI32q_latestChip",
+			"modalBackdrop": "_LI32q_modalBackdrop",
+			"results": "_LI32q_results",
+			"ghLogin": "_LI32q_ghLogin",
+			"compatChip": "_LI32q_compatChip",
+			"loadMore": "_LI32q_loadMore",
+			"sectionHead": "_LI32q_sectionHead",
+			"cardBadge": "_LI32q_cardBadge",
+			"quizCount": "_LI32q_quizCount",
+			"unmatchedMore": "_LI32q_unmatchedMore",
+			"tabs": "_LI32q_tabs",
+			"statusOff": "_LI32q_statusOff",
+			"semanticPill": "_LI32q_semanticPill",
+			"loadMoreRow": "_LI32q_loadMoreRow",
+			"deviceFlowTip": "_LI32q_deviceFlowTip",
+			"modalDesc": "_LI32q_modalDesc",
+			"advancedCmd": "_LI32q_advancedCmd",
+			"quizHead": "_LI32q_quizHead",
+			"reasonAi": "_LI32q_reasonAi",
+			"filterChipOn": "_LI32q_filterChipOn",
+			"selfUpdateBar": "_LI32q_selfUpdateBar",
+			"ghDone": "_LI32q_ghDone",
+			"modalSuccess": "_LI32q_modalSuccess",
+			"versionRow": "_LI32q_versionRow",
+			"step": "_LI32q_step",
+			"modalActions": "_LI32q_modalActions",
+			"activationLive": "_LI32q_activationLive",
+			"tabBody": "_LI32q_tabBody",
+			"favBtnOn": "_LI32q_favBtnOn",
+			"toast": "_LI32q_toast",
+			"outletTitle": "_LI32q_outletTitle",
+			"panel": "_LI32q_panel",
+			"tab": "_LI32q_tab",
+			"hotTag": "_LI32q_hotTag",
+			"settingHead": "_LI32q_settingHead",
 			"stepDot": "_LI32q_stepDot",
-			"panelInMain": "_LI32q_panelInMain"
+			"outletHint": "_LI32q_outletHint",
+			"iconBtnOn": "_LI32q_iconBtnOn",
+			"modalClose": "_LI32q_modalClose",
+			"installedHead": "_LI32q_installedHead",
+			"installedRow": "_LI32q_installedRow",
+			"quizTags": "_LI32q_quizTags",
+			"input": "_LI32q_input",
+			"modalError": "_LI32q_modalError",
+			"installedInfo": "_LI32q_installedInfo",
+			"versionLabel": "_LI32q_versionLabel",
+			"sceneHint": "_LI32q_sceneHint",
+			"stepDone": "_LI32q_stepDone",
+			"updateChip": "_LI32q_updateChip",
+			"dividerLine": "_LI32q_dividerLine",
+			"outletManualTitle": "_LI32q_outletManualTitle",
+			"cardActionHint": "_LI32q_cardActionHint",
+			"filterRow": "_LI32q_filterRow",
+			"sectionTitle": "_LI32q_sectionTitle",
+			"btnPrimary": "_LI32q_btnPrimary",
+			"btnSm": "_LI32q_btnSm",
+			"outletActions": "_LI32q_outletActions",
+			"advancedTip": "_LI32q_advancedTip",
+			"hotTagsTitle": "_LI32q_hotTagsTitle",
+			"sceneInfo": "_LI32q_sceneInfo",
+			"cardStars": "_LI32q_cardStars",
+			"quizCta": "_LI32q_quizCta",
+			"settingTitle": "_LI32q_settingTitle",
+			"stepBar": "_LI32q_stepBar",
+			"mainHost": "_LI32q_mainHost",
+			"btnDanger": "_LI32q_btnDanger",
+			"statusWarn": "_LI32q_statusWarn",
+			"fieldLabel": "_LI32q_fieldLabel",
+			"cardTags": "_LI32q_cardTags",
+			"outlet": "_LI32q_outlet",
+			"grid2": "_LI32q_grid2",
+			"needConfig": "_LI32q_needConfig",
+			"quizDesc": "_LI32q_quizDesc",
+			"emptyTitle": "_LI32q_emptyTitle",
+			"emptyState": "_LI32q_emptyState",
+			"installedName": "_LI32q_installedName",
+			"versionCode": "_LI32q_versionCode",
+			"steps": "_LI32q_steps",
+			"ghPollState": "_LI32q_ghPollState",
+			"toastIn": "_LI32q_toastIn",
+			"tagMoreRow": "_LI32q_tagMoreRow",
+			"searchInput": "_LI32q_searchInput",
+			"outletManualText": "_LI32q_outletManualText",
+			"trigger": "_LI32q_trigger",
+			"section": "_LI32q_section",
+			"emptyIcon": "_LI32q_emptyIcon"
 		};
 		//#endregion
 		//#region src/client/error-outlet.tsx
@@ -329,6 +337,10 @@ window.__ModuleLoader__.load({
 		function truncate(s, max) {
 			return s.length > max ? `${s.slice(0, max)}…（截断）` : s;
 		}
+		/** 组装诊断全文（RPC 失败时降级：仍带上客户端已知的错误与位置）。P6 安装弹窗「复制诊断」复用。 */
+		async function buildDiagnostics(label, error) {
+			return buildDiagText(label, error);
+		}
 		/** 组装诊断全文（RPC 失败时降级：仍带上客户端已知的错误与位置） */
 		async function buildDiagText(label, error) {
 			let snap = "";
@@ -348,8 +360,9 @@ window.__ModuleLoader__.load({
 				"",
 				"— 错误 —",
 				`${error.name}: ${error.message}`,
+				error instanceof RpcError && error.classified ? `分类: ${error.classified.code} — ${error.classified.title}\n建议: ${error.classified.hint}` : "",
 				error.stack ? truncate(error.stack, 1200) : "（无堆栈）"
-			].join("\n");
+			].filter((l) => l !== "").join("\n");
 		}
 		/** 修复提示词：把诊断嵌进一段可直接粘贴给 AI 的话 */
 		async function buildFixPrompt(label, error) {
@@ -367,6 +380,7 @@ window.__ModuleLoader__.load({
 				"====== 诊断结束 ======"
 			].join("\n");
 		}
+		/** 写剪贴板；不可用返回 false（调用方降级为手动复制）。P6 设置 Tab 导出日志复用。 */
 		async function copyText(text) {
 			try {
 				if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
@@ -633,6 +647,8 @@ window.__ModuleLoader__.load({
 			const { plugin, onDone, onClose } = props;
 			const [phase, setPhase] = (0, react.useState)("confirm");
 			const [error, setError] = (0, react.useState)("");
+			const [errorClass, setErrorClass] = (0, react.useState)(null);
+			const [diagCopied, setDiagCopied] = (0, react.useState)(false);
 			const [childSessionId, setChildSessionId] = (0, react.useState)(null);
 			const [security, setSecurity] = (0, react.useState)(false);
 			const [forceCompat, setForceCompat] = (0, react.useState)(false);
@@ -651,8 +667,17 @@ window.__ModuleLoader__.load({
 					setPhase("handedOff");
 				} catch (e) {
 					setError(e.message);
+					setErrorClass(e instanceof RpcError ? e.classified ?? null : null);
+					setDiagCopied(false);
 					setPhase("error");
 				}
+			};
+			/** P6：错误阶段一键复制诊断（含分类 + 环境快照 + 堆栈） */
+			const copyErrorDiag = async () => {
+				if (await copyText(await buildDiagnostics(`安装弹窗（${plugin.name}）`, new Error(error)))) {
+					setDiagCopied(true);
+					setTimeout(() => setDiagCopied(false), 2e3);
+				} else toast("复制失败：诊断文本过长，请重试一次", 3e3);
 			};
 			const cmd = plugin.installCommands && plugin.installCommands.length > 0 ? plugin.installCommands[0] : plugin.installMethod === "skills-add" ? `git clone https://github.com/${plugin.fullName}.git` : `dsh plugin --profile web add ${plugin.name}`;
 			return El("div", {
@@ -728,7 +753,15 @@ window.__ModuleLoader__.load({
 			}, security ? "🛡 安全安装" : "确认安装"))) : phase === "running" ? El("div", null, El("div", { className: styles_module_css_default.modalTitle }, "正在安装"), El("div", { className: styles_module_css_default.loading }, "正在唤起 AI 助手…")) : phase === "handedOff" ? El("div", { className: styles_module_css_default.modalSuccess }, El("div", { className: styles_module_css_default.modalSuccessIcon }, El(Icon, {
 				d: ICON_CHECK,
 				size: 22
-			})), El("div", { className: styles_module_css_default.modalSuccessTitle }, childSessionId ? "已交给 AI 助手安装" : "安装完成（零 Token 直装）"), El("p", { className: styles_module_css_default.modalDesc }, childSessionId ? `AI 助手已开始工作（子会话 ${childSessionId.slice(0, 8)}…），请到会话中查看进度；需要配置时 AI 会向你确认。` : t0?.alreadyInstalled ? `「${plugin.name}」已在目标位置检测到安装，已跳过。` : t0?.ok && !t0.smokeFailed ? `已通过${t0.mode === "recipe" ? "配方" : "解析命令"}直装完成，冒烟验证通过，无需 AI 介入。` : `直装未通过验证（${t0?.error ?? "冒烟失败"}），已转交 AI 助手处理。`), El("div", { className: styles_module_css_default.modalActions }, El("button", {
+			})), El("div", { className: styles_module_css_default.modalSuccessTitle }, childSessionId ? "已交给 AI 助手安装" : "安装完成（零 Token 直装）"), El("p", { className: styles_module_css_default.modalDesc }, childSessionId ? `AI 助手已开始工作（子会话 ${childSessionId.slice(0, 8)}…），请到会话中查看进度；需要配置时 AI 会向你确认。` : t0?.alreadyInstalled ? `「${plugin.name}」已在目标位置检测到安装，已跳过。` : t0?.ok && !t0.smokeFailed ? `已通过${t0.mode === "recipe" ? "配方" : "解析命令"}直装完成，冒烟验证通过，无需 AI 介入。` : t0?.classified ? El("span", null, `直装未通过：${t0.classified.title}，已转交 AI 助手处理。`, El("span", {
+				className: styles_module_css_default.modalDesc,
+				style: {
+					display: "block",
+					marginTop: 6,
+					fontSize: 12,
+					color: "#8a919f"
+				}
+			}, `原因：${t0.error ?? ""}。建议：${t0.classified.hint}`)) : `直装未通过验证（${t0?.error ?? "冒烟失败"}），已转交 AI 助手处理。`), El("div", { className: styles_module_css_default.modalActions }, El("button", {
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary}`,
 				onClick: () => {
 					onDone();
@@ -738,10 +771,27 @@ window.__ModuleLoader__.load({
 				d: ICON_CLOSE,
 				size: 14,
 				className: styles_module_css_default.inlineIcon
-			}), `启动失败：${error}`), El("div", { className: styles_module_css_default.modalActions }, El("button", {
+			}), errorClass ? `${errorClass.title}` : `启动失败：${error}`), errorClass ? El("div", {
+				className: styles_module_css_default.modalDesc,
+				style: {
+					marginTop: 8,
+					fontSize: 12.5
+				}
+			}, `建议：${errorClass.hint}`, El("span", {
+				className: styles_module_css_default.updateHint,
+				style: {
+					display: "block",
+					marginTop: 6,
+					wordBreak: "break-all"
+				},
+				title: error
+			}, `原始报错：${error.slice(0, 120)}`)) : null, El("div", { className: styles_module_css_default.modalActions }, El("button", {
 				className: styles_module_css_default.btn,
 				onClick: () => setPhase("confirm")
 			}, "重试"), El("button", {
+				className: styles_module_css_default.btn,
+				onClick: () => void copyErrorDiag()
+			}, diagCopied ? "已复制诊断 ✓" : "复制诊断"), El("button", {
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnPrimary}`,
 				onClick: onClose
 			}, "关闭")))));
@@ -1132,7 +1182,11 @@ window.__ModuleLoader__.load({
 			}, checking ? "检测中…" : "检查更新") : null), checkError ? El("div", { className: styles_module_css_default.updateHint }, `检测失败：${checkError}`) : null, matched.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "未检测到市场收录的已装插件") : null, ...matched.map((i, idx) => El("div", {
 				key: `${i.localName}-${idx}`,
 				className: styles_module_css_default.installedRow
-			}, El("div", { className: styles_module_css_default.installedInfo }, El("div", { className: styles_module_css_default.installedHead }, El("span", { className: styles_module_css_default.installedName }, i.plugin?.name ?? i.localName), El("span", { className: styles_module_css_default.cardBadge }, i.source === "skills" ? "技能" : "插件")), El("div", { className: styles_module_css_default.installedMeta }, `${i.version ?? "未知版本"} · ${i.source === "skills" ? "skill" : "profile"}`), verifMap[i.localName] ? El("div", { className: `${styles_module_css_default.activationChip} ${verifMap[i.localName].state === "live" ? styles_module_css_default.activationLive : verifMap[i.localName].state === "broken" ? styles_module_css_default.activationBroken : verifMap[i.localName].state === "inert" ? styles_module_css_default.activationInert : ""}` }, activationText(verifMap[i.localName])) : null, checking ? El("div", { className: styles_module_css_default.updateHint }, "检测中…") : renderCheck(i)), confirming === i.localName ? El("div", { className: styles_module_css_default.installedActions }, El("button", {
+			}, El("div", { className: styles_module_css_default.installedInfo }, El("div", { className: styles_module_css_default.installedHead }, El("span", { className: styles_module_css_default.installedName }, i.plugin?.name ?? i.localName), El("span", { className: styles_module_css_default.cardBadge }, i.source === "skills" ? "技能" : "插件"), i.plugin?.dshCompat && i.plugin.dshCompat.status !== "unknown" ? El("span", {
+				className: styles_module_css_default.compatChip,
+				"data-status": i.plugin.dshCompat.status,
+				title: i.plugin.dshCompat.reason
+			}, `推荐 ${i.plugin.dshCompat.label}`, i.plugin.dshCompat.status === "incompatible" && i.plugin.dshCompat.local ? `（当前 ${i.plugin.dshCompat.local}）` : "") : null), El("div", { className: styles_module_css_default.installedMeta }, `${i.version ?? "未知版本"} · ${i.source === "skills" ? "skill" : "profile"}`), verifMap[i.localName] ? El("div", { className: `${styles_module_css_default.activationChip} ${verifMap[i.localName].state === "live" ? styles_module_css_default.activationLive : verifMap[i.localName].state === "broken" ? styles_module_css_default.activationBroken : verifMap[i.localName].state === "inert" ? styles_module_css_default.activationInert : ""}` }, activationText(verifMap[i.localName])) : null, checking ? El("div", { className: styles_module_css_default.updateHint }, "检测中…") : renderCheck(i)), confirming === i.localName ? El("div", { className: styles_module_css_default.installedActions }, El("button", {
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
 				onClick: () => setConfirming(null)
 			}, "取消"), El("button", {
@@ -1174,6 +1228,7 @@ window.__ModuleLoader__.load({
 			const [mode, setMode] = (0, react.useState)(profile?.modeOverride ?? "auto");
 			const [profileName, setProfileName] = (0, react.useState)("web");
 			const [versions, setVersions] = (0, react.useState)({});
+			const [logState, setLogState] = (0, react.useState)("");
 			(0, react.useEffect)(() => {
 				setMode(profile?.modeOverride ?? "auto");
 				api("config").then((c) => {
@@ -1362,7 +1417,20 @@ window.__ModuleLoader__.load({
 			}, "刷新推荐数据")), El("div", { className: styles_module_css_default.settingCard }, El("div", { className: styles_module_css_default.settingHead }, El("span", { className: styles_module_css_default.settingIc }, El(Icon, {
 				d: ICON_CLOCK,
 				size: 15
-			})), El("span", { className: styles_module_css_default.settingTitle }, "关于")), El("p", { className: styles_module_css_default.ghTip }, "数据缓存于本地（GitHub Actions 每日抓取）。"), versions["@dsh-market/plugin"] ? El("div", { className: styles_module_css_default.versionRow }, El("span", { className: styles_module_css_default.versionLabel }, "插件版本"), El("code", { className: styles_module_css_default.versionCode }, `${versions["@dsh-market/plugin"] ?? "?"}`, versions["@dsh-market/core"] ? ` · core ${versions["@dsh-market/core"]}` : "")) : null));
+			})), El("span", { className: styles_module_css_default.settingTitle }, "关于")), El("p", { className: styles_module_css_default.ghTip }, "数据缓存于本地（GitHub Actions 每日抓取）。"), versions["@dsh-market/plugin"] ? El("div", { className: styles_module_css_default.versionRow }, El("span", { className: styles_module_css_default.versionLabel }, "插件版本"), El("code", { className: styles_module_css_default.versionCode }, `${versions["@dsh-market/plugin"] ?? "?"}`, versions["@dsh-market/core"] ? ` · core ${versions["@dsh-market/core"]}` : "")) : null, El("div", { className: styles_module_css_default.versionRow }, El("button", {
+				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm}`,
+				disabled: logState === "copying",
+				onClick: () => void (async () => {
+					setLogState("copying");
+					try {
+						const ok = await copyText(await api("log:export"));
+						setLogState(ok ? "copied" : "failed");
+					} catch {
+						setLogState("failed");
+					}
+					setTimeout(() => setLogState(""), 2200);
+				})()
+			}, logState === "copying" ? "导出中…" : "导出操作日志"), El("span", { className: styles_module_css_default.updateHint }, logState === "copied" ? "已复制到剪贴板 ✓（含宿主版本/时区/最近 200 条）" : logState === "failed" ? "复制失败，请重试" : "复制安装/更新/卸载记录，粘给 AI 可大幅加速排查"))));
 		}
 		function PacksTab(props) {
 			const { packs } = props;

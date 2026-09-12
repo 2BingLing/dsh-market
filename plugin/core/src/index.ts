@@ -24,3 +24,5 @@ export * from "./version.js";
 export * from "./host.js";
 export * from "./compat.js";
 export * from "./diag.js";
+export * from "./errors.js";
+export * from "./log.js";

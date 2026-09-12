@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { aggregateTags, applyUpdate, canonicalCommands, checkSelfUpdate, checkUpdates, deriveSmokeCommands, detectPnpmMajor, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
+import { aggregateTags, appendOpLog, applyUpdate, canonicalCommands, checkSelfUpdate, checkUpdates, classifyFailure, deriveSmokeCommands, detectPnpmMajor, exportLogText, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, hotTags, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readOpLogTail, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。
@@ -320,7 +320,23 @@ function apply(ctx) {
 				if (!r.ok) {
 					const blocked = parseBlockedBuilds(r.error ?? "");
 					if (blocked.length > 0) r.blockedBuilds = blocked;
-				}
+					const cls = classifyFailure(r.error ?? "");
+					r.classified = cls;
+					appendOpLog(cfg, {
+						t: (/* @__PURE__ */ new Date()).toISOString(),
+						op: "install",
+						ok: false,
+						code: cls.code,
+						msg: cls.title,
+						target: plugin.id,
+						detail: r.error ?? ""
+					});
+				} else appendOpLog(cfg, {
+					t: (/* @__PURE__ */ new Date()).toISOString(),
+					op: "install",
+					ok: true,
+					target: plugin.id
+				});
 				return r;
 			}
 			case "verify": {
@@ -339,10 +355,29 @@ function apply(ctx) {
 					source: "profile",
 					plugin
 				};
-				return applyUpdate(cfg, plugin, item, {
+				const r = await applyUpdate(cfg, plugin, item, {
 					runner: realRunner(),
 					profile: args.targetProfile ?? readSettings(cfg).profile
 				});
+				if (!r.applied) {
+					const cls = classifyFailure(r.error ?? r.reason ?? "");
+					r.classified = cls;
+					appendOpLog(cfg, {
+						t: (/* @__PURE__ */ new Date()).toISOString(),
+						op: "update",
+						ok: false,
+						code: cls.code,
+						msg: cls.title,
+						target: plugin.id,
+						detail: r.error ?? r.reason ?? ""
+					});
+				} else appendOpLog(cfg, {
+					t: (/* @__PURE__ */ new Date()).toISOString(),
+					op: "update",
+					ok: true,
+					target: plugin.id
+				});
+				return r;
 			}
 			case "update:relax": {
 				const profile = args.profile ?? readSettings(cfg).profile;
@@ -362,11 +397,30 @@ function apply(ctx) {
 				const plugin = data.plugins.find((p) => p.id === args.pluginId);
 				if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`);
 				const item = scanInstalled(cfg, data).find((i) => i.pluginId === args.pluginId);
-				return uninstallPlugin(cfg, plugin, {
+				const r = await uninstallPlugin(cfg, plugin, {
 					targetProfile: args.targetProfile ?? readSettings(cfg).profile,
 					runner: realRunner(),
 					localName: item?.localName
 				});
+				if (!r.ok) {
+					const cls = classifyFailure(r.error ?? "");
+					r.classified = cls;
+					appendOpLog(cfg, {
+						t: (/* @__PURE__ */ new Date()).toISOString(),
+						op: "uninstall",
+						ok: false,
+						code: cls.code,
+						msg: cls.title,
+						target: plugin.id,
+						detail: r.error ?? ""
+					});
+				} else appendOpLog(cfg, {
+					t: (/* @__PURE__ */ new Date()).toISOString(),
+					op: "uninstall",
+					ok: true,
+					target: plugin.id
+				});
+				return r;
 			}
 			case "ai:install": {
 				const plugin = (await market()).plugins.find((p) => p.id === args.pluginId);
@@ -396,7 +450,8 @@ function apply(ctx) {
 						ok: t0.ok,
 						alreadyInstalled: t0.alreadyInstalled ?? false,
 						smokeFailed: t0.result?.smokeFailed ?? false,
-						error: t0.result?.error ?? null
+						error: t0.result?.error ?? null,
+						classified: !t0.ok && t0.result?.error ? classifyFailure(t0.result.error) : void 0
 					};
 				}
 				const agents = ctx.get("agents");
@@ -458,6 +513,8 @@ function apply(ctx) {
 				return { ok: true };
 			}
 			case "metrics:summary": return metricSummary(cfg);
+			case "log:tail": return readOpLogTail(cfg, Number(args.n ?? 200));
+			case "log:export": return exportLogText(cfg, readVersions());
 			case "gh:deviceCode": return (await fetch("https://github.com/login/device/code", {
 				method: "POST",
 				headers: {
@@ -530,9 +587,11 @@ function apply(ctx) {
 				}));
 			} catch (err) {
 				res.writeHead(200, { "content-type": "application/json" });
+				const msg = err.message ?? "unknown error";
 				res.end(JSON.stringify({
 					ok: false,
-					error: err.message
+					error: msg,
+					classified: classifyFailure(msg)
 				}));
 			}
 		}
