@@ -1820,3 +1820,77 @@
   color: var(--mkt-text-danger);
   border-color: var(--mkt-chip-red-border);
 }
+
+/* ---------- P12 崩溃"出路"面板 ---------- */
+.outlet {
+  margin: 18px auto;
+  max-width: 460px;
+  padding: 20px 18px;
+  border: 1px solid var(--mkt-chip-red-border, #f3c9c9);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+.outletTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mkt-text, #1f2328);
+  margin-bottom: 8px;
+}
+.outletMsg {
+  margin: 0 auto 4px;
+  max-width: 420px;
+}
+.outletMsg code {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--mkt-chip-red-bg, #fdf1f1);
+  color: var(--mkt-text-danger);
+  font-size: 11.5px;
+  line-height: 1.5;
+  word-break: break-all;
+  text-align: left;
+  max-height: 88px;
+  overflow: auto;
+  white-space: pre-wrap;
+}
+.outletActions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.outletManual {
+  margin-top: 10px;
+  text-align: left;
+}
+.outletManualTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mkt-text, #1f2328);
+  margin-bottom: 4px;
+}
+.outletManualText {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px dashed #d0d4da;
+  background: #f7f8fa;
+  font-size: 11px;
+  line-height: 1.5;
+  max-height: 180px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  cursor: copy;
+  user-select: all;
+}
+.outletHint {
+  margin-top: 12px;
+  font-size: 11px;
+  color: #8a919f;
+  line-height: 1.6;
+}

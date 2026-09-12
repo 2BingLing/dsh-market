@@ -23,3 +23,4 @@ export * from "./github.js";
 export * from "./version.js";
 export * from "./host.js";
 export * from "./compat.js";
+export * from "./diag.js";

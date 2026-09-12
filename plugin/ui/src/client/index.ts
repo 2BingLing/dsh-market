@@ -17,6 +17,7 @@ import { createElement, useSyncExternalStore } from 'react'
 import { MarketPanel } from './panel.tsx'
 import { getOpen, setOpen, subscribe, toggle } from './store.ts'
 import { MarketLogo } from './logo.tsx'
+import { Boundary } from './error-outlet.tsx'
 import styles from './styles.module.css'
 
 /** 面板 id == main slot 的 key（两者必须同名，见文件头 A） */
@@ -84,11 +85,14 @@ export function apply(ctx: {
       ctx.slots.register(
         { name: 'main', key: PANEL_ID },
         () =>
-          createElement(MarketPanel, {
-            mode: 'main',
-            // 回对话：main 的 `conversation` 是保留 key，selectPanel(null) 即返回
-            onClose: () => layout.selectPanel?.(null),
-          }),
+          // P12 兜底边界：Tab 内边界只救 Tab 内容，MarketPanel 自身（header/状态逻辑）崩溃时
+          // 由这里接住——main 槽位仍然渲染一张"出路卡"，绝不白屏整个中央面板
+          createElement(Boundary, { key: PANEL_ID, label: '面板整体' },
+            createElement(MarketPanel, {
+              mode: 'main',
+              // 回对话：main 的 `conversation` 是保留 key，selectPanel(null) 即返回
+              onClose: () => layout.selectPanel?.(null),
+            })),
       ),
     )
     return
@@ -106,7 +110,10 @@ export function apply(ctx: {
   ctx.slots.inject('shell.overlay', () =>
     ctx.slots.register(
       { name: 'shell.overlay', id: 'dsh-market-panel', order: 10 },
-      () => createElement(MarketPanel, { mode: 'overlay', onClose: () => setOpen(false) }),
+      () =>
+        // P12 兜底边界（overlay 入口同 main）
+        createElement(Boundary, { key: 'dsh-market-panel', label: '面板整体' },
+          createElement(MarketPanel, { mode: 'overlay', onClose: () => setOpen(false) })),
     ),
   )
 }

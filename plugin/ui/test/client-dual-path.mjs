@@ -35,7 +35,8 @@ new Function(code.replace(/\/\/# sourceMappingURL=.*$/m, ''))()
 
 assert.ok(typeof factory === 'function', 'bundle 未注册 factory')
 
-// ---------- 2. 假 react（只用到 createElement / useSyncExternalStore） ----------
+// ---------- 2. 假 react（只用到 createElement / useSyncExternalStore / Component） ----------
+class FakeComponent {}
 const reactStub = {
   createElement: (type, props, ...children) => ({ type, props, children }),
   useSyncExternalStore: (_sub, getSnapshot) => getSnapshot(),
@@ -43,6 +44,9 @@ const reactStub = {
   useEffect: () => {},
   useMemo: (fn) => fn(),
   useRef: (v) => ({ current: v }),
+  // P12 错误边界（Boundary extends React.Component）在 bundle 求值时就会 extends，
+  // 所以 Component 必须在模块加载前就存在
+  Component: FakeComponent,
 }
 const fakeRequire = (id) => {
   if (id === 'react') return reactStub

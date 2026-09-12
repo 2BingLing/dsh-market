@@ -18,6 +18,7 @@ import {
 } from './api.ts'
 import { getOpen, setOpen, subscribe } from './store.ts'
 import { MarketLogo } from './logo.tsx'
+import { Boundary, ErrorOutlet } from './error-outlet.tsx'
 import styles from './styles.module.css'
 
 /** GitHub 设备流 client_id（dsh-market GitHub App，公开值非机密） */
@@ -94,7 +95,7 @@ function fmtStars(n: number): string {
   return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n)
 }
 
-function El(tag: string | ((props: any) => ReactNode), props: Record<string, unknown> | null, ...children: ReactNode[]): ReactNode {
+function El(tag: string | ((props: any) => ReactNode) | import('react').ComponentClass<any>, props: Record<string, unknown> | null, ...children: ReactNode[]): ReactNode {
   return createElement(tag as never, props ?? {}, ...children)
 }
 
@@ -1586,9 +1587,12 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
   const [selfUpdate, setSelfUpdate] = useState<SelfUpdateInfo | null>(null)
   const [selfUpdating, setSelfUpdating] = useState(false)
   const [selfDismissed, setSelfDismissed] = useState(false)
+  // P12：数据加载失败不再静默吞掉（吞掉 = 空列表 + 无解释的"坏态无出路"）
+  const [loadError, setLoadError] = useState<Error | null>(null)
 
   const loadAll = async () => {
     setLoading(true)
+    setLoadError(null)
     try {
       const [pl, prof, inst, pk] = await Promise.all([
         api<LitePlugin[]>('plugins'),
@@ -1618,6 +1622,7 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
       setRecs(r)
     } catch (e) {
       console.error('market load failed:', e)
+      setLoadError(e as Error)
     } finally {
       setLoading(false)
     }
@@ -1767,51 +1772,67 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
         ),
       ),
       El('div', { className: styles.body },
-        tab === 'recommend'
-          ? El(RecommendTab, {
-              plugins,
-              profile,
-              recs,
-              loading,
-              installedIds,
-              onInstall: setInstallTarget,
-              onTagClick,
-              onSwitchMode,
-              onQuizSubmit: async (tags: string[]) => {
-                await api('profile:update', { quizTags: tags })
-                onInstalledChanged()
-              },
-              sceneState,
-              onFetchScene,
+        loadError
+          ? // P12：数据加载失败 → 出路面板（重试 = 整个 loadAll 重跑；Tab 栏仍可切换但各 Tab 数据为空）
+            El(ErrorOutlet, {
+              error: loadError,
+              label: '数据加载',
+              onRetry: () => void loadAll(),
             })
-          : tab === 'search'
-            ? El(SearchTab, { plugins, onInstall: setInstallTarget, onTagClick })
-            : tab === 'packs'
-              ? El(PacksTab, {
-                  packs,
-                  onInstallPack: (pack: LitePack) => {
-                    // v0.1：打开整合包仓库页，由包作者提供安装方式
-                    window.open(`https://github.com/${pack.id}`, '_blank')
-                  },
-                })
-              : tab === 'favorites'
-              ? El(FavoritesTab, {
+          : tab === 'recommend'
+            // P12：每个 Tab 独立错误边界（key 绑定 tab，切 Tab 自动重置）——
+            // 单个 Tab 渲染崩溃不再白屏整个面板，其他 Tab 照常可用
+            ? El(Boundary, { key: tab, label: '推荐 Tab' },
+                El(RecommendTab, {
                   plugins,
+                  profile,
+                  recs,
+                  loading,
+                  installedIds,
                   onInstall: setInstallTarget,
                   onTagClick,
-                  refreshTick: refreshKey,
-                  onGotoRecommend: () => setTab('recommend'),
-                })
-              : tab === 'installed'
-                ? El(InstalledTab, { installed, loading, onChanged: onInstalledChanged })
-                : El(SettingsTab, { profile, onChanged: onInstalledChanged }),
+                  onSwitchMode,
+                  onQuizSubmit: async (tags: string[]) => {
+                    await api('profile:update', { quizTags: tags })
+                    onInstalledChanged()
+                  },
+                  sceneState,
+                  onFetchScene,
+                }))
+            : tab === 'search'
+              ? El(Boundary, { key: tab, label: '搜索 Tab' },
+                  El(SearchTab, { plugins, onInstall: setInstallTarget, onTagClick }))
+              : tab === 'packs'
+                ? El(Boundary, { key: tab, label: '整合包 Tab' },
+                    El(PacksTab, {
+                      packs,
+                      onInstallPack: (pack: LitePack) => {
+                        // v0.1：打开整合包仓库页，由包作者提供安装方式
+                        window.open(`https://github.com/${pack.id}`, '_blank')
+                      },
+                    }))
+                : tab === 'favorites'
+                ? El(Boundary, { key: tab, label: '收藏 Tab' },
+                    El(FavoritesTab, {
+                      plugins,
+                      onInstall: setInstallTarget,
+                      onTagClick,
+                      refreshTick: refreshKey,
+                      onGotoRecommend: () => setTab('recommend'),
+                    }))
+                : tab === 'installed'
+                  ? El(Boundary, { key: tab, label: '已装 Tab' },
+                      El(InstalledTab, { installed, loading, onChanged: onInstalledChanged }))
+                  : El(Boundary, { key: tab, label: '设置 Tab' },
+                      El(SettingsTab, { profile, onChanged: onInstalledChanged })),
       ),
       installTarget
-        ? El(InstallModal, {
-            plugin: installTarget,
-            onDone: onInstalledChanged,
-            onClose: () => setInstallTarget(null),
-          })
+        ? El(Boundary, { key: installTarget.id, label: '安装弹窗' },
+            El(InstallModal, {
+              plugin: installTarget,
+              onDone: onInstalledChanged,
+              onClose: () => setInstallTarget(null),
+            }))
         : null,
     ),
   )

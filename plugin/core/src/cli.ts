@@ -24,6 +24,7 @@ import { installPlugin, uninstallPlugin } from "./installer.js";
 import { checkUpdates, checkSelfUpdate, applyUpdate, readMinimumReleaseAge, writeMinimumReleaseAge } from "./update.js";
 import { verifyAfterInstall } from "./verify.js";
 import { detectPnpmMajor, isBuildBlockedFailure, parseBlockedBuilds, writeBuildApprovals } from "./builds.js";
+import { buildDiagSnapshot } from "./diag.js";
 import type { CommandRunner } from "./types.js";
 import { fetchCurrentUser, fetchStarred } from "./github.js";
 
@@ -277,6 +278,8 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
     const major = await detectPnpmMajor({ runner: realRunner, cwd: profileDir });
     return writeBuildApprovals(profileDir, args.packages ?? [], { pnpmMajor: major });
   },
+  // P12 诊断快照（出路面板「一键导出诊断」的数据源；只读本地、绝不抛错）
+  "diag:snapshot": () => buildDiagSnapshot(cfg, pluginVersion()),
   uninstall: async (args) => {
     const data = await market();
     const plugin = data.plugins.find((p) => p.id === args.pluginId);
