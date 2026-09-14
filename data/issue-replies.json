@@ -1,23 +1,52 @@
 {
-  "generatedAt": "2026-09-12T21:30:40.067Z",
+  "generatedAt": "2026-09-14T22:32:18.952Z",
   "replies": [
     {
       "issueNumbers": [
-        145
+        152,
+        150
       ],
       "fullName": "ouli-1242/dsh-plugin-tool-management",
+      "type": "cordis-plugin",
+      "stars": 3,
+      "score": 65
+    },
+    {
+      "issueNumbers": [
+        151
+      ],
+      "fullName": "exoticknight/dsh-just-chat",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 37
     },
     {
       "issueNumbers": [
-        143
+        147
+      ],
+      "fullName": "fuguier001/dsh-progress",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 26
+    },
+    {
+      "issueNumbers": [
+        146
+      ],
+      "fullName": "fuguier001/dsh-imgnav",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        149,
+        146
       ],
       "fullName": "fuguier001/dsh-imgview",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 35
+      "score": 7
     }
   ]
 }
