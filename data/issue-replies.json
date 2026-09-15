@@ -1,10 +1,27 @@
 {
-  "generatedAt": "2026-09-14T22:32:18.952Z",
+  "generatedAt": "2026-09-15T22:09:05.788Z",
   "replies": [
     {
       "issueNumbers": [
-        152,
-        150
+        164
+      ],
+      "fullName": "jsdvjx/dsh-strata",
+      "type": "cordis-plugin",
+      "stars": 102,
+      "score": 81
+    },
+    {
+      "issueNumbers": [
+        157
+      ],
+      "fullName": "ADWMC/helm-d",
+      "type": "cordis-plugin",
+      "stars": 45,
+      "score": 74
+    },
+    {
+      "issueNumbers": [
+        166
       ],
       "fullName": "ouli-1242/dsh-plugin-tool-management",
       "type": "cordis-plugin",
@@ -13,40 +30,48 @@
     },
     {
       "issueNumbers": [
-        151
+        158
       ],
-      "fullName": "exoticknight/dsh-just-chat",
+      "fullName": "yixiuzhemu/MCP-Manager",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 37
+      "score": 27
     },
     {
       "issueNumbers": [
-        147
+        160
       ],
-      "fullName": "fuguier001/dsh-progress",
+      "fullName": "a1435473620/dsh-web-search-nokey",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 26
+      "stars": 1,
+      "score": 52
     },
     {
       "issueNumbers": [
-        146
+        159
       ],
-      "fullName": "fuguier001/dsh-imgnav",
+      "fullName": "zhuto666/dsh-compact-agents",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
+      "stars": 1,
+      "score": 41
     },
     {
       "issueNumbers": [
-        149,
-        146
+        164
       ],
-      "fullName": "fuguier001/dsh-imgview",
+      "fullName": "Moleitau-WorldSaver/dsh-strata-custom",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 7
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        148
+      ],
+      "fullName": "fuguier001/dsh-procguard",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
     }
   ]
 }
