@@ -35,6 +35,7 @@ import { parseInstallCommands } from "./install-parse.js";
 import { normalizeTags } from "./tag-normalize.js";
 import { summarizeReadme } from "./summary.js";
 import { collectPacks } from "./packs.js";
+import { loadScoringReadme } from "./scoring-readme.js";
 
 /** 检测结果缓存（增量核心：repo 未变化时复用，跳过重复检测网络调用） */
 interface DetectCache {
@@ -306,7 +307,7 @@ async function main() {
       let dshEnginesSource: string | undefined;
 
       if (cachedDetect && cachedDetect.pushedAt === repo.pushed_at && cachedDetect.detection.isPlugin) {
-        // 命中：仓库未变化且缓存为插件，直接复用检测产物（零网络调用）
+        // 命中：复用检测产物；评分正文缓存过期时仍需回补。
         detection = cachedDetect.detection;
         isCordis = cachedDetect.isCordis;
         needsConfig = cachedDetect.needsConfig;
@@ -318,7 +319,7 @@ async function main() {
         // 旧缓存没有 dshEngines 字段 → undefined/null = 未知；等 TTL 过期或仓库有推送时自然补上
         dshEngines = cachedDetect.dshEngines ?? null;
         dshEnginesSource = cachedDetect.dshEnginesSource;
-        readmeContent = null; // 评分用：下面从 readmes 缓存取（24h 内必有）
+        readmeContent = await loadScoringReadme(candidate.fullName, repo.default_branch, true);
       } else {
         // 未命中/仓库变化/缓存为 false（历史遗留误判如 #123 reasoning-bridge）：
         // false 缓存不信任（新代码 aed60b3 后不写 false 缓存）→ 完整重检覆盖
@@ -433,11 +434,7 @@ async function main() {
         }
 
         // README（缓存 24h）
-        readmeContent = await cached<string | null>(
-          "readmes",
-          candidate.fullName,
-          () => fetchRawFile(candidate.fullName, "README.md", repo!.default_branch)
-        );
+        readmeContent = await loadScoringReadme(candidate.fullName, repo.default_branch);
 
         // skill 型：抓 SKILL.md 做摘要
         let skillMd: string | null = null;
@@ -483,11 +480,6 @@ async function main() {
             lastVerifiedAt: new Date().toISOString(),
           });
         }
-      }
-
-      // 评分用的 readmeContent：检测缓存命中时从 readmes 缓存补取（不重新抓取）
-      if (readmeContent === null) {
-        readmeContent = cacheGet<string | null>("readmes", candidate.fullName, 24 * 3600_000);
       }
 
       const installCommands =
