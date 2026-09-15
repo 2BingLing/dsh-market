@@ -24,7 +24,7 @@ export interface Detection {
 }
 
 const SKILL_MARKER = "SKILL.md";
-const CORDIS_MARKERS = [
+export const CORDIS_MARKERS = [
   "dsh.profile",
   "cordis.patch.yml",
   "dsh.profile.yml",

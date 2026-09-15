@@ -25,7 +25,7 @@ import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
 import { fetchSubmissionRepos, fetchPackSubmissionRepos } from "./sources/issues.js";
 import { mergeCorrections, type DataCorrections } from "./sources/corrections.js";
-import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectSubdirBundle, extractDshEngines } from "./detect.js";
+import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectSubdirBundle, extractDshEngines, CORDIS_MARKERS } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
 import { batchProbeRepos } from "./decay-probe.js";
@@ -385,11 +385,11 @@ async function main() {
             evidence: [...detection.evidence, "package.json cordis（SKILL.md 改判）"],
           };
         }
-        // dsh-manifest.json / dsh.plugin.json 声明式插件：清单本身就是插件证据，跳过 package.json 二次确认（#53/#123 类）
+        // 根标记文件（dsh.profile / cordis.patch.yml / dsh-manifest.json / dsh.plugin.json 等）
+        // 本身就是插件声明：清单/patch 在，插件就成立，跳过 package.json 二次确认
+        //（#53/#123 类；#148 dsh-procguard：零依赖 cordis 插件被 "package.json not cordis" 误杀）
         const hasManifest = rootItems.some(
-          (i) =>
-            i.name.toLowerCase() === "dsh-manifest.json" ||
-            i.name.toLowerCase() === "dsh.plugin.json"
+          (i) => CORDIS_MARKERS.includes(i.name.toLowerCase())
         );
         if (detection.type === "cordis-plugin" && !isCordis && !hasManifest) {
           // monorepo / 子目录兜底：根 package.json 是 workspace 根（非插件），插件在子目录（#52 类）
