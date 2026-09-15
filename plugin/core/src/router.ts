@@ -9,6 +9,7 @@ import { join, normalize } from "node:path";
 import type { DshPlugin } from "@dsh-market/schema";
 import type { CommandRunner, InstallResult, SmokeCheck, StepCallback } from "./types.js";
 import { installPlugin, installPackageName, skillsDestName } from "./installer.js";
+import { guardInstallCommands } from "./command-guard.js";
 import type { ResolvedConfig } from "./config.js";
 import {
   envFingerprint,
@@ -223,6 +224,19 @@ export async function routeInstall(
       recipe.commands.length > 0 &&
       recipe.type === plugin.type
     ) {
+      // 命令安全门（issue #165）：配方命令也未过白名单 → 拒绝直装，交 AI 复核
+      const recipeGuard = guardInstallCommands(plugin, recipe.commands, {
+        allowedDestPrefix: cfg.skillsDir,
+      });
+      if (!recipeGuard.ok) {
+        return {
+          mode: "recipe",
+          ok: false,
+          needAi: true,
+          reason: `配方命令未通过直装白名单（${recipeGuard.blocked[0]?.reason ?? "未知"}），已拦截，交 AI 复核`,
+          recipe,
+        };
+      }
       const result = await install(
         recipe.commands,
         recipe.smoke.length > 0 ? recipe.smoke : deriveSmokeCommands(cfg, plugin, profile, pkgName),
@@ -241,6 +255,22 @@ export async function routeInstall(
 
   // 2. collector 解析命令（有则优先执行；无则内置确定性路径兜底——两者都零 LLM）
   const smoke = deriveSmokeCommands(cfg, plugin, profile, pkgName);
+  // 命令安全门（issue #165）：解析命令未过白名单 → 拒绝直装（不做内置路径静默兜底——
+  // 那会执行与 README 所述不同的安装方式），升级 T1 复核；reason 同步告知 AI 不得原样重试
+  const parsedGuard = guardInstallCommands(plugin, parsed, {
+    allowedDestPrefix: cfg.skillsDir,
+  });
+  if (parsed.length > 0 && !parsedGuard.ok) {
+    return {
+      mode: "parsed",
+      ok: false,
+      needAi: true,
+      reason: `解析命令未通过直装白名单（${parsedGuard.blocked[0]?.reason ?? "未知"}）：${parsedGuard.blocked
+        .map((b) => b.command.slice(0, 80))
+        .join(" ; ")}。直装已拦截、未执行任何命令；复核时不得原样重试被拦截的命令`,
+      recipe: null,
+    };
+  }
   const useParsed = parsed.length > 0;
   // 内置兜底：skill → git clone <repo> <skillsDir>/<name>；cordis → dsh plugin add <pkgName>
   const result = useParsed

@@ -379,6 +379,11 @@ function InstallModal(props: {
       : plugin.installMethod === 'skills-add'
         ? `git clone https://github.com/${plugin.fullName}.git`
         : `dsh plugin --profile web add ${plugin.name}`
+  // #165 执行前展示：直装将执行的命令默认可见（此前藏在"高级"里，用户点安装前看不到）
+  const t0Commands =
+    plugin.installCommands && plugin.installCommands.length > 0
+      ? plugin.installCommands
+      : [cmd]
 
   return El('div', { className: styles.modalBackdrop, onClick: onClose },
     El('div', { className: styles.modal, onClick: (e: MouseEvent) => e.stopPropagation() },
@@ -436,6 +441,11 @@ function InstallModal(props: {
               plugin.type === 'skill'
                 ? '目标：装到技能目录（~/.agents/skills），装完即可用。'
                 : '目标：装进 web profile，装完需重启 harness 生效。'),
+            El('div', { className: styles.advanced, style: { marginTop: 6 } },
+              El('p', { className: styles.advancedTip, style: { marginBottom: 4 } },
+                '直装将执行以下命令（白名单外的命令会被拦截并转 AI 复核，不会直接运行）：'),
+              El('code', { className: styles.advancedCmd }, t0Commands.join('\n')),
+            ),
             El('details', { className: styles.advanced },
               El('summary', null, '高级：查看/复制手动命令'),
               El('code', { className: styles.advancedCmd }, cmd),
@@ -454,7 +464,7 @@ function InstallModal(props: {
               }),
               El('span', { style: { fontSize: 13, fontWeight: 600 } }, '🛡 安全模式'),
               El('span', { className: styles.securityDesc, style: { fontSize: 11.5, color: '#8a919f' } },
-                security ? '开启：AI 安装前扫描（危险命令/信息收集/配置篡改/来源），发现风险即中止，不直接安装' : '关闭：快速安装（零 LLM 直装优先）'),
+                security ? '开启：AI 安装前扫描（危险命令/信息收集/配置篡改/网络暴露/来源），发现风险即中止，不直接安装' : '关闭：快速安装（零 LLM 直装优先）'),
             ),
             security
               ? El('p', { className: styles.warn, style: { fontSize: 12 } },

@@ -12,6 +12,7 @@ export * from "./installed.js";
 export * from "./profile.js";
 export * from "./recommend.js";
 export * from "./installer.js";
+export * from "./command-guard.js";
 export * from "./recipe.js";
 export * from "./router.js";
 export * from "./metrics.js";

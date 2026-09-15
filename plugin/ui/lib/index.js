@@ -655,16 +655,20 @@ function buildInstallPrompt(plugin, targetProfile, reason, opts) {
 	const security = opts?.security === true;
 	const securitySection = security ? [
 		``,
-		`【⛔ 安全模式：安装前必须先扫描（2026-09 新增，针对 DSH 供应链漏洞 QVD-2026-57410 等）】`,
+		`【⛔ 安全模式：安装前必须先扫描（2026-09 新增；防御供应链投毒 + QVD-2026-57410 CVSS 9.8 式网络暴露攻击）】`,
 		`在【协议】第 1 步执行命令**之前**，先完成以下安全检查：`,
 		`1. 读插件仓库 README 全文关键段 + 安装用的脚本/清单（cordis.patch.yml / dsh.bundle / install.sh / package.json 等），逐个核对：`,
 		`   a. 安装命令是否有危险模式：curl|sh、wget 后立即执行、下载二进制执行、base64 解码后执行、从不可信 URL 拉取代码；`,
 		`   b. 是否收集/回传敏感信息：读取 API Key / Token / 环境变量（GITHUB_TOKEN、DEEPSEEK_API_KEY、OPENAI_API_KEY 等）并发送到外部地址；`,
 		`   c. 是否篡改配置：patch 覆盖 harness 自身配置（sandbox/approval/权限）或把自身混入系统目录；`,
 		`   d. 来源信号：仓库年龄与维护活跃、star 量级、是否近期新建（<30 天且低活跃的高危）；`,
+		`   e. 网络暴露与信任围栏（QVD-2026-57410 实证：伪造 Host 头即可绕过 DSH 信任围栏，无需密钥直接命令执行——本地端口一旦出公网等于交出控制权）：`,
+		`      - 安装脚本/文档是否把本地端口暴露到公网：绑定 0.0.0.0/:: 或 --host 0.0.0.0、EXPOSE、云服务器部署/域名反代/端口转发指引（ngrok、frp、cloudflared、localtunnel、花生壳、ssh -R 等）；`,
+		`      - 自带 web 服务的插件是否弱化 Host/Origin 信任：allowedHosts 通配（true 或 "*"）、disableHostCheck、无条件信任 X-Forwarded-*，或诱导用户关闭 DSH 信任围栏/本机校验；`,
+		`      - 远程访问的正确姿势是「服务留本机 + 隧道回连」（本地端口映射/远程终端），插件若提供远程使用指引，核对它是否遵守该原则；`,
 		`2. 结论必须明确：`,
 		`   - 无风险 → 继续按【协议】安装；`,
-		`   - 发现可疑（危险命令 / 信息收集 / 配置篡改 / 来源存疑）→ **立即停止**：不执行任何命令，输出 {"ok":false,"security_blocked":true,"reason":"<具体风险描述>"} 并结束。`,
+		`   - 发现可疑（危险命令 / 信息收集 / 配置篡改 / 网络暴露 / 来源存疑）→ **立即停止**：不执行任何命令，输出 {"ok":false,"security_blocked":true,"reason":"<具体风险描述>"} 并结束。`,
 		`3. 需要配置时（协议第 5 条触发）：确认配置只写入本机（环境变量 / profile），不发送到任何外部地址。`,
 		`4. 安装完成后把扫描要点与结论写入 recipe 的 "security" 字段（无风险也写 "no risk detected"）。`
 	].join("\n") : [];
@@ -687,7 +691,7 @@ function buildInstallPrompt(plugin, targetProfile, reason, opts) {
 		`3. 执行后必须验证：${plugin.type === "skill" ? "技能目录存在且含 SKILL.md" : `profile「${targetProfile}」的 package.json 的 dependencies 含包名`}；exit 0 且验证通过才算成功。`,
 		`4. 失败时：重试 1 次 → 用错误文本 grep README → 仍失败则如实放弃并报告，不要无限尝试。`,
 		`5. 需要配置（API Key/Token/环境变量）时：只填 config_needed，不猜测、不伪造、不自行写入；先停下向用户确认。`,
-		`6. 全程禁止：思考过程、解释、总结散文、阅读文档其余部分、搜索网络（除非 README 明确引用必要的安装文档）。`,
+		`6. 全程禁止：思考过程、解释、总结散文、阅读文档其余部分、搜索网络（除非 README 明确引用必要的安装文档）、用重定向包管理器全局目录/缓存目录等方式绕过沙箱写权限（目标目录写不进就如实报告失败，不要绕路）、原样重试被直装安全白名单拦截过的命令（前序尝试里注明"未通过直装白名单"的命令只能分析不能执行）。`,
 		``,
 		`【输出】严格 JSON，无其他文本：`,
 		`{"ok":true|false,"commands":["实际执行的命令"],"smoke":["执行并验证的命令"],"fail":"失败与已尝试方案（失败时）","config_needed":null|{"what":"需要什么配置","hint":"在哪获取"},"recipe":{"commands":["可用安装命令"],"smoke":["验证命令"]}${security ? `,"security_blocked":false|true,"security_reason":"安全扫描结论或风险描述"` : ""}}`
