@@ -25,7 +25,7 @@ import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
 import { fetchSubmissionRepos, fetchPackSubmissionRepos } from "./sources/issues.js";
 import { mergeCorrections, type DataCorrections } from "./sources/corrections.js";
-import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectRiskyInstall, detectSubdirBundle, extractDshEngines, CORDIS_MARKERS } from "./detect.js";
+import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectRiskyInstall, detectCrossEcosystem, detectSubdirBundle, extractDshEngines, CORDIS_MARKERS } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
 import { batchProbeRepos } from "./decay-probe.js";
@@ -505,6 +505,13 @@ async function main() {
       if (corr?.installCommands) commandSource = "issue-correction";
       // 市场侧风险标记（#165 建议五）：数据修正命令优先（与最终展示的安装命令同源）
       const riskyReasons = detectRiskyInstall(corr?.installCommands ?? installCommands);
+      // 跨生态 skill 标注（#169 E2）：纯本地正则，每轮全量重算（无网络调用，无缓存固化问题）
+      const crossEco = detectCrossEcosystem({
+        type: detection.type,
+        description: candidate.awesomeDescription ?? repo!.description ?? "",
+        topics: repo!.topics,
+        readme: readmeContent,
+      });
 
       const plugin: DshPlugin = {
         id: repo!.full_name,
@@ -546,6 +553,8 @@ async function main() {
         score: undefined as unknown as DshPlugin["score"],
         sources: candidate.sources,
         lastCheckedAt: new Date().toISOString(),
+        // 跨生态标注（#169 E2）：仅命中时写字段，不膨胀全量数据（与 dshEngines 同策略）
+        ...(crossEco.cross ? { crossEcosystem: true, crossEcosystemHint: crossEco.hint } : {}),
       };
       detected.push({
         candidate,

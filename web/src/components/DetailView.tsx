@@ -80,11 +80,16 @@ export function buildInstallPrompt(p: DshPlugin): string {
   const compatNote = dshReq
     ? `注意：该插件声明 ${dshReq}。安装前请先确认我的 DSH 版本是否满足；不满足请告诉我，不要强行安装。`
     : null;
+  // #169 E2：跨生态 skill 安装前先确认 DSH 可用性（提示词随 T1 子代理到达插件端，无需发版生效）
+  const crossNote = p.crossEcosystem
+    ? "注意：该技能主要面向其他 AI 宿主（如 Claude Code），并非 DSH 专属；请先确认它在 DSH 环境可用，不适用就直接告诉我，不要强行安装。"
+    : null;
   return [
     `请帮我安装 DeepSeek Harness 插件「${p.name}」：`,
     `- GitHub 仓库：${p.fullName}（${`https://github.com/${p.fullName}`}）`,
     `- 类型：${typeDesc}`,
     ...(compatNote ? [`- ${compatNote}`] : []),
+    ...(crossNote ? [`- ${crossNote}`] : []),
     `- ${configNote}`,
     ``,
     `请先查看仓库 README 确认安装步骤，然后按官方方式安装（skill 型克隆到 ~/.agents/skills，cordis 型用 dsh plugin 装到我的 profile）。装完后告诉我怎么使用。`,
@@ -127,6 +132,12 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
           <span className={`pill ${plugin.type === "skill" ? "pill-skill" : "pill-plugin"}`}>
             {plugin.type === "skill" ? "SKILL" : "PLUGIN"}
           </span>
+          {/* #169 E2 · 跨生态 skill：主要面向其他 AI 宿主，中性灰标注 */}
+          {plugin.crossEcosystem && (
+            <span className="pill pill-cross" title={plugin.crossEcosystemHint ?? undefined}>
+              跨生态
+            </span>
+          )}
           {isCommunitySubmitted(plugin) && <CommunityBadge />}
           <h2>{plugin.name}</h2>
           <button
@@ -192,6 +203,15 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
           <section className="info-block">
             <h4>安装</h4>
             <div className="install-box">
+              {/* #169 E2 · 跨生态说明（数据字段到位后展示；旧数据无此字段按未标注处理） */}
+              {plugin.crossEcosystem ? (
+                <p
+                  style={{ margin: "0 0 8px", fontSize: 12.5, color: "#78716C" }}
+                  title={plugin.crossEcosystemHint ?? undefined}
+                >
+                  跨生态技能：主要面向其他 AI 宿主（如 Claude Code），DSH 兼容性未经验证 · 安装前建议先读 README 确认可用性
+                </p>
+              ) : null}
               {/* 安装命令 + 复制 */}
               <div className="cmd-box">
                 <code>{installCmd}</code>
@@ -230,6 +250,14 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                   )}
                 </span>
               </div>
+
+              {/* #169 E1 · README 未解析出安装命令的预期说明：插件端有内置确定性路径
+               *（skill=git clone / cordis=按包名装入 profile），并非不能一键安装，只是安装方式标准化 */}
+              {!plugin.install.commands?.length ? (
+                <p style={{ margin: "8px 0 0", fontSize: 12.5, color: "#8CA3BB" }}>
+                  README 未提供一键安装命令：插件端将按类型标准方式安装（skill 克隆到技能目录 / 插件按包名装入 profile），失败时交 AI 兜底复核
+                </p>
+              ) : null}
 
               {/* #165 建议五：风险警示（单行省略，置于「复制安装提示词」下一行） */}
               {plugin.install.risky ? (

@@ -172,6 +172,8 @@ body::before {
 .pill { font-size: 11px; padding: 3px 9px; border-radius: 6px; letter-spacing: 0.02em; }
 .pill-skill { background: var(--ds-blue-100); color: var(--ds-blue-700); border: 1px solid var(--ds-blue-300); }
 .pill-plugin { background: var(--ds-green-bg); color: var(--ds-green); border: 1px solid var(--ds-green-line); }
+/* #169 E2 · 跨生态标注：中性灰（信息提示，非风险警示） */
+.pill-cross { background: #F5F5F4; color: #78716C; border: 1px solid #E0DEDC; }
 .card h4 { font-size: 15px; font-weight: 600; color: var(--ds-title); margin-bottom: 6px; }
 .card .desc {
   font-size: 12.5px; color: var(--ds-text); line-height: 1.7; margin-bottom: 12px;

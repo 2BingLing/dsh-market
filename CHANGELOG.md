@@ -4,6 +4,19 @@
 
 ## [Unreleased]
 
+### 市场侧（web + collector，随采集渐进生效）
+
+**跨生态标注（#169 建议四，E2）**
+
+- 背景：SKILL.md 是跨宿主通用格式，主要面向 Claude Code 等其他 AI 宿主的仓库会因此混入市场（如 ruflo 给自己打 `dsh-plugin` topic 反向 SEO）。
+- collector 新增 `detectCrossEcosystem`：skill 型 + Claude 生态强信号（topics / 描述 / README 宿主特征）且描述未自述服务 DSH → 写入 `crossEcosystem` / `crossEcosystemHint`（可选字段）。规则在 7,333 条真实数据上校准：命中 23/128 skill，DSH 自述条目全部豁免。**只标注不降分不拦截**。
+- Web 卡片与详情页类型胶囊旁显示中性灰「跨生态」标记；「复制安装提示词」自动附加跨生态告诫（随 T1 子代理生效，插件端无需发版）。
+
+**无解析命令条目的预期说明（#169 建议三前置事实修正，E1）**
+
+- 详情页安装区对 `install.commands` 为空的条目（当前 26.1%）新增说明：插件端将按类型标准方式安装（skill 克隆到技能目录 / cordis 按包名装入 profile），失败时交 AI 兜底复核。
+- 事实修正：#169 称这类条目"T0 必走兜底→失败"，实际插件端自 0.4.x 起有内置确定性安装路径（`installSkill` / `installCordis`），无命令 ≠ 不能一键安装；本说明按真实行为表述。
+
 ## [0.4.9] - 2026-09-16
 
 ### 插件端（`@dsh-market/plugin@0.4.9` / `@dsh-market/core@0.4.8`）

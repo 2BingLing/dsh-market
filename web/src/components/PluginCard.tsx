@@ -35,6 +35,12 @@ export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen 
           <span className={`pill ${plugin.type === "skill" ? "pill-skill" : "pill-plugin"}`}>
             {plugin.type === "skill" ? "SKILL" : "PLUGIN"}
           </span>
+          {/* #169 E2 · 跨生态 skill：主要面向其他 AI 宿主，中性灰标注 */}
+          {plugin.crossEcosystem && (
+            <span className="pill pill-cross" title={plugin.crossEcosystemHint ?? undefined}>
+              跨生态
+            </span>
+          )}
           {isCommunitySubmitted(plugin) && <CommunityBadge small />}
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: 10 }}>

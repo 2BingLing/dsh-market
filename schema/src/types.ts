@@ -102,6 +102,15 @@ export interface DshPlugin {
   submissionIssue?: number;
   /** 安装相关信息 */
   install: InstallInfo;
+  /**
+   * 跨生态标记（#169 E2）：skill 型但主要面向其他 AI 宿主（如 Claude Code），
+   * 因 SKILL.md 是跨宿主通用格式而被市场收录。仅展示层提示，不参与评分/拦截；
+   * 判定依据：Claude 生态强信号（topics/描述/README）且描述未自述服务 DSH。
+   * `undefined` = 非 skill 型或无跨生态信号（旧数据缺省按未标记处理）。
+   */
+  crossEcosystem?: boolean;
+  /** 跨生态判定依据（简述，供 UI tooltip 与排障） */
+  crossEcosystemHint?: string;
   /** 实用五维评分 */
   score: PracticalScore;
   /** 数据源（awesome/topic/org/user-submit） */

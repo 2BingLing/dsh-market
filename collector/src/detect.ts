@@ -313,3 +313,45 @@ export function detectRiskyInstall(commands: string[] | undefined): string[] {
   }
   return reasons;
 }
+
+/**
+ * 跨生态 skill 检测（#169 E2）：SKILL.md 是跨宿主通用格式（Claude Code 等生态同样使用），
+ * 主要面向其他宿主的仓库会因此混入市场。仅作展示层标注（不评分、不拦截、不拒绝收录），
+ * 让用户安装前知道"这东西可能不是为 DSH 做的"。
+ *
+ * 规则（在 7,333 条真实数据上校准：命中 23/128 个 skill，DSH 自述的 4 个全部豁免）：
+ * 1. 仅 skill 型（cordis 插件天然 DSH 专属）
+ * 2. 强 Claude 生态信号：topics 命中 或 描述/README 命中宿主特征
+ * 3. 豁免：描述自述服务 DSH（\bdsh\b / deepseek harness）——DSH 专属作者几乎都会自述
+ *    （ruflo 给自己打的 "dsh-plugin" topic 不参与豁免，防止反向 SEO 混入）
+ */
+export const CLAUDE_ECOSYSTEM_TOPICS = new Set([
+  "claude-code",
+  "claude-skills",
+  "claude-agents",
+  "anthropic",
+]);
+
+const CLAUDE_HOST_RE =
+  /(claude\s?code|anthropic|claude\s+(skills|agents|desktop)|~\/\.claude\b|\.claude\/(skills|commands|agents)|claude mcp add|claude desktop)/i;
+const DSH_SELF_RE = /\bdsh\b|deepseek\s?harness/i;
+
+export function detectCrossEcosystem(input: {
+  type: PluginType | null;
+  description: string;
+  topics: string[];
+  readme: string | null;
+}): { cross: boolean; hint?: string } {
+  if (input.type !== "skill") return { cross: false };
+  const desc = input.description ?? "";
+  const topicHit = input.topics.some((t) => CLAUDE_ECOSYSTEM_TOPICS.has(t.toLowerCase()));
+  // 豁免优先：描述自述服务 DSH 的一律不算跨生态（校准中 seo-toolkit / dsh-plugin-dev-skills 等）
+  if (DSH_SELF_RE.test(desc)) return { cross: false };
+  if (!topicHit && !CLAUDE_HOST_RE.test(desc) && !(input.readme && CLAUDE_HOST_RE.test(input.readme))) {
+    return { cross: false };
+  }
+  return {
+    cross: true,
+    hint: "主要面向其他 AI 宿主（如 Claude Code），DSH 兼容性未经验证",
+  };
+}
