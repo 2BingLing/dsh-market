@@ -64,15 +64,16 @@ export async function installPlugin(
     } else {
       r = await installCordis(cfg, plugin, options, step, steps);
     }
-    // 装后冒烟验证（dryRun 不执行；已装跳过场景也会验证存量健康）
-    if (r.ok && !options.dryRun && options.smoke && options.smoke.length > 0) {
+    // 装后冒烟验证（dryRun 不执行；已装跳过场景也会验证存量健康；已取消不验证）
+    if (r.ok && !options.dryRun && !options.signal?.aborted && options.smoke && options.smoke.length > 0) {
       r.smoke = await runSmoke(options.smoke, options.runner);
       r.smokeFailed = r.smoke.some((s) => !s.ok);
     }
     return r;
   } catch (err) {
-    step("failed", "安装失败", "failed", (err as Error).message);
-    return fail((err as Error).message);
+    const msg = options.signal?.aborted ? "安装已取消" : (err as Error).message;
+    step("failed", "安装失败", "failed", msg);
+    return fail(msg);
   }
 }
 
@@ -99,6 +100,10 @@ async function installByCommands(
   };
   try {
     for (let i = 0; i < commands.length; i++) {
+      if (options.signal?.aborted) {
+        step(stepId, `执行 ${commands.length} 条安装命令`, "failed", "已取消");
+        return { ok: false, steps, error: "安装已取消" };
+      }
       const id = `cmd-${i}`;
       step(id, commands[i], "running");
       await runWithRetry(options, step, id, commands[i], PLUGIN_ADD_TIMEOUT);
@@ -290,7 +295,7 @@ async function installCordis(
   };
 }
 
-/** 带重试的命令执行 */
+/** 带重试的命令执行；signal abort 时终止子进程且不重试 */
 async function runWithRetry(
   options: InstallOptions,
   step: StepFn,
@@ -300,11 +305,14 @@ async function runWithRetry(
 ): Promise<void> {
   let lastErr: unknown;
   for (let attempt = 0; attempt <= MAX_RETRY; attempt++) {
+    if (options.signal?.aborted) {
+      throw new Error("安装已取消");
+    }
     if (attempt > 0) {
       step(stepId, undefined, "running", `重试 ${attempt}/${MAX_RETRY}`);
     }
     try {
-      const r = await options.runner.run(command, { timeoutMs });
+      const r = await options.runner.run(command, { timeoutMs, signal: options.signal });
       if (r.exitCode !== 0) {
         const errText = r.stderr || r.stdout;
         // 文件占用/权限类失败（运行中 harness 更新本 profile 的典型病）：不重试，
@@ -319,6 +327,7 @@ async function runWithRetry(
       return;
     } catch (err) {
       lastErr = err;
+      if (options.signal?.aborted) throw new Error("安装已取消");
       if (isLockFailure((err as Error).message)) throw err;
       if (attempt === MAX_RETRY) throw err;
     }

@@ -83,6 +83,8 @@ export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen 
       <div className="foot">
         <span className="star">{fmt(plugin.stars)}</span>
         <span>{plugin.install.needsConfig ? "需配置" : plugin.install.usageNeedsConfig ? "装后需配模型" : "开箱即用"}</span>
+        {/* #165 建议五：市场侧风险标记（README 安装命令含远程脚本执行 / 全局安装） */}
+        {plugin.install.risky ? <span style={{ color: "#c8943d" }}>⚠ {plugin.install.riskyReasons?.[0]?.includes("全局") ? "全局安装" : "远程脚本"}</span> : null}
         <span>{plugin.install.method === "skills-add" ? "一键安装" : "pnpm 安装"}</span>
         {/* N2 · 宿主版本要求（Web 只展示需求，本机是否装得上由插件端判定） */}
         {dshReq ? <span title={plugin.install.dshEngines ?? undefined}>{dshReq}</span> : null}

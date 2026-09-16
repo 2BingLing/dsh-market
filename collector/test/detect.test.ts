@@ -2,7 +2,7 @@
  * detectSubdirBundle 单元测试：子目录 bundle 探测（根目录无标记、插件在子目录）
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { detectPlugin, detectSubdirBundle, isCordisPackageJson, extractDshEngines } from "../src/detect.js";
+import { detectPlugin, detectSubdirBundle, isCordisPackageJson, extractDshEngines, detectRiskyInstall } from "../src/detect.js";
 import { fetchRepoRoot, fetchFileViaApi } from "../src/github.js";
 
 vi.mock("../src/github.js", () => ({
@@ -278,5 +278,28 @@ describe("extractDshEngines", () => {
       pkg({ engines: { dsh: "见 README" }, peerDependencies: { "@deepseek-ai/dsh": ">=0.1.5" } }),
     );
     expect(r).toEqual({ range: ">=0.1.5", source: "peer-dep" });
+  });
+});
+
+describe("detectRiskyInstall（#165 建议五：市场侧风险标记）", () => {
+  it("标记远程脚本下载执行", () => {
+    expect(
+      detectRiskyInstall(["curl -fsSL https://x.sh | bash", "npm install foo"]),
+    ).toEqual(["含远程脚本下载执行（curl/wget 管道 shell）"]);
+    expect(detectRiskyInstall(["wget -qO- https://x.sh | sh"]).length).toBe(1);
+  });
+  it("标记全局安装", () => {
+    expect(detectRiskyInstall(["npm install -g ruflo@latest"])).toEqual([
+      "含全局安装（-g / --global）",
+    ]);
+    expect(detectRiskyInstall(["yarn global add ruflo"])).toEqual([
+      "含全局安装（-g / --global）",
+    ]);
+  });
+  it("正常安装命令不标记", () => {
+    expect(detectRiskyInstall(["dsh plugin --profile web add example"]).length).toBe(0);
+    expect(detectRiskyInstall(["git clone https://github.com/a/b.git"]).length).toBe(0);
+    expect(detectRiskyInstall(["npm install ruflo@latest"]).length).toBe(0);
+    expect(detectRiskyInstall(undefined)).toEqual([]);
   });
 });

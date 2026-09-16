@@ -16,6 +16,9 @@ export interface LitePlugin {
   curatedReason?: string
   scoreTotal: number
   needsConfig: boolean
+  /** #165 建议五：市场侧风险标记（README 安装命令含远程脚本执行 / 全局安装） */
+  risky?: boolean
+  riskyReasons?: string[]
   installMethod: string
   installCommands: string[]
   installTarget?: string
@@ -166,12 +169,20 @@ export class RpcError extends Error {
   }
 }
 
-export async function api<T = unknown>(method: string, args?: unknown): Promise<T> {
-  const res = await fetch('/market/api', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ method, args: args ?? {} }),
-  })
+export async function api<T = unknown>(
+  method: string,
+  args?: unknown,
+  opts?: { signal?: AbortSignal },
+): Promise<T> {
+  const res = await fetch(
+    '/market/api',
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ method, args: args ?? {} }),
+      signal: opts?.signal,
+    },
+  )
   const data = (await res.json()) as { ok: boolean; result?: T; error?: string; classified?: FailureClassView }
   if (!data.ok) throw new RpcError(data.error ?? 'RPC failed', data.classified)
   return data.result as T

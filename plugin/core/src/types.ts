@@ -83,6 +83,8 @@ export interface InstallOptions {
   runner: CommandRunner;
   /** 步骤回调 */
   onStep?: StepCallback;
+  /** 取消信号（#165 建议三）：abort 后停止重试、不再执行后续命令；已开始的子进程由 runner 负责终止 */
+  signal?: AbortSignal;
 }
 
 /** 冒烟检查项：结构化检查（进程内执行，零 shell 依赖，跨平台可靠）或命令字符串（交给 shell） */
@@ -93,10 +95,10 @@ export type SmokeCheck =
 
 /** 命令执行器接口（注入式，保持核心层可测） */
 export interface CommandRunner {
-  /** 执行命令，返回退出码与输出；timeoutMs 超时抛错 */
+  /** 执行命令，返回退出码与输出；timeoutMs 超时抛错；signal abort 时终止子进程并抛错 */
   run(
     command: string,
-    opts: { cwd?: string; timeoutMs?: number; env?: Record<string, string> },
+    opts: { cwd?: string; timeoutMs?: number; env?: Record<string, string>; signal?: AbortSignal },
   ): Promise<{ exitCode: number; stdout: string; stderr: string }>;
 }
 

@@ -44,6 +44,10 @@ export interface InstallInfo {
   needsConfig: boolean;
   /** 使用/运行时是否需要配置模型或 API Key（区别于安装配置；安装免配置但使用需模型时为 true，#137） */
   usageNeedsConfig?: boolean;
+  /** README 安装命令含风险形态（远程脚本执行 / 全局安装），前端警示展示用（#165 建议五） */
+  risky?: boolean;
+  /** 风险形态的人话原因列表 */
+  riskyReasons?: string[];
   /** 从 README 安装章节解析出的真实安装命令（精确命令优先于模板） */
   commands?: string[];
   /** 命令来源（README 安装章节 / 模板兜底） */

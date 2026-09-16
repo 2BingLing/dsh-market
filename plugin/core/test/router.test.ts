@@ -187,6 +187,20 @@ describe("routeInstall T0 路由", () => {
     expect(runner.run).not.toHaveBeenCalled();
   });
 
+  it("signal 已中止 → 直装拒绝执行任何命令（#165 建议三）", async () => {
+    const cfg = makeCfg();
+    const plugin = withCommands(skillPlugin, [
+      "git clone --depth 1 https://github.com/acme/web-scraper.git /tmp/x",
+    ]);
+    const ac = new AbortController();
+    ac.abort();
+    const runner = runnerMock();
+    const r = await routeInstall(cfg, plugin, { profile: "web", runner, signal: ac.signal });
+    expect(r.ok).toBe(false);
+    expect(r.needAi).toBe(true);
+    expect(runner.run).not.toHaveBeenCalled();
+  });
+
   it("冒烟失败（技能目录未落位）→ 不写配方，needAi 升级", async () => {
     const cfg = makeCfg();
     // 不创建技能目录 → 结构化冒烟（SKILL.md 存在）自然失败

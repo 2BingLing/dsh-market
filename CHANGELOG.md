@@ -4,6 +4,32 @@
 
 ## [Unreleased]
 
+## [0.4.9] - 2026-09-16
+
+### 插件端（`@dsh-market/plugin@0.4.9` / `@dsh-market/core@0.4.8`）
+
+**🛡 可取消（#165 建议三）**
+
+- core：`CommandRunner`/`InstallOptions`/`RouteOptions` 增加 `AbortSignal`；abort 后停止重试、不跑冒烟，错误信息为「安装已取消」。
+- ui：`ai:install` 注册 installId → AbortController；新增 `ai:install:cancel` RPC；T0 正在运行的子进程立即终止，T1 子代理随 signal 终止（与 10 分钟硬超时合并为 `AbortSignal.any`）；取消后不学配方、不记成功。
+- 面板「运行中」阶段新增**取消安装**按钮，取消后回到确认页。
+
+**🛡 审查与安装分离（#165 建议二）**
+
+- 安全模式重构为三段式：**AI 只读审查**（零执行零写入，消灭"边审边装"的沙箱悖论）→ **审查报告**（风险清单 + 将执行命令 + 需手动执行命令）→ **用户确认后宿主受控执行**。
+- 审查建议命令宿主执行前**仍过 `guardInstallCommands` 白名单**（安全不变量）：白名单内自动执行，白名单外返回 manual 由用户手动操作。
+- 新增 RPC：`ai:review` / `ai:review:poll` / `ai:install:reviewed`；取消链路全程可用。
+
+**⚠ 市场侧风险标记（#165 建议五）**
+
+- collector 识别 install.commands 中的远程脚本执行与全局安装形态，写入 `install.risky` / `riskyReasons`（可选字段，随采集渐进生效）。
+- Web 卡片 ⚠ 徽章 + 详情页醒目警示；插件端确认弹窗同步提示。**只标记不降分**——避免误伤 nvm/rustup/bun 等正当安装方式；执行层白名单已保证这类命令不会被自动运行。
+
+**其他**
+
+- B2 补回项残留零分回补：事故期被冻结的 `practical=0` 条目（#153 残留 1045 个）在补回后自动做 README 回补重评分，失败则维持旧评分下轮再试。
+- core 217 测试、collector 131 测试全过；三端 tsc 通过。
+
 ## [0.4.8] - 2026-09-15
 
 ### 插件端（`@dsh-market/plugin@0.4.8` / `@dsh-market/core@0.4.7` / `@dsh-market/schema@0.1.2`）

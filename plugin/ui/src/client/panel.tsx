@@ -306,7 +306,17 @@ function InstallModal(props: {
   onClose: () => void
 }): ReactNode {
   const { plugin, onDone, onClose } = props
-  const [phase, setPhase] = useState<'confirm' | 'running' | 'handedOff' | 'error'>('confirm')
+  const [phase, setPhase] = useState<'confirm' | 'reviewing' | 'report' | 'running' | 'handedOff' | 'error'>('confirm')
+  // #165 建议三（可取消）：记录当前安装的 installId，供取消按钮定位宿主侧 AbortController
+  const lastInstallIdRef = useRef('')
+  // #165 建议二（审查与安装分离）：安全审查报告（review 阶段展示，确认后按 commands 受控执行）
+  const [review, setReview] = useState<{
+    securityBlocked: boolean
+    reason?: string
+    risks: Array<{ level?: string; point?: string }>
+    commands: string[]
+    manual: string[]
+  } | null>(null)
   const [error, setError] = useState('')
   // P6：RPC 错误的人话分类（title/hint/keyLines）
   const [errorClass, setErrorClass] = useState<FailureClassView | null>(null)
@@ -332,8 +342,11 @@ function InstallModal(props: {
 
   // AI 代理安装（路由式）：T0 直装（零 LLM：已装/配方/解析命令）→ 需要时才交给协议子代理。
   // 安全模式（security=true）：跳过 T0，强制 AI 先扫描再安装。
+  // #165 建议三（可取消）：installId 供「取消」终止宿主侧 T0/T1。
   const startAi = async () => {
     setPhase('running')
+    const installId = `${plugin.id}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+    lastInstallIdRef.current = installId
     try {
       const r = await api<{
         started: boolean
@@ -344,21 +357,134 @@ function InstallModal(props: {
         smokeFailed?: boolean
         error?: string | null
         security?: boolean
+        cancelled?: boolean
         classified?: FailureClassView | null
-      }>('ai:install', {
-        pluginId: plugin.id,
-        security,
-      })
+      }>(
+        'ai:install',
+        {
+          pluginId: plugin.id,
+          security,
+          installId,
+        },
+      )
       setChildSessionId(r.childSessionId)
+      if (r.cancelled) {
+        setPhase('confirm')
+        return
+      }
       if (!r.started) setT0(r)
       setPhase('handedOff')
     } catch (e) {
+      // 用户在等待期间点了取消：宿主已终止安装，回到确认页
+      if ((e as Error).name === 'AbortError' || /取消/.test((e as Error).message)) {
+        setPhase('confirm')
+        return
+      }
       setError((e as Error).message)
       // P6：RPC 错误自带分类 → 展示人话原因与建议，而不是裸报错
       setErrorClass(e instanceof RpcError ? e.classified ?? null : null)
       setDiagCopied(false)
       setPhase('error')
     }
+  }
+
+  /** #165 建议二（审查与安装分离）：安全模式流程 = 只读审查 → 报告 → 用户确认 → 宿主受控执行。
+   *  审查子代理零执行零写入，没有沙箱悖论；建议命令宿主执行前还会再过一次白名单。 */
+  const startReview = async () => {
+    setPhase('reviewing')
+    const installId = `${plugin.id}-r-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+    lastInstallIdRef.current = installId
+    try {
+      const r = await api<{ started: boolean; childSessionId: string | null }>('ai:review', {
+        pluginId: plugin.id,
+        installId,
+      })
+      setChildSessionId(r.childSessionId)
+      let polls = 0
+      for (;;) {
+        await new Promise((res) => setTimeout(res, 3000))
+        polls++
+        const p = await api<{
+          done: boolean
+          cancelled?: boolean
+          verdict?: {
+            securityBlocked: boolean
+            reason?: string
+            risks: Array<{ level?: string; point?: string }>
+            commands: string[]
+            manual: string[]
+          } | null
+        }>('ai:review:poll', { installId })
+        if (p.cancelled) {
+          setPhase('confirm')
+          return
+        }
+        if (p.done) {
+          if (p.verdict) {
+            setReview(p.verdict)
+            setPhase('report')
+          } else {
+            setError('审查超时，请稍后重试或按 README 手动安装')
+            setPhase('error')
+          }
+          return
+        }
+        if (polls > 140) {
+          setError('审查超时，请稍后重试或按 README 手动安装')
+          setPhase('error')
+          return
+        }
+      }
+    } catch (e) {
+      setError((e as Error).message)
+      setErrorClass(e instanceof RpcError ? e.classified ?? null : null)
+      setPhase('error')
+    }
+  }
+
+  /** 报告确认后的受控执行：宿主对建议命令再做白名单校验，白名单外返回 manual */
+  const confirmReviewed = async () => {
+    if (!review || review.commands.length === 0) {
+      setError('审查未给出可自动执行的安装命令，请按"手动执行"命令操作')
+      setPhase('error')
+      return
+    }
+    setPhase('running')
+    const installId = `${plugin.id}-x-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+    lastInstallIdRef.current = installId
+    try {
+      const r = await api<{
+        started: boolean
+        ok?: boolean
+        smokeFailed?: boolean
+        error?: string | null
+        cancelled?: boolean
+        blocked?: Array<{ command: string; reason: string }>
+        classified?: FailureClassView | null
+      }>('ai:install:reviewed', { pluginId: plugin.id, commands: review.commands, installId })
+      if (r.cancelled) {
+        setPhase('confirm')
+        return
+      }
+      if (r.blocked && r.blocked.length > 0) {
+        setReview({ ...review, manual: r.blocked.map((b) => b.command) })
+        setError('部分命令未通过直装白名单，请按"手动执行"命令操作')
+        setPhase('error')
+        return
+      }
+      setT0({ mode: 'parsed', ok: r.ok, smokeFailed: r.smokeFailed ?? false, error: r.error ?? null, classified: r.classified ?? null })
+      setPhase('handedOff')
+    } catch (e) {
+      setError((e as Error).message)
+      setErrorClass(e instanceof RpcError ? e.classified ?? null : null)
+      setPhase('error')
+    }
+  }
+
+  /** #165 建议三（可取消）：终止进行中的安装（宿主杀 T0 子进程 / 终止 T1 子代理） */
+  const cancelInstall = async () => {
+    // fire-and-forget：宿主终止后会尽快让原 RPC 返回
+    void api('ai:install:cancel', { installId: lastInstallIdRef.current }).catch(() => {})
   }
 
   /** P6：错误阶段一键复制诊断（含分类 + 环境快照 + 堆栈） */
@@ -445,6 +571,11 @@ function InstallModal(props: {
               El('p', { className: styles.advancedTip, style: { marginBottom: 4 } },
                 '直装将执行以下命令（白名单外的命令会被拦截并转 AI 复核，不会直接运行）：'),
               El('code', { className: styles.advancedCmd }, t0Commands.join('\n')),
+              // #165 建议五：市场侧风险标记
+              plugin.risky
+                ? El('p', { className: styles.warn, style: { fontSize: 11.5, marginTop: 4 } },
+                    '⚠ ' + (plugin.riskyReasons?.join('；') || '安装命令含风险形态') + '——请先阅读脚本内容再确认。')
+                : null,
             ),
             El('details', { className: styles.advanced },
               El('summary', null, '高级：查看/复制手动命令'),
@@ -464,7 +595,7 @@ function InstallModal(props: {
               }),
               El('span', { style: { fontSize: 13, fontWeight: 600 } }, '🛡 安全模式'),
               El('span', { className: styles.securityDesc, style: { fontSize: 11.5, color: '#8a919f' } },
-                security ? '开启：AI 安装前扫描（危险命令/信息收集/配置篡改/网络暴露/来源），发现风险即中止，不直接安装' : '关闭：快速安装（零 LLM 直装优先）'),
+                security ? '开启：AI 只读审查 → 看报告确认后才安装（危险命令/信息收集/配置篡改/网络暴露/来源）' : '关闭：快速安装（零 LLM 直装优先）'),
             ),
             security
               ? El('p', { className: styles.warn, style: { fontSize: 12 } },
@@ -477,15 +608,57 @@ function InstallModal(props: {
                 className: `${styles.btn} ${styles.btnPrimary}`,
                 disabled: compatBlocked,
                 title: compatBlocked ? '该插件要求更高的 DSH 版本，请先勾选上方"仍然安装"' : undefined,
-                onClick: () => void startAi(),
+                onClick: () => void (security ? startReview() : startAi()),
               },
                 security ? '🛡 安全安装' : '确认安装'),
             ),
           )
-        : phase === 'running'
+        : phase === 'reviewing'
+          ? El('div', null,
+              El('div', { className: styles.modalTitle }, '🛡 安全审查中'),
+              El('div', { className: styles.loading }, 'AI 只读审查（不执行任何命令、不写入任何文件）…'),
+              El('div', { className: styles.modalActions },
+                El('button', { className: styles.btn, onClick: () => void cancelInstall() }, '取消审查'),
+              ),
+            )
+          : phase === 'report'
+            ? El('div', null,
+                El('div', { className: styles.modalTitle }, '🛡 安全审查报告'),
+                review?.reason
+                  ? El('div', { className: styles.modalDesc }, review.reason)
+                  : null,
+                ...(review?.risks ?? []).map((rk, i) =>
+                  El('p', { key: i, className: styles.warn, style: { fontSize: 12 } },
+                    El(Icon, { d: ICON_WARN, size: 13, className: styles.inlineIcon }),
+                    `[${(rk.level ?? 'info').toUpperCase()}] ${rk.point}`),
+                ),
+                review && review.commands.length > 0
+                  ? El('div', { className: styles.advanced, style: { marginTop: 6 } },
+                      El('p', { className: styles.advancedTip, style: { marginBottom: 4 } },
+                        '确认后将执行以下命令（白名单内，宿主安装前会再次校验）：'),
+                      El('code', { className: styles.advancedCmd }, review.commands.join('\n')))
+                  : null,
+                review && review.manual.length > 0
+                  ? El('div', { className: styles.advanced, style: { marginTop: 6 } },
+                      El('p', { className: styles.advancedTip, style: { marginBottom: 4 } },
+                        '以下命令不在白名单内，请手动执行：'),
+                      El('code', { className: styles.advancedCmd }, review.manual.join('\n')))
+                  : null,
+                El('div', { className: styles.modalActions },
+                  El('button', { className: styles.btn, onClick: onClose }, '取消'),
+                  review && review.commands.length > 0
+                    ? El('button', { className: `${styles.btn} ${styles.btnPrimary}`, onClick: () => void confirmReviewed() }, '确认安装')
+                    : null,
+                ),
+              )
+            : phase === 'running'
           ? El('div', null,
               El('div', { className: styles.modalTitle }, '正在安装'),
               El('div', { className: styles.loading }, '正在唤起 AI 助手…'),
+              // #165 建议三（可取消）：终止宿主侧正在执行的安装（T0 杀子进程 / T1 终止子代理）
+              El('div', { className: styles.modalActions },
+                El('button', { className: styles.btn, onClick: () => void cancelInstall() }, '取消安装'),
+              ),
             )
           : phase === 'handedOff'
             ? El('div', { className: styles.modalSuccess },

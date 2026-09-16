@@ -45,6 +45,8 @@ export interface RouteOptions {
   onStep?: StepCallback;
   /** 是否允许命中配方缓存（默认 true；false 用于诊断） */
   useRecipe?: boolean;
+  /** 取消信号（#165 建议三）：透传给安装执行器，abort 后停止执行与重试 */
+  signal?: AbortSignal;
 }
 
 /** 展开 `~`（README 命令常见；Windows 上 cmd 的 ~ 展开不可靠，这里统一处理） */
@@ -193,7 +195,7 @@ export async function routeInstall(
   plugin: DshPlugin,
   opts: RouteOptions,
 ): Promise<RouterResult> {
-  const { profile, runner, force, onStep, useRecipe = true } = opts;
+  const { profile, runner, force, onStep, useRecipe = true, signal } = opts;
 
   // 前置计算：解析命令（skill 目标规范化）+ cordis 冒烟对账包名（解析命令提取优先）
   const parsed = normalizeSkillCommands(cfg, plugin, plugin.install?.commands ?? []);
@@ -212,6 +214,7 @@ export async function routeInstall(
       runner,
       force,
       onStep,
+      signal,
     });
 
   // 1. 配方命中：环境指纹一致 + 未过期 + 类型一致 → 按配方执行
@@ -281,6 +284,7 @@ export async function routeInstall(
         force,
         onStep,
         smoke,
+        signal,
       });
   const mode: RouterMode = useParsed ? "parsed" : "builtin";
   if (result.ok && !result.smokeFailed) {

@@ -290,3 +290,26 @@ export function detectUsageNeedsConfig(readmeContent: string | null): boolean {
     isKeyRequirement(clause) && (USAGE_CTX_RE.test(clause) || !INSTALL_CTX_RE.test(clause))
   );
 }
+
+/** 远程脚本执行：下载器管道进 shell / 直接表达式执行（nvm、rustup、bun 等安装方式形态） */
+const REMOTE_EXEC_RE = /\|\s*(ba|z)?sh\b|\b(iex|invoke-expression)\b/i;
+const DOWNLOADER_RE = /\b(curl|wget|iwr|irm|invoke-webrequest|invoke-restmethod)\b/i;
+/** 全局安装：npm/pnpm -g、--global、yarn global add */
+const GLOBAL_INSTALL_RE = /(^|\s)-g(\s|$)|--global\b|\bglobal\s+add\b/i;
+
+/** 市场侧风险标记（#165 建议五）：install.commands 的粗粒度风险信号——
+ *  仅供前端警示展示（知情权），不是执行拦截（拦截由插件端白名单负责，两层独立）。 */
+export function detectRiskyInstall(commands: string[] | undefined): string[] {
+  if (!commands || commands.length === 0) return [];
+  const reasons: string[] = [];
+  if (
+    commands.some((c) => DOWNLOADER_RE.test(c) && REMOTE_EXEC_RE.test(c)) ||
+    commands.some((c) => REMOTE_EXEC_RE.test(c) && /\b(curl|wget)\b/i.test(c))
+  ) {
+    reasons.push("含远程脚本下载执行（curl/wget 管道 shell）");
+  }
+  if (commands.some((c) => GLOBAL_INSTALL_RE.test(c))) {
+    reasons.push("含全局安装（-g / --global）");
+  }
+  return reasons;
+}

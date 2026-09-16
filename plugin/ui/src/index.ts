@@ -38,6 +38,8 @@ import {
   deriveSmokeCommands,
   canonicalCommands,
   learnRecipe,
+  guardInstallCommands,
+  extractInstallPkgName,
   listRecipes,
   recordInstallMetric,
   metricSummary,
@@ -98,6 +100,8 @@ function lite(p: any): Record<string, unknown> {
     curatedReason: p.curatedReason,
     scoreTotal: p.score?.total ?? 0,
     needsConfig: p.install?.needsConfig ?? false,
+    risky: p.install?.risky ?? false,
+    riskyReasons: p.install?.riskyReasons ?? [],
     installMethod: p.install?.method,
     installCommands: p.install?.commands ?? [],
     installTarget: p.install?.target,
@@ -564,42 +568,37 @@ export function apply(ctx: {
         if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
         const profile = (args.targetProfile as string) ?? readSettings(cfg).profile
         const security = Boolean(args.security)
-        const t0 = security
-          ? null
-          : await routeInstall(cfg, plugin, {
-              profile,
-              runner: realRunner(),
-              force: Boolean(args.force),
-            })
-        // T0 已搞定：零 token，不需要子代理（安全模式下跳过 T0，不走这里）
-        if (!security && t0 && !t0.needAi) {
-          recordInstallMetric(cfg, {
-            ts: new Date().toISOString(),
-            pluginId: plugin.id,
-            type: 'ai',
-            // needAi=false 时 t0.mode 不可能为 'ai'
-            mode: t0.mode as "already" | "recipe" | "parsed" | "builtin",
-            ok: t0.ok,
-            alreadyInstalled: t0.alreadyInstalled,
-            smokeFailed: t0.result?.smokeFailed ?? false,
-            error: t0.result?.error ?? null,
-          })
-          return {
-            started: false,
-            childSessionId: null,
-            mode: t0.mode,
-            ok: t0.ok,
-            alreadyInstalled: t0.alreadyInstalled ?? false,
-            smokeFailed: t0.result?.smokeFailed ?? false,
-            error: t0.result?.error ?? null,
-            // P6：T0 直装失败 → 附人话分类（UI 在"直装未通过验证"处展示原因+建议）
-            classified: !t0.ok && t0.result?.error ? classifyFailure(t0.result.error) : undefined,
-          }
+        // #165 建议三（可取消）：installId 注册 AbortController，供取消 RPC 终止 T0/T1
+        const installId = String(args.installId ?? '')
+        const ac = new AbortController()
+        if (installId) activeInstalls.set(installId, ac)
+        try {
+          return await runAiInstall({ cfg, ctx, args, plugin, profile, security, signal: ac.signal })
+        } finally {
+          if (installId) activeInstalls.delete(installId)
         }
+      }
+
+      // #165 建议三（可取消）：终止进行中的安装（T0 命令立即杀进程；T1 子代理随 signal 终止）
+      case 'ai:install:cancel': {
+        const id = String(args.installId ?? '')
+        const ac = activeInstalls.get(id)
+        if (!ac) return { ok: false, error: '没有进行中的安装或已完成' }
+        ac.abort()
+        return { ok: true }
+      }
+
+      // #165 建议二（审查与安装分离）：安全模式 = 只读审查（零执行）→ 用户看报告确认 → 宿主执行白名单内命令
+      case 'ai:review': {
+        const data = await market()
+        const plugin = data.plugins.find((p) => p.id === args.pluginId)
+        if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
+        const installId = String(args.installId ?? '')
+        const ac = new AbortController()
+        if (installId) activeInstalls.set(installId, ac)
         const agents = ctx.get('agents') as
           | {
               list?: () => Array<{ sessionId?: string; id?: string }>
-              /** 0.1.5+：只返回顶层 agent */
               roots?: () => Array<{ sessionId?: string; id?: string }>
             }
           | undefined
@@ -618,59 +617,88 @@ export function apply(ctx: {
             }
           | undefined
         if (!subagents) throw new Error('子代理服务不可用')
-        // 优先 roots()：安装子代理要挂在「当前根会话」下，不能挂到别的子代理上
         const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0]
         if (!agent) throw new Error('当前会话代理不可用')
         const provider = subagents.list().includes('spawn') ? 'spawn' : subagents.list()[0]
-        const prompt = buildInstallPrompt(plugin, profile, t0?.reason, { security })
-        // start 的 promise 在 run 发布后 fulfill；只等发布（10s 超时保护）
+        const prompt = buildReviewPrompt(plugin)
         const run = await Promise.race([
           subagents.start(provider, {
-            label: `安装 ${plugin.name}`,
+            label: `安全审查 ${plugin.name}`,
             prompt: [{ type: 'text', text: prompt }],
             parent: agent,
-            signal: AbortSignal.timeout(10 * 60 * 1000),
+            signal: AbortSignal.any([ac.signal, AbortSignal.timeout(6 * 60 * 1000)]),
           }),
           new Promise<never>((_, rej) =>
             setTimeout(() => rej(new Error('子代理启动超时')), 10000),
           ),
         ])
         const sessionId = run.sessionId ?? run.id ?? null
-        // P1.5 度量：升级子代理
-        recordInstallMetric(cfg, {
-          ts: new Date().toISOString(),
-          pluginId: plugin.id,
-          type: 'ai',
-          mode: 't1',
-          ok: false,
-          phase: 'start',
-          // t0 在安全模式下为 null（跳过 T0 直装）——同函数下方 reason 用的是 t0?.reason
-          error: t0?.reason ?? null,
-        })
-        // P1.5 T1 输出自动落库（后台，不阻塞 RPC）：轮询子会话 → JSON verdict → 学配方 + 完成度量
-        if (sessionId) {
+        if (sessionId && installId) {
+          reviewResults.set(installId, { done: false })
           const sq = ctx.get('sessionQuery') as
             | { readSession?(id: string): Promise<{ events?: Array<Record<string, any>> } | undefined> }
             | undefined
           if (sq?.readSession) {
-            void watchInstallVerdict({
-              cfg,
-              plugin,
-              profile,
-              sessionId,
-              readSession: sq.readSession,
-            })
+            watchReviewVerdict({ installId, sessionId, readSession: sq.readSession, signal: ac.signal })
           }
         }
-        return {
-          started: true,
-          childSessionId: sessionId,
-          mode: 't1',
-          reason: t0?.reason ?? null,
-          security,
+        return { started: true, childSessionId: sessionId }
+      }
+      case 'ai:review:poll': {
+        const id = String(args.installId ?? '')
+        const ac = activeInstalls.get(id)
+        if (ac?.signal.aborted) {
+          activeInstalls.delete(id)
+          reviewResults.delete(id)
+          return { done: true, cancelled: true }
+        }
+        const entry = reviewResults.get(id)
+        if (!entry || !entry.done) return { done: false }
+        reviewResults.delete(id)
+        activeInstalls.delete(id)
+        return { done: true, verdict: entry.verdict ?? null }
+      }
+      // 审查确认后的受控执行：建议命令仍过白名单（安全不变量），白名单外返回 manual 由用户手动执行
+      case 'ai:install:reviewed': {
+        const data = await market()
+        const plugin = data.plugins.find((p) => p.id === args.pluginId)
+        if (!plugin) throw new Error(`插件不存在: ${args.pluginId}`)
+        const profile = (args.targetProfile as string) ?? readSettings(cfg).profile
+        const commands = (args.commands as string[] | undefined) ?? []
+        if (commands.length === 0) throw new Error('缺少 commands')
+        const installId = String(args.installId ?? '')
+        const ac = new AbortController()
+        if (installId) activeInstalls.set(installId, ac)
+        try {
+          const g = guardInstallCommands(plugin, commands, { allowedDestPrefix: cfg.skillsDir })
+          if (!g.ok) {
+            return { started: false, ok: false, blocked: g.blocked, manual: g.blocked.map((b) => b.command), error: '部分命令未通过直装白名单，请手动执行' }
+          }
+          const pkgName = commands.map(extractInstallPkgName).find((n): n is string => n !== null) ?? undefined
+          const smoke = deriveSmokeCommands(cfg, plugin, profile, pkgName)
+          const r = await installPlugin(cfg, plugin, {
+            commands,
+            smoke,
+            targetProfile: profile,
+            runner: realRunner(),
+            force: Boolean(args.force),
+            signal: ac.signal,
+          })
+          if (r.ok && !r.smokeFailed && !ac.signal.aborted) {
+            learnRecipe(cfg, plugin, profile, { commands, smoke, learnedFrom: 't1' })
+          }
+          return {
+            started: false,
+            ok: r.ok,
+            cancelled: ac.signal.aborted,
+            smokeFailed: r.smokeFailed ?? false,
+            error: r.error ?? null,
+            classified: !r.ok && r.error ? classifyFailure(r.error) : undefined,
+          }
+        } finally {
+          if (installId) activeInstalls.delete(installId)
         }
       }
-
       // 配方缓存（T0 的"学习成果"）：透明列表 + 手动学习（T1 验证后落库 / 用户修正）
       case 'recipe:list':
         return listRecipes(cfg)
@@ -916,20 +944,67 @@ function buildInstallPrompt(
   ].join('\n')
 }
 
+/** #165 建议二（审查与安装分离）：安全模式专用的只读审查提示词。
+ *  与 buildInstallPrompt 的本质区别：子代理**只审查不执行**——没有"边审边装"的沙箱悖论，
+ *  审查更快更省 token；建议命令限白名单三形态，白名单外的放 manual 由用户手动执行。 */
+function buildReviewPrompt(
+  plugin: {
+    name: string
+    fullName: string
+    type: string
+    descriptionZh: string | null
+    install: { method?: string; commands?: string[]; needsConfig?: boolean; usageNeedsConfig?: boolean; target?: string }
+    stars: number
+  },
+): string {
+  const cmdLine =
+    plugin.install.commands && plugin.install.commands.length > 0
+      ? plugin.install.commands.join('\n    ')
+      : '(无)'
+  return [
+    `你是「极简安全审查员」，只读审查 DSH 插件「${plugin.name}」（${plugin.fullName}）。`,
+    `**绝对禁止：执行任何命令、安装任何包、写入任何文件。** 你的全部产出只有一份 JSON 审查报告。`,
+    ``,
+    `【插件信息】`,
+    `- 类型：${plugin.type === 'skill' ? 'skill（技能）' : 'cordis 插件'}（${plugin.type}）`,
+    `- 简介：${plugin.descriptionZh ?? '(无中文简介)'}`,
+    `- 需要配置：${plugin.install.needsConfig ? '是（API Key / Token 等）' : plugin.install.usageNeedsConfig ? '安装无需；使用时需配置模型（可能产生费用）' : '否'}`,
+    `- collector 解析的参考命令：`,
+    `    ${cmdLine}`,
+    ``,
+    `【审查步骤】`,
+    `1. 读仓库 README 关键段 + 安装用脚本/清单（cordis.patch.yml / dsh.bundle / install.sh / package.json 等），逐项核对：`,
+    `   a. 危险命令：curl|sh 管道执行、下载执行、base64 解码执行、从不可信 URL 拉代码；`,
+    `   b. 敏感信息收集回传：读取 API Key / Token / 环境变量并发送到外部地址；`,
+    `   c. 配置篡改：覆盖 harness 自身 sandbox/approval/权限配置或混入系统目录；`,
+    `   d. 网络暴露与信任围栏：0.0.0.0 绑定、云部署/反代隧道、弱化 Host 校验、诱导关闭信任围栏；`,
+    `   e. 来源信号：仓库年龄/维护活跃/star 量级，<30 天且低活跃为高危。`,
+    `2. 给出**建议的安全安装命令**——只允许三种白名单形态：`,
+    `   ① dsh plugin [--profile <p>] add <pkg>；② git clone https://github.com/${plugin.fullName}（仅限插件自身仓库）；③ npm install|pnpm add <pkg>（非全局）。`,
+    `   白名单外的命令一律放进 manual（用户手动执行），绝不放进 commands。`,
+    ``,
+    `【输出】严格 JSON，无其他文本：`,
+    `{"security_blocked":true|false,"reason":"一句话总体结论","risks":[{"level":"high|medium|low","point":"具体风险"}],"commands":["白名单内的建议安装命令"],"manual":["需用户手动执行的命令"],"config_needed":null|{"what":"...","hint":"..."}}`,
+  ].join('\n')
+}
+
 /** T1 子代理验收（后台，不阻塞 RPC）：轮询子会话输出 → 解析 JSON verdict →
  *  ok 且带命令 → 学配方（learnedFrom=t1，含 config_needed）；记录完成度量（sessionChars 为 token 粗略代理）。
- *  终止条件：拿到 verdict（成功或失败）→ 停止；否则轮询到 10 分钟上限。 */
+ *  终止条件：拿到 verdict（成功或失败）→ 停止；否则轮询到 10 分钟上限。
+ *  signal（#165 建议三）：用户取消 → 立即停止轮询，verdict 不落库、配方不学习。 */
 async function watchInstallVerdict(opts: {
   cfg: ReturnType<typeof resolveConfig>
   plugin: Awaited<ReturnType<typeof fetchMarketData>>['data']['plugins'][number]
   profile: string
   sessionId: string
   readSession: (id: string) => Promise<{ events?: Array<Record<string, any>> } | undefined>
+  signal?: AbortSignal
 }): Promise<void> {
-  const { cfg, plugin, profile, sessionId, readSession } = opts
+  const { cfg, plugin, profile, sessionId, readSession, signal } = opts
   const deadline = Date.now() + 10 * 60 * 1000
   let chars = 0
   const tick = async () => {
+    if (signal?.aborted) return
     let done = false
     try {
       const s = await readSession(sessionId)
@@ -973,9 +1048,80 @@ async function watchInstallVerdict(opts: {
     } catch {
       /* 会话读取失败：继续轮询 */
     }
-    if (!done && Date.now() < deadline) setTimeout(() => void tick(), 5000)
+    if (!done && !signal?.aborted && Date.now() < deadline) setTimeout(() => void tick(), 5000)
   }
   setTimeout(() => void tick(), 5000)
+}
+
+/** #165 建议二：审查 verdict（review 子代理产出） */
+export interface ReviewVerdict {
+  securityBlocked: boolean
+  reason?: string
+  risks?: Array<{ level?: string; point?: string }>
+  commands?: string[]
+  manual?: string[]
+  configNeeded?: { what?: string; hint?: string } | null
+}
+
+/** 解析审查子代理的严格 JSON：容忍 ```json 围栏与前后杂文本；无 security_blocked 视为无效 */
+function parseReviewVerdict(text: string): ReviewVerdict | null {
+  const cleaned = text.replace(/```(?:json)?/gi, '')
+  const m = cleaned.match(/\{[\s\S]*\}/)
+  if (!m) return null
+  try {
+    const obj = JSON.parse(m[0]) as Record<string, unknown>
+    if (typeof obj !== 'object' || obj === null || typeof obj.security_blocked !== 'boolean') return null
+    const risks = Array.isArray(obj.risks)
+      ? (obj.risks as Array<Record<string, unknown>>)
+          .filter((r) => r && typeof r.point === 'string')
+          .map((r) => ({ level: typeof r.level === 'string' ? r.level : undefined, point: r.point as string }))
+      : []
+    const strArr = (v: unknown): string[] | undefined =>
+      Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : undefined
+    const cfg = obj.config_needed as Record<string, unknown> | null | undefined
+    return {
+      securityBlocked: obj.security_blocked,
+      reason: typeof obj.reason === 'string' ? obj.reason : undefined,
+      risks,
+      commands: strArr(obj.commands) ?? [],
+      manual: strArr(obj.manual) ?? [],
+      configNeeded:
+        cfg && typeof cfg === 'object'
+          ? { what: typeof cfg.what === 'string' ? cfg.what : undefined, hint: typeof cfg.hint === 'string' ? cfg.hint : undefined }
+          : null,
+    }
+  } catch {
+    return null
+  }
+}
+
+/** 审查结果暂存（installId → verdict）：watcher 后台写，前端 ai:review:poll 读，读完即删 */
+const reviewResults = new Map<string, { done: boolean; verdict?: ReviewVerdict | null }>()
+
+/** 审查子代理验收（后台）：轮询子会话 → 解析审查 verdict → 存入 reviewResults；6.5 分钟超时置空 verdict */
+function watchReviewVerdict(opts: {
+  installId: string
+  sessionId: string
+  readSession: (id: string) => Promise<{ events?: Array<Record<string, any>> } | undefined>
+  signal: AbortSignal
+}): void {
+  const deadline = Date.now() + 6.5 * 60 * 1000
+  const tick = async (): Promise<void> => {
+    if (opts.signal.aborted) return
+    try {
+      const s = await opts.readSession(opts.sessionId)
+      const verdict = parseReviewVerdict(collectSessionText(s?.events ?? []))
+      if (verdict) {
+        reviewResults.set(opts.installId, { done: true, verdict })
+        return
+      }
+    } catch {
+      /* 会话读取失败：继续轮询 */
+    }
+    if (Date.now() < deadline) setTimeout(() => void tick(), 5000)
+    else reviewResults.set(opts.installId, { done: true, verdict: null })
+  }
+  setTimeout(() => void tick(), 4000)
 }
 
 /** 从会话事件里收集全部文本（user/assistant/tool 的 content[i].text 与 data.text/text 字段） */
@@ -1005,7 +1151,7 @@ const isWin = process.platform === 'win32'
 
 function realRunner() {
   return {
-    run(command: string, opts: { cwd?: string; timeoutMs?: number; env?: Record<string, string> }) {
+    run(command: string, opts: { cwd?: string; timeoutMs?: number; env?: Record<string, string>; signal?: AbortSignal }) {
       return new Promise<{ exitCode: number; stdout: string; stderr: string }>((resolve, reject) => {
         const file = isWin ? process.env.ComSpec ?? 'cmd.exe' : '/bin/sh'
         const args = isWin ? ['/d', '/s', '/c', command] : ['-c', command]
@@ -1017,10 +1163,13 @@ function realRunner() {
             timeout: opts.timeoutMs ?? 120000,
             windowsHide: isWin,
             env: opts.env ? { ...process.env, ...opts.env } : undefined,
+            // #165 建议三（可取消）：abort 时终止正在运行的子进程
+            signal: opts.signal,
           },
           (err, stdout, stderr) => {
             if (err) {
-              reject(new Error(stderr || stdout || err.message))
+              const reason = opts.signal?.aborted ? '安装已取消' : (stderr || stdout || err.message)
+              reject(new Error(reason))
               return
             }
             resolve({ exitCode: 0, stdout, stderr })
@@ -1028,5 +1177,134 @@ function realRunner() {
         )
       })
     },
+  }
+}
+
+/** 进行中的安装（#165 建议三）：installId → AbortController，供「取消」RPC 终止 T0/T1 */
+const activeInstalls = new Map<string, AbortController>()
+
+/** ai:install 主体（#165 建议三重构出函数）：T0 路由（可取消）→ needAi 时派 T1 子代理（可取消）。
+ *  取消语义：T0 = 终止正在运行的子进程且不重试；T1 = 终止子代理并丢弃 verdict（不学配方、不记成功）。 */
+async function runAiInstall(opts: {
+  cfg: ReturnType<typeof resolveConfig>
+  ctx: { get(name: string): unknown }
+  args: Record<string, unknown>
+  plugin: Awaited<ReturnType<typeof fetchMarketData>>['data']['plugins'][number]
+  profile: string
+  security: boolean
+  signal: AbortSignal
+}): Promise<unknown> {
+  const { cfg, ctx, args, plugin, profile, security, signal } = opts
+  const t0 = security
+    ? null
+    : await routeInstall(cfg, plugin, {
+        profile,
+        runner: realRunner(),
+        force: Boolean(args.force),
+        signal,
+      })
+  // 取消后：不升级 T1、不记成功度量
+  if (signal.aborted) {
+    return { started: false, childSessionId: null, cancelled: true, ok: false, error: '安装已取消' }
+  }
+  // T0 已搞定：零 token，不需要子代理（安全模式下跳过 T0，不走这里）
+  if (!security && t0 && !t0.needAi) {
+    recordInstallMetric(cfg, {
+      ts: new Date().toISOString(),
+      pluginId: plugin.id,
+      type: 'ai',
+      // needAi=false 时 t0.mode 不可能为 'ai'
+      mode: t0.mode as "already" | "recipe" | "parsed" | "builtin",
+      ok: t0.ok,
+      alreadyInstalled: t0.alreadyInstalled,
+      smokeFailed: t0.result?.smokeFailed ?? false,
+      error: t0.result?.error ?? null,
+    })
+    return {
+      started: false,
+      childSessionId: null,
+      mode: t0.mode,
+      ok: t0.ok,
+      alreadyInstalled: t0.alreadyInstalled ?? false,
+      smokeFailed: t0.result?.smokeFailed ?? false,
+      error: t0.result?.error ?? null,
+      // P6：T0 直装失败 → 附人话分类（UI 在"直装未通过验证"处展示原因+建议）
+      classified: !t0.ok && t0.result?.error ? classifyFailure(t0.result.error) : undefined,
+    }
+  }
+  const agents = ctx.get('agents') as
+    | {
+        list?: () => Array<{ sessionId?: string; id?: string }>
+        /** 0.1.5+：只返回顶层 agent */
+        roots?: () => Array<{ sessionId?: string; id?: string }>
+      }
+    | undefined
+  const subagents = ctx.get('subagents') as
+    | {
+        list(): string[]
+        start(
+          name: string,
+          request: {
+            label?: string
+            prompt: Array<{ type: string; text: string }>
+            parent: unknown
+            signal: AbortSignal
+          },
+        ): Promise<{ sessionId?: string; id?: string }>
+      }
+    | undefined
+  if (!subagents) throw new Error('子代理服务不可用')
+  // 优先 roots()：安装子代理要挂在「当前根会话」下，不能挂到别的子代理上
+  const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0]
+  if (!agent) throw new Error('当前会话代理不可用')
+  const provider = subagents.list().includes('spawn') ? 'spawn' : subagents.list()[0]
+  const prompt = buildInstallPrompt(plugin, profile, t0?.reason, { security })
+  // start 的 promise 在 run 发布后 fulfill；只等发布（10s 超时保护）
+  const run = await Promise.race([
+    subagents.start(provider, {
+      label: `安装 ${plugin.name}`,
+      prompt: [{ type: 'text', text: prompt }],
+      parent: agent,
+      // 取消与 10 分钟硬超时合并：任一触发都终止子代理
+      signal: AbortSignal.any([signal, AbortSignal.timeout(10 * 60 * 1000)]),
+    }),
+    new Promise<never>((_, rej) =>
+      setTimeout(() => rej(new Error('子代理启动超时')), 10000),
+    ),
+  ])
+  const sessionId = run.sessionId ?? run.id ?? null
+  // P1.5 度量：升级子代理
+  recordInstallMetric(cfg, {
+    ts: new Date().toISOString(),
+    pluginId: plugin.id,
+    type: 'ai',
+    mode: 't1',
+    ok: false,
+    phase: 'start',
+    // t0 在安全模式下为 null（跳过 T0 直装）——同函数下方 reason 用的是 t0?.reason
+    error: t0?.reason ?? null,
+  })
+  // P1.5 T1 输出自动落库（后台，不阻塞 RPC）：轮询子会话 → JSON verdict → 学配方 + 完成度量
+  if (sessionId) {
+    const sq = ctx.get('sessionQuery') as
+      | { readSession?(id: string): Promise<{ events?: Array<Record<string, any>> } | undefined> }
+      | undefined
+    if (sq?.readSession) {
+      void watchInstallVerdict({
+        cfg,
+        plugin,
+        profile,
+        sessionId,
+        readSession: sq.readSession,
+        signal,
+      })
+    }
+  }
+  return {
+    started: true,
+    childSessionId: sessionId,
+    mode: 't1',
+    reason: t0?.reason ?? null,
+    security,
   }
 }

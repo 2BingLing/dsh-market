@@ -25,7 +25,7 @@ import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
 import { fetchSubmissionRepos, fetchPackSubmissionRepos } from "./sources/issues.js";
 import { mergeCorrections, type DataCorrections } from "./sources/corrections.js";
-import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectSubdirBundle, extractDshEngines, CORDIS_MARKERS } from "./detect.js";
+import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectRiskyInstall, detectSubdirBundle, extractDshEngines, CORDIS_MARKERS } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
 import { batchProbeRepos } from "./decay-probe.js";
@@ -501,6 +501,8 @@ async function main() {
       // 安装命令修正（数据修正 issue 提供时覆盖 README 解析结果，#137）
       let commandSource = installParsed.source === "template" ? undefined : installParsed.source;
       if (corr?.installCommands) commandSource = "issue-correction";
+      // 市场侧风险标记（#165 建议五）：数据修正命令优先（与最终展示的安装命令同源）
+      const riskyReasons = detectRiskyInstall(corr?.installCommands ?? installCommands);
 
       const plugin: DshPlugin = {
         id: repo!.full_name,
@@ -531,6 +533,8 @@ async function main() {
           target: detection.type === "skill" ? "~/.agents/skills" : undefined,
           needsConfig,
           usageNeedsConfig,
+          risky: riskyReasons.length > 0,
+          riskyReasons: riskyReasons.length > 0 ? riskyReasons : undefined,
           commands: corr?.installCommands ?? installCommands,
           commandSource,
           // N2：宿主版本要求。dshEngines=null 时**不写字段**（保持"未知"语义，
@@ -806,7 +810,40 @@ async function main() {
   console.log("[3/5] 实用五维评分...");
   const p99 = computeP99Stars(detected.map((d) => d.repo.stargazers_count));
   for (const d of detected) {
-    if (d.candidate.sources.includes("restore")) continue; // B2 补回项保留上次评分（readme 未重抓，避免分数失真）
+    // B2 补回项：事故期被零分冻结的条目（practical===0 但有摘要）做 README 回补重评分（#153 残留）；
+    // 其余补回项维持上次评分。回补失败维持旧评分，下轮再试。
+    if (d.candidate.sources.includes("restore")) {
+      const frozenZero = d.plugin.score?.breakdown?.practical === 0 && d.plugin.readmeSummary;
+      if (!frozenZero) continue;
+      try {
+        const content = await loadScoringReadme(
+          d.plugin.fullName,
+          d.repo?.default_branch ?? null,
+          false
+        );
+        if (content === null) continue;
+        d.plugin.score = computePracticalScore(
+          {
+            stars: d.plugin.stars,
+            forks: d.plugin.forks,
+            openIssues: d.plugin.openIssues,
+            pushedAt: d.plugin.pushedAt,
+            hasDescription: Boolean(d.plugin.description),
+            hasLicense: Boolean(d.plugin.license),
+            hasHomepage: Boolean(d.plugin.homepage),
+            topics: d.plugin.topics,
+            readmeContent: content,
+            hasSkillMd: d.plugin.type === "skill",
+            needsConfig: d.plugin.install.needsConfig,
+            usageNeedsConfig: d.plugin.install.usageNeedsConfig ?? false,
+          },
+          p99
+        );
+      } catch {
+        /* 回补失败维持旧评分 */
+      }
+      continue;
+    }
     d.plugin.score = computePracticalScore(
       {
         stars: d.repo.stargazers_count,
