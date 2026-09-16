@@ -1,77 +1,41 @@
 {
-  "generatedAt": "2026-09-15T22:09:05.788Z",
+  "generatedAt": "2026-09-16T22:14:18.267Z",
   "replies": [
     {
       "issueNumbers": [
-        164
+        170
       ],
-      "fullName": "jsdvjx/dsh-strata",
+      "fullName": "ckk-09/dsh-refix",
       "type": "cordis-plugin",
-      "stars": 102,
-      "score": 81
+      "stars": 0,
+      "score": 35
     },
     {
       "issueNumbers": [
-        157
+        168
       ],
-      "fullName": "ADWMC/helm-d",
-      "type": "cordis-plugin",
-      "stars": 45,
-      "score": 74
-    },
-    {
-      "issueNumbers": [
-        166
-      ],
-      "fullName": "ouli-1242/dsh-plugin-tool-management",
-      "type": "cordis-plugin",
-      "stars": 3,
-      "score": 65
-    },
-    {
-      "issueNumbers": [
-        158
-      ],
-      "fullName": "yixiuzhemu/MCP-Manager",
+      "fullName": "yixiuzhemu/Assistant-Manager",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 27
     },
     {
       "issueNumbers": [
-        160
+        167
       ],
-      "fullName": "a1435473620/dsh-web-search-nokey",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 52
-    },
-    {
-      "issueNumbers": [
-        159
-      ],
-      "fullName": "zhuto666/dsh-compact-agents",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 41
-    },
-    {
-      "issueNumbers": [
-        164
-      ],
-      "fullName": "Moleitau-WorldSaver/dsh-strata-custom",
+      "fullName": "Lichtspur/deepseek-style-theme",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
+      "score": 34
     },
     {
       "issueNumbers": [
-        148
+        171
       ],
-      "fullName": "fuguier001/dsh-procguard",
+      "fullName": "Huo-yang/dsh-session-trash",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
+      "score": 35
     }
   ]
 }
