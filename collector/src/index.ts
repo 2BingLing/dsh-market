@@ -320,6 +320,8 @@ async function main() {
         dshEngines = cachedDetect.dshEngines ?? null;
         dshEnginesSource = cachedDetect.dshEnginesSource;
         readmeContent = await loadScoringReadme(candidate.fullName, repo.default_branch, true);
+        // 摘要随回补正文刷新（摘要上限提升后，存量条目不必等 7 天检测缓存过期才变长）
+        if (readmeContent !== null) readmeSummary = summarizeReadme(readmeContent);
       } else {
         // 未命中/仓库变化/缓存为 false（历史遗留误判如 #123 reasoning-bridge）：
         // false 缓存不信任（新代码 aed60b3 后不写 false 缓存）→ 完整重检覆盖

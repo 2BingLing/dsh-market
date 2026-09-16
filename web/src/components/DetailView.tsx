@@ -192,13 +192,6 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
           <section className="info-block">
             <h4>安装</h4>
             <div className="install-box">
-              {/* #165 建议五：README 安装命令含风险形态 → 醒目警示（知情权；一键安装执行层另有白名单兜底） */}
-              {plugin.install.risky ? (
-                <p style={{ margin: "0 0 10px", fontSize: 13, color: "#c8943d" }}>
-                  ⚠ {plugin.install.riskyReasons?.join("；") ?? "安装命令含风险形态"}
-                  ——一键安装不会直接运行这类命令，请先阅读项目 README 中的脚本内容再手动执行。
-                </p>
-              ) : null}
               {/* 安装命令 + 复制 */}
               <div className="cmd-box">
                 <code>{installCmd}</code>
@@ -237,6 +230,23 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
                   )}
                 </span>
               </div>
+
+              {/* #165 建议五：风险警示（单行省略，置于「复制安装提示词」下一行） */}
+              {plugin.install.risky ? (
+                <p
+                  style={{
+                    margin: "8px 0 0",
+                    fontSize: 12.5,
+                    color: "#c8943d",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                  title="一键安装不会直接运行这类命令，请先阅读 README 中的脚本内容"
+                >
+                  ⚠ {plugin.install.riskyReasons?.join("；") ?? "安装命令含风险形态"} · 一键安装不会直接运行，详见 README
+                </p>
+              ) : null}
             </div>
           </section>
 
