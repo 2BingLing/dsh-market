@@ -1,41 +1,23 @@
 {
-  "generatedAt": "2026-09-16T22:14:18.267Z",
+  "generatedAt": "2026-09-18T21:41:20.101Z",
   "replies": [
     {
       "issueNumbers": [
-        170
+        172
       ],
-      "fullName": "ckk-09/dsh-refix",
+      "fullName": "ouli-1242/dsh-plugin-tool-management",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
+      "stars": 7,
+      "score": 70
     },
     {
       "issueNumbers": [
-        168
+        173
       ],
-      "fullName": "yixiuzhemu/Assistant-Manager",
+      "fullName": "zhouqj001/dsh-cic",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 27
-    },
-    {
-      "issueNumbers": [
-        167
-      ],
-      "fullName": "Lichtspur/deepseek-style-theme",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 34
-    },
-    {
-      "issueNumbers": [
-        171
-      ],
-      "fullName": "Huo-yang/dsh-session-trash",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
+      "score": 25
     }
   ]
 }
