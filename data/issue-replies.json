@@ -1,23 +1,14 @@
 {
-  "generatedAt": "2026-09-18T21:41:20.101Z",
+  "generatedAt": "2026-09-19T22:31:29.989Z",
   "replies": [
     {
       "issueNumbers": [
-        172
+        174
       ],
-      "fullName": "ouli-1242/dsh-plugin-tool-management",
-      "type": "cordis-plugin",
-      "stars": 7,
-      "score": 70
-    },
-    {
-      "issueNumbers": [
-        173
-      ],
-      "fullName": "zhouqj001/dsh-cic",
+      "fullName": "sueccku/dsh-plugin-wps-office-next",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 25
+      "score": 36
     }
   ]
 }
