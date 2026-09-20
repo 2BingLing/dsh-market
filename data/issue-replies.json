@@ -1,14 +1,32 @@
 {
-  "generatedAt": "2026-09-19T22:31:29.989Z",
+  "generatedAt": "2026-09-20T21:30:04.839Z",
   "replies": [
     {
       "issueNumbers": [
-        174
+        176
       ],
-      "fullName": "sueccku/dsh-plugin-wps-office-next",
+      "fullName": "PerryLink/dsh-auto-review",
+      "type": "cordis-plugin",
+      "stars": 188,
+      "score": 79
+    },
+    {
+      "issueNumbers": [
+        177
+      ],
+      "fullName": "kaluosifa/dsh-plugin-skill2cn",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
+      "score": 34
+    },
+    {
+      "issueNumbers": [
+        178
+      ],
+      "fullName": "AnonyJcy/dsh-j-space",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 37
     }
   ]
 }
