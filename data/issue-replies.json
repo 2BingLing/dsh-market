@@ -1,32 +1,23 @@
 {
-  "generatedAt": "2026-09-20T21:30:04.839Z",
+  "generatedAt": "2026-09-21T22:42:05.486Z",
   "replies": [
     {
       "issueNumbers": [
-        176
+        180
       ],
-      "fullName": "PerryLink/dsh-auto-review",
+      "fullName": "donoteatme/dsh-local-link",
       "type": "cordis-plugin",
-      "stars": 188,
-      "score": 79
+      "stars": 1,
+      "score": 57
     },
     {
       "issueNumbers": [
-        177
+        179
       ],
-      "fullName": "kaluosifa/dsh-plugin-skill2cn",
+      "fullName": "5101good/amoji",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 34
-    },
-    {
-      "issueNumbers": [
-        178
-      ],
-      "fullName": "AnonyJcy/dsh-j-space",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 37
+      "score": 32
     }
   ]
 }
