@@ -201,6 +201,7 @@ const handlers: Record<string, (args: any) => Promise<unknown> | unknown> = {
         plugin: litePlugin(r.plugin),
         relevance: r.relevance,
         tagHits: r.tagHits,
+        via: r.via, // 中文意图词典命中的意图（调试通道与正式通道同形状）
       })),
     ),
   "tags:hot": (args) => market().then((d) => hotTags(d.plugins, args.n ?? 12)),

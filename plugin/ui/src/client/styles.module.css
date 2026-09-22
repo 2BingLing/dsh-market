@@ -1894,3 +1894,16 @@
   color: #8a919f;
   line-height: 1.6;
 }
+
+/* AI 语义搜索开关：开启态（原"待开发"占位解封为实验开关） */
+.semanticSwitch {
+  cursor: pointer;
+  opacity: 1;
+  transition: background 0.15s ease;
+}
+.semanticSwitchOn {
+  background: var(--mkt-brand);
+}
+.semanticSwitchOn::after {
+  left: 16px;
+}

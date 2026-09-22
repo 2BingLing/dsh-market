@@ -279,6 +279,8 @@ export function apply(ctx: {
           plugin: lite(r.plugin),
           relevance: r.relevance,
           tagHits: r.tagHits,
+          // 中文意图词典命中的意图（「记事本」→ notes…），UI 提示"为什么搜到它"
+          via: r.via,
         }))
       }
       case 'tags:hot':
@@ -389,7 +391,8 @@ export function apply(ctx: {
             }
           })
           .filter((x): x is NonNullable<typeof x> => x !== null)
-        return { picks, results }
+        // tags: LLM 精排不产出结构化标签（理由在 results[].aiReason），留空兼容客户端形状
+        return { tags: [] as string[], picks, results }
       }
 
       case 'recommend': {

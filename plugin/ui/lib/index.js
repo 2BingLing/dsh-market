@@ -178,7 +178,8 @@ function apply(ctx) {
 				return search(data.plugins, String(args.query ?? ""), args.options).map((r) => ({
 					plugin: lite(r.plugin),
 					relevance: r.relevance,
-					tagHits: r.tagHits
+					tagHits: r.tagHits,
+					via: r.via
 				}));
 			}
 			case "tags:hot": return hotTags((await market()).plugins, args.n ?? 12);
@@ -264,6 +265,7 @@ function apply(ctx) {
 				}
 				const picks = parsePicks(text);
 				return {
+					tags: [],
 					picks,
 					results: (picks.length > 0 ? picks : candidates.slice(0, 20).map((c, i) => ({
 						i,

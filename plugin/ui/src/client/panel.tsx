@@ -909,7 +909,7 @@ function SearchTab(props: {
   const [query, setQuery] = useState('')
   const [tags, setTags] = useState<string[]>([])
   const [type, setType] = useState<string>('all')
-  const [results, setResults] = useState<Array<{ plugin: LitePlugin; relevance: number; tagHits: number; aiReason?: string }>>([])
+  const [results, setResults] = useState<Array<{ plugin: LitePlugin; relevance: number; tagHits: number; aiReason?: string; via?: string[] }>>([])
   const [searching, setSearching] = useState(false)
   const [semanticOn, setSemanticOn] = useState(false) // 语义搜索默认关闭（省 token）
   const [semanticNotice, setSemanticNotice] = useState('')
@@ -960,7 +960,7 @@ function SearchTab(props: {
       const opts: Record<string, unknown> = { limit: 0 } // 0 = 全量（市场收录 500+）
       if (tags.length) opts.tags = tags
       if (type !== 'all') opts.type = type
-      const r = await api<Array<{ plugin: LitePlugin; relevance: number; tagHits: number }>>('search', {
+      const r = await api<Array<{ plugin: LitePlugin; relevance: number; tagHits: number; via?: string[] }>>('search', {
         query,
         options: opts,
       })
@@ -1005,16 +1005,22 @@ function SearchTab(props: {
         }, label),
       ),
     ),
-    // AI 语义搜索（B：开关卡片，待开发态）
+    // AI 语义搜索（实验态开关：LLM 理解需求 + 从召回池精排，消耗 token 故默认关）
     El('div', { className: styles.semanticToggle },
       El('div', { className: styles.semanticInfo },
         El('div', { className: styles.semanticTitle },
           'AI 语义搜索',
-          El('span', { className: styles.semanticPill }, '待开发'),
+          El('span', { className: styles.semanticPill }, '实验'),
         ),
-        El('div', { className: styles.semanticDesc }, '用自然语言理解意图，帮你找到「最贴近需求」的插件。'),
+        El('div', { className: styles.semanticDesc }, '理解自然语言需求并精排（消耗少量 token）。普通搜索已内置中文口语匹配，无需开启。'),
       ),
-      El('div', { className: styles.semanticSwitch, title: '功能待开发，暂不可用' }),
+      El('div', {
+        className: `${styles.semanticSwitch} ${semanticOn ? styles.semanticSwitchOn : ''}`,
+        role: 'switch',
+        'aria-checked': semanticOn,
+        title: semanticOn ? '关闭 AI 语义搜索' : '开启 AI 语义搜索',
+        onClick: () => setSemanticOn((v) => !v),
+      }),
     ),
     // 热门标签（B：白底胶囊 chips）
     El('div', { className: styles.hotTagsTitle }, '热门标签'),
@@ -1069,9 +1075,12 @@ function SearchTab(props: {
                     plugin: r.plugin,
                     reasons: r.aiReason
                       ? [`AI：${r.aiReason}`]
-                      : r.tagHits > 0
-                        ? [`标签命中 ${r.tagHits} 项`]
-                        : undefined,
+                      : r.via && r.via.length > 0
+                        ? // 中文意图词典命中：告诉用户"为什么搜'记事本'会出现它"
+                          [`匹配「${r.via.join('」「')}」`]
+                        : r.tagHits > 0
+                          ? [`标签命中 ${r.tagHits} 项`]
+                          : undefined,
                     onInstall,
                     onTagClick,
                   }),

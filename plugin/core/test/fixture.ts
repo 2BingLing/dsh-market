@@ -15,8 +15,7 @@ type FixturePartial = Partial<Omit<DshPlugin, "score" | "install">> & {
   install?: Partial<InstallInfo>;
 };
 
-function p(partial: FixturePartial): DshPlugin {
-  const now = Date.now();
+function p(partial: FixturePartial): DshPlugin {  const now = Date.now();
   const days = (n: number) => new Date(now - n * 86400000).toISOString();
   return {
     id: partial.id,
@@ -62,6 +61,11 @@ function p(partial: FixturePartial): DshPlugin {
     sources: ["fixture"],
     lastCheckedAt: new Date().toISOString(),
   };
+}
+
+/** 单插件构造器（供非市场级测试复用 p() 的默认值） */
+export function makePlugin(partial: FixturePartial): DshPlugin {
+  return p(partial);
 }
 
 /** 标准测试市场：12 个插件覆盖多种标签/分数/类型 */
