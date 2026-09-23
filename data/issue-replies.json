@@ -1,14 +1,23 @@
 {
-  "generatedAt": "2026-09-22T22:03:08.831Z",
+  "generatedAt": "2026-09-23T23:16:24.398Z",
   "replies": [
     {
       "issueNumbers": [
-        179
+        182
       ],
-      "fullName": "5101good/amoji",
+      "fullName": "ouli-1242/dsh-plugin-tool-management",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 32
+      "stars": 7,
+      "score": 68
+    },
+    {
+      "issueNumbers": [
+        181
+      ],
+      "fullName": "btsd321/dsh-remote-explorer",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 50
     }
   ]
 }
