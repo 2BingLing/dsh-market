@@ -111,9 +111,12 @@ async function main() {
         const issue = await api(`/repos/${MARKET_REPO}/issues/${issueNumber}`);
         const isDataFix = /^\[数据修正\]/i.test(issue?.title ?? "");
         const marker = isDataFix ? "已应用数据修正" : "已收录";
-        // 防重复回复：检查是否已有 bot 评论（修正类/收录类各自独立，互不误判）
+        // 防重复回复：只看 bot 自己的评论（github-actions[bot]）——
+        // 用户补充说明可能引用"已收录"字样（#179：提交者写"不代表本市场已收录"，
+        // 全量子串匹配致每轮误判"已回复过"永久跳过），修正类/收录类各自独立互不误判
         const comments = await api(`/repos/${MARKET_REPO}/issues/${issueNumber}/comments`);
         const already = (comments ?? []).some((c) => {
+          if (c?.user?.login !== "github-actions[bot]") return false;
           const b = c.body ?? "";
           return b.includes(marker) || (!isDataFix && b.includes("已收录"));
         });
