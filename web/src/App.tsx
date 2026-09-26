@@ -16,6 +16,7 @@ import TagPanel from "./components/TagPanel";
 import FilterBar, { type ScoreRange, type StarRange, type ConfigFilter, type TypeFilter } from "./components/FilterBar";
 import Logo from "./components/Logo";
 import { matchesTags } from "./lib/tags";
+import { searchWithZhIntent } from "./lib/zh-search";
 
 type SortKey = "score" | "stars" | "newest";
 type View = "home" | "detail" | "guide" | "quiz" | "packDetail";
@@ -173,34 +174,6 @@ export default function App() {
     [plugins]
   );
 
-  /** 混合搜索：包含匹配（快/准）优先，Fuse 模糊兜底 */
-  const searchPlugins = useCallback(
-    (list: DshPlugin[], q: string): DshPlugin[] => {
-      const ql = q.trim().toLowerCase();
-      if (!ql) return list;
-      // 1. 快速包含匹配（名称/作者·仓库名/中文简介/英文简介/标签）
-      const exact = list.filter(
-        (p) =>
-          p.name.toLowerCase().includes(ql) ||
-          p.fullName.toLowerCase().includes(ql) ||
-          (p.descriptionZh ?? "").toLowerCase().includes(ql) ||
-          (p.description ?? "").toLowerCase().includes(ql) ||
-          p.tags.some((t) => t.toLowerCase().includes(ql))
-      );
-      if (exact.length > 0) {
-        // 名称开头/完全匹配优先，再按实用分
-        return exact.sort((a, b) => {
-          const rank = (p: DshPlugin) =>
-            p.name.toLowerCase() === ql ? 0 : p.name.toLowerCase().startsWith(ql) ? 1 : 2;
-          return rank(a) - rank(b) || b.score.total - a.score.total;
-        });
-      }
-      // 2. Fuse 模糊兜底（含中文自然语言查询）
-      return fuse.search(ql).map((r) => r.item);
-    },
-    [fuse]
-  );
-
   const hasActiveFilter = Boolean(debouncedQuery.trim() || tags.length || fType || fScore || fConfig || fStars);
 
   // 分区候选集
@@ -211,10 +184,17 @@ export default function App() {
     return plugins;
   }, [plugins, section]);
 
+  /** 混合搜索：包含匹配（快/准）优先 → 中文意图词典扩展召回（§5.3）→ Fuse 模糊兜底 */
+  const searchResult = useMemo(
+    () =>
+      debouncedQuery.trim()
+        ? searchWithZhIntent(sectionList, debouncedQuery, fuse)
+        : { list: sectionList, intents: [], expandedCount: 0 },
+    [sectionList, debouncedQuery, fuse]
+  );
+
   const visible = useMemo(() => {
-    let list = debouncedQuery.trim()
-      ? searchPlugins(sectionList, debouncedQuery)
-      : [...sectionList];
+    let list = searchResult.list;
     if (nav === "favorites") list = list.filter((p) => favorites.includes(p.id));
     // 标签多选 AND
     if (tags.length) list = list.filter((p) => matchesTags(p, tags));
@@ -234,7 +214,7 @@ export default function App() {
     else if (sort === "stars") list.sort((a, b) => b.stars - a.stars);
     else list.sort((a, b) => b.pushedAt.localeCompare(a.pushedAt));
     return list;
-  }, [sectionList, debouncedQuery, searchPlugins, tags, nav, favorites, fType, fScore, fConfig, fStars, sort]);
+  }, [searchResult, tags, nav, favorites, fType, fScore, fConfig, fStars, sort]);
 
   // 分页切片（每页 PAGE_SIZE 个）
   const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
@@ -488,6 +468,13 @@ export default function App() {
           onReset={resetFilters}
         />
       </div>
+
+      {/* §5.3 中文意图扩展提示：口语查询命中词典时，告知扩展召回的存在 */}
+      {searchResult.expandedCount > 0 && searchResult.intents.length > 0 && (
+        <div className="zh-hint">
+          已按「{searchResult.intents.join("」「")}」扩展匹配，另有 {searchResult.expandedCount} 个相关结果
+        </div>
+      )}
 
       {/* 分区小按钮 + 排序 */}
       <div className="toolbar-row">

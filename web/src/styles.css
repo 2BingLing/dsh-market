@@ -183,6 +183,8 @@ body::before {
 }
 .card .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
 .tag-mini { font-size: 11px; color: var(--ds-blue-600); background: var(--ds-blue-50); padding: 2px 8px; border-radius: 6px; border: 1px solid #dce8f4; }
+/* §5.3 中文意图扩展提示（口语查询 → 词典扩展召回） */
+.zh-hint { font-size: 12px; color: #8CA3BB; margin: 10px 0 0; }
 
 /* 评分区：左短条 + 右五边形雷达图 */
 .card .score-zone { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }

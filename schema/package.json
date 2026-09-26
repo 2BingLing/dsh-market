@@ -4,7 +4,8 @@
   "type": "module",
   "types": "src/types.ts",
   "exports": {
-    ".": "./src/types.ts"
+    ".": "./src/types.ts",
+    "./zh-intent": "./src/zh-intent.ts"
   },
   "files": [
     "src"
