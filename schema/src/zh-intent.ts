@@ -20,7 +20,7 @@ export interface ZhIntent {
 }
 
 export const ZH_INTENTS: ZhIntent[] = [
-  { key: "记事本", words: ["记事本", "便签", "笔记本", "记事", "笔记"], terms: ["notes", "note", "memo", "notepad", "便签", "笔记", "markdown"] },
+  { key: "记事本", words: ["记事本", "便签", "笔记本", "记事", "笔记"], terms: ["notes", "note", "notepad", "便签", "笔记", "markdown"] },
   { key: "待办", words: ["待办", "任务管理", "清单", "todo"], terms: ["todo", "task", "checklist", "待办", "任务", "清单"] },
   { key: "翻译", words: ["翻译", "translate"], terms: ["translate", "translation", "翻译"] },
   { key: "截图", words: ["截图", "截屏", "录屏"], terms: ["screenshot", "capture", "screen", "截图", "录屏"] },

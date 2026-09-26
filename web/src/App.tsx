@@ -17,6 +17,7 @@ import FilterBar, { type ScoreRange, type StarRange, type ConfigFilter, type Typ
 import Logo from "./components/Logo";
 import { matchesTags } from "./lib/tags";
 import { searchWithZhIntent } from "./lib/zh-search";
+import { buildZhFacets } from "./lib/zh-taxonomy";
 
 type SortKey = "score" | "stars" | "newest";
 type View = "home" | "detail" | "guide" | "quiz" | "packDetail";
@@ -61,6 +62,8 @@ export default function App() {
   const [favorites, setFavorites] = useState<string[]>(loadFavorites);
   // 分区（小按钮 Tab）
   const [section, setSection] = useState<SectionKey>("all");
+  // 中文分类（§5.3 词典驱动，单选 facet）
+  const [zhCat, setZhCat] = useState("");
   // 多维筛选
   const [fType, setFType] = useState<TypeFilter>("");
   const [fScore, setFScore] = useState<ScoreRange>("");
@@ -174,7 +177,7 @@ export default function App() {
     [plugins]
   );
 
-  const hasActiveFilter = Boolean(debouncedQuery.trim() || tags.length || fType || fScore || fConfig || fStars);
+  const hasActiveFilter = Boolean(debouncedQuery.trim() || tags.length || fType || fScore || fConfig || fStars || zhCat);
 
   // 分区候选集
   const sectionList = useMemo((): DshPlugin[] => {
@@ -193,9 +196,26 @@ export default function App() {
     [sectionList, debouncedQuery, fuse]
   );
 
+  /** 中文分类 facets（§5.3 词典推导）：构建约 0.7s，异步补齐避免阻塞首屏渲染 */
+  const [zhFacets, setZhFacets] = useState<import("./lib/zh-taxonomy").ZhFacet[]>([]);
+  useEffect(() => {
+    if (plugins.length === 0) {
+      setZhFacets([]);
+      return;
+    }
+    const t = setTimeout(() => setZhFacets(buildZhFacets(plugins)), 0);
+    return () => clearTimeout(t);
+  }, [plugins]);
+
   const visible = useMemo(() => {
     let list = searchResult.list;
     if (nav === "favorites") list = list.filter((p) => favorites.includes(p.id));
+    // 中文分类（单选，词典强信号集合）
+    if (zhCat) {
+      const facet = zhFacets.find((f) => f.key === zhCat);
+      const ids = new Set((facet?.plugins ?? []).map((p) => p.id));
+      list = list.filter((p) => ids.has(p.id));
+    }
     // 标签多选 AND
     if (tags.length) list = list.filter((p) => matchesTags(p, tags));
     // 多维筛选
@@ -214,7 +234,7 @@ export default function App() {
     else if (sort === "stars") list.sort((a, b) => b.stars - a.stars);
     else list.sort((a, b) => b.pushedAt.localeCompare(a.pushedAt));
     return list;
-  }, [searchResult, tags, nav, favorites, fType, fScore, fConfig, fStars, sort]);
+  }, [searchResult, tags, nav, favorites, fType, fScore, fConfig, fStars, sort, zhCat, zhFacets]);
 
   // 分页切片（每页 PAGE_SIZE 个）
   const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
@@ -223,7 +243,7 @@ export default function App() {
   // 搜索/筛选/分区/排序变化时回到第 1 页
   useEffect(() => {
     setPage(1);
-  }, [debouncedQuery, tags, fType, fScore, fConfig, fStars, section, nav, sort]);
+  }, [debouncedQuery, tags, fType, fScore, fConfig, fStars, section, nav, sort, zhCat]);
 
   const weeklyPick = useMemo(
     () => [...plugins].sort((a, b) => b.score.total - a.score.total)[0],
@@ -236,12 +256,14 @@ export default function App() {
     setQuery("");
     setPackQuery("");
     setTags([]);
+    setZhCat("");
     window.scrollTo({ top: 0 });
   }, []);
 
   const resetFilters = useCallback(() => {
     setQuery("");
     setTags([]);
+    setZhCat("");
     setFType("");
     setFScore("");
     setFConfig("");
@@ -453,7 +475,14 @@ export default function App() {
           <button className="search-btn" type="submit">搜索</button>
         </form>
 
-        <TagPanel plugins={plugins} selected={tags} onToggle={(t) => setTags((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]))} />
+        <TagPanel
+          plugins={plugins}
+          selected={tags}
+          onToggle={(t) => setTags((prev) => (prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]))}
+          zhFacets={zhFacets}
+          zhCat={zhCat}
+          onToggleZhCat={(k) => setZhCat((prev) => (prev === k ? "" : k))}
+        />
         <FilterBar
           type={fType}
           score={fScore}

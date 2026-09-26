@@ -149,6 +149,11 @@ body::before {
 }
 .chip:hover { border-color: var(--ds-blue-500); background: #fff; }
 .chip.on { background: var(--ds-blue-600); border-color: var(--ds-blue-600); color: #fff; }
+/* §5.3 中文分类 chips（词典推导维度，teal 系与数据 tag 的蓝色区分） */
+.chip-zh { background: #E1F5EE; color: #0F6E56; border-color: #9FE1CB; }
+.chip-zh:hover { border-color: #1D9E75; background: #fff; }
+.chip-zh.on { background: #0F6E56; border-color: #0F6E56; color: #fff; }
+.chip-zh.on .chip-count { color: #CFF3E4; }
 
 /* ---------- 榜单切换 ---------- */
 .tabs { display: flex; gap: 6px; margin-bottom: 20px; }

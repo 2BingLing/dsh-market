@@ -1,19 +1,27 @@
 /**
- * 标签面板：热门标签行 + 「全部标签 ▾」展开完整面板（可搜索、多选 AND 组合）
+ * 标签面板：中文分类行（§5.3 词典驱动）+ 热门标签行 + 「全部标签 ▾」展开完整面板（可搜索、多选 AND 组合）
  */
 import { useMemo, useState } from "react";
 import { aggregateTags, type TagStat } from "../lib/tags";
+import type { ZhFacet } from "../lib/zh-taxonomy";
 
 interface Props {
   plugins: import("@dsh-market/schema").DshPlugin[];
   selected: string[];
   onToggle: (tag: string) => void;
+  /** 中文分类 facets（词典推导，App 层 useMemo 传入） */
+  zhFacets: ZhFacet[];
+  /** 当前选中的中文分类（单选） */
+  zhCat: string;
+  onToggleZhCat: (key: string) => void;
 }
 
 const HOT_COUNT = 12;
 const PANEL_COUNT = 60;
+/** 中文分类行展示的意图数（其余靠搜索词命中） */
+const ZH_FACET_COUNT = 14;
 
-export default function TagPanel({ plugins, selected, onToggle }: Props) {
+export default function TagPanel({ plugins, selected, onToggle, zhFacets, zhCat, onToggleZhCat }: Props) {
   const [expanded, setExpanded] = useState(false);
   const [tagQuery, setTagQuery] = useState("");
 
@@ -27,6 +35,16 @@ export default function TagPanel({ plugins, selected, onToggle }: Props) {
     const q = tagQuery.trim().toLowerCase();
     return all.filter((t) => t.tag.toLowerCase().includes(q)).slice(0, 30);
   }, [all, panelTags, tagQuery]);
+
+  // 中文分类展示集：top N + 当前选中（选中项不在 top N 时置前）
+  const zhVisible = useMemo(() => {
+    const top = zhFacets.slice(0, ZH_FACET_COUNT);
+    if (zhCat && !top.some((f) => f.key === zhCat)) {
+      const sel = zhFacets.find((f) => f.key === zhCat);
+      if (sel) return [sel, ...top.slice(0, ZH_FACET_COUNT - 1)];
+    }
+    return top;
+  }, [zhFacets, zhCat]);
 
   const chip = (t: TagStat) => {
     const on = selected.includes(t.tag);
@@ -45,6 +63,23 @@ export default function TagPanel({ plugins, selected, onToggle }: Props) {
 
   return (
     <div className="tag-panel">
+      {zhVisible.length > 0 && (
+        <div className="filter-row">
+          <span className="filter-label">中文分类：</span>
+          {zhVisible.map((f) => (
+            <span
+              key={f.key}
+              className={`chip chip-zh ${zhCat === f.key ? "on" : ""}`}
+              onClick={() => onToggleZhCat(f.key)}
+              title={`按「${f.key}」浏览 · ${f.count} 个插件（词典强信号匹配）`}
+            >
+              {f.key}
+              <em className="chip-count">{f.count}</em>
+            </span>
+          ))}
+        </div>
+      )}
+
       <div className="filter-row hot-row">
         <span className="filter-label">热门功能：</span>
         {hot.map(chip)}

@@ -15,6 +15,7 @@
 import Fuse from "fuse.js";
 import type { DshPlugin } from "@dsh-market/schema";
 import { expandZhQuery } from "@dsh-market/schema/zh-intent";
+import { matchTerms } from "./zh-taxonomy";
 
 export interface ZhAwareSearch {
   list: DshPlugin[];
@@ -79,13 +80,15 @@ export function searchWithZhIntent(
     const weak: DshPlugin[] = [];
     for (const p of list) {
       if (inMain.has(p.id)) continue;
-      const hay = haystackOf(p);
-      const tagHit = zh.terms.some((t) => p.tags.includes(t));
-      const nameHit = zh.terms.some(
-        (t) => p.name.toLowerCase().includes(t) || p.fullName.toLowerCase().includes(t)
+      const tier = matchTerms(
+        p.name.toLowerCase(),
+        p.fullName.toLowerCase(),
+        p.tags.map((t) => t.toLowerCase()),
+        haystackOf(p),
+        zh.terms
       );
-      if (tagHit || nameHit) strong.push(p);
-      else if (zh.terms.some((t) => hay.includes(t))) weak.push(p);
+      if (tier === "strong") strong.push(p);
+      else if (tier === "weak") weak.push(p);
     }
     strong.sort((a, b) => b.score.total - a.score.total);
     weak.sort((a, b) => b.score.total - a.score.total);
