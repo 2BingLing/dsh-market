@@ -7,8 +7,10 @@
 
 import type { DshPlugin } from "@dsh-market/schema";
 
-/** 宽泛标签黑名单（覆盖绝大多数插件，无筛选价值，直接移除） */
-const GENERIC_TAGS = new Set(["效率工具", "开发辅助", "AI 增强", "AI增强"]);
+/** 宽泛标签黑名单（覆盖绝大多数插件，无筛选价值，直接移除）
+ *  「自动化」2026-09-29 加入：1863/9145（20.4%）的插件被打上该标签，
+ *  把中文分类 facet 的「自动化」撑成"什么都包含"，失去筛选价值。 */
+const GENERIC_TAGS = new Set(["效率工具", "开发辅助", "AI 增强", "AI增强", "自动化"]);
 
 export interface NormalizeResult {
   /** 同义标签 → 主标签 */
