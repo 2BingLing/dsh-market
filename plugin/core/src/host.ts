@@ -71,7 +71,23 @@ function probeRuntime(): { version: string; from: string } | null {
   return null;
 }
 
-/** 全局 npm 根目录候选（Windows / 类 Unix / nvm 风格 / 自定义前缀） */
+/** 从用户 .npmrc 读自定义 prefix（Windows npm global prefix 场景：很多用户不设 env，
+ *  只在 ~/.npmrc 写 `prefix=...`；读不到返回 null） */
+function npmrcPrefix(): string | null {
+  try {
+    const file = join(homedir(), ".npmrc");
+    if (!existsSync(file)) return null;
+    const m = readFileSync(file, "utf8")
+      .split(/\r?\n/)
+      .find((l) => /^\s*prefix\s*=/.test(l));
+    const p = m?.split("=")[1]?.trim().replace(/^["']|["']$/g, "");
+    return p || null;
+  } catch {
+    return null;
+  }
+}
+
+/** 全局 npm 根目录候选（Windows / 类 Unix / nvm 风格 / .npmrc prefix / 自定义前缀） */
 function globalNodeModulesCandidates(): string[] {
   const out: string[] = [];
   const appData = process.env.APPDATA ?? join(homedir(), "AppData", "Roaming");
@@ -81,6 +97,11 @@ function globalNodeModulesCandidates(): string[] {
   out.push("/usr/local/lib/node_modules");
   out.push("/usr/lib/node_modules");
   out.push(join(homedir(), ".npm-global", "lib", "node_modules"));
+  const npmrc = npmrcPrefix();
+  if (npmrc) {
+    out.push(join(npmrc, "node_modules"));
+    out.push(join(npmrc, "lib", "node_modules"));
+  }
   const prefix = process.env.NPM_CONFIG_PREFIX;
   if (prefix) {
     out.push(join(prefix, "lib", "node_modules"));

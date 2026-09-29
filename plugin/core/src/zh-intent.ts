@@ -9,5 +9,11 @@
  * core 下次发版前必须先发含本文件的 schema 版本，否则已发布的 core 在
  * 运行时会拿到没有 zh-intent 的 schema 包。
  */
-export { ZH_INTENTS, expandZhQuery } from "@dsh-market/schema/zh-intent";
+export {
+  ZH_INTENTS,
+  expandZhQuery,
+  isTokenTerm,
+  rawTerm,
+  tokenInText,
+} from "@dsh-market/schema/zh-intent";
 export type { ZhIntent, ZhExpansion } from "@dsh-market/schema/zh-intent";

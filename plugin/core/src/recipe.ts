@@ -68,7 +68,8 @@ function detectPackageManagers(): string[] {
   const found: string[] = [];
   for (const name of PM_PROBES) {
     try {
-      const r = spawnSync(DETECT_CMD, [name], { timeout: 2000, stdio: "ignore" });
+      // N7：windowsHide 防 Windows 上每个探测闪一个控制台窗口
+      const r = spawnSync(DETECT_CMD, [name], { timeout: 2000, stdio: "ignore", windowsHide: true });
       if (r.status === 0) found.push(name);
     } catch {
       /* 探测失败忽略该工具 */

@@ -452,14 +452,18 @@ async function removeDirWithRetry(
         env: { DSH_RM_TARGET: dest },
       });
     } else {
-      // 含空格路径：powershell -EncodedCommand（UTF-16LE base64，彻底绕开 cmd 引号/ANSI）
+      // 含空格路径：powershell -EncodedCommand（UTF-16LE base64，彻底绕开 cmd 引号/ANSI）；
+      // -ExecutionPolicy Bypass：Restricted 策略下 inline 命令也可能被拦（N7，竞品 #397/#398 同款）
       const ps =
         'Remove-Item -LiteralPath "$env:DSH_RM_TARGET" -Recurse -Force';
       const encoded = Buffer.from(ps, "utf16le").toString("base64");
-      await options.runner.run(`powershell -NoProfile -EncodedCommand ${encoded}`, {
-        timeoutMs: 60000,
-        env: { DSH_RM_TARGET: dest },
-      });
+      await options.runner.run(
+        `powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${encoded}`,
+        {
+          timeoutMs: 60000,
+          env: { DSH_RM_TARGET: dest },
+        },
+      );
     }
   } else {
     await options.runner.run(`rm -rf "${dest}"`, { timeoutMs: 60000 });

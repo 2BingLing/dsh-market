@@ -5,7 +5,7 @@
 import Fuse from "fuse.js";
 import type { DshPlugin } from "@dsh-market/schema";
 import { matchesTags, usableTags } from "./tags.js";
-import { expandZhQuery } from "./zh-intent.js";
+import { expandZhQuery, isTokenTerm, rawTerm, tokenInText } from "./zh-intent.js";
 
 export interface SearchOptions {
   /** 语义翻译出的标签（LLM 增强：自然语言 → 标签），与关键词共同参与召回 */
@@ -82,14 +82,16 @@ export function search(
         seen.add(p.id);
         if (zh.intents.length > 0) continue; // 主命中优先；扩展命中不再重复计
       }
-      // 意图扩展词扫描：标签精确命中 > 字段子串命中
+      // 意图扩展词扫描：标签精确命中 > 字段子串命中（# 前缀的词边界召回词按 token 判定，
+      // 防 "ai" 子串吃掉 email/main 这类误报——与 web 端 matchTerms 同一套定义）
       let best: number | null = null;
       const hitIntents = new Set<string>();
       for (const t of zh.terms) {
-        if (p.tags.includes(t)) {
+        const raw = rawTerm(t);
+        if (p.tags.includes(raw)) {
           best = best === null ? 0.15 : Math.min(best, 0.15);
           hitIntents.add(termIntent.get(t) ?? "");
-        } else if (haystack.includes(t)) {
+        } else if (isTokenTerm(t) ? tokenInText(raw, haystack) : haystack.includes(raw)) {
           best = best === null ? 0.3 : Math.min(best, 0.3);
           hitIntents.add(termIntent.get(t) ?? "");
         }
