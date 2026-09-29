@@ -71,16 +71,28 @@ export default function App() {
   const [fStars, setFStars] = useState<StarRange>("");
   // 分页
   const [page, setPage] = useState(1);
+  // N6 数据加载失败：报真实原因 + 耗时 + 可重试（不再静默吞掉只剩空白）
+  const [loadError, setLoadError] = useState("");
+  const [loadMs, setLoadMs] = useState(0);
+  const [loadRetryKey, setLoadRetryKey] = useState(0);
 
   useEffect(() => {
+    const t0 = Date.now();
     fetch(`${import.meta.env.BASE_URL}plugins.json`)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then((data: MarketData) => {
         setPlugins(data.plugins);
         setGeneratedAt(data.generatedAt);
+        setLoadError("");
       })
-      .catch((e) => console.error("加载插件数据失败:", e))
-      .finally(() => setLoading(false));
+      .catch((e) => setLoadError(e instanceof Error ? e.message : String(e)))
+      .finally(() => {
+        setLoadMs(Date.now() - t0);
+        setLoading(false);
+      });
     // 整合包通道（独立文件；缺失时静默降级为空）
     fetch(`${import.meta.env.BASE_URL}packs.json`)
       .then((r) => (r.ok ? r.json() : null))
@@ -88,7 +100,7 @@ export default function App() {
         setPacks(data?.packs ?? []);
       })
       .catch(() => setPacks([]));
-  }, []);
+  }, [loadRetryKey]);
 
   const toggleFavorite = useCallback((id: string) => {
     setFavorites((prev) => {
@@ -532,6 +544,24 @@ export default function App() {
 
       {loading ? (
         <div className="state-hint loading-dots">正在加载插件市场</div>
+      ) : loadError ? (
+        <div className="state-hint">
+          数据加载失败：{loadError}（耗时 {(loadMs / 1000).toFixed(1)} 秒）
+          <br />
+          数据托管在 GitHub Pages，网络不通或被拦截时会出现这种情况。
+          <br />
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              setLoading(true);
+              setLoadRetryKey((k) => k + 1);
+            }}
+            style={{ color: "#2864A9" }}
+          >
+            重试
+          </a>
+        </div>
       ) : visible.length === 0 ? (
         <div className="state-hint">
           {nav === "favorites" && favorites.length === 0
