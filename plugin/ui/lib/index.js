@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { aggregateTags, appendOpLog, applyUpdate, canonicalCommands, checkSelfUpdate, checkUpdates, classifyFailure, deriveSmokeCommands, detectPnpmMajor, exportLogText, extractInstallPkgName, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, guardInstallCommands, hotTags, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readOpLogTail, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
+import { aggregateTags, appendOpLog, applyUpdate, buildBackup, canonicalCommands, checkSelfUpdate, checkUpdates, classifyFailure, deriveSmokeCommands, detectPnpmMajor, exportLogText, extractInstallPkgName, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, guardInstallCommands, hotTags, importBackup, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readOpLogTail, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。
@@ -577,6 +577,25 @@ function apply(ctx) {
 			case "metrics:summary": return metricSummary(cfg);
 			case "log:tail": return readOpLogTail(cfg, Number(args.n ?? 200));
 			case "log:export": return exportLogText(cfg, readVersions());
+			case "backup:export": return buildBackup(cfg, await market(), {
+				appVersion: readVersions()["@dsh-market/plugin"],
+				favorites: args.favorites ?? []
+			});
+			case "backup:import": {
+				const backup = args.backup;
+				if (!backup || typeof backup !== "object") throw new Error("缺少备份内容");
+				const r = await importBackup(cfg, await market(), backup, {
+					runner: realRunner(),
+					profile: args.targetProfile ?? void 0
+				});
+				appendOpLog(cfg, {
+					t: (/* @__PURE__ */ new Date()).toISOString(),
+					op: "import",
+					ok: r.failed.length === 0,
+					msg: `备份恢复：补装 ${r.restored.length} · 已装 ${r.already.length} · 未匹配 ${r.unmatched.length} · 失败 ${r.failed.length}`
+				});
+				return r;
+			}
 			case "gh:deviceCode": return (await fetch("https://github.com/login/device/code", {
 				method: "POST",
 				headers: {

@@ -916,6 +916,38 @@
   font-weight: 500;
 }
 
+/* 中文分类 chips（§5.3：词典推导的中文语境分类，teal 区分于数据标签；与 web .chip-zh 同色系） */
+.zhChip {
+  font-size: 12px;
+  color: #0f6e56;
+  border: 1px solid #9fe1cb;
+  background: #e1f5ee;
+  padding: 4px 11px;
+  border-radius: 13px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.14s ease;
+}
+.zhChip:hover {
+  border-color: #1d9e75;
+}
+.zhChipOn {
+  background: #0f6e56;
+  border-color: #0f6e56;
+  color: #ffffff;
+  font-weight: 500;
+}
+.zhChipCount {
+  font-size: 10px;
+  opacity: 0.75;
+  margin-left: 3px;
+}
+.zhCatLabel {
+  font-size: 12px;
+  color: #8a919f;
+  align-self: center;
+}
+
 /* 语义搜索开关卡片（B：.semantic-toggle） */
 .semanticToggle {
   display: flex;

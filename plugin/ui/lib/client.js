@@ -104,7 +104,7 @@ window.__ModuleLoader__.load({
 		}
 		//#endregion
 		//#region \0dsh-css:E:\wm\tool\lader\plugin\ui\src\client\styles.module.css.mjs
-		const css = "*{box-sizing:border-box}:root{--mkt-text:#252525;--mkt-text2:#5f6670;--mkt-text3:#8a919f;--mkt-brand:#4d6bfe;--mkt-brand-strong:#2e4bd8;--mkt-brand-tint:#eaf2fb;--mkt-brand-soft:#c9d4f5;--mkt-border:#e5e7eb;--mkt-border-strong:#d4d7dc;--mkt-divider:#eef0f2;--mkt-selected:#f3f4f6;--mkt-hover:#edeef1;--mkt-bg:#f6f8fb;--mkt-inverse:#252525;--mkt-surface-a:#fff;--mkt-surface-b:#fff;--mkt-surface-c:#fff;--mkt-chip-warn-bg:#fef7e7;--mkt-chip-warn-text:#a97f1f;--mkt-chip-gold-bg:#fef3e2;--mkt-chip-gold-border:#f0d9a8;--mkt-chip-gold-text:#b45309;--mkt-chip-green-bg:#e8f6ee;--mkt-chip-green-border:#bfe3cd;--mkt-chip-green-text:#15803d;--mkt-chip-red-bg:#fdeaea;--mkt-chip-red-border:#f5c6c6;--mkt-chip-red-text:#b91c1c;--mkt-text-ok:#22c55e;--mkt-text-danger:#ef4444;--mkt-rate-ok:#1e7a46;--mkt-rate-warn:#b26a00;--mkt-rate-danger:#b33a3a;--mkt-purple:#7c3aed;--mkt-purple-bg:#f3efff}[data-slot=\"sidebar.footer.action\"]{flex-wrap:wrap;row-gap:4px;width:100%;display:flex!important}._LI32q_trigger{width:100%;min-height:34px;color:var(--dsw-alias-label-primary,var(--mkt-text));cursor:pointer;box-sizing:border-box;background:0 0;border:none;border-radius:8px;flex:0 0 100%;justify-content:flex-start;align-items:center;gap:8px;padding:0 12px;font-size:13px;display:flex}._LI32q_trigger:hover{color:var(--dsw-alias-label-primary,var(--mkt-text));background:var(--dsw-alias-interactive-bg-hover,var(--mkt-hover))}._LI32q_trigger[data-active]{color:var(--mkt-brand);background:var(--mkt-hover)}@media (prefers-color-scheme:dark){._LI32q_trigger{color:#e8eaed}._LI32q_trigger:hover{color:#fff;background:#ffffff1a}}._LI32q_triggerIcon{justify-content:center;align-items:center;line-height:1;display:inline-flex}._LI32q_triggerIcon svg{flex:none;width:16px;height:16px}._LI32q_triggerLabel{white-space:nowrap}._LI32q_backdrop{z-index:100;pointer-events:auto;background:0 0;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_panel{pointer-events:auto;width:560px;max-width:94vw;height:720px;max-height:92vh;color:var(--mkt-text);-webkit-font-smoothing:antialiased;background:#fff;border:1px solid #e5e7eb;border-radius:14px;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,PingFang SC,Noto Sans SC,Microsoft YaHei,Helvetica Neue,Arial,sans-serif;font-size:13px;display:flex;position:relative;overflow:hidden;box-shadow:0 8px 40px #00000024,0 2px 8px #00000014}._LI32q_mainHost{box-sizing:border-box;justify-content:center;align-items:stretch;width:100%;height:100%;min-height:0;padding:16px;display:flex;overflow:hidden}._LI32q_panelInMain{width:100%;max-width:960px;height:100%;max-height:none;margin:0 auto}._LI32q_header{border-bottom:1px solid #eef0f2;flex:none;align-items:center;gap:10px;padding:14px 16px 12px;display:flex}._LI32q_titleIcon{align-items:center;display:flex}._LI32q_titleIcon>svg{color:#4d6bfe;width:24px;height:24px}._LI32q_title{font-size:15px;font-weight:600}._LI32q_subtitle{color:var(--mkt-brand-strong);background:#eaf2fb;border-radius:10px;padding:2px 8px;font-size:11.5px;font-weight:500}._LI32q_headerClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;margin-left:auto;transition:background-color .14s;display:flex}._LI32q_headerClose:hover{color:var(--mkt-text);background:#f3f4f6}._LI32q_headerClose svg{width:16px;height:16px}._LI32q_tabs{border-bottom:1px solid #eef0f2;flex:none;gap:2px;padding:0 12px;display:flex}._LI32q_tab{color:var(--mkt-text2);cursor:pointer;white-space:nowrap;background:0 0;border:none;margin:0 8px;padding:10px 4px;font-size:13px;position:relative}._LI32q_tab:hover{color:var(--mkt-text)}._LI32q_tabOn{color:var(--mkt-text);font-weight:600}._LI32q_tabOn:after{content:\"\";background:#4d6bfe;border-radius:2px;height:2px;position:absolute;bottom:-1px;left:0;right:0}._LI32q_body{scrollbar-width:thin;scrollbar-color:var(--mkt-border-strong) transparent;flex:1;min-height:0;padding:16px 16px 20px;overflow-y:auto}._LI32q_body::-webkit-scrollbar{width:6px}._LI32q_body::-webkit-scrollbar-thumb{background:var(--mkt-border-strong);border-radius:3px}._LI32q_body::-webkit-scrollbar-track{background:0 0}._LI32q_tabBody,._LI32q_section{flex-direction:column;display:flex}._LI32q_sectionHead{align-items:center;gap:7px;margin:20px 0 10px;display:flex}._LI32q_section:first-child>._LI32q_sectionHead{margin-top:2px}._LI32q_sectionIcon{color:#8a919f;flex:none;align-items:center;display:flex}._LI32q_sectionIcon>svg{width:14px;height:14px}._LI32q_sectionTitle{color:var(--mkt-text);margin:0;font-size:14px;font-weight:600}._LI32q_sectionNote{color:#8a919f;margin-left:auto;font-size:12px}._LI32q_btn{color:var(--mkt-text);cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s,box-shadow .14s;box-shadow:0 1px 3px #0000000f}._LI32q_btn:hover{border-color:var(--mkt-border-strong);background:#f3f4f6}._LI32q_btn:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnPrimary{background:var(--mkt-brand);border-color:var(--mkt-brand);color:#fff;box-shadow:0 1px 3px #4d6bfe59}._LI32q_btnPrimary:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnGhost{box-shadow:none;color:var(--mkt-text2);border-color:#0000}._LI32q_btnGhost:hover{color:var(--mkt-text);background:#f3f4f6}._LI32q_btnSm{padding:4px 11px;font-size:12px}._LI32q_btnDanger{color:var(--mkt-text-danger);border-color:var(--mkt-chip-red-border)}._LI32q_btnDanger:hover{background:var(--mkt-chip-red-bg);border-color:var(--mkt-chip-red-border)}._LI32q_card{cursor:default;background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;min-width:0;padding:14px;transition:box-shadow .15s,transform .15s,border-color .15s;display:flex;overflow:hidden;box-shadow:0 1px 3px #0000000f}._LI32q_card:hover{border-color:var(--mkt-border-strong);transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_cardHead{align-items:center;gap:8px;display:flex}._LI32q_cardName{color:var(--mkt-text);text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_cardBadge{color:var(--mkt-brand-strong);background:#eaf2fb;border-radius:10px;flex:none;padding:1px 7px;font-size:11.5px;font-weight:500}._LI32q_compatChip{white-space:nowrap;background:var(--mkt-surface-c);color:var(--mkt-text3);border:1px solid #0000;border-radius:8px;flex:none;padding:1px 6px;font-size:10.5px;font-weight:500}._LI32q_compatChip[data-status=unknown]{background:var(--mkt-chip-warn-bg);color:var(--mkt-chip-warn-text);border-color:var(--mkt-chip-warn-border,transparent)}._LI32q_compatChip[data-status=incompatible]{background:var(--mkt-chip-red-bg);color:var(--mkt-chip-red-text);border-color:var(--mkt-chip-red-border)}._LI32q_cardStars{color:var(--mkt-text2);flex:none;align-items:center;gap:4px;margin-left:auto;font-size:12px;display:flex}._LI32q_cardStars>svg{width:13px;height:13px;color:var(--mkt-chip-warn-text)}._LI32q_cardDesc{color:var(--mkt-text2);-webkit-line-clamp:3;-webkit-box-orient:vertical;margin:8px 0 9px;font-size:13px;line-height:1.55;display:-webkit-box;overflow:hidden}._LI32q_cardTags,._LI32q_cardReasons{flex-wrap:wrap;gap:6px;margin-bottom:10px;display:flex}._LI32q_reason{color:var(--mkt-chip-green-text);background:var(--mkt-chip-green-bg);border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_reasonAi{color:var(--mkt-brand-strong);background:#eaf2fb;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_cardActions{align-items:center;gap:6px;display:flex}._LI32q_spacer{margin-left:auto}._LI32q_needConfig{color:var(--mkt-chip-warn-text);font-size:11px}._LI32q_cardActionHint{color:#8a919f;text-align:right;margin-top:6px;font-size:11px}._LI32q_iconBtn{border:1px solid var(--mkt-border-strong);cursor:pointer;color:#8a919f;background:#fff;border-radius:7px;flex:none;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_iconBtn:hover{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_iconBtn:disabled{opacity:.5;cursor:not-allowed}._LI32q_iconBtn svg{width:15px;height:15px}._LI32q_iconBtnOn{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_favBtn{color:var(--mkt-text2);border:1px solid var(--mkt-border-strong);cursor:pointer;white-space:nowrap;background:#fff;border-radius:7px;justify-content:center;align-items:center;gap:4px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_favBtn:hover{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_favBtnOn{color:#4d6bfe;border-color:var(--mkt-brand-soft);background:#eaf2fb}._LI32q_repoBtn{color:var(--mkt-text2);border:1px solid var(--mkt-border-strong);cursor:pointer;background:#fff;border-radius:7px;align-items:center;gap:5px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_repoBtn svg{width:13px;height:13px}._LI32q_repoBtn:hover{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_tag{color:var(--mkt-text3);cursor:pointer;user-select:none;background:#f3f4f6;border:none;border-radius:8px;padding:2px 6px;font-size:11px;transition:background-color .12s,color .12s}._LI32q_tag:hover{color:var(--mkt-brand-strong);background:#eaf2fb}._LI32q_tagOn{color:var(--mkt-brand-strong);background:#eaf2fb;font-weight:500}._LI32q_recommendToolbar{border:1px solid var(--mkt-brand-tint);background:#eaf2fb;border-radius:11px;align-items:center;gap:8px;margin-bottom:4px;padding:9px 12px;display:flex}._LI32q_recommendToolbarIcon{color:#4d6bfe;flex:none;align-items:center;display:flex}._LI32q_recommendToolbarIcon>svg{width:14px;height:14px}._LI32q_recommendHint{color:var(--mkt-text2);flex:1;font-size:12px;line-height:1.5}._LI32q_modeSwitchRow{margin-bottom:4px;display:flex}._LI32q_quizCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;margin-bottom:4px;padding:15px;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_quizHead{align-items:center;gap:8px;margin-bottom:4px;display:flex}._LI32q_quizHeadIcon{color:#4d6bfe;align-items:center;display:flex}._LI32q_quizHeadIcon>svg{width:16px;height:16px}._LI32q_quizTitle{flex:1;font-size:14px;font-weight:600}._LI32q_quizDesc{color:var(--mkt-text2);margin:0 0 12px;font-size:12px}._LI32q_quizTags{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_quizChip{color:var(--mkt-text2);cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_quizChip:hover{border-color:var(--mkt-brand-soft);color:#4d6bfe}._LI32q_quizChipOn{border-color:var(--mkt-brand-soft);color:var(--mkt-brand-strong);background:#eaf2fb;font-weight:500}._LI32q_quizActions{align-items:center;gap:8px;display:flex}._LI32q_quizCount{color:#8a919f;font-size:12px}._LI32q_quizCta{align-items:center;margin-left:auto;display:flex}._LI32q_quizCta ._LI32q_btnPrimary{padding:9px 14px;font-size:13px;font-weight:600}._LI32q_sceneList{flex-direction:column;gap:0;display:flex}._LI32q_sceneRow{border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:10px;margin-bottom:9px;padding:12px 13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_sceneRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_sceneInfo{flex:1;min-width:0}._LI32q_sceneName{margin-bottom:3px;font-size:13.5px;font-weight:600}._LI32q_sceneDesc{color:var(--mkt-text2);font-size:12px;line-height:1.5}._LI32q_sceneHint{color:#8a919f;font-size:12px}._LI32q_sceneEmpty{color:#8a919f;border:1px solid #e5e7eb;border-radius:11px;margin:0;padding:12px 13px;font-size:12px}._LI32q_stateHint{text-align:center;color:#8a919f;padding:24px 12px;font-size:12px}._LI32q_installedNote{color:#8a919f;margin-top:8px;font-size:11px}._LI32q_grid2{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_grid2>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_grid2{grid-template-columns:1fr}}._LI32q_searchWrap{margin-bottom:14px;position:relative}._LI32q_searchWrapIcon{color:#8a919f;pointer-events:none;align-items:center;width:15px;height:15px;display:flex;position:absolute;top:50%;left:11px;transform:translateY(-50%)}._LI32q_searchWrapIcon>svg{width:15px;height:15px}._LI32q_searchInput{border:1px solid var(--mkt-border-strong);width:100%;height:38px;color:var(--mkt-text);background:#fff;border-radius:10px;outline:none;padding:0 34px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_searchInput::placeholder{color:var(--mkt-text2)}._LI32q_searchInput:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_searchClear{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:5px;justify-content:center;align-items:center;width:20px;height:20px;padding:0;display:flex;position:absolute;top:50%;right:9px;transform:translateY(-50%)}._LI32q_searchClear:hover{background:#f3f4f6}._LI32q_searchClear svg{width:13px;height:13px}._LI32q_filterRow{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_filterChip{color:var(--mkt-text2);cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:13px;padding:4px 11px;font-size:12px;transition:all .14s}._LI32q_filterChip:hover{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_filterChipOn{border-color:var(--mkt-brand-soft);color:var(--mkt-brand-strong);background:#eaf2fb;font-weight:500}._LI32q_semanticToggle{background:#fff;border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:9px;margin-bottom:14px;padding:9px 12px;display:flex}._LI32q_semanticInfo{flex:1}._LI32q_semanticTitle{align-items:center;gap:6px;font-size:13px;font-weight:600;display:flex}._LI32q_semanticPill{color:#8a919f;border:1px solid #e5e7eb;border-radius:9px;padding:0 6px;font-size:10px;font-weight:500}._LI32q_semanticDesc{color:#8a919f;margin-top:2px;font-size:12px}._LI32q_semanticSwitch{background:var(--mkt-border-strong);cursor:not-allowed;opacity:.7;border-radius:10px;flex:none;width:34px;height:20px;position:relative}._LI32q_semanticSwitch:after{content:\"\";background:#fff;border-radius:50%;width:16px;height:16px;position:absolute;top:2px;left:2px;box-shadow:0 1px 2px #0003}._LI32q_hotTagsTitle{color:#8a919f;margin-bottom:8px;font-size:12px}._LI32q_tagCloud{flex-wrap:wrap;gap:6px;padding:0;display:flex}._LI32q_hotTag{color:var(--mkt-text2);cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_hotTag:hover{border-color:var(--mkt-brand-soft);color:#4d6bfe}._LI32q_hotTagOn{border-color:var(--mkt-brand-soft);color:var(--mkt-brand-strong);background:#eaf2fb;font-weight:500}._LI32q_tagMoreRow{margin:2px 0 4px}._LI32q_results{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_results>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_results{grid-template-columns:1fr}}._LI32q_resultCount{color:var(--mkt-text2);margin:2px 0 10px;font-size:12px}._LI32q_resultCount b{color:var(--mkt-text)}._LI32q_loadMoreRow{text-align:center;margin:14px 0 6px}._LI32q_loadMore{color:var(--mkt-text);cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s;box-shadow:0 1px 3px #0000000f}._LI32q_loadMore:hover{border-color:var(--mkt-border-strong);background:#f3f4f6}._LI32q_semanticResult{color:#8a919f;flex-wrap:wrap;align-items:center;gap:5px;font-size:12px;display:flex}._LI32q_emptyState{text-align:center;padding:56px 20px}._LI32q_emptyIcon{color:var(--mkt-border-strong);justify-content:center;margin-bottom:12px;display:flex}._LI32q_emptyIcon>svg{width:44px;height:44px}._LI32q_emptyTitle{color:var(--mkt-text);margin-bottom:5px;font-size:14px;font-weight:600}._LI32q_emptyDesc{color:#8a919f;margin-bottom:16px;font-size:12px}._LI32q_installedRow{border:1px solid #e5e7eb;border-radius:11px;align-items:flex-start;gap:11px;margin-bottom:9px;padding:13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_installedRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_installedInfo{flex:1;min-width:0}._LI32q_installedHead{align-items:center;gap:8px;display:flex}._LI32q_installedName{color:var(--mkt-text);text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_installedMeta{color:#8a919f;margin-top:3px;font-size:12px}._LI32q_installedActions{flex-direction:column;flex:none;gap:6px;display:flex}._LI32q_unmatched{flex-wrap:wrap;gap:5px;margin-top:8px;display:flex}._LI32q_unmatchedChip{background:var(--mkt-chip-warn-bg);border:1px dashed var(--mkt-chip-gold-border);color:var(--mkt-chip-warn-text);border-radius:10px;padding:3px 8px;font-size:11.5px}._LI32q_unmatchedMore{color:#8a919f;align-self:center;font-size:11px}._LI32q_updateChip{background:var(--mkt-chip-gold-bg);border:1px solid var(--mkt-chip-gold-border);color:var(--mkt-chip-gold-text);border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_latestChip{background:var(--mkt-chip-green-bg);border:1px solid var(--mkt-chip-green-border);color:var(--mkt-chip-green-text);border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_updateHint{color:#8a919f;margin-top:5px;font-size:11.5px}._LI32q_activationChip{background:var(--mkt-brand-tint);border:1px solid var(--mkt-brand-soft);color:#4d6bfe;border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_activationLive{background:var(--mkt-chip-green-bg);border:1px solid var(--mkt-chip-green-border);color:var(--mkt-chip-green-text)}._LI32q_activationBroken{background:var(--mkt-chip-red-bg);border:1px solid var(--mkt-chip-red-border);color:var(--mkt-chip-red-text)}._LI32q_activationInert{border:1px solid var(--mkt-border-strong);color:var(--mkt-text3);background:#f3f4f6}._LI32q_selfUpdateBar{background:var(--mkt-chip-gold-bg);border:1px solid var(--mkt-chip-gold-border);color:var(--mkt-chip-gold-text);border-radius:10px;align-items:center;gap:8px;margin:0 14px 10px;padding:8px 12px;font-size:12px;display:flex}._LI32q_selfUpdateText{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}._LI32q_settingCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;margin-bottom:12px;padding:15px;box-shadow:0 1px 3px #0000000f}._LI32q_settingHead{align-items:center;gap:8px;margin-bottom:10px;display:flex}._LI32q_settingIc{color:#4d6bfe;background:#f3f4f6;border-radius:8px;flex:none;justify-content:center;align-items:center;width:26px;height:26px;display:flex}._LI32q_settingIc>svg{width:15px;height:15px}._LI32q_settingTitle{font-size:14px;font-weight:600}._LI32q_versionRow{border-top:1px solid #eef0f2;align-items:center;gap:8px;margin-top:10px;padding-top:10px;display:flex}._LI32q_versionLabel{color:var(--mkt-text2);flex:none;font-size:12px}._LI32q_versionCode{color:var(--mkt-text);background:#f3f4f6;border:1px solid #e5e7eb;border-radius:6px;padding:2px 8px;font-family:ui-monospace,Menlo,monospace;font-size:12px}._LI32q_settingStatus{border-radius:9px;margin-left:auto;padding:2px 8px;font-size:11.5px}._LI32q_statusOk{background:var(--mkt-chip-green-bg);color:var(--mkt-text-ok)}._LI32q_statusOff{color:#8a919f;background:#f3f4f6}._LI32q_statusWarn{background:var(--mkt-chip-warn-bg);color:var(--mkt-chip-warn-text)}._LI32q_settingsRow{align-items:center;gap:8px;display:flex}._LI32q_settingsLabel{color:var(--mkt-text2);white-space:nowrap;font-size:12px}._LI32q_ghTip{color:var(--mkt-text2);margin:0;font-size:12px;line-height:1.7}._LI32q_ghLink{color:#4d6bfe;align-items:center;gap:2px;text-decoration:none;display:inline-flex}._LI32q_ghLink:hover{text-decoration:underline}._LI32q_ghLogin{flex:1;font-size:13px;font-weight:600}._LI32q_ghRow{align-items:center;gap:8px;display:flex}._LI32q_deviceFlow{color:var(--mkt-text2);background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;flex-direction:column;gap:6px;padding:9px 11px;font-size:12px;display:flex}._LI32q_deviceCode{letter-spacing:2px;color:#4d6bfe;background:#fff;border-radius:6px;align-self:flex-start;padding:4px 8px;font-family:ui-monospace,Menlo,monospace;font-size:18px;font-weight:700}._LI32q_ghPollState{color:var(--mkt-text2);margin:0;font-size:12px}._LI32q_deviceFlow a{color:#4d6bfe}._LI32q_deviceFlowTip{color:#8a919f;margin:0;font-size:11.5px;line-height:1.6}._LI32q_ghDone{color:var(--mkt-text-ok);align-items:center;font-weight:500;display:inline-flex}._LI32q_field{margin-bottom:11px}._LI32q_fieldRow{gap:8px;display:flex}._LI32q_fieldRow>._LI32q_field{flex:1;margin-bottom:0}._LI32q_fieldLabel{color:var(--mkt-text2);margin-bottom:5px;font-size:12px;display:block}._LI32q_input,._LI32q_select{border:1px solid var(--mkt-border-strong);width:100%;height:34px;color:var(--mkt-text);background:#fff;border-radius:9px;outline:none;padding:0 10px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_input:focus,._LI32q_select:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_input::placeholder{color:var(--mkt-text2)}._LI32q_error{color:var(--mkt-text-danger);margin:0;font-size:12px}._LI32q_warn{color:var(--mkt-chip-warn-text);align-items:center;margin:0;font-size:12px;display:flex}._LI32q_dividerLine{background:#eef0f2;height:1px;margin:13px 0}._LI32q_inlineIcon{vertical-align:-2px;flex:none;margin-right:4px;display:inline-block}._LI32q_modalBackdrop{z-index:120;background:#14161c6b;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_modal{background:#fff;border-radius:14px;flex-direction:column;width:420px;max-width:92vw;padding:20px 22px;display:flex;overflow:hidden;box-shadow:0 12px 50px #0000003d}._LI32q_modalHead{justify-content:space-between;align-items:center;margin-bottom:12px;display:flex}._LI32q_modalTitle{font-size:15px;font-weight:600}._LI32q_modalClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:background-color .14s;display:flex}._LI32q_modalClose:hover{color:var(--mkt-text);background:#f3f4f6}._LI32q_modalClose svg{width:16px;height:16px}._LI32q_modalBody{flex-direction:column;gap:10px;display:flex}._LI32q_modalDesc{color:var(--mkt-text2);margin:0;font-size:12.5px;line-height:1.6}._LI32q_modalActions{justify-content:flex-end;gap:8px;margin-top:8px;display:flex}._LI32q_modalSuccess{text-align:center;flex-direction:column;justify-content:center;align-items:center;gap:10px;display:flex}._LI32q_modalSuccessIcon{background:var(--mkt-chip-green-bg);width:44px;height:44px;color:var(--mkt-text-ok);border-radius:50%;justify-content:center;align-items:center;margin:0 auto;display:flex}._LI32q_modalSuccessIcon>svg{width:22px;height:22px}._LI32q_modalSuccessTitle{color:var(--mkt-text);font-size:14px;font-weight:600}._LI32q_modalError{color:var(--mkt-text-danger);word-break:break-all;align-items:center;font-size:13px;font-weight:600;display:flex}._LI32q_loading{text-align:center;color:#8a919f;padding:20px;font-size:12px}._LI32q_advanced{margin-top:2px}._LI32q_advanced summary{cursor:pointer;color:#8a919f;user-select:none;font-size:11px}._LI32q_advancedTip{color:#8a919f;margin:6px 0 0;font-size:11px;line-height:1.5}._LI32q_advancedCmd{color:var(--mkt-text2);white-space:pre-wrap;word-break:break-all;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;margin-top:6px;padding:9px 11px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.6;display:block}._LI32q_steps{align-items:center;margin-bottom:18px;display:flex}._LI32q_step{color:#8a919f;flex:1;align-items:center;gap:7px;font-size:12px;display:flex;position:relative}._LI32q_stepDot{border:1.5px solid var(--mkt-border-strong);color:#8a919f;background:#fff;border-radius:50%;flex:none;justify-content:center;align-items:center;width:20px;height:20px;font-size:11.5px;transition:all .2s;display:flex}._LI32q_stepActive{color:var(--mkt-text)}._LI32q_stepActive ._LI32q_stepDot{color:#4d6bfe;border-color:#4d6bfe}._LI32q_stepDone{color:var(--mkt-text)}._LI32q_stepDone ._LI32q_stepDot{color:#fff;background:#4d6bfe;border-color:#4d6bfe}._LI32q_stepBar{background:var(--mkt-border-strong);border-radius:1px;flex:1;height:1.5px;margin:0 6px}._LI32q_stepBarDone{background:#4d6bfe}._LI32q_toast{background:var(--mkt-inverse);color:#fff;z-index:200;pointer-events:none;border-radius:8px;padding:8px 16px;font-size:12.5px;animation:.22s _LI32q_toastIn;position:fixed;bottom:24px;left:50%;transform:translate(-50%);box-shadow:0 4px 16px #0003}@keyframes _LI32q_toastIn{0%{opacity:0;transform:translate(-50%)translateY(10px)}to{opacity:1;transform:translate(-50%)translateY(0)}}@media (prefers-color-scheme:dark){:root{--mkt-text:#e8eaed;--mkt-text2:#b3bac4;--mkt-text3:#a6aeba;--mkt-brand:#6d8bff;--mkt-brand-strong:#8aa5ff;--mkt-brand-tint:#6d8bff1a;--mkt-brand-soft:#6d8bff3d;--mkt-border:#2a2e36;--mkt-border-strong:#3a3f49;--mkt-divider:#262a31;--mkt-selected:#2e323a;--mkt-hover:#2a2e35;--mkt-bg:#171a1f;--mkt-inverse:#31353d;--mkt-surface-a:#1b1e24;--mkt-surface-b:#21252c;--mkt-surface-c:#262a32;--mkt-chip-warn-bg:#b4530929;--mkt-chip-warn-text:#fbbf24;--mkt-chip-gold-bg:#d9770629;--mkt-chip-gold-border:#d9770659;--mkt-chip-gold-text:#fbbf24;--mkt-chip-green-bg:#22c55e21;--mkt-chip-green-border:#22c55e4d;--mkt-chip-green-text:#4ade80;--mkt-chip-red-bg:#ef444421;--mkt-chip-red-border:#ef44444d;--mkt-chip-red-text:#f87171;--mkt-text-ok:#4ade80;--mkt-text-danger:#f87171;--mkt-rate-ok:#4ade80;--mkt-rate-warn:#fbbf24;--mkt-rate-danger:#f87171;--mkt-purple:#a78bfa;--mkt-purple-bg:#7c3aed29}._LI32q_panel{color-scheme:dark;box-shadow:0 8px 32px #00000080}}:root[style*=\"color-scheme: dark\"]{--mkt-text:#e8eaed;--mkt-text2:#9aa1a8;--mkt-text3:#8b93a1;--mkt-brand:#6d8bff;--mkt-brand-strong:#8aa5ff;--mkt-brand-tint:#6d8bff1a;--mkt-brand-soft:#6d8bff3d;--mkt-border:#2a2e36;--mkt-border-strong:#3a3f49;--mkt-divider:#262a31;--mkt-selected:#2e323a;--mkt-hover:#2a2e35;--mkt-bg:#171a1f;--mkt-inverse:#31353d;--mkt-surface-a:#1b1e24;--mkt-surface-b:#21252c;--mkt-surface-c:#262a32;--mkt-chip-warn-bg:#b4530929;--mkt-chip-warn-text:#fbbf24;--mkt-chip-gold-bg:#d9770629;--mkt-chip-gold-border:#d9770659;--mkt-chip-gold-text:#fbbf24;--mkt-chip-green-bg:#22c55e21;--mkt-chip-green-border:#22c55e4d;--mkt-chip-green-text:#4ade80;--mkt-chip-red-bg:#ef444421;--mkt-chip-red-border:#ef44444d;--mkt-chip-red-text:#f87171;--mkt-text-ok:#4ade80;--mkt-text-danger:#f87171;--mkt-rate-ok:#4ade80;--mkt-rate-warn:#fbbf24;--mkt-rate-danger:#f87171;--mkt-purple:#a78bfa;--mkt-purple-bg:#7c3aed29}:root[style*=\"color-scheme: dark\"] ._LI32q_panel{color-scheme:dark;box-shadow:0 8px 32px #00000080}:root[style*=\"color-scheme: dark\"] ._LI32q_trigger{color:#e8eaed}:root[style*=\"color-scheme: dark\"] ._LI32q_trigger:hover{color:#fff;background:#ffffff1a}:root[style*=\"color-scheme: dark\"] ._LI32q_trigger[data-active]{color:var(--mkt-brand);background:var(--mkt-hover)}._LI32q_panel{background:var(--mkt-surface-a)}._LI32q_card,._LI32q_settingCard,._LI32q_quizCard,._LI32q_modal{background:var(--mkt-surface-b)}._LI32q_btn,._LI32q_iconBtn,._LI32q_favBtn,._LI32q_repoBtn,._LI32q_quizChip,._LI32q_searchInput,._LI32q_filterChip,._LI32q_semanticToggle,._LI32q_semanticSwitch,._LI32q_hotTag,._LI32q_loadMore,._LI32q_deviceCode,._LI32q_select,._LI32q_stepDot{background:var(--mkt-surface-c)}._LI32q_btnPrimary,._LI32q_btnPrimary:hover,._LI32q_btnPrimary:active{background:var(--mkt-brand);border-color:var(--mkt-brand)}._LI32q_btnPrimary:hover{background:var(--mkt-brand-strong);border-color:var(--mkt-brand-strong)}._LI32q_btnDanger{background:var(--mkt-chip-red-bg);color:var(--mkt-text-danger);border-color:var(--mkt-chip-red-border)}._LI32q_outlet{border:1px solid var(--mkt-chip-red-border,#f3c9c9);text-align:center;background:#fff;border-radius:12px;max-width:460px;margin:18px auto;padding:20px 18px;box-shadow:0 1px 3px #0000000f}._LI32q_outletTitle{color:var(--mkt-text,#1f2328);margin-bottom:8px;font-size:14px;font-weight:600}._LI32q_outletMsg{max-width:420px;margin:0 auto 4px}._LI32q_outletMsg code{background:var(--mkt-chip-red-bg,#fdf1f1);color:var(--mkt-text-danger);word-break:break-all;text-align:left;white-space:pre-wrap;border-radius:8px;max-height:88px;padding:8px 10px;font-size:11.5px;line-height:1.5;display:block;overflow:auto}._LI32q_outletActions{flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;display:flex}._LI32q_outletManual{text-align:left;margin-top:10px}._LI32q_outletManualTitle{color:var(--mkt-text,#1f2328);margin-bottom:4px;font-size:12px;font-weight:600}._LI32q_outletManualText{white-space:pre-wrap;word-break:break-all;cursor:copy;user-select:all;background:#f7f8fa;border:1px dashed #d0d4da;border-radius:8px;max-height:180px;margin:0;padding:8px 10px;font-size:11px;line-height:1.5;overflow:auto}._LI32q_outletHint{color:#8a919f;margin-top:12px;font-size:11px;line-height:1.6}._LI32q_semanticSwitch{cursor:pointer;opacity:1;transition:background .15s}._LI32q_semanticSwitchOn{background:var(--mkt-brand)}._LI32q_semanticSwitchOn:after{left:16px}";
+		const css = "*{box-sizing:border-box}:root{--mkt-text:#252525;--mkt-text2:#5f6670;--mkt-text3:#8a919f;--mkt-brand:#4d6bfe;--mkt-brand-strong:#2e4bd8;--mkt-brand-tint:#eaf2fb;--mkt-brand-soft:#c9d4f5;--mkt-border:#e5e7eb;--mkt-border-strong:#d4d7dc;--mkt-divider:#eef0f2;--mkt-selected:#f3f4f6;--mkt-hover:#edeef1;--mkt-bg:#f6f8fb;--mkt-inverse:#252525;--mkt-surface-a:#fff;--mkt-surface-b:#fff;--mkt-surface-c:#fff;--mkt-chip-warn-bg:#fef7e7;--mkt-chip-warn-text:#a97f1f;--mkt-chip-gold-bg:#fef3e2;--mkt-chip-gold-border:#f0d9a8;--mkt-chip-gold-text:#b45309;--mkt-chip-green-bg:#e8f6ee;--mkt-chip-green-border:#bfe3cd;--mkt-chip-green-text:#15803d;--mkt-chip-red-bg:#fdeaea;--mkt-chip-red-border:#f5c6c6;--mkt-chip-red-text:#b91c1c;--mkt-text-ok:#22c55e;--mkt-text-danger:#ef4444;--mkt-rate-ok:#1e7a46;--mkt-rate-warn:#b26a00;--mkt-rate-danger:#b33a3a;--mkt-purple:#7c3aed;--mkt-purple-bg:#f3efff}[data-slot=\"sidebar.footer.action\"]{flex-wrap:wrap;row-gap:4px;width:100%;display:flex!important}._LI32q_trigger{width:100%;min-height:34px;color:var(--dsw-alias-label-primary,var(--mkt-text));cursor:pointer;box-sizing:border-box;background:0 0;border:none;border-radius:8px;flex:0 0 100%;justify-content:flex-start;align-items:center;gap:8px;padding:0 12px;font-size:13px;display:flex}._LI32q_trigger:hover{color:var(--dsw-alias-label-primary,var(--mkt-text));background:var(--dsw-alias-interactive-bg-hover,var(--mkt-hover))}._LI32q_trigger[data-active]{color:var(--mkt-brand);background:var(--mkt-hover)}@media (prefers-color-scheme:dark){._LI32q_trigger{color:#e8eaed}._LI32q_trigger:hover{color:#fff;background:#ffffff1a}}._LI32q_triggerIcon{justify-content:center;align-items:center;line-height:1;display:inline-flex}._LI32q_triggerIcon svg{flex:none;width:16px;height:16px}._LI32q_triggerLabel{white-space:nowrap}._LI32q_backdrop{z-index:100;pointer-events:auto;background:0 0;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_panel{pointer-events:auto;width:560px;max-width:94vw;height:720px;max-height:92vh;color:var(--mkt-text);-webkit-font-smoothing:antialiased;background:#fff;border:1px solid #e5e7eb;border-radius:14px;flex-direction:column;font-family:-apple-system,BlinkMacSystemFont,PingFang SC,Noto Sans SC,Microsoft YaHei,Helvetica Neue,Arial,sans-serif;font-size:13px;display:flex;position:relative;overflow:hidden;box-shadow:0 8px 40px #00000024,0 2px 8px #00000014}._LI32q_mainHost{box-sizing:border-box;justify-content:center;align-items:stretch;width:100%;height:100%;min-height:0;padding:16px;display:flex;overflow:hidden}._LI32q_panelInMain{width:100%;max-width:960px;height:100%;max-height:none;margin:0 auto}._LI32q_header{border-bottom:1px solid #eef0f2;flex:none;align-items:center;gap:10px;padding:14px 16px 12px;display:flex}._LI32q_titleIcon{align-items:center;display:flex}._LI32q_titleIcon>svg{color:#4d6bfe;width:24px;height:24px}._LI32q_title{font-size:15px;font-weight:600}._LI32q_subtitle{color:var(--mkt-brand-strong);background:#eaf2fb;border-radius:10px;padding:2px 8px;font-size:11.5px;font-weight:500}._LI32q_headerClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;margin-left:auto;transition:background-color .14s;display:flex}._LI32q_headerClose:hover{color:var(--mkt-text);background:#f3f4f6}._LI32q_headerClose svg{width:16px;height:16px}._LI32q_tabs{border-bottom:1px solid #eef0f2;flex:none;gap:2px;padding:0 12px;display:flex}._LI32q_tab{color:var(--mkt-text2);cursor:pointer;white-space:nowrap;background:0 0;border:none;margin:0 8px;padding:10px 4px;font-size:13px;position:relative}._LI32q_tab:hover{color:var(--mkt-text)}._LI32q_tabOn{color:var(--mkt-text);font-weight:600}._LI32q_tabOn:after{content:\"\";background:#4d6bfe;border-radius:2px;height:2px;position:absolute;bottom:-1px;left:0;right:0}._LI32q_body{scrollbar-width:thin;scrollbar-color:var(--mkt-border-strong) transparent;flex:1;min-height:0;padding:16px 16px 20px;overflow-y:auto}._LI32q_body::-webkit-scrollbar{width:6px}._LI32q_body::-webkit-scrollbar-thumb{background:var(--mkt-border-strong);border-radius:3px}._LI32q_body::-webkit-scrollbar-track{background:0 0}._LI32q_tabBody,._LI32q_section{flex-direction:column;display:flex}._LI32q_sectionHead{align-items:center;gap:7px;margin:20px 0 10px;display:flex}._LI32q_section:first-child>._LI32q_sectionHead{margin-top:2px}._LI32q_sectionIcon{color:#8a919f;flex:none;align-items:center;display:flex}._LI32q_sectionIcon>svg{width:14px;height:14px}._LI32q_sectionTitle{color:var(--mkt-text);margin:0;font-size:14px;font-weight:600}._LI32q_sectionNote{color:#8a919f;margin-left:auto;font-size:12px}._LI32q_btn{color:var(--mkt-text);cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s,box-shadow .14s;box-shadow:0 1px 3px #0000000f}._LI32q_btn:hover{border-color:var(--mkt-border-strong);background:#f3f4f6}._LI32q_btn:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnPrimary{background:var(--mkt-brand);border-color:var(--mkt-brand);color:#fff;box-shadow:0 1px 3px #4d6bfe59}._LI32q_btnPrimary:disabled{opacity:.5;cursor:not-allowed}._LI32q_btnGhost{box-shadow:none;color:var(--mkt-text2);border-color:#0000}._LI32q_btnGhost:hover{color:var(--mkt-text);background:#f3f4f6}._LI32q_btnSm{padding:4px 11px;font-size:12px}._LI32q_btnDanger{color:var(--mkt-text-danger);border-color:var(--mkt-chip-red-border)}._LI32q_btnDanger:hover{background:var(--mkt-chip-red-bg);border-color:var(--mkt-chip-red-border)}._LI32q_card{cursor:default;background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;min-width:0;padding:14px;transition:box-shadow .15s,transform .15s,border-color .15s;display:flex;overflow:hidden;box-shadow:0 1px 3px #0000000f}._LI32q_card:hover{border-color:var(--mkt-border-strong);transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_cardHead{align-items:center;gap:8px;display:flex}._LI32q_cardName{color:var(--mkt-text);text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_cardBadge{color:var(--mkt-brand-strong);background:#eaf2fb;border-radius:10px;flex:none;padding:1px 7px;font-size:11.5px;font-weight:500}._LI32q_compatChip{white-space:nowrap;background:var(--mkt-surface-c);color:var(--mkt-text3);border:1px solid #0000;border-radius:8px;flex:none;padding:1px 6px;font-size:10.5px;font-weight:500}._LI32q_compatChip[data-status=unknown]{background:var(--mkt-chip-warn-bg);color:var(--mkt-chip-warn-text);border-color:var(--mkt-chip-warn-border,transparent)}._LI32q_compatChip[data-status=incompatible]{background:var(--mkt-chip-red-bg);color:var(--mkt-chip-red-text);border-color:var(--mkt-chip-red-border)}._LI32q_cardStars{color:var(--mkt-text2);flex:none;align-items:center;gap:4px;margin-left:auto;font-size:12px;display:flex}._LI32q_cardStars>svg{width:13px;height:13px;color:var(--mkt-chip-warn-text)}._LI32q_cardDesc{color:var(--mkt-text2);-webkit-line-clamp:3;-webkit-box-orient:vertical;margin:8px 0 9px;font-size:13px;line-height:1.55;display:-webkit-box;overflow:hidden}._LI32q_cardTags,._LI32q_cardReasons{flex-wrap:wrap;gap:6px;margin-bottom:10px;display:flex}._LI32q_reason{color:var(--mkt-chip-green-text);background:var(--mkt-chip-green-bg);border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_reasonAi{color:var(--mkt-brand-strong);background:#eaf2fb;border-radius:8px;padding:2px 6px;font-size:11px}._LI32q_cardActions{align-items:center;gap:6px;display:flex}._LI32q_spacer{margin-left:auto}._LI32q_needConfig{color:var(--mkt-chip-warn-text);font-size:11px}._LI32q_cardActionHint{color:#8a919f;text-align:right;margin-top:6px;font-size:11px}._LI32q_iconBtn{border:1px solid var(--mkt-border-strong);cursor:pointer;color:#8a919f;background:#fff;border-radius:7px;flex:none;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_iconBtn:hover{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_iconBtn:disabled{opacity:.5;cursor:not-allowed}._LI32q_iconBtn svg{width:15px;height:15px}._LI32q_iconBtnOn{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_favBtn{color:var(--mkt-text2);border:1px solid var(--mkt-border-strong);cursor:pointer;white-space:nowrap;background:#fff;border-radius:7px;justify-content:center;align-items:center;gap:4px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s,background-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_favBtn:hover{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_favBtnOn{color:#4d6bfe;border-color:var(--mkt-brand-soft);background:#eaf2fb}._LI32q_repoBtn{color:var(--mkt-text2);border:1px solid var(--mkt-border-strong);cursor:pointer;background:#fff;border-radius:7px;align-items:center;gap:5px;padding:4px 9px;font-family:inherit;font-size:12px;transition:color .14s,border-color .14s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_repoBtn svg{width:13px;height:13px}._LI32q_repoBtn:hover{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_tag{color:var(--mkt-text3);cursor:pointer;user-select:none;background:#f3f4f6;border:none;border-radius:8px;padding:2px 6px;font-size:11px;transition:background-color .12s,color .12s}._LI32q_tag:hover{color:var(--mkt-brand-strong);background:#eaf2fb}._LI32q_tagOn{color:var(--mkt-brand-strong);background:#eaf2fb;font-weight:500}._LI32q_recommendToolbar{border:1px solid var(--mkt-brand-tint);background:#eaf2fb;border-radius:11px;align-items:center;gap:8px;margin-bottom:4px;padding:9px 12px;display:flex}._LI32q_recommendToolbarIcon{color:#4d6bfe;flex:none;align-items:center;display:flex}._LI32q_recommendToolbarIcon>svg{width:14px;height:14px}._LI32q_recommendHint{color:var(--mkt-text2);flex:1;font-size:12px;line-height:1.5}._LI32q_modeSwitchRow{margin-bottom:4px;display:flex}._LI32q_quizCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;flex-direction:column;margin-bottom:4px;padding:15px;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_quizHead{align-items:center;gap:8px;margin-bottom:4px;display:flex}._LI32q_quizHeadIcon{color:#4d6bfe;align-items:center;display:flex}._LI32q_quizHeadIcon>svg{width:16px;height:16px}._LI32q_quizTitle{flex:1;font-size:14px;font-weight:600}._LI32q_quizDesc{color:var(--mkt-text2);margin:0 0 12px;font-size:12px}._LI32q_quizTags{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_quizChip{color:var(--mkt-text2);cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_quizChip:hover{border-color:var(--mkt-brand-soft);color:#4d6bfe}._LI32q_quizChipOn{border-color:var(--mkt-brand-soft);color:var(--mkt-brand-strong);background:#eaf2fb;font-weight:500}._LI32q_quizActions{align-items:center;gap:8px;display:flex}._LI32q_quizCount{color:#8a919f;font-size:12px}._LI32q_quizCta{align-items:center;margin-left:auto;display:flex}._LI32q_quizCta ._LI32q_btnPrimary{padding:9px 14px;font-size:13px;font-weight:600}._LI32q_sceneList{flex-direction:column;gap:0;display:flex}._LI32q_sceneRow{border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:10px;margin-bottom:9px;padding:12px 13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_sceneRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_sceneInfo{flex:1;min-width:0}._LI32q_sceneName{margin-bottom:3px;font-size:13.5px;font-weight:600}._LI32q_sceneDesc{color:var(--mkt-text2);font-size:12px;line-height:1.5}._LI32q_sceneHint{color:#8a919f;font-size:12px}._LI32q_sceneEmpty{color:#8a919f;border:1px solid #e5e7eb;border-radius:11px;margin:0;padding:12px 13px;font-size:12px}._LI32q_stateHint{text-align:center;color:#8a919f;padding:24px 12px;font-size:12px}._LI32q_installedNote{color:#8a919f;margin-top:8px;font-size:11px}._LI32q_grid2{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_grid2>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_grid2{grid-template-columns:1fr}}._LI32q_searchWrap{margin-bottom:14px;position:relative}._LI32q_searchWrapIcon{color:#8a919f;pointer-events:none;align-items:center;width:15px;height:15px;display:flex;position:absolute;top:50%;left:11px;transform:translateY(-50%)}._LI32q_searchWrapIcon>svg{width:15px;height:15px}._LI32q_searchInput{border:1px solid var(--mkt-border-strong);width:100%;height:38px;color:var(--mkt-text);background:#fff;border-radius:10px;outline:none;padding:0 34px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_searchInput::placeholder{color:var(--mkt-text2)}._LI32q_searchInput:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_searchClear{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:5px;justify-content:center;align-items:center;width:20px;height:20px;padding:0;display:flex;position:absolute;top:50%;right:9px;transform:translateY(-50%)}._LI32q_searchClear:hover{background:#f3f4f6}._LI32q_searchClear svg{width:13px;height:13px}._LI32q_filterRow{flex-wrap:wrap;gap:6px;margin-bottom:14px;display:flex}._LI32q_filterChip{color:var(--mkt-text2);cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:13px;padding:4px 11px;font-size:12px;transition:all .14s}._LI32q_filterChip:hover{color:#4d6bfe;border-color:var(--mkt-brand-soft)}._LI32q_filterChipOn{border-color:var(--mkt-brand-soft);color:var(--mkt-brand-strong);background:#eaf2fb;font-weight:500}._LI32q_zhChip{color:#0f6e56;cursor:pointer;user-select:none;background:#e1f5ee;border:1px solid #9fe1cb;border-radius:13px;padding:4px 11px;font-size:12px;transition:all .14s}._LI32q_zhChip:hover{border-color:#1d9e75}._LI32q_zhChipOn{color:#fff;background:#0f6e56;border-color:#0f6e56;font-weight:500}._LI32q_zhChipCount{opacity:.75;margin-left:3px;font-size:10px}._LI32q_zhCatLabel{color:#8a919f;align-self:center;font-size:12px}._LI32q_semanticToggle{background:#fff;border:1px solid #e5e7eb;border-radius:11px;align-items:center;gap:9px;margin-bottom:14px;padding:9px 12px;display:flex}._LI32q_semanticInfo{flex:1}._LI32q_semanticTitle{align-items:center;gap:6px;font-size:13px;font-weight:600;display:flex}._LI32q_semanticPill{color:#8a919f;border:1px solid #e5e7eb;border-radius:9px;padding:0 6px;font-size:10px;font-weight:500}._LI32q_semanticDesc{color:#8a919f;margin-top:2px;font-size:12px}._LI32q_semanticSwitch{background:var(--mkt-border-strong);cursor:not-allowed;opacity:.7;border-radius:10px;flex:none;width:34px;height:20px;position:relative}._LI32q_semanticSwitch:after{content:\"\";background:#fff;border-radius:50%;width:16px;height:16px;position:absolute;top:2px;left:2px;box-shadow:0 1px 2px #0003}._LI32q_hotTagsTitle{color:#8a919f;margin-bottom:8px;font-size:12px}._LI32q_tagCloud{flex-wrap:wrap;gap:6px;padding:0;display:flex}._LI32q_hotTag{color:var(--mkt-text2);cursor:pointer;user-select:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:5px 11px;font-size:12px;transition:all .14s}._LI32q_hotTag:hover{border-color:var(--mkt-brand-soft);color:#4d6bfe}._LI32q_hotTagOn{border-color:var(--mkt-brand-soft);color:var(--mkt-brand-strong);background:#eaf2fb;font-weight:500}._LI32q_tagMoreRow{margin:2px 0 4px}._LI32q_results{grid-template-columns:1fr 1fr;align-items:start;gap:12px;display:grid}._LI32q_results>*{min-width:0;max-width:100%}@media (width<=480px){._LI32q_results{grid-template-columns:1fr}}._LI32q_resultCount{color:var(--mkt-text2);margin:2px 0 10px;font-size:12px}._LI32q_resultCount b{color:var(--mkt-text)}._LI32q_loadMoreRow{text-align:center;margin:14px 0 6px}._LI32q_loadMore{color:var(--mkt-text);cursor:pointer;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:6px 14px;font-family:inherit;font-size:12.5px;font-weight:500;transition:background-color .14s,border-color .14s;box-shadow:0 1px 3px #0000000f}._LI32q_loadMore:hover{border-color:var(--mkt-border-strong);background:#f3f4f6}._LI32q_semanticResult{color:#8a919f;flex-wrap:wrap;align-items:center;gap:5px;font-size:12px;display:flex}._LI32q_emptyState{text-align:center;padding:56px 20px}._LI32q_emptyIcon{color:var(--mkt-border-strong);justify-content:center;margin-bottom:12px;display:flex}._LI32q_emptyIcon>svg{width:44px;height:44px}._LI32q_emptyTitle{color:var(--mkt-text);margin-bottom:5px;font-size:14px;font-weight:600}._LI32q_emptyDesc{color:#8a919f;margin-bottom:16px;font-size:12px}._LI32q_installedRow{border:1px solid #e5e7eb;border-radius:11px;align-items:flex-start;gap:11px;margin-bottom:9px;padding:13px;transition:box-shadow .15s,transform .15s;display:flex;box-shadow:0 1px 3px #0000000f}._LI32q_installedRow:hover{transform:translateY(-1px);box-shadow:0 2px 8px #0000001a}._LI32q_installedInfo{flex:1;min-width:0}._LI32q_installedHead{align-items:center;gap:8px;display:flex}._LI32q_installedName{color:var(--mkt-text);text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:600;overflow:hidden}._LI32q_installedMeta{color:#8a919f;margin-top:3px;font-size:12px}._LI32q_installedActions{flex-direction:column;flex:none;gap:6px;display:flex}._LI32q_unmatched{flex-wrap:wrap;gap:5px;margin-top:8px;display:flex}._LI32q_unmatchedChip{background:var(--mkt-chip-warn-bg);border:1px dashed var(--mkt-chip-gold-border);color:var(--mkt-chip-warn-text);border-radius:10px;padding:3px 8px;font-size:11.5px}._LI32q_unmatchedMore{color:#8a919f;align-self:center;font-size:11px}._LI32q_updateChip{background:var(--mkt-chip-gold-bg);border:1px solid var(--mkt-chip-gold-border);color:var(--mkt-chip-gold-text);border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_latestChip{background:var(--mkt-chip-green-bg);border:1px solid var(--mkt-chip-green-border);color:var(--mkt-chip-green-text);border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_updateHint{color:#8a919f;margin-top:5px;font-size:11.5px}._LI32q_activationChip{background:var(--mkt-brand-tint);border:1px solid var(--mkt-brand-soft);color:#4d6bfe;border-radius:10px;margin-top:5px;padding:1px 8px;font-size:11.5px;font-weight:500;display:inline-block}._LI32q_activationLive{background:var(--mkt-chip-green-bg);border:1px solid var(--mkt-chip-green-border);color:var(--mkt-chip-green-text)}._LI32q_activationBroken{background:var(--mkt-chip-red-bg);border:1px solid var(--mkt-chip-red-border);color:var(--mkt-chip-red-text)}._LI32q_activationInert{border:1px solid var(--mkt-border-strong);color:var(--mkt-text3);background:#f3f4f6}._LI32q_selfUpdateBar{background:var(--mkt-chip-gold-bg);border:1px solid var(--mkt-chip-gold-border);color:var(--mkt-chip-gold-text);border-radius:10px;align-items:center;gap:8px;margin:0 14px 10px;padding:8px 12px;font-size:12px;display:flex}._LI32q_selfUpdateText{text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;overflow:hidden}._LI32q_settingCard{background:#fff;border:1px solid #e5e7eb;border-radius:11px;margin-bottom:12px;padding:15px;box-shadow:0 1px 3px #0000000f}._LI32q_settingHead{align-items:center;gap:8px;margin-bottom:10px;display:flex}._LI32q_settingIc{color:#4d6bfe;background:#f3f4f6;border-radius:8px;flex:none;justify-content:center;align-items:center;width:26px;height:26px;display:flex}._LI32q_settingIc>svg{width:15px;height:15px}._LI32q_settingTitle{font-size:14px;font-weight:600}._LI32q_versionRow{border-top:1px solid #eef0f2;align-items:center;gap:8px;margin-top:10px;padding-top:10px;display:flex}._LI32q_versionLabel{color:var(--mkt-text2);flex:none;font-size:12px}._LI32q_versionCode{color:var(--mkt-text);background:#f3f4f6;border:1px solid #e5e7eb;border-radius:6px;padding:2px 8px;font-family:ui-monospace,Menlo,monospace;font-size:12px}._LI32q_settingStatus{border-radius:9px;margin-left:auto;padding:2px 8px;font-size:11.5px}._LI32q_statusOk{background:var(--mkt-chip-green-bg);color:var(--mkt-text-ok)}._LI32q_statusOff{color:#8a919f;background:#f3f4f6}._LI32q_statusWarn{background:var(--mkt-chip-warn-bg);color:var(--mkt-chip-warn-text)}._LI32q_settingsRow{align-items:center;gap:8px;display:flex}._LI32q_settingsLabel{color:var(--mkt-text2);white-space:nowrap;font-size:12px}._LI32q_ghTip{color:var(--mkt-text2);margin:0;font-size:12px;line-height:1.7}._LI32q_ghLink{color:#4d6bfe;align-items:center;gap:2px;text-decoration:none;display:inline-flex}._LI32q_ghLink:hover{text-decoration:underline}._LI32q_ghLogin{flex:1;font-size:13px;font-weight:600}._LI32q_ghRow{align-items:center;gap:8px;display:flex}._LI32q_deviceFlow{color:var(--mkt-text2);background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;flex-direction:column;gap:6px;padding:9px 11px;font-size:12px;display:flex}._LI32q_deviceCode{letter-spacing:2px;color:#4d6bfe;background:#fff;border-radius:6px;align-self:flex-start;padding:4px 8px;font-family:ui-monospace,Menlo,monospace;font-size:18px;font-weight:700}._LI32q_ghPollState{color:var(--mkt-text2);margin:0;font-size:12px}._LI32q_deviceFlow a{color:#4d6bfe}._LI32q_deviceFlowTip{color:#8a919f;margin:0;font-size:11.5px;line-height:1.6}._LI32q_ghDone{color:var(--mkt-text-ok);align-items:center;font-weight:500;display:inline-flex}._LI32q_field{margin-bottom:11px}._LI32q_fieldRow{gap:8px;display:flex}._LI32q_fieldRow>._LI32q_field{flex:1;margin-bottom:0}._LI32q_fieldLabel{color:var(--mkt-text2);margin-bottom:5px;font-size:12px;display:block}._LI32q_input,._LI32q_select{border:1px solid var(--mkt-border-strong);width:100%;height:34px;color:var(--mkt-text);background:#fff;border-radius:9px;outline:none;padding:0 10px;font-family:inherit;font-size:13px;transition:border-color .16s,box-shadow .16s}._LI32q_input:focus,._LI32q_select:focus{border-color:#4d6bfe;box-shadow:0 0 0 3px #4d6bfe24}._LI32q_input::placeholder{color:var(--mkt-text2)}._LI32q_error{color:var(--mkt-text-danger);margin:0;font-size:12px}._LI32q_warn{color:var(--mkt-chip-warn-text);align-items:center;margin:0;font-size:12px;display:flex}._LI32q_dividerLine{background:#eef0f2;height:1px;margin:13px 0}._LI32q_inlineIcon{vertical-align:-2px;flex:none;margin-right:4px;display:inline-block}._LI32q_modalBackdrop{z-index:120;background:#14161c6b;justify-content:center;align-items:center;display:flex;position:fixed;inset:0}._LI32q_modal{background:#fff;border-radius:14px;flex-direction:column;width:420px;max-width:92vw;padding:20px 22px;display:flex;overflow:hidden;box-shadow:0 12px 50px #0000003d}._LI32q_modalHead{justify-content:space-between;align-items:center;margin-bottom:12px;display:flex}._LI32q_modalTitle{font-size:15px;font-weight:600}._LI32q_modalClose{cursor:pointer;color:#8a919f;background:0 0;border:none;border-radius:7px;justify-content:center;align-items:center;width:28px;height:28px;padding:0;transition:background-color .14s;display:flex}._LI32q_modalClose:hover{color:var(--mkt-text);background:#f3f4f6}._LI32q_modalClose svg{width:16px;height:16px}._LI32q_modalBody{flex-direction:column;gap:10px;display:flex}._LI32q_modalDesc{color:var(--mkt-text2);margin:0;font-size:12.5px;line-height:1.6}._LI32q_modalActions{justify-content:flex-end;gap:8px;margin-top:8px;display:flex}._LI32q_modalSuccess{text-align:center;flex-direction:column;justify-content:center;align-items:center;gap:10px;display:flex}._LI32q_modalSuccessIcon{background:var(--mkt-chip-green-bg);width:44px;height:44px;color:var(--mkt-text-ok);border-radius:50%;justify-content:center;align-items:center;margin:0 auto;display:flex}._LI32q_modalSuccessIcon>svg{width:22px;height:22px}._LI32q_modalSuccessTitle{color:var(--mkt-text);font-size:14px;font-weight:600}._LI32q_modalError{color:var(--mkt-text-danger);word-break:break-all;align-items:center;font-size:13px;font-weight:600;display:flex}._LI32q_loading{text-align:center;color:#8a919f;padding:20px;font-size:12px}._LI32q_advanced{margin-top:2px}._LI32q_advanced summary{cursor:pointer;color:#8a919f;user-select:none;font-size:11px}._LI32q_advancedTip{color:#8a919f;margin:6px 0 0;font-size:11px;line-height:1.5}._LI32q_advancedCmd{color:var(--mkt-text2);white-space:pre-wrap;word-break:break-all;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;margin-top:6px;padding:9px 11px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.6;display:block}._LI32q_steps{align-items:center;margin-bottom:18px;display:flex}._LI32q_step{color:#8a919f;flex:1;align-items:center;gap:7px;font-size:12px;display:flex;position:relative}._LI32q_stepDot{border:1.5px solid var(--mkt-border-strong);color:#8a919f;background:#fff;border-radius:50%;flex:none;justify-content:center;align-items:center;width:20px;height:20px;font-size:11.5px;transition:all .2s;display:flex}._LI32q_stepActive{color:var(--mkt-text)}._LI32q_stepActive ._LI32q_stepDot{color:#4d6bfe;border-color:#4d6bfe}._LI32q_stepDone{color:var(--mkt-text)}._LI32q_stepDone ._LI32q_stepDot{color:#fff;background:#4d6bfe;border-color:#4d6bfe}._LI32q_stepBar{background:var(--mkt-border-strong);border-radius:1px;flex:1;height:1.5px;margin:0 6px}._LI32q_stepBarDone{background:#4d6bfe}._LI32q_toast{background:var(--mkt-inverse);color:#fff;z-index:200;pointer-events:none;border-radius:8px;padding:8px 16px;font-size:12.5px;animation:.22s _LI32q_toastIn;position:fixed;bottom:24px;left:50%;transform:translate(-50%);box-shadow:0 4px 16px #0003}@keyframes _LI32q_toastIn{0%{opacity:0;transform:translate(-50%)translateY(10px)}to{opacity:1;transform:translate(-50%)translateY(0)}}@media (prefers-color-scheme:dark){:root{--mkt-text:#e8eaed;--mkt-text2:#b3bac4;--mkt-text3:#a6aeba;--mkt-brand:#6d8bff;--mkt-brand-strong:#8aa5ff;--mkt-brand-tint:#6d8bff1a;--mkt-brand-soft:#6d8bff3d;--mkt-border:#2a2e36;--mkt-border-strong:#3a3f49;--mkt-divider:#262a31;--mkt-selected:#2e323a;--mkt-hover:#2a2e35;--mkt-bg:#171a1f;--mkt-inverse:#31353d;--mkt-surface-a:#1b1e24;--mkt-surface-b:#21252c;--mkt-surface-c:#262a32;--mkt-chip-warn-bg:#b4530929;--mkt-chip-warn-text:#fbbf24;--mkt-chip-gold-bg:#d9770629;--mkt-chip-gold-border:#d9770659;--mkt-chip-gold-text:#fbbf24;--mkt-chip-green-bg:#22c55e21;--mkt-chip-green-border:#22c55e4d;--mkt-chip-green-text:#4ade80;--mkt-chip-red-bg:#ef444421;--mkt-chip-red-border:#ef44444d;--mkt-chip-red-text:#f87171;--mkt-text-ok:#4ade80;--mkt-text-danger:#f87171;--mkt-rate-ok:#4ade80;--mkt-rate-warn:#fbbf24;--mkt-rate-danger:#f87171;--mkt-purple:#a78bfa;--mkt-purple-bg:#7c3aed29}._LI32q_panel{color-scheme:dark;box-shadow:0 8px 32px #00000080}}:root[style*=\"color-scheme: dark\"]{--mkt-text:#e8eaed;--mkt-text2:#9aa1a8;--mkt-text3:#8b93a1;--mkt-brand:#6d8bff;--mkt-brand-strong:#8aa5ff;--mkt-brand-tint:#6d8bff1a;--mkt-brand-soft:#6d8bff3d;--mkt-border:#2a2e36;--mkt-border-strong:#3a3f49;--mkt-divider:#262a31;--mkt-selected:#2e323a;--mkt-hover:#2a2e35;--mkt-bg:#171a1f;--mkt-inverse:#31353d;--mkt-surface-a:#1b1e24;--mkt-surface-b:#21252c;--mkt-surface-c:#262a32;--mkt-chip-warn-bg:#b4530929;--mkt-chip-warn-text:#fbbf24;--mkt-chip-gold-bg:#d9770629;--mkt-chip-gold-border:#d9770659;--mkt-chip-gold-text:#fbbf24;--mkt-chip-green-bg:#22c55e21;--mkt-chip-green-border:#22c55e4d;--mkt-chip-green-text:#4ade80;--mkt-chip-red-bg:#ef444421;--mkt-chip-red-border:#ef44444d;--mkt-chip-red-text:#f87171;--mkt-text-ok:#4ade80;--mkt-text-danger:#f87171;--mkt-rate-ok:#4ade80;--mkt-rate-warn:#fbbf24;--mkt-rate-danger:#f87171;--mkt-purple:#a78bfa;--mkt-purple-bg:#7c3aed29}:root[style*=\"color-scheme: dark\"] ._LI32q_panel{color-scheme:dark;box-shadow:0 8px 32px #00000080}:root[style*=\"color-scheme: dark\"] ._LI32q_trigger{color:#e8eaed}:root[style*=\"color-scheme: dark\"] ._LI32q_trigger:hover{color:#fff;background:#ffffff1a}:root[style*=\"color-scheme: dark\"] ._LI32q_trigger[data-active]{color:var(--mkt-brand);background:var(--mkt-hover)}._LI32q_panel{background:var(--mkt-surface-a)}._LI32q_card,._LI32q_settingCard,._LI32q_quizCard,._LI32q_modal{background:var(--mkt-surface-b)}._LI32q_btn,._LI32q_iconBtn,._LI32q_favBtn,._LI32q_repoBtn,._LI32q_quizChip,._LI32q_searchInput,._LI32q_filterChip,._LI32q_semanticToggle,._LI32q_semanticSwitch,._LI32q_hotTag,._LI32q_loadMore,._LI32q_deviceCode,._LI32q_select,._LI32q_stepDot{background:var(--mkt-surface-c)}._LI32q_btnPrimary,._LI32q_btnPrimary:hover,._LI32q_btnPrimary:active{background:var(--mkt-brand);border-color:var(--mkt-brand)}._LI32q_btnPrimary:hover{background:var(--mkt-brand-strong);border-color:var(--mkt-brand-strong)}._LI32q_btnDanger{background:var(--mkt-chip-red-bg);color:var(--mkt-text-danger);border-color:var(--mkt-chip-red-border)}._LI32q_outlet{border:1px solid var(--mkt-chip-red-border,#f3c9c9);text-align:center;background:#fff;border-radius:12px;max-width:460px;margin:18px auto;padding:20px 18px;box-shadow:0 1px 3px #0000000f}._LI32q_outletTitle{color:var(--mkt-text,#1f2328);margin-bottom:8px;font-size:14px;font-weight:600}._LI32q_outletMsg{max-width:420px;margin:0 auto 4px}._LI32q_outletMsg code{background:var(--mkt-chip-red-bg,#fdf1f1);color:var(--mkt-text-danger);word-break:break-all;text-align:left;white-space:pre-wrap;border-radius:8px;max-height:88px;padding:8px 10px;font-size:11.5px;line-height:1.5;display:block;overflow:auto}._LI32q_outletActions{flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px;display:flex}._LI32q_outletManual{text-align:left;margin-top:10px}._LI32q_outletManualTitle{color:var(--mkt-text,#1f2328);margin-bottom:4px;font-size:12px;font-weight:600}._LI32q_outletManualText{white-space:pre-wrap;word-break:break-all;cursor:copy;user-select:all;background:#f7f8fa;border:1px dashed #d0d4da;border-radius:8px;max-height:180px;margin:0;padding:8px 10px;font-size:11px;line-height:1.5;overflow:auto}._LI32q_outletHint{color:#8a919f;margin-top:12px;font-size:11px;line-height:1.6}._LI32q_semanticSwitch{cursor:pointer;opacity:1;transition:background .15s}._LI32q_semanticSwitchOn{background:var(--mkt-brand)}._LI32q_semanticSwitchOn:after{left:16px}";
 		const tagId = "@dsh-market/plugin/styles.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -114,190 +114,194 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var styles_module_css_default = {
-			"settingsRow": "_LI32q_settingsRow",
-			"reasonAi": "_LI32q_reasonAi",
-			"hotTagsTitle": "_LI32q_hotTagsTitle",
-			"deviceFlow": "_LI32q_deviceFlow",
-			"fieldLabel": "_LI32q_fieldLabel",
-			"sceneRow": "_LI32q_sceneRow",
-			"outletHint": "_LI32q_outletHint",
-			"cardReasons": "_LI32q_cardReasons",
-			"card": "_LI32q_card",
-			"quizDesc": "_LI32q_quizDesc",
-			"sceneInfo": "_LI32q_sceneInfo",
-			"ghLink": "_LI32q_ghLink",
-			"quizTags": "_LI32q_quizTags",
-			"semanticSwitchOn": "_LI32q_semanticSwitchOn",
-			"backdrop": "_LI32q_backdrop",
-			"cardActionHint": "_LI32q_cardActionHint",
-			"tag": "_LI32q_tag",
-			"searchWrap": "_LI32q_searchWrap",
-			"btnPrimary": "_LI32q_btnPrimary",
-			"recommendHint": "_LI32q_recommendHint",
-			"installedActions": "_LI32q_installedActions",
-			"cardTags": "_LI32q_cardTags",
-			"body": "_LI32q_body",
-			"subtitle": "_LI32q_subtitle",
+			"deviceFlowTip": "_LI32q_deviceFlowTip",
+			"tab": "_LI32q_tab",
+			"installedInfo": "_LI32q_installedInfo",
 			"ghLogin": "_LI32q_ghLogin",
-			"activationChip": "_LI32q_activationChip",
-			"ghDone": "_LI32q_ghDone",
-			"modalError": "_LI32q_modalError",
-			"trigger": "_LI32q_trigger",
-			"tabBody": "_LI32q_tabBody",
-			"tagOn": "_LI32q_tagOn",
-			"quizChipOn": "_LI32q_quizChipOn",
-			"emptyDesc": "_LI32q_emptyDesc",
-			"semanticDesc": "_LI32q_semanticDesc",
-			"outlet": "_LI32q_outlet",
-			"latestChip": "_LI32q_latestChip",
-			"quizActions": "_LI32q_quizActions",
-			"updateHint": "_LI32q_updateHint",
-			"advancedCmd": "_LI32q_advancedCmd",
-			"filterChip": "_LI32q_filterChip",
-			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
-			"title": "_LI32q_title",
-			"modeSwitchRow": "_LI32q_modeSwitchRow",
+			"modalBackdrop": "_LI32q_modalBackdrop",
+			"backdrop": "_LI32q_backdrop",
+			"activationBroken": "_LI32q_activationBroken",
+			"versionCode": "_LI32q_versionCode",
+			"modalBody": "_LI32q_modalBody",
+			"outletActions": "_LI32q_outletActions",
+			"modalSuccess": "_LI32q_modalSuccess",
+			"searchWrapIcon": "_LI32q_searchWrapIcon",
+			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
+			"unmatchedMore": "_LI32q_unmatchedMore",
+			"settingsLabel": "_LI32q_settingsLabel",
+			"ghRow": "_LI32q_ghRow",
 			"btnGhost": "_LI32q_btnGhost",
+			"header": "_LI32q_header",
+			"quizHeadIcon": "_LI32q_quizHeadIcon",
+			"section": "_LI32q_section",
+			"deviceCode": "_LI32q_deviceCode",
+			"fieldLabel": "_LI32q_fieldLabel",
+			"btn": "_LI32q_btn",
+			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
+			"stepDot": "_LI32q_stepDot",
+			"recommendHint": "_LI32q_recommendHint",
+			"spacer": "_LI32q_spacer",
+			"triggerIcon": "_LI32q_triggerIcon",
+			"installedRow": "_LI32q_installedRow",
+			"deviceFlow": "_LI32q_deviceFlow",
+			"advancedCmd": "_LI32q_advancedCmd",
+			"sceneEmpty": "_LI32q_sceneEmpty",
+			"searchInput": "_LI32q_searchInput",
+			"emptyTitle": "_LI32q_emptyTitle",
+			"outletManualTitle": "_LI32q_outletManualTitle",
+			"zhChip": "_LI32q_zhChip",
+			"loading": "_LI32q_loading",
+			"toastIn": "_LI32q_toastIn",
+			"reasonAi": "_LI32q_reasonAi",
+			"favBtn": "_LI32q_favBtn",
+			"semanticToggle": "_LI32q_semanticToggle",
+			"modalActions": "_LI32q_modalActions",
+			"cardBadge": "_LI32q_cardBadge",
+			"triggerLabel": "_LI32q_triggerLabel",
+			"cardHead": "_LI32q_cardHead",
+			"statusWarn": "_LI32q_statusWarn",
+			"ghDone": "_LI32q_ghDone",
+			"loadMoreRow": "_LI32q_loadMoreRow",
+			"btnDanger": "_LI32q_btnDanger",
+			"activationChip": "_LI32q_activationChip",
+			"cardTags": "_LI32q_cardTags",
+			"quizDesc": "_LI32q_quizDesc",
+			"hotTag": "_LI32q_hotTag",
+			"loadMore": "_LI32q_loadMore",
+			"settingStatus": "_LI32q_settingStatus",
+			"statusOk": "_LI32q_statusOk",
 			"quizChip": "_LI32q_quizChip",
+			"subtitle": "_LI32q_subtitle",
+			"unmatchedChip": "_LI32q_unmatchedChip",
+			"statusOff": "_LI32q_statusOff",
+			"steps": "_LI32q_steps",
+			"semanticResult": "_LI32q_semanticResult",
+			"quizTags": "_LI32q_quizTags",
+			"sectionIcon": "_LI32q_sectionIcon",
+			"iconBtn": "_LI32q_iconBtn",
+			"filterRow": "_LI32q_filterRow",
+			"tagCloud": "_LI32q_tagCloud",
+			"semanticDesc": "_LI32q_semanticDesc",
+			"selfUpdateBar": "_LI32q_selfUpdateBar",
+			"dividerLine": "_LI32q_dividerLine",
+			"grid2": "_LI32q_grid2",
+			"quizCta": "_LI32q_quizCta",
+			"sceneDesc": "_LI32q_sceneDesc",
+			"zhCatLabel": "_LI32q_zhCatLabel",
+			"tabBody": "_LI32q_tabBody",
+			"installedMeta": "_LI32q_installedMeta",
+			"error": "_LI32q_error",
+			"modalTitle": "_LI32q_modalTitle",
+			"step": "_LI32q_step",
+			"semanticTitle": "_LI32q_semanticTitle",
+			"btnSm": "_LI32q_btnSm",
+			"semanticSwitchOn": "_LI32q_semanticSwitchOn",
+			"tabs": "_LI32q_tabs",
+			"zhChipCount": "_LI32q_zhChipCount",
+			"hotTagsTitle": "_LI32q_hotTagsTitle",
+			"sceneName": "_LI32q_sceneName",
+			"body": "_LI32q_body",
+			"emptyIcon": "_LI32q_emptyIcon",
+			"quizTitle": "_LI32q_quizTitle",
+			"tabOn": "_LI32q_tabOn",
+			"tag": "_LI32q_tag",
+			"quizChipOn": "_LI32q_quizChipOn",
+			"sceneList": "_LI32q_sceneList",
+			"sceneRow": "_LI32q_sceneRow",
+			"versionLabel": "_LI32q_versionLabel",
+			"unmatched": "_LI32q_unmatched",
+			"tagMoreRow": "_LI32q_tagMoreRow",
+			"ghLink": "_LI32q_ghLink",
+			"inlineIcon": "_LI32q_inlineIcon",
+			"stepDone": "_LI32q_stepDone",
+			"results": "_LI32q_results",
+			"emptyState": "_LI32q_emptyState",
+			"sceneInfo": "_LI32q_sceneInfo",
+			"semanticPill": "_LI32q_semanticPill",
+			"panel": "_LI32q_panel",
+			"emptyDesc": "_LI32q_emptyDesc",
+			"cardStars": "_LI32q_cardStars",
+			"zhChipOn": "_LI32q_zhChipOn",
+			"quizHead": "_LI32q_quizHead",
+			"semanticSwitch": "_LI32q_semanticSwitch",
+			"updateHint": "_LI32q_updateHint",
+			"selfUpdateText": "_LI32q_selfUpdateText",
+			"modal": "_LI32q_modal",
+			"outletMsg": "_LI32q_outletMsg",
+			"outletHint": "_LI32q_outletHint",
+			"updateChip": "_LI32q_updateChip",
+			"ghTip": "_LI32q_ghTip",
+			"stepBarDone": "_LI32q_stepBarDone",
+			"quizActions": "_LI32q_quizActions",
+			"filterChipOn": "_LI32q_filterChipOn",
+			"installedActions": "_LI32q_installedActions",
+			"panelInMain": "_LI32q_panelInMain",
+			"sectionNote": "_LI32q_sectionNote",
+			"title": "_LI32q_title",
+			"reason": "_LI32q_reason",
+			"titleIcon": "_LI32q_titleIcon",
+			"favBtnOn": "_LI32q_favBtnOn",
+			"modalClose": "_LI32q_modalClose",
+			"repoBtn": "_LI32q_repoBtn",
+			"stepActive": "_LI32q_stepActive",
+			"iconBtnOn": "_LI32q_iconBtnOn",
+			"outletManual": "_LI32q_outletManual",
+			"settingCard": "_LI32q_settingCard",
+			"hotTagOn": "_LI32q_hotTagOn",
+			"cardActionHint": "_LI32q_cardActionHint",
+			"settingsRow": "_LI32q_settingsRow",
+			"trigger": "_LI32q_trigger",
+			"cardActions": "_LI32q_cardActions",
+			"mainHost": "_LI32q_mainHost",
+			"advanced": "_LI32q_advanced",
+			"outletTitle": "_LI32q_outletTitle",
+			"outlet": "_LI32q_outlet",
+			"sectionHead": "_LI32q_sectionHead",
+			"stateHint": "_LI32q_stateHint",
+			"activationInert": "_LI32q_activationInert",
+			"quizCount": "_LI32q_quizCount",
+			"cardDesc": "_LI32q_cardDesc",
+			"sectionTitle": "_LI32q_sectionTitle",
+			"cardReasons": "_LI32q_cardReasons",
+			"input": "_LI32q_input",
+			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
+			"modalHead": "_LI32q_modalHead",
+			"cardName": "_LI32q_cardName",
+			"searchWrap": "_LI32q_searchWrap",
+			"warn": "_LI32q_warn",
+			"outletManualText": "_LI32q_outletManualText",
+			"sceneHint": "_LI32q_sceneHint",
+			"stepBar": "_LI32q_stepBar",
+			"card": "_LI32q_card",
+			"toast": "_LI32q_toast",
+			"settingIc": "_LI32q_settingIc",
+			"filterChip": "_LI32q_filterChip",
+			"semanticInfo": "_LI32q_semanticInfo",
+			"settingTitle": "_LI32q_settingTitle",
+			"latestChip": "_LI32q_latestChip",
+			"headerClose": "_LI32q_headerClose",
+			"compatChip": "_LI32q_compatChip",
+			"settingHead": "_LI32q_settingHead",
+			"fieldRow": "_LI32q_fieldRow",
+			"needConfig": "_LI32q_needConfig",
+			"resultCount": "_LI32q_resultCount",
+			"advancedTip": "_LI32q_advancedTip",
+			"modalError": "_LI32q_modalError",
+			"ghPollState": "_LI32q_ghPollState",
+			"quizCard": "_LI32q_quizCard",
+			"recommendToolbar": "_LI32q_recommendToolbar",
+			"versionRow": "_LI32q_versionRow",
+			"installedName": "_LI32q_installedName",
+			"modeSwitchRow": "_LI32q_modeSwitchRow",
+			"searchClear": "_LI32q_searchClear",
+			"activationLive": "_LI32q_activationLive",
+			"installedHead": "_LI32q_installedHead",
+			"field": "_LI32q_field",
 			"modalDesc": "_LI32q_modalDesc",
 			"installedNote": "_LI32q_installedNote",
-			"loadMoreRow": "_LI32q_loadMoreRow",
-			"cardBadge": "_LI32q_cardBadge",
-			"quizCount": "_LI32q_quizCount",
-			"favBtnOn": "_LI32q_favBtnOn",
-			"panelInMain": "_LI32q_panelInMain",
-			"grid2": "_LI32q_grid2",
-			"sectionIcon": "_LI32q_sectionIcon",
-			"sectionNote": "_LI32q_sectionNote",
-			"stepActive": "_LI32q_stepActive",
-			"versionCode": "_LI32q_versionCode",
+			"tagOn": "_LI32q_tagOn",
 			"select": "_LI32q_select",
-			"unmatchedChip": "_LI32q_unmatchedChip",
-			"toast": "_LI32q_toast",
-			"recommendToolbar": "_LI32q_recommendToolbar",
-			"section": "_LI32q_section",
-			"triggerIcon": "_LI32q_triggerIcon",
-			"filterChipOn": "_LI32q_filterChipOn",
-			"dividerLine": "_LI32q_dividerLine",
-			"unmatched": "_LI32q_unmatched",
-			"results": "_LI32q_results",
-			"warn": "_LI32q_warn",
-			"advanced": "_LI32q_advanced",
-			"cardName": "_LI32q_cardName",
-			"sceneHint": "_LI32q_sceneHint",
-			"semanticPill": "_LI32q_semanticPill",
-			"sceneName": "_LI32q_sceneName",
-			"unmatchedMore": "_LI32q_unmatchedMore",
-			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
-			"step": "_LI32q_step",
-			"btnSm": "_LI32q_btnSm",
-			"quizCard": "_LI32q_quizCard",
-			"iconBtn": "_LI32q_iconBtn",
-			"favBtn": "_LI32q_favBtn",
-			"toastIn": "_LI32q_toastIn",
-			"installedInfo": "_LI32q_installedInfo",
-			"ghRow": "_LI32q_ghRow",
-			"quizHead": "_LI32q_quizHead",
-			"resultCount": "_LI32q_resultCount",
-			"installedRow": "_LI32q_installedRow",
-			"btn": "_LI32q_btn",
-			"sceneList": "_LI32q_sceneList",
-			"deviceFlowTip": "_LI32q_deviceFlowTip",
-			"input": "_LI32q_input",
-			"tabOn": "_LI32q_tabOn",
-			"statusWarn": "_LI32q_statusWarn",
-			"quizTitle": "_LI32q_quizTitle",
-			"error": "_LI32q_error",
-			"modalClose": "_LI32q_modalClose",
-			"modalSuccess": "_LI32q_modalSuccess",
-			"outletManual": "_LI32q_outletManual",
-			"tabs": "_LI32q_tabs",
-			"tagCloud": "_LI32q_tagCloud",
-			"versionRow": "_LI32q_versionRow",
-			"settingStatus": "_LI32q_settingStatus",
-			"hotTag": "_LI32q_hotTag",
-			"cardHead": "_LI32q_cardHead",
-			"emptyIcon": "_LI32q_emptyIcon",
-			"tagMoreRow": "_LI32q_tagMoreRow",
-			"installedHead": "_LI32q_installedHead",
-			"mainHost": "_LI32q_mainHost",
-			"tab": "_LI32q_tab",
-			"semanticInfo": "_LI32q_semanticInfo",
-			"ghTip": "_LI32q_ghTip",
-			"outletManualText": "_LI32q_outletManualText",
-			"semanticToggle": "_LI32q_semanticToggle",
-			"searchInput": "_LI32q_searchInput",
-			"ghPollState": "_LI32q_ghPollState",
-			"semanticResult": "_LI32q_semanticResult",
-			"sectionTitle": "_LI32q_sectionTitle",
-			"selfUpdateText": "_LI32q_selfUpdateText",
-			"statusOff": "_LI32q_statusOff",
-			"panel": "_LI32q_panel",
-			"stepBar": "_LI32q_stepBar",
-			"cardDesc": "_LI32q_cardDesc",
-			"installedName": "_LI32q_installedName",
-			"settingsLabel": "_LI32q_settingsLabel",
-			"activationLive": "_LI32q_activationLive",
-			"settingTitle": "_LI32q_settingTitle",
-			"quizCta": "_LI32q_quizCta",
-			"sceneEmpty": "_LI32q_sceneEmpty",
-			"installedMeta": "_LI32q_installedMeta",
-			"stepDone": "_LI32q_stepDone",
-			"settingHead": "_LI32q_settingHead",
-			"emptyTitle": "_LI32q_emptyTitle",
-			"stepBarDone": "_LI32q_stepBarDone",
-			"semanticSwitch": "_LI32q_semanticSwitch",
-			"btnDanger": "_LI32q_btnDanger",
-			"settingCard": "_LI32q_settingCard",
-			"field": "_LI32q_field",
-			"titleIcon": "_LI32q_titleIcon",
-			"semanticTitle": "_LI32q_semanticTitle",
-			"headerClose": "_LI32q_headerClose",
-			"versionLabel": "_LI32q_versionLabel",
-			"inlineIcon": "_LI32q_inlineIcon",
-			"modal": "_LI32q_modal",
-			"steps": "_LI32q_steps",
-			"outletMsg": "_LI32q_outletMsg",
-			"stateHint": "_LI32q_stateHint",
-			"outletTitle": "_LI32q_outletTitle",
-			"modalTitle": "_LI32q_modalTitle",
-			"loading": "_LI32q_loading",
-			"quizHeadIcon": "_LI32q_quizHeadIcon",
-			"selfUpdateBar": "_LI32q_selfUpdateBar",
-			"modalActions": "_LI32q_modalActions",
-			"compatChip": "_LI32q_compatChip",
-			"needConfig": "_LI32q_needConfig",
-			"stepDot": "_LI32q_stepDot",
-			"iconBtnOn": "_LI32q_iconBtnOn",
-			"fieldRow": "_LI32q_fieldRow",
-			"header": "_LI32q_header",
-			"modalHead": "_LI32q_modalHead",
-			"settingIc": "_LI32q_settingIc",
-			"searchClear": "_LI32q_searchClear",
-			"modalBody": "_LI32q_modalBody",
-			"hotTagOn": "_LI32q_hotTagOn",
-			"outletManualTitle": "_LI32q_outletManualTitle",
-			"triggerLabel": "_LI32q_triggerLabel",
-			"loadMore": "_LI32q_loadMore",
-			"emptyState": "_LI32q_emptyState",
-			"searchWrapIcon": "_LI32q_searchWrapIcon",
-			"advancedTip": "_LI32q_advancedTip",
-			"repoBtn": "_LI32q_repoBtn",
-			"filterRow": "_LI32q_filterRow",
-			"activationBroken": "_LI32q_activationBroken",
-			"sceneDesc": "_LI32q_sceneDesc",
-			"activationInert": "_LI32q_activationInert",
-			"cardActions": "_LI32q_cardActions",
-			"deviceCode": "_LI32q_deviceCode",
-			"sectionHead": "_LI32q_sectionHead",
-			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
-			"statusOk": "_LI32q_statusOk",
-			"cardStars": "_LI32q_cardStars",
-			"reason": "_LI32q_reason",
-			"updateChip": "_LI32q_updateChip",
-			"modalBackdrop": "_LI32q_modalBackdrop",
-			"spacer": "_LI32q_spacer",
-			"outletActions": "_LI32q_outletActions"
+			"btnPrimary": "_LI32q_btnPrimary"
 		};
 		//#endregion
 		//#region src/client/error-outlet.tsx
@@ -422,6 +426,1280 @@ window.__ModuleLoader__.load({
 			}, manual.text)) : null, El$1("div", { className: styles_module_css_default.outletHint }, "诊断只包含版本/环境与错误信息，不含对话内容与密钥。反复崩溃可到设置 Tab 检查插件更新。"));
 		}
 		//#endregion
+		//#region ../../schema/src/zh-intent.ts
+		const ZH_INTENTS = [
+			{
+				key: "记事本",
+				words: [
+					"记事本",
+					"便签",
+					"笔记本",
+					"记事",
+					"笔记"
+				],
+				terms: [
+					"#notes",
+					"#note",
+					"#notepad",
+					"便签",
+					"笔记",
+					"markdown"
+				]
+			},
+			{
+				key: "待办",
+				words: [
+					"待办",
+					"任务管理",
+					"清单",
+					"todo"
+				],
+				terms: [
+					"#todo",
+					"#task",
+					"#checklist",
+					"待办",
+					"任务",
+					"清单",
+					"任务看板",
+					"#kanban"
+				]
+			},
+			{
+				key: "翻译",
+				words: ["翻译", "translate"],
+				terms: [
+					"#translate",
+					"#translation",
+					"翻译"
+				]
+			},
+			{
+				key: "截图",
+				words: [
+					"截图",
+					"截屏",
+					"录屏"
+				],
+				terms: [
+					"#screenshot",
+					"#capture",
+					"#screen",
+					"截图",
+					"录屏",
+					"截图工具"
+				]
+			},
+			{
+				key: "下载",
+				words: ["下载"],
+				terms: [
+					"#download",
+					"#downloader",
+					"下载"
+				]
+			},
+			{
+				key: "天气",
+				words: ["天气"],
+				terms: ["#weather", "天气"]
+			},
+			{
+				key: "日历日程",
+				words: [
+					"日历",
+					"日程",
+					"闹钟",
+					"时钟"
+				],
+				terms: [
+					"#calendar",
+					"#schedule",
+					"#clock",
+					"#alarm",
+					"日历",
+					"日程",
+					"时钟"
+				]
+			},
+			{
+				key: "提醒",
+				words: ["提醒", "通知"],
+				terms: [
+					"#remind",
+					"#reminder",
+					"#notification",
+					"#notify",
+					"提醒",
+					"消息通知"
+				]
+			},
+			{
+				key: "聊天",
+				words: [
+					"聊天",
+					"对话",
+					"陪聊"
+				],
+				terms: [
+					"#chat",
+					"#chatbot",
+					"聊天",
+					"对话"
+				]
+			},
+			{
+				key: "邮件",
+				words: ["邮件", "邮箱"],
+				terms: [
+					"#mail",
+					"#email",
+					"#smtp",
+					"邮件"
+				]
+			},
+			{
+				key: "文件管理",
+				words: ["文件管理", "资源管理"],
+				terms: [
+					"#file",
+					"#files",
+					"#explorer",
+					"文件"
+				]
+			},
+			{
+				key: "图片",
+				words: [
+					"图片",
+					"相册",
+					"壁纸"
+				],
+				terms: [
+					"#image",
+					"#images",
+					"#photo",
+					"#wallpaper",
+					"图片",
+					"壁纸",
+					"相册",
+					"视觉理解",
+					"图像识别",
+					"图片问答",
+					"图像处理"
+				]
+			},
+			{
+				key: "绘画",
+				words: [
+					"画图",
+					"绘画",
+					"生图",
+					"文生图",
+					"画"
+				],
+				terms: [
+					"#draw",
+					"#drawing",
+					"stable-diffusion",
+					"#image-generation",
+					"绘画",
+					"生图"
+				]
+			},
+			{
+				key: "音乐",
+				words: [
+					"音乐",
+					"歌曲",
+					"听歌"
+				],
+				terms: [
+					"#music",
+					"#audio",
+					"音乐"
+				]
+			},
+			{
+				key: "视频",
+				words: ["视频"],
+				terms: ["#video", "视频"]
+			},
+			{
+				key: "播放器",
+				words: ["播放器"],
+				terms: ["#player", "播放器"]
+			},
+			{
+				key: "浏览器",
+				words: [
+					"浏览器",
+					"网页",
+					"上网"
+				],
+				terms: [
+					"#browser",
+					"#web",
+					"浏览器",
+					"网页"
+				]
+			},
+			{
+				key: "搜索引擎",
+				words: ["搜索引擎"],
+				terms: [
+					"#search",
+					"search-engine",
+					"搜索"
+				]
+			},
+			{
+				key: "代码开发",
+				words: [
+					"代码",
+					"编程",
+					"开发"
+				],
+				terms: [
+					"#code",
+					"#coding",
+					"#dev",
+					"代码",
+					"编程"
+				]
+			},
+			{
+				key: "Git",
+				words: [
+					"git",
+					"github",
+					"gitee",
+					"提交"
+				],
+				terms: [
+					"#git",
+					"#github",
+					"#gitee",
+					"#commit",
+					"版本控制"
+				]
+			},
+			{
+				key: "终端",
+				words: [
+					"终端",
+					"命令行",
+					"shell"
+				],
+				terms: [
+					"#terminal",
+					"#shell",
+					"#cli",
+					"终端",
+					"命令行"
+				]
+			},
+			{
+				key: "数据库",
+				words: ["数据库", "sql"],
+				terms: [
+					"#database",
+					"#sql",
+					"sqlite",
+					"mysql",
+					"数据库",
+					"数据库连接"
+				]
+			},
+			{
+				key: "爬虫",
+				words: ["爬虫", "抓取"],
+				terms: [
+					"#crawler",
+					"#scraper",
+					"#spider",
+					"爬虫",
+					"抓取"
+				]
+			},
+			{
+				key: "自动化",
+				words: ["自动化", "rpa"],
+				terms: [
+					"#automation",
+					"#automate",
+					"#workflow",
+					"任务编排",
+					"桌面自动化"
+				]
+			},
+			{
+				key: "剪贴板",
+				words: ["剪贴板"],
+				terms: ["#clipboard", "剪贴板"]
+			},
+			{
+				key: "压缩",
+				words: ["压缩", "解压"],
+				terms: [
+					"#zip",
+					"#compress",
+					"#archive",
+					"压缩",
+					"解压"
+				]
+			},
+			{
+				key: "PDF",
+				words: ["pdf"],
+				terms: ["#pdf"]
+			},
+			{
+				key: "办公文档",
+				words: [
+					"word",
+					"excel",
+					"ppt",
+					"表格",
+					"幻灯片",
+					"演示"
+				],
+				terms: [
+					"#excel",
+					"#word",
+					"#office",
+					"#xlsx",
+					"表格",
+					"幻灯片",
+					"#ppt"
+				]
+			},
+			{
+				key: "网盘",
+				words: ["网盘", "云盘"],
+				terms: [
+					"#cloud",
+					"#drive",
+					"网盘",
+					"云盘",
+					"#onedrive"
+				]
+			},
+			{
+				key: "密码",
+				words: ["密码"],
+				terms: ["#password", "密码"]
+			},
+			{
+				key: "加密",
+				words: ["加密", "解密"],
+				terms: [
+					"#encrypt",
+					"#crypto",
+					"加密"
+				]
+			},
+			{
+				key: "代理网络",
+				words: [
+					"代理",
+					"梯子",
+					"组网"
+				],
+				terms: [
+					"#proxy",
+					"#network",
+					"代理",
+					"网络",
+					"网络代理",
+					"内网穿透"
+				]
+			},
+			{
+				key: "网络诊断",
+				words: [
+					"ip",
+					"端口",
+					"ping"
+				],
+				terms: [
+					"#ip",
+					"#port",
+					"#tcp",
+					"#udp",
+					"#ping",
+					"端口"
+				]
+			},
+			{
+				key: "系统进程",
+				words: [
+					"系统",
+					"进程",
+					"任务管理"
+				],
+				terms: [
+					"#system",
+					"#process",
+					"系统",
+					"进程"
+				]
+			},
+			{
+				key: "清理",
+				words: [
+					"清理",
+					"垃圾",
+					"瘦身"
+				],
+				terms: [
+					"#clean",
+					"#cleanup",
+					"清理",
+					"垃圾"
+				]
+			},
+			{
+				key: "监控",
+				words: ["监控"],
+				terms: ["#monitor", "监控"]
+			},
+			{
+				key: "日志",
+				words: ["日志"],
+				terms: [
+					"#log",
+					"#logs",
+					"日志"
+				]
+			},
+			{
+				key: "番茄钟",
+				words: [
+					"番茄钟",
+					"专注",
+					"计时"
+				],
+				terms: [
+					"#pomodoro",
+					"#focus",
+					"#timer",
+					"番茄钟",
+					"专注",
+					"计时"
+				]
+			},
+			{
+				key: "计算换算",
+				words: [
+					"计算器",
+					"换算",
+					"单位"
+				],
+				terms: [
+					"#calculator",
+					"#convert",
+					"计算器",
+					"换算",
+					"数学计算"
+				]
+			},
+			{
+				key: "汇率",
+				words: ["汇率", "货币"],
+				terms: [
+					"#exchange",
+					"#currency",
+					"汇率"
+				]
+			},
+			{
+				key: "股票基金",
+				words: [
+					"股票",
+					"基金",
+					"a股",
+					"行情",
+					"炒股"
+				],
+				terms: [
+					"#stock",
+					"#finance",
+					"股票",
+					"基金",
+					"行情"
+				]
+			},
+			{
+				key: "加密货币",
+				words: [
+					"比特币",
+					"加密货币",
+					"币圈"
+				],
+				terms: [
+					"#bitcoin",
+					"#crypto",
+					"#blockchain",
+					"加密货币"
+				]
+			},
+			{
+				key: "AI大模型",
+				words: [
+					"大模型",
+					"llm",
+					"gpt",
+					"智能体",
+					"人工智能"
+				],
+				terms: [
+					"#ai",
+					"#llm",
+					"#gpt",
+					"#agent",
+					"大模型",
+					"人工智能"
+				]
+			},
+			{
+				key: "机器人",
+				words: ["机器人"],
+				terms: [
+					"#bot",
+					"#robot",
+					"机器人"
+				]
+			},
+			{
+				key: "问卷投票",
+				words: [
+					"问卷",
+					"投票",
+					"抽奖"
+				],
+				terms: [
+					"#survey",
+					"#poll",
+					"#quiz",
+					"问卷",
+					"投票",
+					"抽奖"
+				]
+			},
+			{
+				key: "游戏",
+				words: ["游戏", "摸鱼"],
+				terms: [
+					"#game",
+					"#games",
+					"游戏"
+				]
+			},
+			{
+				key: "娱乐",
+				words: [
+					"娱乐",
+					"段子",
+					"笑话"
+				],
+				terms: [
+					"#fun",
+					"#joke",
+					"#meme",
+					"娱乐",
+					"段子"
+				]
+			},
+			{
+				key: "新闻资讯",
+				words: [
+					"新闻",
+					"资讯",
+					"头条",
+					"热搜"
+				],
+				terms: [
+					"#news",
+					"#feed",
+					"#trending",
+					"新闻",
+					"资讯",
+					"热搜",
+					"新闻聚合"
+				]
+			},
+			{
+				key: "RSS订阅",
+				words: ["rss", "订阅"],
+				terms: [
+					"#rss",
+					"#feed",
+					"订阅"
+				]
+			},
+			{
+				key: "阅读",
+				words: [
+					"阅读",
+					"电子书",
+					"小说"
+				],
+				terms: [
+					"#read",
+					"#reader",
+					"#ebook",
+					"#novel",
+					"#epub",
+					"阅读",
+					"小说"
+				]
+			},
+			{
+				key: "学习背词",
+				words: [
+					"学习",
+					"背单词",
+					"单词",
+					"英语"
+				],
+				terms: [
+					"#learn",
+					"#study",
+					"#vocabulary",
+					"#english",
+					"学习",
+					"单词",
+					"英语"
+				]
+			},
+			{
+				key: "论文文献",
+				words: [
+					"论文",
+					"文献",
+					"学术"
+				],
+				terms: [
+					"#paper",
+					"#arxiv",
+					"#scholar",
+					"论文",
+					"文献"
+				]
+			},
+			{
+				key: "知识库",
+				words: [
+					"知识库",
+					"维基",
+					"wiki"
+				],
+				terms: [
+					"#wiki",
+					"#knowledge",
+					"知识库",
+					"维基"
+				]
+			},
+			{
+				key: "白板",
+				words: ["白板", "画布"],
+				terms: [
+					"#whiteboard",
+					"#canvas",
+					"白板",
+					"画布"
+				]
+			},
+			{
+				key: "思维导图",
+				words: ["思维导图"],
+				terms: [
+					"#mindmap",
+					"#mind",
+					"思维导图"
+				]
+			},
+			{
+				key: "流程图",
+				words: [
+					"流程图",
+					"图表",
+					"绘图"
+				],
+				terms: [
+					"#diagram",
+					"#flowchart",
+					"#mermaid",
+					"流程图",
+					"图表"
+				]
+			},
+			{
+				key: "OCR",
+				words: ["ocr", "文字识别"],
+				terms: ["#ocr", "文字识别"]
+			},
+			{
+				key: "语音合成",
+				words: [
+					"语音",
+					"朗读",
+					"tts",
+					"配音"
+				],
+				terms: [
+					"#tts",
+					"#speech",
+					"#voice",
+					"语音",
+					"朗读"
+				]
+			},
+			{
+				key: "语音识别",
+				words: [
+					"语音识别",
+					"听写",
+					"whisper"
+				],
+				terms: [
+					"#whisper",
+					"#asr",
+					"#stt",
+					"语音识别",
+					"听写",
+					"语音输入"
+				]
+			},
+			{
+				key: "字幕",
+				words: ["字幕"],
+				terms: ["#subtitle", "字幕"]
+			},
+			{
+				key: "视频下载",
+				words: [
+					"视频下载",
+					"youtube",
+					"油管",
+					"b站",
+					"bilibili",
+					"哔哩"
+				],
+				terms: [
+					"youtube",
+					"bilibili",
+					"yt-dlp",
+					"b站"
+				]
+			},
+			{
+				key: "微博",
+				words: ["微博"],
+				terms: ["weibo", "微博"]
+			},
+			{
+				key: "微信",
+				words: [
+					"微信",
+					"公众号",
+					"wechat"
+				],
+				terms: [
+					"wechat",
+					"weixin",
+					"微信",
+					"公众号"
+				]
+			},
+			{
+				key: "Twitter",
+				words: [
+					"twitter",
+					"tweet",
+					"推文"
+				],
+				terms: ["twitter", "tweet"]
+			},
+			{
+				key: "Telegram",
+				words: ["telegram"],
+				terms: ["telegram"]
+			},
+			{
+				key: "Discord",
+				words: ["discord"],
+				terms: ["discord"]
+			},
+			{
+				key: "飞书钉钉",
+				words: [
+					"飞书",
+					"钉钉",
+					"lark"
+				],
+				terms: [
+					"#feishu",
+					"#lark",
+					"#dingtalk",
+					"飞书",
+					"钉钉"
+				]
+			},
+			{
+				key: "Notion",
+				words: ["notion"],
+				terms: ["notion"]
+			},
+			{
+				key: "Obsidian",
+				words: ["obsidian"],
+				terms: ["obsidian"]
+			},
+			{
+				key: "MCP",
+				words: ["mcp", "mcp服务器"],
+				terms: [
+					"#mcp",
+					"mcp-server",
+					"MCP管理",
+					"MCP调试"
+				]
+			},
+			{
+				key: "备份恢复",
+				words: ["备份", "恢复"],
+				terms: [
+					"#backup",
+					"#restore",
+					"备份",
+					"恢复"
+				]
+			},
+			{
+				key: "同步",
+				words: ["同步"],
+				terms: ["#sync", "同步"]
+			},
+			{
+				key: "主题美化",
+				words: [
+					"主题",
+					"美化",
+					"皮肤"
+				],
+				terms: [
+					"#theme",
+					"#themes",
+					"主题",
+					"美化"
+				]
+			},
+			{
+				key: "字体",
+				words: ["字体"],
+				terms: [
+					"#font",
+					"#fonts",
+					"字体"
+				]
+			},
+			{
+				key: "颜色配色",
+				words: [
+					"颜色",
+					"配色",
+					"色板"
+				],
+				terms: [
+					"#color",
+					"#palette",
+					"颜色",
+					"配色"
+				]
+			},
+			{
+				key: "图标",
+				words: ["图标"],
+				terms: [
+					"#icon",
+					"#icons",
+					"图标"
+				]
+			},
+			{
+				key: "二维码",
+				words: ["二维码", "扫码"],
+				terms: [
+					"#qrcode",
+					"#qr",
+					"二维码"
+				]
+			},
+			{
+				key: "短链",
+				words: ["短链", "短网址"],
+				terms: [
+					"#shorten",
+					"url-shortener",
+					"短链"
+				]
+			},
+			{
+				key: "正则",
+				words: ["正则"],
+				terms: [
+					"#regex",
+					"#regexp",
+					"正则"
+				]
+			},
+			{
+				key: "格式化",
+				words: ["格式化", "美化代码"],
+				terms: [
+					"#format",
+					"#formatter",
+					"#prettier",
+					"格式化"
+				]
+			},
+			{
+				key: "JSON",
+				words: ["json"],
+				terms: ["#json"]
+			},
+			{
+				key: "CSV",
+				words: ["csv"],
+				terms: ["#csv", "#tsv"]
+			},
+			{
+				key: "API调试",
+				words: [
+					"api",
+					"接口",
+					"mock"
+				],
+				terms: [
+					"#api",
+					"#mock",
+					"#rest",
+					"接口"
+				]
+			},
+			{
+				key: "测试",
+				words: ["测试"],
+				terms: [
+					"#test",
+					"#testing",
+					"测试"
+				]
+			},
+			{
+				key: "Docker",
+				words: ["docker", "容器"],
+				terms: [
+					"#docker",
+					"#container",
+					"容器"
+				]
+			},
+			{
+				key: "服务器运维",
+				words: [
+					"服务器",
+					"运维",
+					"部署"
+				],
+				terms: [
+					"#deploy",
+					"#ops",
+					"#devops",
+					"服务器",
+					"部署",
+					"运维"
+				]
+			},
+			{
+				key: "SSH远程",
+				words: ["ssh", "远程"],
+				terms: [
+					"#ssh",
+					"#remote",
+					"远程"
+				]
+			},
+			{
+				key: "图床上传",
+				words: ["图床", "上传"],
+				terms: [
+					"#upload",
+					"image-hosting",
+					"图床",
+					"上传"
+				]
+			},
+			{
+				key: "磁力种子",
+				words: [
+					"磁力",
+					"种子",
+					"bt",
+					"迅雷"
+				],
+				terms: [
+					"#torrent",
+					"#magnet",
+					"#bt",
+					"种子",
+					"磁力"
+				]
+			},
+			{
+				key: "总结摘要",
+				words: [
+					"总结",
+					"摘要",
+					"概要"
+				],
+				terms: [
+					"#summary",
+					"#summarize",
+					"总结",
+					"摘要"
+				]
+			},
+			{
+				key: "写作文案",
+				words: [
+					"写作",
+					"文案",
+					"改写"
+				],
+				terms: [
+					"#write",
+					"#writing",
+					"写作",
+					"文案",
+					"内容创作"
+				]
+			},
+			{
+				key: "代码审查",
+				words: [
+					"审查",
+					"评审",
+					"review"
+				],
+				terms: [
+					"#review",
+					"code-review",
+					"审查"
+				]
+			},
+			{
+				key: "面试",
+				words: ["面试"],
+				terms: ["#interview", "面试"]
+			},
+			{
+				key: "简历",
+				words: ["简历"],
+				terms: [
+					"#resume",
+					"#cv",
+					"简历"
+				]
+			},
+			{
+				key: "健康健身",
+				words: [
+					"健康",
+					"健身",
+					"体重"
+				],
+				terms: [
+					"#health",
+					"#fitness",
+					"健康",
+					"健身"
+				]
+			},
+			{
+				key: "记账",
+				words: [
+					"记账",
+					"账单",
+					"花销"
+				],
+				terms: [
+					"#expense",
+					"#billing",
+					"记账",
+					"账单"
+				]
+			},
+			{
+				key: "农历节日",
+				words: [
+					"农历",
+					"节日",
+					"假期"
+				],
+				terms: [
+					"#lunar",
+					"#holiday",
+					"农历",
+					"节日"
+				]
+			},
+			{
+				key: "随机抽签",
+				words: [
+					"随机",
+					"抽签",
+					"骰子"
+				],
+				terms: [
+					"#random",
+					"#dice",
+					"随机"
+				]
+			},
+			{
+				key: "桌宠",
+				words: ["桌宠", "桌面宠物"],
+				terms: ["#desktop-pet", "桌宠"]
+			},
+			{
+				key: "数据分析",
+				words: ["数据分析", "数据统计"],
+				terms: [
+					"#data-analysis",
+					"#analytics",
+					"数据分析",
+					"数据统计"
+				]
+			},
+			{
+				key: "多模态",
+				words: ["多模态"],
+				terms: [
+					"#multimodal",
+					"#multi-modal",
+					"多模态"
+				]
+			},
+			{
+				key: "提示词",
+				words: ["提示词", "prompt"],
+				terms: [
+					"#prompt",
+					"提示词管理",
+					"提示词优化"
+				]
+			},
+			{
+				key: "报告生成",
+				words: [
+					"报告生成",
+					"周报",
+					"日报"
+				],
+				terms: [
+					"#report",
+					"报告生成",
+					"周报",
+					"日报"
+				]
+			}
+		];
+		/** 词边界匹配标记前缀（见文件头设计约定） */
+		const TOKEN_MARK = "#";
+		/** 该召回词是否为词边界（token）匹配 */
+		function isTokenTerm(term) {
+			return term.startsWith(TOKEN_MARK);
+		}
+		/** 去掉词边界标记后的实际匹配词 */
+		function rawTerm(term) {
+			return isTokenTerm(term) ? term.slice(1) : term;
+		}
+		const tokenRegexCache = /* @__PURE__ */ new Map();
+		/**
+		* 词边界（token）匹配：`term` 在文本中作为独立词出现才命中。
+		* 边界 = 非小写字母数字（大小写不敏感，文本需先转小写）——
+		* "ai-chat" 命中 "ai"、"AI聊天" 命中（CJK 是边界）、"email"/"main" 不命中。
+		*/
+		function tokenInText(term, text) {
+			let re = tokenRegexCache.get(term);
+			if (!re) {
+				const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+				re = new RegExp(`(?:^|[^a-z0-9])${escaped}(?![a-z0-9])`, "i");
+				tokenRegexCache.set(term, re);
+			}
+			return re.test(text);
+		}
+		//#endregion
+		//#region ../../schema/src/zh-taxonomy.ts
+		/** 实用分归一读取（全量 score.total / lite scoreTotal 双形态） */
+		function facetScoreOf(p) {
+			return p.score?.total ?? p.scoreTotal ?? 0;
+		}
+		/** 对单个插件判断一组召回词的命中层级。hay 传 null 时跳过弱信号判定。 */
+		function matchTerms(nameLower, fullNameLower, tagsLower, hay, terms) {
+			let weak = false;
+			for (const t of terms) {
+				const raw = rawTerm(t);
+				if (tagsLower.includes(raw)) return "strong";
+				if (isTokenTerm(t)) {
+					if (tokenInText(raw, nameLower) || tokenInText(raw, fullNameLower)) return "strong";
+					if (hay !== null && !weak && tokenInText(raw, hay)) weak = true;
+				} else {
+					if (nameLower.includes(raw) || fullNameLower.includes(raw)) return "strong";
+					if (hay !== null && !weak && hay.includes(raw)) weak = true;
+				}
+			}
+			return weak ? "weak" : null;
+		}
+		/** 意图 key → 召回词（查不到返回 null；分类过滤 UI 用） */
+		function intentTerms(key) {
+			return ZH_INTENTS.find((it) => it.key === key)?.terms ?? null;
+		}
+		/**
+		* 为全库构建中文分类 facets。只统计强信号（browse 场景，精度优先，
+		* "宁缺毋滥"与词典设计约定一致）；少于 minCount 个插件的意图不展示。
+		* 按覆盖数降序；一次性 O(意图数 × 插件数)，9k × ~100 在首页加载时约百毫秒级。
+		*/
+		function buildZhFacets(plugins, minCount = 3) {
+			const lowered = /* @__PURE__ */ new Map();
+			for (const p of plugins) lowered.set(p, {
+				name: p.name.toLowerCase(),
+				full: p.fullName.toLowerCase(),
+				tags: p.tags.map((t) => t.toLowerCase())
+			});
+			const out = [];
+			for (const it of ZH_INTENTS) {
+				const strong = [];
+				for (const p of plugins) {
+					const l = lowered.get(p);
+					if (matchTerms(l.name, l.full, l.tags, null, it.terms) === "strong") strong.push(p);
+				}
+				if (strong.length >= minCount) {
+					strong.sort((a, b) => facetScoreOf(b) - facetScoreOf(a));
+					out.push({
+						key: it.key,
+						count: strong.length,
+						plugins: strong
+					});
+				}
+			}
+			return out.sort((a, b) => b.count - a.count);
+		}
+		//#endregion
 		//#region src/client/panel.tsx
 		/**
 		* 插件市场面板（5-tab：推荐 / 搜索 / 收藏 / 已装 / 设置）
@@ -476,7 +1754,8 @@ window.__ModuleLoader__.load({
 					"效率工具",
 					"开发辅助",
 					"AI 增强",
-					"AI增强"
+					"AI增强",
+					"自动化"
 				].includes(t)) continue;
 				counts.set(t, (counts.get(t) ?? 0) + 1);
 			}
@@ -1077,6 +2356,7 @@ window.__ModuleLoader__.load({
 			const [semanticTags, setSemanticTags] = (0, react.useState)([]);
 			const [hotExpanded, setHotExpanded] = (0, react.useState)(false);
 			const [visible, setVisible] = (0, react.useState)(50);
+			const [zhCat, setZhCat] = (0, react.useState)("");
 			const debounceRef = (0, react.useRef)(null);
 			(0, react.useEffect)(() => {
 				if (searchSeed) {
@@ -1086,6 +2366,15 @@ window.__ModuleLoader__.load({
 			}, []);
 			const hotAll = (0, react.useMemo)(() => aggregateHotTags(plugins, 40), [plugins]);
 			const hot = hotExpanded ? hotAll : hotAll.slice(0, 8);
+			const zhFacets = (0, react.useMemo)(() => buildZhFacets(plugins, 3), [plugins]);
+			const zhVisible = (0, react.useMemo)(() => {
+				const top = zhFacets.slice(0, 12);
+				if (zhCat && !top.some((f) => f.key === zhCat)) {
+					const sel = zhFacets.find((f) => f.key === zhCat);
+					if (sel) return [sel, ...top.slice(0, 11)];
+				}
+				return top;
+			}, [zhFacets, zhCat]);
 			(0, react.useEffect)(() => {
 				if (debounceRef.current) clearTimeout(debounceRef.current);
 				debounceRef.current = setTimeout(() => {
@@ -1098,29 +2387,44 @@ window.__ModuleLoader__.load({
 				query,
 				tags,
 				type,
-				semanticOn
+				semanticOn,
+				zhCat
 			]);
 			const runSearch = async () => {
 				setSearching(true);
 				setVisible(50);
 				try {
+					if (!query.trim() && zhCat) {
+						const members = (zhFacets.find((f) => f.key === zhCat)?.plugins ?? []).filter((p) => type === "all" || p.type === type);
+						setSemanticTags([]);
+						setResults(members.map((p) => ({
+							plugin: p,
+							relevance: 100,
+							tagHits: 0
+						})));
+						return;
+					}
+					let out = null;
 					if (semanticOn && query.trim().length >= 2) {
 						const r = await api("search:semantic", { query });
 						setSemanticTags(r.tags);
-						if (r.results.length > 0) {
-							setResults(r.results);
-							return;
-						}
+						if (r.results.length > 0) out = r.results;
 					}
-					setSemanticTags([]);
-					const opts = { limit: 0 };
-					if (tags.length) opts.tags = tags;
-					if (type !== "all") opts.type = type;
-					const r = await api("search", {
-						query,
-						options: opts
-					});
-					setResults(r);
+					if (!out) {
+						setSemanticTags([]);
+						const opts = { limit: 0 };
+						if (tags.length) opts.tags = tags;
+						if (type !== "all") opts.type = type;
+						out = await api("search", {
+							query,
+							options: opts
+						});
+					}
+					if (zhCat && out) {
+						const terms = intentTerms(zhCat) ?? [];
+						out = out.filter((r) => matchTerms(r.plugin.name.toLowerCase(), r.plugin.fullName.toLowerCase(), (r.plugin.tags ?? []).map((t) => t.toLowerCase()), null, terms) === "strong");
+					}
+					setResults(out ?? []);
 				} catch {
 					setResults([]);
 				} finally {
@@ -1153,7 +2457,12 @@ window.__ModuleLoader__.load({
 				key: v,
 				className: `${styles_module_css_default.filterChip} ${type === v ? styles_module_css_default.filterChipOn : ""}`,
 				onClick: () => setType(v)
-			}, label))), El("div", { className: styles_module_css_default.semanticToggle }, El("div", { className: styles_module_css_default.semanticInfo }, El("div", { className: styles_module_css_default.semanticTitle }, "AI 语义搜索", El("span", { className: styles_module_css_default.semanticPill }, "实验")), El("div", { className: styles_module_css_default.semanticDesc }, "理解自然语言需求并精排（消耗少量 token）。普通搜索已内置中文口语匹配，无需开启。")), El("div", {
+			}, label))), zhVisible.length > 0 ? El("div", { className: styles_module_css_default.filterRow }, El("span", { className: styles_module_css_default.zhCatLabel }, "中文分类："), ...zhVisible.map((f) => El("span", {
+				key: f.key,
+				className: `${styles_module_css_default.zhChip} ${zhCat === f.key ? styles_module_css_default.zhChipOn : ""}`,
+				title: `按「${f.key}」浏览 · ${f.count} 个插件（词典强信号匹配）`,
+				onClick: () => setZhCat((v) => v === f.key ? "" : f.key)
+			}, f.key, El("em", { className: styles_module_css_default.zhChipCount }, String(f.count))))) : null, El("div", { className: styles_module_css_default.semanticToggle }, El("div", { className: styles_module_css_default.semanticInfo }, El("div", { className: styles_module_css_default.semanticTitle }, "AI 语义搜索", El("span", { className: styles_module_css_default.semanticPill }, "实验")), El("div", { className: styles_module_css_default.semanticDesc }, "理解自然语言需求并精排（消耗少量 token）。普通搜索已内置中文口语匹配，无需开启。")), El("div", {
 				className: `${styles_module_css_default.semanticSwitch} ${semanticOn ? styles_module_css_default.semanticSwitchOn : ""}`,
 				role: "switch",
 				"aria-checked": semanticOn,
@@ -1170,7 +2479,7 @@ window.__ModuleLoader__.load({
 				key: t,
 				className: `${styles_module_css_default.hotTag} ${tags.includes(t) ? styles_module_css_default.hotTagOn : ""}`,
 				onClick: () => toggleTag(t)
-			}, t))) : null, searching && results.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "搜索中…") : results.length === 0 && query === "" && tags.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "输入关键词或选择标签开始搜索") : results.length === 0 ? El("div", { className: styles_module_css_default.emptyState }, El("div", { className: styles_module_css_default.emptyIcon }, El(Icon, {
+			}, t))) : null, searching && results.length === 0 ? El("div", { className: styles_module_css_default.stateHint }, "搜索中…") : results.length === 0 && query === "" && tags.length === 0 && !zhCat ? El("div", { className: styles_module_css_default.stateHint }, "输入关键词、选择中文分类或标签开始搜索") : results.length === 0 ? El("div", { className: styles_module_css_default.emptyState }, El("div", { className: styles_module_css_default.emptyIcon }, El(Icon, {
 				d: ICON_SEARCH,
 				size: 44
 			})), El("div", { className: styles_module_css_default.emptyTitle }, "没有找到匹配的插件"), El("div", { className: styles_module_css_default.emptyDesc }, "换个关键词或标签试试。")) : El("div", null, El("div", { className: styles_module_css_default.resultCount }, "共 ", El("b", null, String(results.length)), " 个结果"), El("div", { className: styles_module_css_default.results }, ...results.slice(0, visible).map((r) => El(PluginCard, {
@@ -1382,6 +2691,9 @@ window.__ModuleLoader__.load({
 			const [profileName, setProfileName] = (0, react.useState)("web");
 			const [versions, setVersions] = (0, react.useState)({});
 			const [logState, setLogState] = (0, react.useState)("");
+			const [backupBusy, setBackupBusy] = (0, react.useState)("");
+			const [importSummary, setImportSummary] = (0, react.useState)("");
+			const backupFileRef = (0, react.useRef)(null);
 			(0, react.useEffect)(() => {
 				setMode(profile?.modeOverride ?? "auto");
 				api("config").then((c) => {
@@ -1399,6 +2711,57 @@ window.__ModuleLoader__.load({
 			const [ghPoll, setGhPoll] = (0, react.useState)("idle");
 			const [pollDetail, setPollDetail] = (0, react.useState)("");
 			const [pollCount, setPollCount] = (0, react.useState)(0);
+			/** 导出：RPC 取备份对象 → 浏览器下载 JSON（含收藏；绝不含凭据） */
+			const exportBackup = async () => {
+				setBackupBusy("exporting");
+				try {
+					const backup = await api("backup:export", { favorites: readFavorites() });
+					const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+					const url = URL.createObjectURL(blob);
+					const a = document.createElement("a");
+					a.href = url;
+					a.download = `dsh-market-backup-${(/* @__PURE__ */ new Date()).toISOString().slice(0, 10)}.json`;
+					a.click();
+					URL.revokeObjectURL(url);
+					toast("备份已导出（浏览器下载）");
+				} catch (e) {
+					toast(`导出失败：${e.message}`, 3500);
+				} finally {
+					setBackupBusy("");
+				}
+			};
+			/** 导入：读 JSON → RPC 合并恢复（补装缺失、不动后来装的）→ 收藏并集合并 */
+			const onBackupFile = (e) => {
+				const file = e.target.files?.[0];
+				e.target.value = "";
+				if (!file || backupBusy) return;
+				(async () => {
+					setBackupBusy("importing");
+					setImportSummary("");
+					try {
+						let backup;
+						try {
+							backup = JSON.parse(await file.text());
+						} catch {
+							throw new Error("文件不是合法 JSON");
+						}
+						const r = await api("backup:import", { backup });
+						const incoming = backup.favorites ?? [];
+						if (incoming.length > 0) writeFavorites([.../* @__PURE__ */ new Set([...readFavorites(), ...incoming])]);
+						setImportSummary(`补装 ${r.restored.length} · 本机已有 ${r.already.length} · 未匹配 ${r.unmatched.length}` + (r.failed.length ? ` · 失败 ${r.failed.length}` : "") + (r.requiresRestart ? " · 重启 harness 后生效" : ""));
+						if (r.failed.length > 0) {
+							const names = r.failed.slice(0, 3).map((f) => f.name).join("、");
+							setImportSummary((s) => `${s}\n失败：${names}${r.failed.length > 3 ? " 等" : ""}`);
+						}
+						onChanged();
+						toast(r.failed.length === 0 ? "备份恢复完成" : "备份恢复完成（部分条目失败，见摘要）", 3600);
+					} catch (err) {
+						toast(`导入失败：${err.message}`, 4e3);
+					} finally {
+						setBackupBusy("");
+					}
+				})();
+			};
 			const pollIntervalRef = (0, react.useRef)(null);
 			const clearPoll = () => {
 				if (pollIntervalRef.current !== null) {
@@ -1568,6 +2931,29 @@ window.__ModuleLoader__.load({
 				className: styles_module_css_default.btn,
 				onClick: onChanged
 			}, "刷新推荐数据")), El("div", { className: styles_module_css_default.settingCard }, El("div", { className: styles_module_css_default.settingHead }, El("span", { className: styles_module_css_default.settingIc }, El(Icon, {
+				d: ICON_PACKAGE,
+				size: 15
+			})), El("span", { className: styles_module_css_default.settingTitle }, "备份与恢复")), El("p", { className: styles_module_css_default.ghTip }, "导出已装清单 / 收藏 / 偏好为 JSON；换机或重装后导入，只补装缺失的插件，绝不动后来装的。备份不含任何凭据。"), El("div", { className: styles_module_css_default.settingsRow }, El("button", {
+				className: styles_module_css_default.btn,
+				disabled: backupBusy !== "",
+				onClick: () => void exportBackup()
+			}, backupBusy === "exporting" ? "导出中…" : "导出备份"), El("button", {
+				className: styles_module_css_default.btn,
+				disabled: backupBusy !== "",
+				onClick: () => backupFileRef.current?.click()
+			}, backupBusy === "importing" ? "恢复中…" : "导入恢复"), El("input", {
+				type: "file",
+				accept: "application/json,.json",
+				style: { display: "none" },
+				ref: backupFileRef,
+				onChange: onBackupFile
+			})), importSummary ? El("p", {
+				className: styles_module_css_default.ghTip,
+				style: {
+					whiteSpace: "pre-line",
+					marginTop: 6
+				}
+			}, importSummary) : null), El("div", { className: styles_module_css_default.settingCard }, El("div", { className: styles_module_css_default.settingHead }, El("span", { className: styles_module_css_default.settingIc }, El(Icon, {
 				d: ICON_CLOCK,
 				size: 15
 			})), El("span", { className: styles_module_css_default.settingTitle }, "关于")), El("p", { className: styles_module_css_default.ghTip }, "数据缓存于本地（GitHub Actions 每日抓取）。"), versions["@dsh-market/plugin"] ? El("div", { className: styles_module_css_default.versionRow }, El("span", { className: styles_module_css_default.versionLabel }, "插件版本"), El("code", { className: styles_module_css_default.versionCode }, `${versions["@dsh-market/plugin"] ?? "?"}`, versions["@dsh-market/core"] ? ` · core ${versions["@dsh-market/core"]}` : "")) : null, El("div", { className: styles_module_css_default.versionRow }, El("button", {
@@ -1739,7 +3125,8 @@ window.__ModuleLoader__.load({
 								"效率工具",
 								"开发辅助",
 								"AI 增强",
-								"AI增强"
+								"AI增强",
+								"自动化"
 							].includes(t)) continue;
 							counts.set(t, (counts.get(t) ?? 0) + 1);
 						}

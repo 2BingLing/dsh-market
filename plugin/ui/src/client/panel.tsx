@@ -21,6 +21,8 @@ import {
 import { getOpen, setOpen, subscribe } from './store.ts'
 import { MarketLogo } from './logo.tsx'
 import { Boundary, ErrorOutlet, buildDiagnostics, copyText } from './error-outlet.tsx'
+// §5.3 中文分类（词典推导，纯 TS 零 node 依赖，client 打包内联安全；与 web 端同一份实现）
+import { buildZhFacets, intentTerms, matchTerms } from '@dsh-market/schema/zh-taxonomy'
 import styles from './styles.module.css'
 
 /** GitHub 设备流 client_id（dsh-market GitHub App，公开值非机密） */
@@ -73,7 +75,7 @@ function aggregateHotTags(plugins: LitePlugin[], n = 14): string[] {
   for (const p of plugins) {
     for (const t of p.tags) {
       if (!/[\u4e00-\u9fff]/.test(t)) continue
-      if (['效率工具', '开发辅助', 'AI 增强', 'AI增强'].includes(t)) continue
+      if (['效率工具', '开发辅助', 'AI 增强', 'AI增强', '自动化'].includes(t)) continue
       counts.set(t, (counts.get(t) ?? 0) + 1)
     }
   }
@@ -916,6 +918,8 @@ function SearchTab(props: {
   const [semanticTags, setSemanticTags] = useState<string[]>([])
   const [hotExpanded, setHotExpanded] = useState(false)
   const [visible, setVisible] = useState(50)
+  // §5.3 中文分类（单选 facet；词典与 web TagPanel 同一份，强信号推导）
+  const [zhCat, setZhCat] = useState('')
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // 从标签点击带入的初始查询
@@ -928,6 +932,17 @@ function SearchTab(props: {
 
   const hotAll = useMemo(() => aggregateHotTags(plugins, 40), [plugins])
   const hot = hotExpanded ? hotAll : hotAll.slice(0, 8)
+  // 中文分类 facets：一次性推导（9k × ~104 意图，sub-second；切 Tab 时算好复用）
+  const zhFacets = useMemo(() => buildZhFacets(plugins, 3), [plugins])
+  // 展示集：top 12 + 当前选中置顶（与 web TagPanel 同约定）
+  const zhVisible = useMemo(() => {
+    const top = zhFacets.slice(0, 12)
+    if (zhCat && !top.some((f) => f.key === zhCat)) {
+      const sel = zhFacets.find((f) => f.key === zhCat)
+      if (sel) return [sel, ...top.slice(0, 11)]
+    }
+    return top
+  }, [zhFacets, zhCat])
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -937,12 +952,22 @@ function SearchTab(props: {
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current)
     }
-  }, [query, tags, type, semanticOn])
+  }, [query, tags, type, semanticOn, zhCat])
 
   const runSearch = async () => {
     setSearching(true)
     setVisible(50)
     try {
+      // 中文分类浏览：空查询 = 直接按该类强信号成员展示（不发生 RPC）
+      if (!query.trim() && zhCat) {
+        const members = (zhFacets.find((f) => f.key === zhCat)?.plugins ?? []).filter(
+          (p) => type === 'all' || p.type === type,
+        )
+        setSemanticTags([])
+        setResults(members.map((p) => ({ plugin: p, relevance: 100, tagHits: 0 })))
+        return
+      }
+      let out: Array<{ plugin: LitePlugin; relevance: number; tagHits: number; aiReason?: string; via?: string[] }> | null = null
       // 语义搜索：LLM 翻译意图 → 标签增强召回（harness 独有能力）
       if (semanticOn && query.trim().length >= 2) {
         const r = await api<{
@@ -950,21 +975,34 @@ function SearchTab(props: {
           results: Array<{ plugin: LitePlugin; relevance: number; tagHits: number }>
         }>('search:semantic', { query })
         setSemanticTags(r.tags)
-        if (r.results.length > 0) {
-          setResults(r.results)
-          return
-        }
+        if (r.results.length > 0) out = r.results
         // 语义无结果 → 降级普通搜索
       }
-      setSemanticTags([])
-      const opts: Record<string, unknown> = { limit: 0 } // 0 = 全量（市场收录 500+）
-      if (tags.length) opts.tags = tags
-      if (type !== 'all') opts.type = type
-      const r = await api<Array<{ plugin: LitePlugin; relevance: number; tagHits: number; via?: string[] }>>('search', {
-        query,
-        options: opts,
-      })
-      setResults(r)
+      if (!out) {
+        setSemanticTags([])
+        const opts: Record<string, unknown> = { limit: 0 } // 0 = 全量（市场收录 500+）
+        if (tags.length) opts.tags = tags
+        if (type !== 'all') opts.type = type
+        out = await api<Array<{ plugin: LitePlugin; relevance: number; tagHits: number; via?: string[] }>>('search', {
+          query,
+          options: opts,
+        })
+      }
+      // 中文分类 × 搜索组合：结果里只留该类强信号成员（与 facets 同一匹配器）
+      if (zhCat && out) {
+        const terms = intentTerms(zhCat) ?? []
+        out = out.filter(
+          (r) =>
+            matchTerms(
+              r.plugin.name.toLowerCase(),
+              r.plugin.fullName.toLowerCase(),
+              (r.plugin.tags ?? []).map((t) => t.toLowerCase()),
+              null,
+              terms,
+            ) === 'strong',
+        )
+      }
+      setResults(out ?? [])
     } catch {
       setResults([])
     } finally {
@@ -1005,6 +1043,23 @@ function SearchTab(props: {
         }, label),
       ),
     ),
+    // 中文分类（§5.3：词典推导的中文语境分类，单选 facet；再点一次取消）
+    zhVisible.length > 0
+      ? El('div', { className: styles.filterRow },
+          El('span', { className: styles.zhCatLabel }, '中文分类：'),
+          ...zhVisible.map((f) =>
+            El('span', {
+              key: f.key,
+              className: `${styles.zhChip} ${zhCat === f.key ? styles.zhChipOn : ''}`,
+              title: `按「${f.key}」浏览 · ${f.count} 个插件（词典强信号匹配）`,
+              onClick: () => setZhCat((v) => (v === f.key ? '' : f.key)),
+            },
+              f.key,
+              El('em', { className: styles.zhChipCount }, String(f.count)),
+            ),
+          ),
+        )
+      : null,
     // AI 语义搜索（实验态开关：LLM 理解需求 + 从召回池精排，消耗 token 故默认关）
     El('div', { className: styles.semanticToggle },
       El('div', { className: styles.semanticInfo },
@@ -1058,8 +1113,8 @@ function SearchTab(props: {
       : null,
     searching && results.length === 0
       ? El('div', { className: styles.stateHint }, '搜索中…')
-      : results.length === 0 && query === '' && tags.length === 0
-        ? El('div', { className: styles.stateHint }, '输入关键词或选择标签开始搜索')
+      : results.length === 0 && query === '' && tags.length === 0 && !zhCat
+        ? El('div', { className: styles.stateHint }, '输入关键词、选择中文分类或标签开始搜索')
         : results.length === 0
           ? El('div', { className: styles.emptyState },
               El('div', { className: styles.emptyIcon }, El(Icon, { d: ICON_SEARCH, size: 44 })),
@@ -1389,6 +1444,10 @@ function SettingsTab(props: {
   const [versions, setVersions] = useState<Record<string, string>>({})
   // P6：操作日志导出（复制到剪贴板；头自带宿主版本+探测来源+时区）
   const [logState, setLogState] = useState<'' | 'copying' | 'copied' | 'failed'>('')
+  // P5 备份/恢复：导出 = 客户端下载 JSON；导入 = 文件选择 → RPC 合并恢复（只补装缺失）
+  const [backupBusy, setBackupBusy] = useState<'' | 'exporting' | 'importing'>('')
+  const [importSummary, setImportSummary] = useState('')
+  const backupFileRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
     setMode(profile?.modeOverride ?? 'auto')
@@ -1410,6 +1469,74 @@ function SettingsTab(props: {
   const [ghPoll, setGhPoll] = useState<'idle' | 'waiting' | 'polling' | 'finishing' | 'done'>('idle')
   const [pollDetail, setPollDetail] = useState('')
   const [pollCount, setPollCount] = useState(0)
+
+  // ---------- P5 备份/恢复 ----------
+
+  interface BackupImportResultView {
+    restored: string[]
+    already: string[]
+    failed: Array<{ pluginId: string; name: string; error: string }>
+    unmatched: Array<{ pluginName?: string; fullName?: string; localName: string }>
+    requiresRestart: boolean
+  }
+
+  /** 导出：RPC 取备份对象 → 浏览器下载 JSON（含收藏；绝不含凭据） */
+  const exportBackup = async () => {
+    setBackupBusy('exporting')
+    try {
+      const backup = await api<Record<string, unknown>>('backup:export', { favorites: readFavorites() })
+      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `dsh-market-backup-${new Date().toISOString().slice(0, 10)}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+      toast('备份已导出（浏览器下载）')
+    } catch (e) {
+      toast(`导出失败：${(e as Error).message}`, 3500)
+    } finally {
+      setBackupBusy('')
+    }
+  }
+
+  /** 导入：读 JSON → RPC 合并恢复（补装缺失、不动后来装的）→ 收藏并集合并 */
+  const onBackupFile = (e: { target: { files?: FileList | null; value: string } }) => {
+    const file = e.target.files?.[0]
+    e.target.value = '' // 允许重选同一文件
+    if (!file || backupBusy) return
+    void (async () => {
+      setBackupBusy('importing')
+      setImportSummary('')
+      try {
+        let backup: { favorites?: string[]; installed?: unknown[] }
+        try {
+          backup = JSON.parse(await file.text())
+        } catch {
+          throw new Error('文件不是合法 JSON')
+        }
+        const r = await api<BackupImportResultView>('backup:import', { backup })
+        const incoming = backup.favorites ?? []
+        if (incoming.length > 0) writeFavorites([...new Set([...readFavorites(), ...incoming])])
+        setImportSummary(
+          `补装 ${r.restored.length} · 本机已有 ${r.already.length} · 未匹配 ${r.unmatched.length}` +
+            (r.failed.length ? ` · 失败 ${r.failed.length}` : '') +
+            (r.requiresRestart ? ' · 重启 harness 后生效' : ''),
+        )
+        if (r.failed.length > 0) {
+          const names = r.failed.slice(0, 3).map((f) => f.name).join('、')
+          setImportSummary((s) => `${s}\n失败：${names}${r.failed.length > 3 ? ' 等' : ''}`)
+        }
+        onChanged()
+        toast(r.failed.length === 0 ? '备份恢复完成' : '备份恢复完成（部分条目失败，见摘要）', 3600)
+      } catch (err) {
+        toast(`导入失败：${(err as Error).message}`, 4000)
+      } finally {
+        setBackupBusy('')
+      }
+    })()
+  }
+
   // 轮询 interval 管理：保证同时只有一个轮询，卸载/重开时清理
   const pollIntervalRef = useRef<number | null>(null)
   const clearPoll = () => {
@@ -1658,6 +1785,38 @@ function SettingsTab(props: {
       El('div', { className: styles.dividerLine }),
       El('button', { className: styles.btn, onClick: onChanged }, '刷新推荐数据'),
     ),
+    // P5 备份与恢复卡片
+    El('div', { className: styles.settingCard },
+      El('div', { className: styles.settingHead },
+        El('span', { className: styles.settingIc }, El(Icon, { d: ICON_PACKAGE, size: 15 })),
+        El('span', { className: styles.settingTitle }, '备份与恢复'),
+      ),
+      El('p', { className: styles.ghTip },
+        '导出已装清单 / 收藏 / 偏好为 JSON；换机或重装后导入，只补装缺失的插件，绝不动后来装的。备份不含任何凭据。',
+      ),
+      El('div', { className: styles.settingsRow },
+        El('button', {
+          className: styles.btn,
+          disabled: backupBusy !== '',
+          onClick: () => void exportBackup(),
+        }, backupBusy === 'exporting' ? '导出中…' : '导出备份'),
+        El('button', {
+          className: styles.btn,
+          disabled: backupBusy !== '',
+          onClick: () => backupFileRef.current?.click(),
+        }, backupBusy === 'importing' ? '恢复中…' : '导入恢复'),
+        El('input', {
+          type: 'file',
+          accept: 'application/json,.json',
+          style: { display: 'none' },
+          ref: backupFileRef,
+          onChange: onBackupFile,
+        }),
+      ),
+      importSummary
+        ? El('p', { className: styles.ghTip, style: { whiteSpace: 'pre-line', marginTop: 6 } }, importSummary)
+        : null,
+    ),
     // 关于卡片
     El('div', { className: styles.settingCard },
       El('div', { className: styles.settingHead },
@@ -1884,7 +2043,7 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
         if (!i.plugin) continue
         for (const t of i.plugin.tags) {
           if (!/[\u4e00-\u9fff]/.test(t)) continue
-          if (['效率工具', '开发辅助', 'AI 增强', 'AI增强'].includes(t)) continue
+          if (['效率工具', '开发辅助', 'AI 增强', 'AI增强', '自动化'].includes(t)) continue
           counts.set(t, (counts.get(t) ?? 0) + 1)
         }
       }

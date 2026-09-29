@@ -50,6 +50,8 @@ import {
   appendOpLog,
   readOpLogTail,
   exportLogText,
+  buildBackup,
+  importBackup,
 } from '@dsh-market/core'
 
 export const name = 'dsh-market'
@@ -729,6 +731,30 @@ export function apply(ctx: {
         return readOpLogTail(cfg, Number(args.n ?? 200))
       case 'log:export':
         return exportLogText(cfg, readVersions())
+
+      // P5 备份/恢复：导出 = 构建备份对象（客户端触发下载，Host 不碰文件对话框）；
+      // 导入 = 合并恢复（只补装缺失，绝不动后来装的；零 LLM 确定性路由）
+      case 'backup:export':
+        return buildBackup(cfg, await market(), {
+          appVersion: readVersions()['@dsh-market/plugin'],
+          favorites: (args.favorites as string[]) ?? [],
+        })
+      case 'backup:import': {
+        const backup = args.backup as unknown
+        if (!backup || typeof backup !== 'object') throw new Error('缺少备份内容')
+        // RPC 无流式通道，进度反馈由 UI 的「恢复中」状态承担；onProgress 参数留给测试/未来复用
+        const r = await importBackup(cfg, await market(), backup as never, {
+          runner: realRunner(),
+          profile: (args.targetProfile as string) ?? undefined,
+        })
+        appendOpLog(cfg, {
+          t: new Date().toISOString(),
+          op: 'import',
+          ok: r.failed.length === 0,
+          msg: `备份恢复：补装 ${r.restored.length} · 已装 ${r.already.length} · 未匹配 ${r.unmatched.length} · 失败 ${r.failed.length}`,
+        })
+        return r
+      }
 
       case 'gh:deviceCode': {
         const r = await fetch('https://github.com/login/device/code', {
