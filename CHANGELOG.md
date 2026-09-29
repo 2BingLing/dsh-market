@@ -4,6 +4,29 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.10` / `@dsh-market/core@0.4.9` / `@dsh-market/schema@0.1.3`）
+
+**P5 备份与恢复（本地 JSON 导出 / 导入合并，WebDAV 后置）**
+
+- core 新增 `backup.ts`：`buildBackup` 导出已装清单（含市场 id + 人可读名称快照）/ 收藏 / 设置为 JSON；`importBackup` 导入**合并恢复**——只补装缺失的插件（走 T0 确定性路由 routeInstall，零 LLM），绝不动后来装的；已下架/未收录条目归入 `unmatched` 如实报告，不静默丢弃。备份**绝不含凭据**（GitHub token 只存浏览器 localStorage）。
+- 导入前形状校验（`isBackupFile`）：坏文件在动手之前报「不是有效的备份文件」，不会装到一半炸。
+- RPC 新增 `backup:export`（Host 构建备份对象，客户端触发浏览器下载）与 `backup:import`（合并恢复 + 操作日志留痕）；设置 Tab 新增「备份与恢复」卡片（导出 / 导入 / 结果摘要与失败原因）。
+
+**§5.3 中文原生体验层收尾（词典卫生 + 数据侧 alias + 中文分类进插件端）**
+
+- **词典卫生·词边界匹配**：召回词支持 `#` 前缀标记（如 `#ai`）——名称/简介侧按 token 匹配而非子串，标签侧仍精确。9145 条真实数据审计驱动全量精化：AI大模型 facet 1602→962（email/main 等 713 条 `ai` 子串误报清零）、自动化 1888→196（`ip`/`web`/`log`/`dev`/`code` 等 40+ 裸词全部 token 化）；新增 `isTokenTerm` / `rawTerm` / `tokenInText` 共享助手（schema 导出）。
+- **数据侧 alias 扩展**：高频中文标签挖掘驱动——新增 6 个意图（MCP / 桌宠 / 数据分析 / 多模态 / 提示词 / 报告生成），并给既有意图补标签别名（语音输入→语音识别、视觉理解/图像识别→图片、版本控制→Git、内容创作→写作文案等 12 处）；「自动化」标签（1863 条 / 20.4%）加入 collector 宽泛标签黑名单（每日管道渐进生效）。
+- **中文分类进插件端**：`matchTerms` / `buildZhFacets` 下沉到 `schema/src/zh-taxonomy.ts`（泛型适配全量 `score.total` 与 lite `scoreTotal` 两种数据形状），web 与插件端共用同一份实现；插件版搜索 Tab 新增 teal 色「中文分类」chips 行（top 12 + 选中置顶，单选 facet，可与关键词搜索组合过滤），与 web TagPanel 同一词典、同一强弱信号定义。构建提速：小写字段缓存后 9k 条 facets 约 0.43s。
+- core `search.ts` 扩展词扫描同步支持词边界召回词（`rawTerm` 后标签精确 0.15 / haystack token 命中 0.3），三端匹配语义一致。
+
+**N7 Windows/系统细节**
+
+- `recipe.ts` 环境探测 `spawnSync` 补 `windowsHide`（防 Windows 上逐工具探测闪控制台窗口）；`installer.ts` PowerShell 删除兜底补 `-ExecutionPolicy Bypass`（Restricted 策略机器上 inline 命令也可能被拦）；`host.ts` 宿主版本探测的 npm 全局目录候选新增用户 `~/.npmrc` 的 `prefix=` 读取（大量 Windows 用户不设 env 只写 .npmrc）。windowsHide（realRunner/cli.ts）与 pnpm ≥11 `allowBuilds` 键此前已覆盖。
+
+**N6 数据加载失败态可读化（web）**
+
+- 数据加载失败不再只 `console.error` 留白：显示真实原因（含 HTTP 状态码）+ 耗时 + 「重试」按钮，并提示数据托管在 GitHub Pages。
+
 ### 市场侧（web 端）
 
 **中文意图搜索接入 Web（§5.3 第一层收尾）**

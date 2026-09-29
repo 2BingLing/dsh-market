@@ -87,9 +87,14 @@ The plugin market lives in your DSH sidebar: **up and running in 3 minutes, and 
 
 - Manually triggered, reads the current session title & messages (**zero token**) → suggests what fits "right now"
 
-**AI semantic search · coming soon**
+**Chinese intent search · zero token**
 
-- Local recall of 60 candidates → LLM re-ranks the top 20 with reasons; fixed candidate pool that doesn't grow with the plugin count, off by default to save tokens
+- Searching 「记事本」 (notepad) also finds plugins described as "笔记" (notes): a built-in 100+ Chinese intent dictionary expands colloquial queries into bilingual recall terms, and results are labeled with the matched intent; the web edition adds a "Chinese categories" chip row for one-click browsing (notepad / todo / screenshot / MCP…)
+- Experimental toggle: AI semantic re-ranking (local recall of 60 candidates → LLM re-ranks the top 20 with reasons; off by default to save tokens)
+
+**Backup & restore**
+
+- Export the installed list / favorites / preferences as JSON in one click; import on another machine **merges** — installs only what's missing, never touches what came later; backups contain no credentials
 
 **AI-assisted install**
 
@@ -99,7 +104,7 @@ The plugin market lives in your DSH sidebar: **up and running in 3 minutes, and 
 
 - **Continuous collection** — scans `dsh-plugin` / `dsh` GitHub topics and curated community lists every day, collecting everything (currently 9145 plugins + packs channel)
 - **Practical 5-dimension scoring** — maintenance activity / usefulness / ecosystem heat / convenience / signal quality, fused with a weighted geometric mean; every plugin comes with a "why recommended" explanation
-- **Chinese experience** — auto-generated Chinese summaries and feature tags; Chinese search & filters
+- **Chinese experience** — auto-generated Chinese summaries and feature tags; Chinese intent search (colloquial queries hit, zero token) & Chinese-category filters
 - **One-click install** — deterministic routing in the plugin edition: `git clone` for skill plugins, `dsh plugin add` for cordis plugins; retry & rollback on failure
 - **AI install** — hand it to a DSH subagent that reads the README, verifies, then installs; asks you first when configuration is needed
 - **Recommendation system** — cold-start quiz / beginner-friendly / for-you (profile-based) / scene recommendations (reads the current session context; see [DSH Plugin Edition](#dsh-plugin-edition))
@@ -112,7 +117,7 @@ The plugin market lives in your DSH sidebar: **up and running in 3 minutes, and 
 
 | Scenario | How |
 |---|---|
-| Find plugins | Chinese keyword search / tag multi-select / type & score filters |
+| Find plugins | Chinese colloquial search (intent dictionary expansion) / "Chinese categories" chips / tag multi-select / type & score filters |
 | Evaluate quality | Card pentagon radar chart + 5-dimension details + recommendation reasoning |
 | Install | Copy the real install command or the "AI install prompt" from the detail page |
 
@@ -121,10 +126,10 @@ The plugin market lives in your DSH sidebar: **up and running in 3 minutes, and 
 | Tab | What it does |
 |---|---|
 | For You | for-you picks / curated / scene recommendations (manual trigger, reads session context) |
-| Search | local Fuse search · hot tags · 200+ results paginated |
+| Search | Chinese intent search (zero token) · "Chinese categories" browsing · hot tags · 200+ results paginated |
 | Favorites | plugins you starred, install later |
 | Installed | detect what's installed locally (skill dir + profile), one-click uninstall |
-| Settings | GitHub binding (PAT starring / device-flow read-only) · recommendation mode · target profile |
+| Settings | GitHub binding (PAT starring / device-flow read-only) · recommendation mode · target profile · backup & restore |
 
 ## Scoring System
 
