@@ -1,10 +1,13 @@
 /**
  * 插件卡片：类型/名称/描述/标签 + 左短条右雷达图评分区 + 元信息 + 收藏
+ * #185 · 整卡为真实 <a href>：右键/中键/Ctrl+点击 新标签页打开详情（浏览器原生），
+ * 普通左键拦截为 SPA 跳转，保持即时切换与滚动恢复
  */
 import type { DshPlugin } from "@dsh-market/schema";
 import RadarChart, { RADAR_ORDER, RADAR_LABELS } from "./RadarChart";
 import CommunityBadge, { isCommunitySubmitted } from "./CommunityBadge";
 import { formatDshRequirement } from "../lib/dsh-compat";
+import { pluginDetailUrl, isPlainLeftClick } from "../lib/deeplink";
 
 function fmt(n: number): string {
   return n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
@@ -29,7 +32,15 @@ export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen 
   const b = plugin.score.breakdown;
   const dshReq = formatDshRequirement(plugin.install.dshEngines);
   return (
-    <article className="card" onClick={() => onOpen(plugin)}>
+    <a
+      className="card"
+      href={pluginDetailUrl(plugin.id)}
+      onClick={(e) => {
+        if (!isPlainLeftClick(e)) return; // 新标签页/新窗口 → 交给浏览器默认行为
+        e.preventDefault();
+        onOpen(plugin);
+      }}
+    >
       <div className="card-top">
         <span className="card-type">
           <span className={`pill ${plugin.type === "skill" ? "pill-skill" : "pill-plugin"}`}>
@@ -48,6 +59,7 @@ export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen 
           <button
             className={`fav-star ${favorite ? "on" : ""}`}
             onClick={(e) => {
+              e.preventDefault(); // 卡片现在是 <a>：仅 stopPropagation 不够，需阻止锚点默认跳转
               e.stopPropagation();
               onToggleFavorite(plugin.id);
             }}
@@ -95,6 +107,6 @@ export default function PluginCard({ plugin, favorite, onToggleFavorite, onOpen 
         {/* N2 · 宿主版本要求（Web 只展示需求，本机是否装得上由插件端判定） */}
         {dshReq ? <span title={plugin.install.dshEngines ?? undefined}>{dshReq}</span> : null}
       </div>
-    </article>
+    </a>
   );
 }

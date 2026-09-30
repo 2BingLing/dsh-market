@@ -18,6 +18,13 @@ import Logo from "./components/Logo";
 import { matchesTags } from "./lib/tags";
 import { searchWithZhIntent } from "./lib/zh-search";
 import { buildZhFacets } from "./lib/zh-taxonomy";
+import {
+  pluginDetailUrl,
+  packDetailUrl,
+  guideUrl,
+  parseDeepLink,
+  isPlainLeftClick,
+} from "./lib/deeplink";
 
 type SortKey = "score" | "stars" | "newest";
 type View = "home" | "detail" | "guide" | "quiz" | "packDetail";
@@ -47,9 +54,16 @@ function loadFavorites(): string[] {
 export default function App() {
   // 列表滚动位置（#103：进入详情/指南前保存，浏览器返回时恢复）
   const scrollYRef = useRef(0);
+  // #185 · SPA 跳转时同步写入 URL；记录最近一次写入的 search，用于忽略纯 #锚点 触发的 popstate
+  const lastSearchRef = useRef(location.search);
+  // #185 · popstate 处理需要按 id 反查对象，用 ref 避免监听器随数据重新订阅
+  const pluginsRef = useRef<DshPlugin[]>([]);
+  const packsRef = useRef<DshPack[]>([]);
   const [plugins, setPlugins] = useState<DshPlugin[]>([]);
   const [packs, setPacks] = useState<DshPack[]>([]);
   const [loading, setLoading] = useState(true);
+  // 整合包通道加载态（#185：深链直达整合包详情前需等待 packs 就绪）
+  const [packsLoading, setPacksLoading] = useState(true);
   const [generatedAt, setGeneratedAt] = useState<string>("");
   const [query, setQuery] = useState("");
   const [packQuery, setPackQuery] = useState("");
@@ -99,8 +113,29 @@ export default function App() {
       .then((data: { packs?: DshPack[] } | null) => {
         setPacks(data?.packs ?? []);
       })
-      .catch(() => setPacks([]));
+      .catch(() => setPacks([]))
+      .finally(() => setPacksLoading(false));
   }, [loadRetryKey]);
+
+  // ref 同步（popstate 深链反查用，不触发监听器重建）
+  useEffect(() => {
+    pluginsRef.current = plugins;
+  }, [plugins]);
+  useEffect(() => {
+    packsRef.current = packs;
+  }, [packs]);
+
+  /** #185 · SPA 内跳转子视图：写 URL（?plugin=/?pack=/?view=）并记录，供 popstate 判别 */
+  const pushDeep = useCallback((url: string) => {
+    lastSearchRef.current = url.substring(url.indexOf("?") === -1 ? url.length : url.indexOf("?"));
+    history.pushState({ v: "deep" }, "", url);
+  }, []);
+
+  /** #185 · 回到列表：清掉 URL 上的深链参数，保持 URL 与视图一致 */
+  const clearDeep = useCallback(() => {
+    lastSearchRef.current = "";
+    history.replaceState({ v: "home" }, "", location.pathname);
+  }, []);
 
   const toggleFavorite = useCallback((id: string) => {
     setFavorites((prev) => {
@@ -115,47 +150,85 @@ export default function App() {
     setSelected(p);
     setView("detail");
     window.scrollTo({ top: 0 });
-    history.pushState({ v: "detail" }, "");
-  }, []);
+    pushDeep(pluginDetailUrl(p.id)); // #185 · 详情页可寻址：右键/中键新标签页、可分享
+  }, [pushDeep]);
 
   const openPackDetail = useCallback((p: DshPack) => {
     scrollYRef.current = window.scrollY;
     setSelectedPack(p);
     setView("packDetail");
     window.scrollTo({ top: 0 });
-    history.pushState({ v: "packDetail" }, "");
-  }, []);
+    pushDeep(packDetailUrl(p.id));
+  }, [pushDeep]);
 
   const backHome = useCallback(() => {
-    // 浏览器后退（触发 popstate → 恢复 home + 列表位置）；入口页直进时栈底则直接回 home
+    // 浏览器后退（触发 popstate → 恢复 home + 列表位置）；直达深链进入时栈底则直接回 home
     if (history.state?.v) history.back();
     else {
       setView("home");
       setSelected(null);
       setSelectedPack(null);
+      clearDeep(); // #185 · 直达 ?plugin= 打开时，返回列表同步清掉 URL 参数
     }
-  }, []);
+  }, [clearDeep]);
 
   const openGuide = useCallback(() => {
     scrollYRef.current = window.scrollY;
     setView("guide");
     window.scrollTo({ top: 0 });
-    history.pushState({ v: "guide" }, "");
-  }, []);
+    pushDeep(guideUrl());
+  }, [pushDeep]);
 
   const openQuiz = useCallback(() => {
     scrollYRef.current = window.scrollY;
     setView("quiz");
     window.scrollTo({ top: 0 });
-    history.pushState({ v: "quiz" }, "");
-  }, []);
+    pushDeep(`${location.pathname}?view=quiz`);
+  }, [pushDeep]);
 
-  /** 浏览器前进/后退：恢复视图 + 返回列表时还原滚动位置（#103） */
+  /**
+   * #185 · 浏览器前进/后退：按 URL 恢复视图（深链参数即唯一真相），回列表时还原滚动位置（#103）。
+   * 纯 #锚点 变化（#market / #pack-list 页内滚动）也触发 popstate，但 search 未变 → 跳过，不重置视图。
+   */
   useEffect(() => {
     const onPop = () => {
-      const s = history.state as { v?: string } | null;
-      if (s?.v === "detail" || s?.v === "packDetail" || s?.v === "guide" || s?.v === "quiz") return; // 前进进入子视图，状态不变
-      // 后退回到列表：恢复 home 视图 + 滚动位置
+      if (location.search === lastSearchRef.current) return; // 仅锚点滚动，忽略
+      lastSearchRef.current = location.search;
+      const link = parseDeepLink();
+      if (link.plugin) {
+        const found = pluginsRef.current.find((x) => x.id === link.plugin);
+        if (found) {
+          setSelected(found);
+          setSelectedPack(null);
+          setView("detail");
+          window.scrollTo({ top: 0 });
+          return;
+        }
+        history.replaceState(null, "", location.pathname); // 失效 id：清参数回列表
+      } else if (link.pack) {
+        const found = packsRef.current.find((x) => x.id === link.pack);
+        if (found) {
+          setSelectedPack(found);
+          setSelected(null);
+          setView("packDetail");
+          window.scrollTo({ top: 0 });
+          return;
+        }
+        history.replaceState(null, "", location.pathname);
+      } else if (link.view === "guide") {
+        setSelected(null);
+        setSelectedPack(null);
+        setView("guide");
+        window.scrollTo({ top: 0 });
+        return;
+      } else if (link.view === "quiz") {
+        setSelected(null);
+        setSelectedPack(null);
+        setView("quiz");
+        window.scrollTo({ top: 0 });
+        return;
+      }
+      // 无深链参数：回到列表，恢复滚动位置
       setSelected(null);
       setSelectedPack(null);
       setView("home");
@@ -164,6 +237,35 @@ export default function App() {
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);
+
+  // #185 · 直达深链：数据就绪后按 URL 恢复详情/指南视图（刷新 ?plugin=xxx 不丢页面）；无效 id 清参数回列表
+  useEffect(() => {
+    if (loading || packsLoading || loadError) return;
+    const link = parseDeepLink();
+    if (link.plugin) {
+      const found = plugins.find((x) => x.id === link.plugin);
+      if (found) {
+        setSelected(found);
+        setView("detail");
+        window.scrollTo({ top: 0 });
+      } else {
+        history.replaceState(null, "", location.pathname);
+      }
+    } else if (link.pack) {
+      const found = packs.find((x) => x.id === link.pack);
+      if (found) {
+        setSelectedPack(found);
+        setView("packDetail");
+        window.scrollTo({ top: 0 });
+      } else {
+        history.replaceState(null, "", location.pathname);
+      }
+    } else if (link.view === "guide") {
+      setView("guide");
+    } else if (link.view === "quiz") {
+      setView("quiz");
+    }
+  }, [loading, packsLoading, loadError, plugins, packs]);
 
   // 防抖搜索词（避免每次按键都触发全量搜索）
   const [debouncedQuery, setDebouncedQuery] = useState("");
@@ -269,8 +371,9 @@ export default function App() {
     setPackQuery("");
     setTags([]);
     setZhCat("");
+    clearDeep(); // #185 · 从详情等子视图点导航切换时，同步清掉 URL 深链参数
     window.scrollTo({ top: 0 });
-  }, []);
+  }, [clearDeep]);
 
   const resetFilters = useCallback(() => {
     setQuery("");
@@ -293,7 +396,13 @@ export default function App() {
           <a onClick={() => gotoNav("market")} className={active === "market" ? "on" : ""}>市场</a>
           <a onClick={() => gotoNav("packs")} className={active === "packs" ? "on" : ""}>整合包</a>
           <a onClick={() => gotoNav("favorites")} className={active === "favorites" ? "on" : ""}>收藏</a>
-          <a onClick={openGuide} className={active === "guide" ? "on" : ""}>评分体系</a>
+          <a
+            href={guideUrl()}
+            onClick={(e) => { if (!isPlainLeftClick(e)) return; e.preventDefault(); openGuide(); }}
+            className={active === "guide" ? "on" : ""}
+          >
+            评分体系
+          </a>
           <a className="gh-link" href="https://github.com/2BingLing/dsh-market" target="_blank" rel="noreferrer" title="GitHub 仓库">
             <svg width="17" height="17" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
               <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
@@ -310,7 +419,12 @@ export default function App() {
           {" · "}
           <a href="https://github.com/2BingLing/dsh-market/issues/new?template=submit_plugin.md" target="_blank" rel="noreferrer">提交收录</a>
           {" · "}
-          <a onClick={openGuide}>评分说明</a>
+          <a
+            href={guideUrl()}
+            onClick={(e) => { if (!isPlainLeftClick(e)) return; e.preventDefault(); openGuide(); }}
+          >
+            评分说明
+          </a>
         </span>
       </footer>
     </div>
@@ -451,7 +565,12 @@ export default function App() {
               </div>
             </div>
             {weeklyPick && (
-              <div className="feature-card" onClick={() => openDetail(weeklyPick)}>
+              <a
+                className="feature-card"
+                href={pluginDetailUrl(weeklyPick.id)}
+                onClick={(e) => { if (!isPlainLeftClick(e)) return; e.preventDefault(); openDetail(weeklyPick); }}
+                title="点击查看详情（右键可在新标签页打开）"
+              >
                 <div className="tag">WEEKLY PICK · 本周精选</div>
                 <h3>{weeklyPick.name}</h3>
                 <p>{(weeklyPick.descriptionZh || weeklyPick.description || "").slice(0, 70)}…</p>
@@ -463,7 +582,7 @@ export default function App() {
                   <span>★ {weeklyPick.stars.toLocaleString()} stars</span>
                   <span>{weeklyPick.type === "skill" ? "SKILL 技能" : "CORDIS 插件"}</span>
                 </div>
-              </div>
+              </a>
             )}
           </section>
         </>

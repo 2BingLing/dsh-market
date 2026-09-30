@@ -29,6 +29,13 @@
 
 ### 市场侧（web 端）
 
+**详情页深链与多标签页打开（#185）**
+
+- 插件卡 / 整合包卡 / 本周精选卡由 `div onClick` 改为真实 `<a href>`：右键「在新标签页打开」、中键、Ctrl/⌘+点击由浏览器原生处理（#185 的直接诉求）；普通左键仍拦截为 SPA 跳转，保留即时切换与 #103 列表滚动恢复，不会整页重拉 plugins.json。卡片内收藏星标补 `preventDefault`（否则点收藏会触发跳转）。
+- 新增 `web/src/lib/deeplink.ts`：查询参数路由 `?plugin=<id>` / `?pack=<id>` / `?view=guide|quiz`。SPA 跳转同步写 URL（pushState），浏览器前进/后退按 URL 恢复视图；详情页可直接分享/收藏，刷新 `?plugin=xxx` 数据就绪后直达详情，无效 id 清参数回列表，加载失败时保留 URL 供重试后恢复。
+- 选型为查询参数而非 hash 路由：GitHub Pages 零配置、URL 更干净，且不与页内 `#market` / `#pack-list` 锚点抢占 hash 语义（popstate 对纯锚点滚动按 search 未变跳过）。
+- 详情页标题行新增「复制链接」按钮（复用 copy-btn 与 copied 反馈）；`a.card` / `a.feature-card` 补 `display: block` 等抹平锚点默认样式；顶部「评分体系」与页脚「评分说明」同步变为真实链接。
+
 **中文意图搜索接入 Web（§5.3 第一层收尾）**
 
 - 中文意图词典从 `plugin/core` 迁至 `@dsh-market/schema`（新增子路径导出 `./zh-intent`），core 留 re-export 垫片、既有导入路径不变——三端共用同一份词表，杜绝分叉漂移。⚠️ **发版顺序**：这是 schema 首个值导出，core 下次发版前必须先发含词典的 schema。

@@ -172,6 +172,10 @@ body::before {
   box-shadow: 0 10px 30px rgba(35, 84, 140, 0.08); transition: all 0.25s; cursor: pointer;
 }
 .card:hover { border-color: var(--ds-blue-300); box-shadow: 0 16px 40px rgba(35, 84, 140, 0.14); transform: translateY(-3px); }
+/* #185 · 卡片/精选卡渲染为真实 <a>（右键/中键新标签页打开详情）：抹平锚点默认样式。
+   注意 color: inherit 只给 a.card——若加到 a.feature-card（0,1,1）会盖过 .feature-card（0,1,0）的白色字 */
+a.card, a.feature-card { display: block; text-decoration: none; }
+a.card { color: inherit; }
 .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .card-type { display: flex; align-items: center; gap: 6px; }
 .pill { font-size: 11px; padding: 3px 9px; border-radius: 6px; letter-spacing: 0.02em; }

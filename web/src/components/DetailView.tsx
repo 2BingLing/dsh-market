@@ -147,6 +147,14 @@ export default function DetailView({ plugin, favorite, onToggleFavorite, onBack 
           >
             {favorite ? "★ 已收藏" : "☆ 收藏"}
           </button>
+          {/* #185 · 本页深链可复制分享：新标签页打开 / 发给别人直达该插件详情 */}
+          <button
+            className={`copy-btn ${copied === "link" ? "ok" : ""}`}
+            onClick={() => copy("link", location.href)}
+            title="复制本页链接，可分享或在新标签页打开"
+          >
+            {copied === "link" ? "✓ 链接已复制" : "复制链接"}
+          </button>
         </div>
         <p className="detail-desc">{plugin.descriptionZh || plugin.description}</p>
         <div className="tags">

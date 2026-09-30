@@ -1,8 +1,10 @@
 /**
  * 整合包卡片：PACK 标记 / 名称 / 作者 / 中文简介 / 条目解析率徽章 / 五维评分
+ * #185 · 整卡为真实 <a href>：右键/中键新标签页打开详情，普通左键拦截为 SPA 跳转
  */
 import type { DshPack } from "@dsh-market/schema";
 import { RADAR_ORDER, RADAR_LABELS } from "./RadarChart";
+import { packDetailUrl, isPlainLeftClick } from "../lib/deeplink";
 
 function fmt(n: number): string {
   return n >= 1000 ? (n / 1000).toFixed(1) + "k" : String(n);
@@ -26,7 +28,15 @@ export default function PackCard({ pack, onOpen }: Props) {
   const { total, ok, inMarket } = pack.entryStats;
   const resolveRate = total > 0 ? Math.round((ok / total) * 100) : 0;
   return (
-    <article className="card" onClick={() => onOpen(pack)}>
+    <a
+      className="card"
+      href={packDetailUrl(pack.id)}
+      onClick={(e) => {
+        if (!isPlainLeftClick(e)) return;
+        e.preventDefault();
+        onOpen(pack);
+      }}
+    >
       <div className="card-top">
         <span className="pill pill-pack">PACK</span>
         <span style={{ fontSize: 11, color: "#8CA3BB" }}>{timeAgo(pack.pushedAt)}</span>
@@ -72,6 +82,6 @@ export default function PackCard({ pack, onOpen }: Props) {
         <span>{total} 个条目</span>
         <span>一键装包</span>
       </div>
-    </article>
+    </a>
   );
 }
