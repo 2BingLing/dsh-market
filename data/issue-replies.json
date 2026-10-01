@@ -1,14 +1,23 @@
 {
-  "generatedAt": "2026-09-27T22:05:56.533Z",
+  "generatedAt": "2026-10-01T00:02:46.219Z",
   "replies": [
     {
       "issueNumbers": [
-        184
+        190
       ],
-      "fullName": "TowardsDawn/dsh-user-markdown",
+      "fullName": "maryasov/dsh-plugins-hub",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 35
+      "score": 17
+    },
+    {
+      "issueNumbers": [
+        187
+      ],
+      "fullName": "sknagato/dsh-plugin-fc-emulator",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 46
     }
   ]
 }
