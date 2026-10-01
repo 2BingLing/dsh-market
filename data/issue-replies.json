@@ -1,23 +1,14 @@
 {
-  "generatedAt": "2026-10-01T00:02:46.219Z",
+  "generatedAt": "2026-10-01T23:47:37.978Z",
   "replies": [
     {
       "issueNumbers": [
-        190
+        191
       ],
-      "fullName": "maryasov/dsh-plugins-hub",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 17
-    },
-    {
-      "issueNumbers": [
-        187
-      ],
-      "fullName": "sknagato/dsh-plugin-fc-emulator",
+      "fullName": "FIZMIE/dsh-restart-button",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 46
+      "score": 54
     }
   ]
 }
