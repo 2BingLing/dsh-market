@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+### 修复
+
+- **@dsh-market/schema 0.1.4：exports 指向编译产物（#192）**——0.1.3 的 exports 直接指向 `./src/*.ts`，Node 运行时对 node_modules 下的 TS 不做类型剥离（`ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`），裸 Node 消费者无法加载；此前 0.1.2 纯类型（导入即擦除）未暴露。现在 schema 走 tsc 构建产出 `dist/*.js + *.d.ts`，exports（`.` / `./zh-intent` / `./zh-taxonomy`）带 types 条件指向 dist，`prepublishOnly` 自动构建。⚠️ 发版纪律更新：**改 schema/src 后必须先 `npm run build`（或任一消费者的 tsc 会拿到旧 dist）**，与 core 的 dist 纪律一致。
+
 ### 插件端（`@dsh-market/plugin@0.4.10` / `@dsh-market/core@0.4.9` / `@dsh-market/schema@0.1.3`）
 
 **P5 备份与恢复（本地 JSON 导出 / 导入合并，WebDAV 后置）**
