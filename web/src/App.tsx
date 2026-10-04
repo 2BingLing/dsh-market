@@ -543,9 +543,9 @@ export default function App() {
 
   return shell(nav === "favorites" ? "favorites" : "market", (
     <>
-      {/* Hero + 精选卡（仅市场首页、无筛选时） */}
-      {nav === "market" && !hasActiveFilter && (
-        <>
+      {/* Hero + 精选卡（仅市场首页；有搜索/筛选时平滑收起而不是瞬间卸载——#198 排版跳动） */}
+      {nav === "market" && (
+        <div className={`hero-collapse${hasActiveFilter ? " collapsed" : ""}`} aria-hidden={hasActiveFilter}>
           {/* 紧凑 Hero 条 */}
           <section className="hero">
             <div>
@@ -585,7 +585,7 @@ export default function App() {
               </a>
             )}
           </section>
-        </>
+        </div>
       )}
 
       {/* 搜索区 */}

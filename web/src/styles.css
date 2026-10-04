@@ -85,6 +85,13 @@ body::before {
 
 /* ---------- Hero ---------- */
 .hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; padding: 44px 0 30px; }
+
+/* #198：有搜索/筛选时 hero 平滑收起（grid-rows 0fr 动画），不再瞬间卸载导致整页跳动 */
+.hero-collapse { display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.3s ease; }
+.hero-collapse > .hero { overflow: hidden; min-height: 0; transition: padding 0.3s ease; }
+.hero-collapse.collapsed { grid-template-rows: 0fr; }
+.hero-collapse.collapsed > .hero { padding-top: 0; padding-bottom: 0; visibility: hidden; transition: padding 0.3s ease, visibility 0s 0.3s; }
+
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ds-blue-600);
   background: rgba(234, 242, 251, 0.85); border: 1px solid var(--ds-blue-300);
