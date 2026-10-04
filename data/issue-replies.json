@@ -1,9 +1,18 @@
 {
-  "generatedAt": "2026-10-01T23:47:37.978Z",
+  "generatedAt": "2026-10-04T11:46:36.670Z",
   "replies": [
     {
       "issueNumbers": [
-        191
+        196
+      ],
+      "fullName": "AFunDog/dsh-sidebar-git-graph",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        195
       ],
       "fullName": "FIZMIE/dsh-restart-button",
       "type": "cordis-plugin",
