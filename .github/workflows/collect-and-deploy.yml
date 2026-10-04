@@ -43,6 +43,13 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      # schema 0.1.4 起 exports 指向 dist（#192）：core 的 tsc 与 web 的 vite 都消费其
+      # dist 产物。dist/ 被 .gitignore 忽略、npm ci 不会产出，必须先构建——否则下一行
+      # core 构建以 "Cannot find module '@dsh-market/schema'" 失败（2026-10-03/04 两次
+      # collect-and-deploy 失败、当日无数据更新的根因）。
+      - name: 构建 schema（core/web 依赖其 dist 产物）
+        run: npm run build -w @dsh-market/schema
+
       # collector 产出瘦身索引时依赖 @dsh-market/core 的瘦身投影（toLiteMarketData）。
       # dist/ 被 .gitignore 忽略、CI 里 npm ci 不会产出它，所以必须显式构建，
       # 否则 collect 会以 "Cannot find module '@dsh-market/core'" 失败、当日无数据更新。
