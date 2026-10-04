@@ -1,0 +1,63 @@
+name: deploy-web
+
+# web 目录单独部署：web/src 的改动不再等每日采集（collect-and-deploy 只有
+# schedule + dispatch 触发），push 即构建并发布 Pages。
+# 注意：web 构建消费 @dsh-market/schema 的 dist（0.1.4 起 exports 指向 dist，#192），
+# 所以必须先构建 schema——与 collect-and-deploy 的教训一致。
+
+on:
+  push:
+    paths:
+      - "web/src/**"
+      - "web/public/**"
+      - "web/index.html"
+      - "schema/src/**"
+      - ".github/workflows/deploy-web.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 与 collect-and-deploy 同组：并发时新 run 取消旧 run，避免 Pages 互相覆盖
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: 构建 schema（web 依赖其 dist 产物）
+        run: npm run build -w @dsh-market/schema
+
+      - name: 构建 Web
+        run: npm run build -w web
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
