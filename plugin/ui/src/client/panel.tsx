@@ -958,11 +958,13 @@ function SearchTab(props: {
     setSearching(true)
     setVisible(50)
     try {
-      // 中文分类浏览：空查询 = 直接按该类强信号成员展示（不发生 RPC）
+      // 中文分类浏览：空查询 = 直接按该类强信号成员展示（不发生 RPC）；
+      // 热门标签（AND 语义，与 RPC 路径的 matchesTags 同口径）必须在此分支同样生效——
+      // 否则选中中文分类后热门标签全部失效（#201 反馈）
       if (!query.trim() && zhCat) {
-        const members = (zhFacets.find((f) => f.key === zhCat)?.plugins ?? []).filter(
-          (p) => type === 'all' || p.type === type,
-        )
+        const members = (zhFacets.find((f) => f.key === zhCat)?.plugins ?? [])
+          .filter((p) => type === 'all' || p.type === type)
+          .filter((p) => tags.every((t) => (p.tags ?? []).includes(t)))
         setSemanticTags([])
         setResults(members.map((p) => ({ plugin: p, relevance: 100, tagHits: 0 })))
         return

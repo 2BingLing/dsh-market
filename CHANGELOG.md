@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.11`）
+
+**修复：中文分类与热门标签无法组合**
+
+- 搜索 Tab 选中「中文分类」后（无关键词的浏览态），热门标签的选择被整段忽略——浏览分支只应用了类型筛选，丢了标签 AND 过滤。现在分类成员会再过一层热门标签 AND（与 RPC 搜索路径的 matchesTags 同口径），分类 × 标签 × 类型三维可任意组合。
+
+
 ### 修复
 
 - **@dsh-market/schema 0.1.4：exports 指向编译产物（#192）**——0.1.3 的 exports 直接指向 `./src/*.ts`，Node 运行时对 node_modules 下的 TS 不做类型剥离（`ERR_UNSUPPORTED_NODE_MODULES_TYPE_STRIPPING`），裸 Node 消费者无法加载；此前 0.1.2 纯类型（导入即擦除）未暴露。现在 schema 走 tsc 构建产出 `dist/*.js + *.d.ts`，exports（`.` / `./zh-intent` / `./zh-taxonomy`）带 types 条件指向 dist，`prepublishOnly` 自动构建。⚠️ 发版纪律更新：**改 schema/src 后必须先 `npm run build`（或任一消费者的 tsc 会拿到旧 dist）**，与 core 的 dist 纪律一致。
