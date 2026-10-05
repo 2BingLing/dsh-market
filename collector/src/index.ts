@@ -278,6 +278,13 @@ async function main() {
 
   const detectOne = async (candidate: Candidate) => {
     try {
+      // 投稿候选（用户显式 intent）被拒时必须留痕——静默丢弃会变成"投稿没反应"（#200 案例）：
+      // 连续多轮无日志的拒绝曾让一个完全合规的投稿仓库排查无门
+      const fromIssue = (candidate.sources ?? []).includes("issue-submission");
+      const reject = (reason: string) => {
+        rejected.push({ fullName: candidate.fullName, reason });
+        if (fromIssue) console.warn(`  [issue-submission] 拒绝 ${candidate.fullName}: ${reason}`);
+      };
       // repo 元数据（缓存 24h）
       let repo = candidate.repo;
       if (!repo) {
@@ -285,7 +292,7 @@ async function main() {
           githubFetch<GithubRepo>(`/repos/${candidate.fullName}`)
         );
         if (repo.fork || repo.archived) {
-          rejected.push({ fullName: candidate.fullName, reason: "fork/archived" });
+          reject("fork/archived");
           return;
         }
       }
@@ -328,12 +335,20 @@ async function main() {
         if (cachedDetect && !cachedDetect.detection.isPlugin) {
           console.warn(`  [cache] ${candidate.fullName} 缓存为 false（历史遗留），重检覆盖`);
         }
-        // 根目录文件列表（缓存 24h）
+        // 根目录文件列表（缓存 24h）。投稿候选**不走缓存**：新收录仓库若曾被瞬时 404/限流
+        // 写入空列表（contents 404 → github.ts 返回 []，cached 把 [] 当有效值缓存 24h），
+        // 会连续多轮静默拒绝同一投稿——投稿量小（每天个位数），实时抓取成本可忽略
         const rootItems = await cached(
           "roots",
           candidate.fullName,
-          () => fetchRepoRoot(repo!.full_name, repo!.default_branch)
+          () => fetchRepoRoot(repo!.full_name, repo!.default_branch),
+          fromIssue ? 0 : undefined
         );
+        if (fromIssue && Array.isArray(rootItems) && rootItems.length === 0) {
+          console.warn(
+            `  [issue-submission] ${candidate.fullName} 根目录列表为空（仓库 404 / 空仓库 / 分支无内容）`
+          );
+        }
 
         // 特征检测（只基于文件列表）
         detection = await detectPlugin(candidate.fullName, rootItems);
@@ -354,7 +369,7 @@ async function main() {
             };
             subdir = sub.subdir;
           } else {
-            rejected.push({ fullName: candidate.fullName, reason: "no plugin markers" });
+            reject("no plugin markers");
             return;
           }
         }
@@ -418,11 +433,11 @@ async function main() {
             isCordis = isCordisPackageJson(subPkg);
             effectivePkgJson = subPkg;
             if (!isCordis) {
-              rejected.push({ fullName: candidate.fullName, reason: "package.json not cordis" });
+              reject("package.json not cordis");
               return;
             }
           } else {
-            rejected.push({ fullName: candidate.fullName, reason: "package.json not cordis" });
+            reject("package.json not cordis");
             return;
           }
         }
@@ -564,10 +579,11 @@ async function main() {
         hasSkillMd: detection.skillFiles.length > 0,
       });
     } catch (err) {
-      rejected.push({
-        fullName: candidate.fullName,
-        reason: `error: ${(err as Error).message.slice(0, 80)}`,
-      });
+      const reason = `error: ${(err as Error).message.slice(0, 80)}`;
+      rejected.push({ fullName: candidate.fullName, reason });
+      if ((candidate.sources ?? []).includes("issue-submission")) {
+        console.warn(`  [issue-submission] 失败 ${candidate.fullName}: ${reason}`);
+      }
     }
   };
 
