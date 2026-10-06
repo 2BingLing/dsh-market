@@ -1,32 +1,14 @@
 {
-  "generatedAt": "2026-10-06T00:53:07.147Z",
+  "generatedAt": "2026-10-06T23:06:53.279Z",
   "replies": [
     {
       "issueNumbers": [
-        203
+        204
       ],
-      "fullName": "ESROAMER/codex-dsh-collab",
+      "fullName": "motionalpha84/dsh-desktop_theme-firefly",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        200
-      ],
-      "fullName": "shuqingyang666/dsh-github-adapted",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        202
-      ],
-      "fullName": "deadbushxw/dsh-plugin-query-enhance",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 34
+      "score": 17
     }
   ]
 }
