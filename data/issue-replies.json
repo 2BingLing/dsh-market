@@ -1,14 +1,23 @@
 {
-  "generatedAt": "2026-10-06T23:06:53.279Z",
+  "generatedAt": "2026-10-08T00:40:11.965Z",
   "replies": [
     {
       "issueNumbers": [
-        204
+        210
       ],
-      "fullName": "motionalpha84/dsh-desktop_theme-firefly",
+      "fullName": "wobenshiwomu/dsh-calm",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 60
+    },
+    {
+      "issueNumbers": [
+        209
+      ],
+      "fullName": "ff66ccff/dsh-ATN",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 17
+      "score": 36
     }
   ]
 }
