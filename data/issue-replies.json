@@ -1,23 +1,41 @@
 {
-  "generatedAt": "2026-10-08T00:40:11.965Z",
+  "generatedAt": "2026-10-09T00:51:30.021Z",
   "replies": [
     {
       "issueNumbers": [
-        210
+        212
       ],
-      "fullName": "wobenshiwomu/dsh-calm",
+      "fullName": "wobenshiwomu/dsh-tide",
       "type": "cordis-plugin",
-      "stars": 2,
-      "score": 60
+      "stars": 0,
+      "score": 34
     },
     {
       "issueNumbers": [
-        209
+        211
       ],
-      "fullName": "ff66ccff/dsh-ATN",
+      "fullName": "yixiuzhemu/dsh-redis-plugin",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
+      "score": 27
+    },
+    {
+      "issueNumbers": [
+        205
+      ],
+      "fullName": "lemonhall/dsh-lucy-companion",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 4
+    },
+    {
+      "issueNumbers": [
+        206
+      ],
+      "fullName": "lemonhall/dsh-tts-reader",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
     }
   ]
 }
