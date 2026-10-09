@@ -1,41 +1,86 @@
 {
-  "generatedAt": "2026-10-09T00:51:30.021Z",
+  "generatedAt": "2026-10-09T23:17:20.962Z",
   "replies": [
     {
       "issueNumbers": [
-        212
+        221
       ],
-      "fullName": "wobenshiwomu/dsh-tide",
+      "fullName": "Faide-cyber/dsh-workbuddy",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 34
+      "stars": 2,
+      "score": 61
     },
     {
       "issueNumbers": [
-        211
+        214
       ],
-      "fullName": "yixiuzhemu/dsh-redis-plugin",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 27
-    },
-    {
-      "issueNumbers": [
-        205
-      ],
-      "fullName": "lemonhall/dsh-lucy-companion",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 4
-    },
-    {
-      "issueNumbers": [
-        206
-      ],
-      "fullName": "lemonhall/dsh-tts-reader",
+      "fullName": "MacilyDots/dsh-session-inherit",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 35
+    },
+    {
+      "issueNumbers": [
+        220
+      ],
+      "fullName": "MacilyDots/dsh-prompt-inject",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        218
+      ],
+      "fullName": "Ronniealgo/dsh-route-balance",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 58
+    },
+    {
+      "issueNumbers": [
+        215
+      ],
+      "fullName": "MacilyDots/dsh-olivia-bridge",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        217
+      ],
+      "fullName": "MacilyDots/dsh-mobile-access",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        219
+      ],
+      "fullName": "MacilyDots/dsh-image-count-guard",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        216
+      ],
+      "fullName": "MacilyDots/dsh-turn-chime",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        213
+      ],
+      "fullName": "wobenshiwomu/dsh-bite",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
     }
   ]
 }
