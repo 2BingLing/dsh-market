@@ -578,10 +578,31 @@ export function apply(ctx: {
         const ac = new AbortController()
         if (installId) activeInstalls.set(installId, ac)
         try {
-          return await runAiInstall({ cfg, ctx, args, plugin, profile, security, signal: ac.signal })
+          const result = await runAiInstall({ cfg, ctx, args, plugin, profile, security, signal: ac.signal })
+          // 断线重连：面板关闭/刷新不会终止宿主侧安装，但会丢掉这次 RPC 的返回值——
+          // 终态留存一份，供 ai:install:status 在面板重新打开时恢复
+          if (installId) {
+            const outcome = (result ?? {}) as { ok?: boolean; cancelled?: boolean; error?: string | null }
+            rememberFinishedInstall(installId, plugin.id, outcome)
+          }
+          return result
+        } catch (err) {
+          if (installId) rememberFinishedInstall(installId, plugin.id, { ok: false, error: err instanceof Error ? err.message : String(err) })
+          throw err
         } finally {
           if (installId) activeInstalls.delete(installId)
         }
+      }
+
+      // 断线重连：面板重新打开后按 installId 轮询安装状态（运行中 / 已结束含终态 / 未知=宿主重启过）。
+      // 终态为一次性读取（读到即删），与 ai:review:poll 同语义。
+      case 'ai:install:status': {
+        const id = String(args.installId ?? '')
+        if (activeInstalls.has(id)) return { running: true }
+        const rec = finishedInstalls.get(id)
+        if (!rec) return { running: false, known: false }
+        finishedInstalls.delete(id)
+        return { running: false, known: true, ...rec }
       }
 
       // #165 建议三（可取消）：终止进行中的安装（T0 命令立即杀进程；T1 子代理随 signal 终止）
@@ -1211,6 +1232,27 @@ function realRunner() {
 
 /** 进行中的安装（#165 建议三）：installId → AbortController，供「取消」RPC 终止 T0/T1 */
 const activeInstalls = new Map<string, AbortController>()
+
+/** 已结束安装的结果留存（断线重连）：installId → 终态快照。
+ *  面板关闭/浏览器刷新不会终止宿主侧安装，但会丢掉那次 RPC 的返回值——
+ *  这里按 installId 记住终态，供 ai:install:status 轮询恢复；上限 20 条，超出淘汰最旧。 */
+const finishedInstalls = new Map<string, { pluginId: string; ok: boolean; cancelled?: boolean; error?: string | null; finishedAt: string }>()
+
+function rememberFinishedInstall(installId: string, pluginId: string, outcome: { ok?: boolean; cancelled?: boolean; error?: string | null }): void {
+  if (!installId) return
+  finishedInstalls.set(installId, {
+    pluginId,
+    ok: outcome.ok ?? false,
+    cancelled: outcome.cancelled,
+    error: outcome.error ?? null,
+    finishedAt: new Date().toISOString(),
+  })
+  while (finishedInstalls.size > 20) {
+    const oldest = finishedInstalls.keys().next().value
+    if (oldest === undefined) break
+    finishedInstalls.delete(oldest)
+  }
+}
 
 /** ai:install 主体（#165 建议三重构出函数）：T0 路由（可取消）→ needAi 时派 T1 子代理（可取消）。
  *  取消语义：T0 = 终止正在运行的子进程且不重试；T1 = 终止子代理并丢弃 verdict（不学配方、不记成功）。 */
