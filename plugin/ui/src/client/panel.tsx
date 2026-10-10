@@ -28,6 +28,10 @@ import styles from './styles.module.css'
 /** GitHub 设备流 client_id（dsh-market GitHub App，公开值非机密） */
 const GH_CLIENT_ID = 'Iv23liYFieChYuBJklZp'
 const GH_TOKEN_KEY = 'dsh-market:gh_token'
+
+/** 断线重连：进行中安装的 installId 留存（宿主侧安装不随面板关闭终止；
+ *  面板重新打开时按它轮询 ai:install:status 恢复进度与终态） */
+const PENDING_INSTALL_KEY = 'dsh-market:pending-install'
 const GH_LOGIN_KEY = 'dsh-market:gh_login'
 const GH_METHOD_KEY = 'dsh-market:gh_method'
 const FAVORITES_KEY = 'dsh-market:favorites'
@@ -349,6 +353,12 @@ function InstallModal(props: {
     setPhase('running')
     const installId = `${plugin.id}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
     lastInstallIdRef.current = installId
+    // 断线重连：installId 落到 localStorage——面板关闭/刷新后宿主侧安装仍在继续，
+    // 面板重新打开时按它轮询 ai:install:status 恢复进度与终态
+    localStorage.setItem(
+      PENDING_INSTALL_KEY,
+      JSON.stringify({ installId, pluginId: plugin.id, pluginName: plugin.name, at: Date.now() }),
+    )
     try {
       const r = await api<{
         started: boolean
@@ -387,6 +397,9 @@ function InstallModal(props: {
       setErrorClass(e instanceof RpcError ? e.classified ?? null : null)
       setDiagCopied(false)
       setPhase('error')
+    } finally {
+      // RPC 已有明确结果（完成/取消/报错）→ 清掉断线重连标记；页面关闭导致 await 未落地的情形不会走到这里
+      localStorage.removeItem(PENDING_INSTALL_KEY)
     }
   }
 
@@ -2024,6 +2037,8 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
   const [selfDismissed, setSelfDismissed] = useState(false)
   // P12：数据加载失败不再静默吞掉（吞掉 = 空列表 + 无解释的"坏态无出路"）
   const [loadError, setLoadError] = useState<Error | null>(null)
+  // 断线重连：上次关闭面板时有未等完的安装 → 恢复横幅 + 轮询宿主终态
+  const [resuming, setResuming] = useState<{ pluginName: string } | null>(null)
 
   const loadAll = async () => {
     setLoading(true)
@@ -2074,6 +2089,63 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
       .then((r) => setSelfUpdate(r))
       .catch(() => {})
   }, [open, selfDismissed])
+
+  // 断线重连：上次关闭面板时有未等完的安装（宿主侧不受面板关闭影响，仍在继续）——
+  // 按 localStorage 留存的 installId 轮询 ai:install:status，恢复进度提示与终态通知
+  useEffect(() => {
+    if (!open) return
+    const raw = localStorage.getItem(PENDING_INSTALL_KEY)
+    if (!raw) return
+    let entry: { installId: string; pluginName: string }
+    try {
+      entry = JSON.parse(raw) as { installId: string; pluginName: string }
+    } catch {
+      localStorage.removeItem(PENDING_INSTALL_KEY)
+      return
+    }
+    let alive = true
+    let polls = 0
+    setResuming({ pluginName: entry.pluginName })
+    const tick = async () => {
+      polls += 1
+      try {
+        const s = await api<{ running: boolean; known?: boolean; ok?: boolean; cancelled?: boolean; error?: string | null }>(
+          'ai:install:status',
+          { installId: entry.installId },
+        )
+        if (!alive) return
+        if (s.running && polls < 200) {
+          setTimeout(() => {
+            if (alive) void tick()
+          }, 3000)
+          return
+        }
+        localStorage.removeItem(PENDING_INSTALL_KEY)
+        setResuming(null)
+        if (s.running) return // 轮询上限：放弃恢复（安装仍在宿主侧继续，可稍后在「已装」查看）
+        if (s.known === false) return // 宿主重启过：终态随进程丢失（安装也已随之中止）
+        if (s.cancelled) {
+          toast(`「${entry.pluginName}」安装已取消`, 3000)
+        } else if (s.ok) {
+          toast(`「${entry.pluginName}」安装完成`, 4000)
+          setRefreshKey((k) => k + 1)
+        } else {
+          toast(`「${entry.pluginName}」安装失败：${s.error ?? '未知原因'}`, 5000)
+        }
+      } catch {
+        // 网络抖动：下一轮再试
+        if (alive && polls < 200) {
+          setTimeout(() => {
+            if (alive) void tick()
+          }, 3000)
+        }
+      }
+    }
+    void tick()
+    return () => {
+      alive = false
+    }
+  }, [open])
 
   /** 插件自身更新：引导式（P0）——运行中不能就地覆盖自己，给出停 harness 后的命令并复制 */
   const applySelfUpdate = async () => {
@@ -2195,6 +2267,12 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
                   className: `${styles.btn} ${styles.btnSm} ${styles.btnGhost}`,
                   onClick: () => setSelfDismissed(true),
                 }, '忽略'),
+          )
+        : null,
+      resuming
+        ? El('div', { className: styles.selfUpdateBar },
+            El('span', { className: styles.selfUpdateText },
+              `正在后台安装「${resuming.pluginName}」…可离开此页面，完成后会提示`),
           )
         : null,
       El('div', { className: styles.tabs },
