@@ -114,194 +114,194 @@ window.__ModuleLoader__.load({
 			document.head.appendChild(tag);
 		}
 		var styles_module_css_default = {
-			"fieldRow": "_LI32q_fieldRow",
-			"installedHead": "_LI32q_installedHead",
-			"modalBody": "_LI32q_modalBody",
-			"stateHint": "_LI32q_stateHint",
-			"searchClear": "_LI32q_searchClear",
-			"stepDot": "_LI32q_stepDot",
-			"modalBackdrop": "_LI32q_modalBackdrop",
-			"stepDone": "_LI32q_stepDone",
-			"stepActive": "_LI32q_stepActive",
-			"iconBtn": "_LI32q_iconBtn",
-			"cardActions": "_LI32q_cardActions",
-			"updateHint": "_LI32q_updateHint",
-			"versionCode": "_LI32q_versionCode",
-			"select": "_LI32q_select",
-			"results": "_LI32q_results",
-			"semanticToggle": "_LI32q_semanticToggle",
-			"advancedTip": "_LI32q_advancedTip",
-			"reasonAi": "_LI32q_reasonAi",
-			"semanticDesc": "_LI32q_semanticDesc",
-			"sceneRow": "_LI32q_sceneRow",
-			"installedMeta": "_LI32q_installedMeta",
-			"hotTag": "_LI32q_hotTag",
-			"statusOff": "_LI32q_statusOff",
-			"searchInput": "_LI32q_searchInput",
-			"cardStars": "_LI32q_cardStars",
-			"searchWrapIcon": "_LI32q_searchWrapIcon",
-			"settingTitle": "_LI32q_settingTitle",
-			"outlet": "_LI32q_outlet",
-			"btnPrimary": "_LI32q_btnPrimary",
-			"ghTip": "_LI32q_ghTip",
-			"settingsLabel": "_LI32q_settingsLabel",
-			"zhChip": "_LI32q_zhChip",
-			"hotTagsTitle": "_LI32q_hotTagsTitle",
-			"loadMore": "_LI32q_loadMore",
-			"modalActions": "_LI32q_modalActions",
-			"outletHint": "_LI32q_outletHint",
-			"field": "_LI32q_field",
-			"unmatched": "_LI32q_unmatched",
-			"sceneDesc": "_LI32q_sceneDesc",
-			"sceneHint": "_LI32q_sceneHint",
-			"reason": "_LI32q_reason",
-			"semanticInfo": "_LI32q_semanticInfo",
-			"tab": "_LI32q_tab",
-			"quizTags": "_LI32q_quizTags",
-			"unmatchedMore": "_LI32q_unmatchedMore",
-			"favBtnOn": "_LI32q_favBtnOn",
-			"title": "_LI32q_title",
-			"quizCount": "_LI32q_quizCount",
-			"selfUpdateText": "_LI32q_selfUpdateText",
-			"body": "_LI32q_body",
-			"mainHost": "_LI32q_mainHost",
-			"advancedCmd": "_LI32q_advancedCmd",
-			"btnGhost": "_LI32q_btnGhost",
 			"needConfig": "_LI32q_needConfig",
-			"modalHead": "_LI32q_modalHead",
-			"titleIcon": "_LI32q_titleIcon",
-			"stepBar": "_LI32q_stepBar",
-			"deviceCode": "_LI32q_deviceCode",
-			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
-			"unmatchedChip": "_LI32q_unmatchedChip",
-			"hotTagOn": "_LI32q_hotTagOn",
-			"sceneList": "_LI32q_sceneList",
-			"btnDanger": "_LI32q_btnDanger",
-			"card": "_LI32q_card",
-			"loadMoreRow": "_LI32q_loadMoreRow",
-			"versionRow": "_LI32q_versionRow",
-			"settingIc": "_LI32q_settingIc",
-			"selfUpdateBar": "_LI32q_selfUpdateBar",
-			"modalError": "_LI32q_modalError",
-			"installedActions": "_LI32q_installedActions",
-			"trigger": "_LI32q_trigger",
-			"btnSm": "_LI32q_btnSm",
-			"quizCard": "_LI32q_quizCard",
-			"modeSwitchRow": "_LI32q_modeSwitchRow",
-			"ghPollState": "_LI32q_ghPollState",
-			"tabOn": "_LI32q_tabOn",
-			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
-			"sectionNote": "_LI32q_sectionNote",
-			"tagMoreRow": "_LI32q_tagMoreRow",
-			"toast": "_LI32q_toast",
-			"zhCatLabel": "_LI32q_zhCatLabel",
-			"modalClose": "_LI32q_modalClose",
-			"repoBtn": "_LI32q_repoBtn",
-			"semanticPill": "_LI32q_semanticPill",
-			"sectionIcon": "_LI32q_sectionIcon",
-			"tabBody": "_LI32q_tabBody",
-			"emptyDesc": "_LI32q_emptyDesc",
-			"activationChip": "_LI32q_activationChip",
-			"deviceFlow": "_LI32q_deviceFlow",
-			"outletManualText": "_LI32q_outletManualText",
-			"statusOk": "_LI32q_statusOk",
-			"triggerLabel": "_LI32q_triggerLabel",
-			"zhChipOn": "_LI32q_zhChipOn",
-			"btn": "_LI32q_btn",
-			"filterChip": "_LI32q_filterChip",
-			"installedInfo": "_LI32q_installedInfo",
-			"section": "_LI32q_section",
-			"outletActions": "_LI32q_outletActions",
-			"input": "_LI32q_input",
-			"semanticResult": "_LI32q_semanticResult",
-			"deviceFlowTip": "_LI32q_deviceFlowTip",
-			"installedRow": "_LI32q_installedRow",
-			"sceneName": "_LI32q_sceneName",
-			"emptyTitle": "_LI32q_emptyTitle",
-			"quizHeadIcon": "_LI32q_quizHeadIcon",
-			"quizDesc": "_LI32q_quizDesc",
-			"latestChip": "_LI32q_latestChip",
-			"cardName": "_LI32q_cardName",
-			"settingsRow": "_LI32q_settingsRow",
-			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
-			"panelInMain": "_LI32q_panelInMain",
-			"cardHead": "_LI32q_cardHead",
-			"triggerIcon": "_LI32q_triggerIcon",
-			"modalTitle": "_LI32q_modalTitle",
-			"recommendToolbar": "_LI32q_recommendToolbar",
-			"iconBtnOn": "_LI32q_iconBtnOn",
-			"ghLogin": "_LI32q_ghLogin",
-			"ghRow": "_LI32q_ghRow",
-			"updateChip": "_LI32q_updateChip",
-			"sceneInfo": "_LI32q_sceneInfo",
-			"modal": "_LI32q_modal",
-			"sectionTitle": "_LI32q_sectionTitle",
-			"sectionHead": "_LI32q_sectionHead",
-			"compatChip": "_LI32q_compatChip",
-			"cardTags": "_LI32q_cardTags",
-			"quizChip": "_LI32q_quizChip",
-			"activationInert": "_LI32q_activationInert",
-			"inlineIcon": "_LI32q_inlineIcon",
-			"loading": "_LI32q_loading",
-			"stepBarDone": "_LI32q_stepBarDone",
 			"step": "_LI32q_step",
-			"toastIn": "_LI32q_toastIn",
-			"outletMsg": "_LI32q_outletMsg",
-			"cardReasons": "_LI32q_cardReasons",
-			"versionLabel": "_LI32q_versionLabel",
-			"cardBadge": "_LI32q_cardBadge",
-			"subtitle": "_LI32q_subtitle",
-			"zhChipCount": "_LI32q_zhChipCount",
-			"quizChipOn": "_LI32q_quizChipOn",
-			"installedName": "_LI32q_installedName",
-			"statusWarn": "_LI32q_statusWarn",
-			"fieldLabel": "_LI32q_fieldLabel",
-			"dividerLine": "_LI32q_dividerLine",
-			"searchWrap": "_LI32q_searchWrap",
-			"outletManualTitle": "_LI32q_outletManualTitle",
-			"tagOn": "_LI32q_tagOn",
-			"filterRow": "_LI32q_filterRow",
-			"semanticSwitch": "_LI32q_semanticSwitch",
-			"backdrop": "_LI32q_backdrop",
-			"headerClose": "_LI32q_headerClose",
-			"tabs": "_LI32q_tabs",
-			"cardActionHint": "_LI32q_cardActionHint",
-			"filterChipOn": "_LI32q_filterChipOn",
-			"spacer": "_LI32q_spacer",
-			"tagCloud": "_LI32q_tagCloud",
-			"error": "_LI32q_error",
 			"steps": "_LI32q_steps",
-			"modalDesc": "_LI32q_modalDesc",
-			"semanticSwitchOn": "_LI32q_semanticSwitchOn",
-			"warn": "_LI32q_warn",
-			"panel": "_LI32q_panel",
-			"tag": "_LI32q_tag",
-			"semanticTitle": "_LI32q_semanticTitle",
-			"settingHead": "_LI32q_settingHead",
-			"quizCta": "_LI32q_quizCta",
-			"resultCount": "_LI32q_resultCount",
-			"advanced": "_LI32q_advanced",
-			"ghLink": "_LI32q_ghLink",
-			"installedNote": "_LI32q_installedNote",
-			"header": "_LI32q_header",
-			"quizHead": "_LI32q_quizHead",
-			"grid2": "_LI32q_grid2",
-			"emptyState": "_LI32q_emptyState",
-			"settingCard": "_LI32q_settingCard",
-			"ghDone": "_LI32q_ghDone",
-			"outletTitle": "_LI32q_outletTitle",
+			"reasonAi": "_LI32q_reasonAi",
+			"emptyTitle": "_LI32q_emptyTitle",
+			"body": "_LI32q_body",
+			"btnSm": "_LI32q_btnSm",
+			"headerClose": "_LI32q_headerClose",
+			"field": "_LI32q_field",
+			"tabs": "_LI32q_tabs",
+			"fieldLabel": "_LI32q_fieldLabel",
+			"modalTitle": "_LI32q_modalTitle",
+			"settingsLabel": "_LI32q_settingsLabel",
+			"sceneName": "_LI32q_sceneName",
+			"ghLogin": "_LI32q_ghLogin",
+			"error": "_LI32q_error",
+			"stepActive": "_LI32q_stepActive",
+			"quizHeadIcon": "_LI32q_quizHeadIcon",
+			"ghTip": "_LI32q_ghTip",
+			"outletManualTitle": "_LI32q_outletManualTitle",
+			"updateHint": "_LI32q_updateHint",
+			"results": "_LI32q_results",
+			"settingStatus": "_LI32q_settingStatus",
+			"outletActions": "_LI32q_outletActions",
+			"installedRow": "_LI32q_installedRow",
 			"outletManual": "_LI32q_outletManual",
+			"trigger": "_LI32q_trigger",
+			"triggerIcon": "_LI32q_triggerIcon",
+			"btnDanger": "_LI32q_btnDanger",
+			"filterRow": "_LI32q_filterRow",
+			"zhChipOn": "_LI32q_zhChipOn",
+			"modalClose": "_LI32q_modalClose",
+			"modalSuccessTitle": "_LI32q_modalSuccessTitle",
+			"searchClear": "_LI32q_searchClear",
 			"cardDesc": "_LI32q_cardDesc",
-			"quizTitle": "_LI32q_quizTitle",
-			"emptyIcon": "_LI32q_emptyIcon",
-			"recommendHint": "_LI32q_recommendHint",
-			"activationBroken": "_LI32q_activationBroken",
-			"favBtn": "_LI32q_favBtn",
-			"modalSuccess": "_LI32q_modalSuccess",
+			"advancedCmd": "_LI32q_advancedCmd",
+			"spacer": "_LI32q_spacer",
+			"cardReasons": "_LI32q_cardReasons",
+			"grid2": "_LI32q_grid2",
+			"versionCode": "_LI32q_versionCode",
+			"sectionHead": "_LI32q_sectionHead",
+			"semanticPill": "_LI32q_semanticPill",
+			"fieldRow": "_LI32q_fieldRow",
+			"zhCatLabel": "_LI32q_zhCatLabel",
+			"settingCard": "_LI32q_settingCard",
+			"quizCount": "_LI32q_quizCount",
+			"header": "_LI32q_header",
 			"quizActions": "_LI32q_quizActions",
+			"activationChip": "_LI32q_activationChip",
+			"sectionIcon": "_LI32q_sectionIcon",
+			"favBtn": "_LI32q_favBtn",
+			"toast": "_LI32q_toast",
+			"outletTitle": "_LI32q_outletTitle",
+			"resultCount": "_LI32q_resultCount",
+			"selfUpdateBar": "_LI32q_selfUpdateBar",
+			"stepBarDone": "_LI32q_stepBarDone",
+			"deviceFlow": "_LI32q_deviceFlow",
+			"cardBadge": "_LI32q_cardBadge",
+			"recommendToolbar": "_LI32q_recommendToolbar",
+			"semanticSwitch": "_LI32q_semanticSwitch",
+			"installedActions": "_LI32q_installedActions",
+			"tabBody": "_LI32q_tabBody",
+			"settingTitle": "_LI32q_settingTitle",
+			"searchWrapIcon": "_LI32q_searchWrapIcon",
+			"backdrop": "_LI32q_backdrop",
+			"favBtnOn": "_LI32q_favBtnOn",
+			"modalSuccessIcon": "_LI32q_modalSuccessIcon",
+			"toastIn": "_LI32q_toastIn",
+			"zhChipCount": "_LI32q_zhChipCount",
+			"settingHead": "_LI32q_settingHead",
+			"installedInfo": "_LI32q_installedInfo",
+			"installedHead": "_LI32q_installedHead",
+			"emptyDesc": "_LI32q_emptyDesc",
+			"selfUpdateText": "_LI32q_selfUpdateText",
+			"installedNote": "_LI32q_installedNote",
+			"iconBtn": "_LI32q_iconBtn",
+			"panel": "_LI32q_panel",
+			"modalSuccess": "_LI32q_modalSuccess",
+			"statusWarn": "_LI32q_statusWarn",
+			"hotTagsTitle": "_LI32q_hotTagsTitle",
+			"dividerLine": "_LI32q_dividerLine",
+			"subtitle": "_LI32q_subtitle",
+			"btnGhost": "_LI32q_btnGhost",
+			"searchWrap": "_LI32q_searchWrap",
+			"unmatchedChip": "_LI32q_unmatchedChip",
+			"hotTag": "_LI32q_hotTag",
+			"semanticInfo": "_LI32q_semanticInfo",
+			"titleIcon": "_LI32q_titleIcon",
+			"sceneDesc": "_LI32q_sceneDesc",
 			"activationLive": "_LI32q_activationLive",
+			"ghRow": "_LI32q_ghRow",
+			"deviceFlowTip": "_LI32q_deviceFlowTip",
+			"warn": "_LI32q_warn",
+			"sceneRow": "_LI32q_sceneRow",
+			"btn": "_LI32q_btn",
+			"compatChip": "_LI32q_compatChip",
+			"inlineIcon": "_LI32q_inlineIcon",
+			"modalBackdrop": "_LI32q_modalBackdrop",
+			"section": "_LI32q_section",
+			"modal": "_LI32q_modal",
+			"cardTags": "_LI32q_cardTags",
+			"sectionNote": "_LI32q_sectionNote",
+			"stepBar": "_LI32q_stepBar",
+			"modalActions": "_LI32q_modalActions",
+			"outletMsg": "_LI32q_outletMsg",
+			"semanticSwitchOn": "_LI32q_semanticSwitchOn",
+			"cardName": "_LI32q_cardName",
+			"sceneInfo": "_LI32q_sceneInfo",
+			"ghDone": "_LI32q_ghDone",
+			"tagMoreRow": "_LI32q_tagMoreRow",
+			"semanticToggle": "_LI32q_semanticToggle",
+			"emptyIcon": "_LI32q_emptyIcon",
+			"quizHead": "_LI32q_quizHead",
+			"advancedTip": "_LI32q_advancedTip",
+			"outlet": "_LI32q_outlet",
+			"card": "_LI32q_card",
+			"recommendHint": "_LI32q_recommendHint",
+			"emptyState": "_LI32q_emptyState",
+			"cardHead": "_LI32q_cardHead",
+			"tagOn": "_LI32q_tagOn",
+			"quizTags": "_LI32q_quizTags",
+			"loadMoreRow": "_LI32q_loadMoreRow",
+			"repoBtn": "_LI32q_repoBtn",
+			"semanticDesc": "_LI32q_semanticDesc",
+			"semanticResult": "_LI32q_semanticResult",
+			"ghPollState": "_LI32q_ghPollState",
+			"statusOff": "_LI32q_statusOff",
+			"versionRow": "_LI32q_versionRow",
+			"loadMore": "_LI32q_loadMore",
+			"filterChip": "_LI32q_filterChip",
+			"input": "_LI32q_input",
+			"quizTitle": "_LI32q_quizTitle",
+			"versionLabel": "_LI32q_versionLabel",
+			"modalHead": "_LI32q_modalHead",
+			"loading": "_LI32q_loading",
+			"stepDot": "_LI32q_stepDot",
+			"recommendToolbarIcon": "_LI32q_recommendToolbarIcon",
+			"quizChip": "_LI32q_quizChip",
+			"title": "_LI32q_title",
+			"cardActionHint": "_LI32q_cardActionHint",
+			"triggerLabel": "_LI32q_triggerLabel",
+			"searchInput": "_LI32q_searchInput",
+			"activationBroken": "_LI32q_activationBroken",
+			"settingIc": "_LI32q_settingIc",
+			"quizChipOn": "_LI32q_quizChipOn",
+			"hotTagOn": "_LI32q_hotTagOn",
+			"semanticTitle": "_LI32q_semanticTitle",
+			"filterChipOn": "_LI32q_filterChipOn",
+			"mainHost": "_LI32q_mainHost",
+			"cardActions": "_LI32q_cardActions",
+			"iconBtnOn": "_LI32q_iconBtnOn",
+			"stateHint": "_LI32q_stateHint",
+			"sceneHint": "_LI32q_sceneHint",
+			"activationInert": "_LI32q_activationInert",
 			"sceneEmpty": "_LI32q_sceneEmpty",
-			"settingStatus": "_LI32q_settingStatus"
+			"modalError": "_LI32q_modalError",
+			"advanced": "_LI32q_advanced",
+			"panelInMain": "_LI32q_panelInMain",
+			"reason": "_LI32q_reason",
+			"installedName": "_LI32q_installedName",
+			"quizCard": "_LI32q_quizCard",
+			"statusOk": "_LI32q_statusOk",
+			"ghLink": "_LI32q_ghLink",
+			"unmatchedMore": "_LI32q_unmatchedMore",
+			"deviceCode": "_LI32q_deviceCode",
+			"unmatched": "_LI32q_unmatched",
+			"zhChip": "_LI32q_zhChip",
+			"settingsRow": "_LI32q_settingsRow",
+			"quizDesc": "_LI32q_quizDesc",
+			"btnPrimary": "_LI32q_btnPrimary",
+			"select": "_LI32q_select",
+			"updateChip": "_LI32q_updateChip",
+			"tabOn": "_LI32q_tabOn",
+			"modalDesc": "_LI32q_modalDesc",
+			"modalBody": "_LI32q_modalBody",
+			"installedMeta": "_LI32q_installedMeta",
+			"sectionTitle": "_LI32q_sectionTitle",
+			"outletManualText": "_LI32q_outletManualText",
+			"outletHint": "_LI32q_outletHint",
+			"tab": "_LI32q_tab",
+			"cardStars": "_LI32q_cardStars",
+			"modeSwitchRow": "_LI32q_modeSwitchRow",
+			"quizCta": "_LI32q_quizCta",
+			"tagCloud": "_LI32q_tagCloud",
+			"latestChip": "_LI32q_latestChip",
+			"sceneList": "_LI32q_sceneList",
+			"stepDone": "_LI32q_stepDone",
+			"tag": "_LI32q_tag"
 		};
 		//#endregion
 		//#region src/client/error-outlet.tsx
@@ -1731,6 +1731,9 @@ window.__ModuleLoader__.load({
 		/** GitHub 设备流 client_id（dsh-market GitHub App，公开值非机密） */
 		const GH_CLIENT_ID = "Iv23liYFieChYuBJklZp";
 		const GH_TOKEN_KEY = "dsh-market:gh_token";
+		/** 断线重连：进行中安装的 installId 留存（宿主侧安装不随面板关闭终止；
+		*  面板重新打开时按它轮询 ai:install:status 恢复进度与终态） */
+		const PENDING_INSTALL_KEY = "dsh-market:pending-install";
 		const GH_LOGIN_KEY = "dsh-market:gh_login";
 		const GH_METHOD_KEY = "dsh-market:gh_method";
 		const FAVORITES_KEY = "dsh-market:favorites";
@@ -1965,6 +1968,12 @@ window.__ModuleLoader__.load({
 				setPhase("running");
 				const installId = `${plugin.id}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 				lastInstallIdRef.current = installId;
+				localStorage.setItem(PENDING_INSTALL_KEY, JSON.stringify({
+					installId,
+					pluginId: plugin.id,
+					pluginName: plugin.name,
+					at: Date.now()
+				}));
 				try {
 					const r = await api("ai:install", {
 						pluginId: plugin.id,
@@ -1987,6 +1996,8 @@ window.__ModuleLoader__.load({
 					setErrorClass(e instanceof RpcError ? e.classified ?? null : null);
 					setDiagCopied(false);
 					setPhase("error");
+				} finally {
+					localStorage.removeItem(PENDING_INSTALL_KEY);
 				}
 			};
 			/** #165 建议二（审查与安装分离）：安全模式流程 = 只读审查 → 报告 → 用户确认 → 宿主受控执行。
@@ -3125,6 +3136,7 @@ window.__ModuleLoader__.load({
 			const [selfUpdating, setSelfUpdating] = (0, react.useState)(false);
 			const [selfDismissed, setSelfDismissed] = (0, react.useState)(false);
 			const [loadError, setLoadError] = (0, react.useState)(null);
+			const [resuming, setResuming] = (0, react.useState)(null);
 			const loadAll = async () => {
 				setLoading(true);
 				setLoadError(null);
@@ -3175,6 +3187,51 @@ window.__ModuleLoader__.load({
 				if (!open || selfDismissed) return;
 				api("update:self", { force: true }).then((r) => setSelfUpdate(r)).catch(() => {});
 			}, [open, selfDismissed]);
+			(0, react.useEffect)(() => {
+				if (!open) return;
+				const raw = localStorage.getItem(PENDING_INSTALL_KEY);
+				if (!raw) return;
+				let entry;
+				try {
+					entry = JSON.parse(raw);
+				} catch {
+					localStorage.removeItem(PENDING_INSTALL_KEY);
+					return;
+				}
+				let alive = true;
+				let polls = 0;
+				setResuming({ pluginName: entry.pluginName });
+				const tick = async () => {
+					polls += 1;
+					try {
+						const s = await api("ai:install:status", { installId: entry.installId });
+						if (!alive) return;
+						if (s.running && polls < 200) {
+							setTimeout(() => {
+								if (alive) tick();
+							}, 3e3);
+							return;
+						}
+						localStorage.removeItem(PENDING_INSTALL_KEY);
+						setResuming(null);
+						if (s.running) return;
+						if (s.known === false) return;
+						if (s.cancelled) toast(`「${entry.pluginName}」安装已取消`, 3e3);
+						else if (s.ok) {
+							toast(`「${entry.pluginName}」安装完成`, 4e3);
+							setRefreshKey((k) => k + 1);
+						} else toast(`「${entry.pluginName}」安装失败：${s.error ?? "未知原因"}`, 5e3);
+					} catch {
+						if (alive && polls < 200) setTimeout(() => {
+							if (alive) tick();
+						}, 3e3);
+					}
+				};
+				tick();
+				return () => {
+					alive = false;
+				};
+			}, [open]);
 			/** 插件自身更新：引导式（P0）——运行中不能就地覆盖自己，给出停 harness 后的命令并复制 */
 			const applySelfUpdate = async () => {
 				setSelfUpdating(true);
@@ -3301,7 +3358,7 @@ window.__ModuleLoader__.load({
 			}, "获取命令"), selfUpdating ? null : El("button", {
 				className: `${styles_module_css_default.btn} ${styles_module_css_default.btnSm} ${styles_module_css_default.btnGhost}`,
 				onClick: () => setSelfDismissed(true)
-			}, "忽略")) : null, El("div", { className: styles_module_css_default.tabs }, ...tabs.map((t) => El("button", {
+			}, "忽略")) : null, resuming ? El("div", { className: styles_module_css_default.selfUpdateBar }, El("span", { className: styles_module_css_default.selfUpdateText }, `正在后台安装「${resuming.pluginName}」…可离开此页面，完成后会提示`)) : null, El("div", { className: styles_module_css_default.tabs }, ...tabs.map((t) => El("button", {
 				key: t.id,
 				className: `${styles_module_css_default.tab} ${tab === t.id ? styles_module_css_default.tabOn : ""}`,
 				onClick: () => setTab(t.id)
