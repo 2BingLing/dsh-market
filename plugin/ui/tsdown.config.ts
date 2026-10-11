@@ -44,7 +44,7 @@ const CSS_VIRTUAL_SUFFIX = '.mjs'
 export default [
   {
     name: `${PLUGIN_ID}/node`,
-    entry: ['src/index.ts', 'src/invariant.ts'],
+    entry: ['src/index.ts', 'src/invariant.ts', 'src/subagent-compat.ts'],
     outDir: 'lib',
     format: ['esm'],
     platform: 'node',

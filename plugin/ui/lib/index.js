@@ -1,6 +1,7 @@
+import { interruptSubagent, startSubagent } from "./subagent-compat.js";
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { aggregateTags, appendOpLog, applyUpdate, buildBackup, canonicalCommands, checkSelfUpdate, checkUpdates, classifyFailure, deriveSmokeCommands, detectPnpmMajor, exportLogText, extractInstallPkgName, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, guardInstallCommands, hotTags, importBackup, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readOpLogTail, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
+import { aggregateTags, appendOpLog, applyUpdate, buildBackup, buildDiagSnapshot, canonicalCommands, checkSelfUpdate, checkUpdates, classifyFailure, deriveSmokeCommands, detectPnpmMajor, exportLogText, extractInstallPkgName, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, guardInstallCommands, hotTags, importBackup, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readOpLogTail, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。
@@ -435,18 +436,48 @@ function apply(ctx) {
 				const ac = new AbortController();
 				if (installId) activeInstalls.set(installId, ac);
 				try {
-					return await runAiInstall({
+					const result = await runAiInstall({
 						cfg,
 						ctx,
 						args,
 						plugin,
 						profile,
 						security,
-						signal: ac.signal
+						signal: ac.signal,
+						installId
 					});
+					if (installId) {
+						const outcome = result ?? {};
+						rememberFinishedInstall(installId, plugin.id, outcome);
+					}
+					return result;
+				} catch (err) {
+					if (installId) rememberFinishedInstall(installId, plugin.id, {
+						ok: false,
+						error: err instanceof Error ? err.message : String(err)
+					});
+					throw err;
 				} finally {
-					if (installId) activeInstalls.delete(installId);
+					if (installId) {
+						activeInstalls.delete(installId);
+						activeChildAgents.delete(installId);
+					}
 				}
+			}
+			case "ai:install:status": {
+				const id = String(args.installId ?? "");
+				if (activeInstalls.has(id)) return { running: true };
+				const rec = finishedInstalls.get(id);
+				if (!rec) return {
+					running: false,
+					known: false
+				};
+				finishedInstalls.delete(id);
+				return {
+					running: false,
+					known: true,
+					...rec
+				};
 			}
 			case "ai:install:cancel": {
 				const id = String(args.installId ?? "");
@@ -456,7 +487,16 @@ function apply(ctx) {
 					error: "没有进行中的安装或已完成"
 				};
 				ac.abort();
-				return { ok: true };
+				let interrupted = false;
+				const child = activeChildAgents.get(id);
+				if (child) {
+					interrupted = await interruptSubagent(ctx.get("subagents"), child);
+					activeChildAgents.delete(id);
+				}
+				return {
+					ok: true,
+					interrupted
+				};
 			}
 			case "ai:review": {
 				const plugin = (await market()).plugins.find((p) => p.id === args.pluginId);
@@ -471,7 +511,7 @@ function apply(ctx) {
 				if (!agent) throw new Error("当前会话代理不可用");
 				const provider = subagents.list().includes("spawn") ? "spawn" : subagents.list()[0];
 				const prompt = buildReviewPrompt(plugin);
-				const run = await Promise.race([subagents.start(provider, {
+				const run = await Promise.race([startSubagent(subagents, provider, {
 					label: `安全审查 ${plugin.name}`,
 					prompt: [{
 						type: "text",
@@ -480,8 +520,12 @@ function apply(ctx) {
 					parent: agent,
 					signal: AbortSignal.any([ac.signal, AbortSignal.timeout(36e4)])
 				}), new Promise((_, rej) => setTimeout(() => rej(/* @__PURE__ */ new Error("子代理启动超时")), 1e4))]);
-				const sessionId = run.sessionId ?? run.id ?? null;
+				const sessionId = run.sessionId;
 				if (sessionId && installId) {
+					if (run.childId) activeChildAgents.set(installId, {
+						childId: run.childId,
+						agent
+					});
 					reviewResults.set(installId, { done: false });
 					const sq = ctx.get("sessionQuery");
 					if (sq?.readSession) watchReviewVerdict({
@@ -501,6 +545,7 @@ function apply(ctx) {
 				if (activeInstalls.get(id)?.signal.aborted) {
 					activeInstalls.delete(id);
 					reviewResults.delete(id);
+					activeChildAgents.delete(id);
 					return {
 						done: true,
 						cancelled: true
@@ -510,6 +555,7 @@ function apply(ctx) {
 				if (!entry || !entry.done) return { done: false };
 				reviewResults.delete(id);
 				activeInstalls.delete(id);
+				activeChildAgents.delete(id);
 				return {
 					done: true,
 					verdict: entry.verdict ?? null
@@ -642,6 +688,13 @@ function apply(ctx) {
 					throw new Error(`GitHub star ${r.status}: ${body.slice(0, 200)}`);
 				}
 				return { ok: true };
+			}
+			case "diag:snapshot": {
+				let pv = null;
+				try {
+					pv = require("@dsh-market/plugin/package.json").version ?? null;
+				} catch {}
+				return buildDiagSnapshot(cfg, pv);
 			}
 			default: throw new Error(`未知方法: ${method}`);
 		}
@@ -968,10 +1021,32 @@ function realRunner() {
 }
 /** 进行中的安装（#165 建议三）：installId → AbortController，供「取消」RPC 终止 T0/T1 */
 const activeInstalls = /* @__PURE__ */ new Map();
+/** #228 · 已启动的 T1/审查子代理（installId → childId + 父 agent）：
+* alpha.2 起 abort 杀不掉已启动的子代理，取消路径须用 childId 调 subagents.interrupt */
+const activeChildAgents = /* @__PURE__ */ new Map();
+/** 已结束安装的结果留存（断线重连）：installId → 终态快照。
+*  面板关闭/浏览器刷新不会终止宿主侧安装，但会丢掉那次 RPC 的返回值——
+*  这里按 installId 记住终态，供 ai:install:status 轮询恢复；上限 20 条，超出淘汰最旧。 */
+const finishedInstalls = /* @__PURE__ */ new Map();
+function rememberFinishedInstall(installId, pluginId, outcome) {
+	if (!installId) return;
+	finishedInstalls.set(installId, {
+		pluginId,
+		ok: outcome.ok ?? false,
+		cancelled: outcome.cancelled,
+		error: outcome.error ?? null,
+		finishedAt: (/* @__PURE__ */ new Date()).toISOString()
+	});
+	while (finishedInstalls.size > 20) {
+		const oldest = finishedInstalls.keys().next().value;
+		if (oldest === void 0) break;
+		finishedInstalls.delete(oldest);
+	}
+}
 /** ai:install 主体（#165 建议三重构出函数）：T0 路由（可取消）→ needAi 时派 T1 子代理（可取消）。
 *  取消语义：T0 = 终止正在运行的子进程且不重试；T1 = 终止子代理并丢弃 verdict（不学配方、不记成功）。 */
 async function runAiInstall(opts) {
-	const { cfg, ctx, args, plugin, profile, security, signal } = opts;
+	const { cfg, ctx, args, plugin, profile, security, signal, installId } = opts;
 	const t0 = security ? null : await routeInstall(cfg, plugin, {
 		profile,
 		runner: realRunner(),
@@ -1014,7 +1089,7 @@ async function runAiInstall(opts) {
 	if (!agent) throw new Error("当前会话代理不可用");
 	const provider = subagents.list().includes("spawn") ? "spawn" : subagents.list()[0];
 	const prompt = buildInstallPrompt(plugin, profile, t0?.reason, { security });
-	const run = await Promise.race([subagents.start(provider, {
+	const run = await Promise.race([startSubagent(subagents, provider, {
 		label: `安装 ${plugin.name}`,
 		prompt: [{
 			type: "text",
@@ -1023,7 +1098,7 @@ async function runAiInstall(opts) {
 		parent: agent,
 		signal: AbortSignal.any([signal, AbortSignal.timeout(6e5)])
 	}), new Promise((_, rej) => setTimeout(() => rej(/* @__PURE__ */ new Error("子代理启动超时")), 1e4))]);
-	const sessionId = run.sessionId ?? run.id ?? null;
+	const sessionId = run.sessionId;
 	recordInstallMetric(cfg, {
 		ts: (/* @__PURE__ */ new Date()).toISOString(),
 		pluginId: plugin.id,
@@ -1034,6 +1109,10 @@ async function runAiInstall(opts) {
 		error: t0?.reason ?? null
 	});
 	if (sessionId) {
+		if (run.childId && installId) activeChildAgents.set(installId, {
+			childId: run.childId,
+			agent
+		});
 		const sq = ctx.get("sessionQuery");
 		if (sq?.readSession) watchInstallVerdict({
 			cfg,

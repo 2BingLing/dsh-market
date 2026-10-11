@@ -1,86 +1,50 @@
 {
-  "generatedAt": "2026-10-09T23:17:20.962Z",
+  "generatedAt": "2026-10-10T22:31:45.607Z",
   "replies": [
     {
       "issueNumbers": [
-        221
+        227
       ],
-      "fullName": "Faide-cyber/dsh-workbuddy",
+      "fullName": "Moolight/dsh-shader-workbench",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        226
+      ],
+      "fullName": "Ronniealgo/dsh-find-file",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 56
+    },
+    {
+      "issueNumbers": [
+        225
+      ],
+      "fullName": "wobenshiwomu/dsh-facet",
       "type": "cordis-plugin",
       "stars": 2,
       "score": 61
     },
     {
       "issueNumbers": [
-        214
+        223
       ],
-      "fullName": "MacilyDots/dsh-session-inherit",
+      "fullName": "klarkxy/dsh-plugins",
+      "type": "cordis-plugin",
+      "stars": 7,
+      "score": 69
+    },
+    {
+      "issueNumbers": [
+        224
+      ],
+      "fullName": "acdsh4869/dsh-deepseek-web-relay",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 35
-    },
-    {
-      "issueNumbers": [
-        220
-      ],
-      "fullName": "MacilyDots/dsh-prompt-inject",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        218
-      ],
-      "fullName": "Ronniealgo/dsh-route-balance",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 58
-    },
-    {
-      "issueNumbers": [
-        215
-      ],
-      "fullName": "MacilyDots/dsh-olivia-bridge",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        217
-      ],
-      "fullName": "MacilyDots/dsh-mobile-access",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        219
-      ],
-      "fullName": "MacilyDots/dsh-image-count-guard",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        216
-      ],
-      "fullName": "MacilyDots/dsh-turn-chime",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        213
-      ],
-      "fullName": "wobenshiwomu/dsh-bite",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
     }
   ]
 }

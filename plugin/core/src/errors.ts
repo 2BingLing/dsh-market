@@ -12,6 +12,7 @@
 export interface FailureClass {
   /** 机器可读类别（写进操作日志，便于统计高频失败原因） */
   code:
+    | "incompatible"
     | "network"
     | "rate-limit"
     | "not-found"
@@ -37,6 +38,14 @@ interface Rule {
 
 /** 按优先级排列：越靠前越特异（file-locked 在 permission 前——Windows 的 EPERM 多是文件占用而非权限） */
 const RULES: Rule[] = [
+  {
+    // #228 · TypeError（如 "subagents.start is not a function"）此前落进 unknown，
+    // 真实原因完全不可见——它几乎总是宿主更新导致的接口变更，必须单独分类并透出原文。
+    code: "incompatible",
+    re: /TypeError|\bis not a function\b/i,
+    title: "插件与宿主版本不兼容（宿主接口变更）",
+    hint: "先到设置 Tab 更新插件市场再重试；仍失败请点「复制诊断」把信息发给 AI",
+  },
   {
     code: "rate-limit",
     re: /rate limit|API rate limit exceeded|secondary rate|EAI_AGAIN.*api\.github/i,
