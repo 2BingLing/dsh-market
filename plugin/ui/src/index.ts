@@ -52,7 +52,13 @@ import {
   exportLogText,
   buildBackup,
   importBackup,
+  buildDiagSnapshot,
 } from '@dsh-market/core'
+import {
+  startSubagent,
+  interruptSubagent,
+  type SubagentsService,
+} from './subagent-compat'
 
 export const name = 'dsh-market'
 
@@ -578,9 +584,12 @@ export function apply(ctx: {
         const ac = new AbortController()
         if (installId) activeInstalls.set(installId, ac)
         try {
-          return await runAiInstall({ cfg, ctx, args, plugin, profile, security, signal: ac.signal })
+          return await runAiInstall({ cfg, ctx, args, plugin, profile, security, signal: ac.signal, installId })
         } finally {
-          if (installId) activeInstalls.delete(installId)
+          if (installId) {
+            activeInstalls.delete(installId)
+            activeChildAgents.delete(installId) // #228 · 子代理登记同步清理
+          }
         }
       }
 
@@ -590,7 +599,19 @@ export function apply(ctx: {
         const ac = activeInstalls.get(id)
         if (!ac) return { ok: false, error: '没有进行中的安装或已完成' }
         ac.abort()
-        return { ok: true }
+        // #228 · alpha.2 abort 语义变更：signal 只在初始消息被收件箱接受前有效，之后子代理
+        // 常驻运行——abort 之外必须显式 interrupt，否则 UI 显示「已取消」而子代理继续跑完、
+        // 继续消耗额度。interrupt 不存在（旧宿主）时安全降级为仅 abort。
+        let interrupted = false
+        const child = activeChildAgents.get(id)
+        if (child) {
+          interrupted = await interruptSubagent(
+            ctx.get('subagents') as SubagentsService | undefined,
+            child,
+          )
+          activeChildAgents.delete(id)
+        }
+        return { ok: true, interrupted }
       }
 
       // #165 建议二（审查与安装分离）：安全模式 = 只读审查（零执行）→ 用户看报告确认 → 宿主执行白名单内命令
@@ -607,27 +628,15 @@ export function apply(ctx: {
               roots?: () => Array<{ sessionId?: string; id?: string }>
             }
           | undefined
-        const subagents = ctx.get('subagents') as
-          | {
-              list(): string[]
-              start(
-                name: string,
-                request: {
-                  label?: string
-                  prompt: Array<{ type: string; text: string }>
-                  parent: unknown
-                  signal: AbortSignal
-                },
-              ): Promise<{ sessionId?: string; id?: string }>
-            }
-          | undefined
+        const subagents = ctx.get('subagents') as SubagentsService | undefined
         if (!subagents) throw new Error('子代理服务不可用')
         const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0]
         if (!agent) throw new Error('当前会话代理不可用')
         const provider = subagents.list().includes('spawn') ? 'spawn' : subagents.list()[0]
         const prompt = buildReviewPrompt(plugin)
+        // #228 · 经双版本垫片启动（alpha.1 start / alpha.2 startActivation 自动适配）
         const run = await Promise.race([
-          subagents.start(provider, {
+          startSubagent(subagents, provider, {
             label: `安全审查 ${plugin.name}`,
             prompt: [{ type: 'text', text: prompt }],
             parent: agent,
@@ -637,8 +646,10 @@ export function apply(ctx: {
             setTimeout(() => rej(new Error('子代理启动超时')), 10000),
           ),
         ])
-        const sessionId = run.sessionId ?? run.id ?? null
+        const sessionId = run.sessionId
         if (sessionId && installId) {
+          // #228 · 登记 childId：alpha.2 下 abort 杀不掉已启动的子代理，取消路径需 interrupt
+          if (run.childId) activeChildAgents.set(installId, { childId: run.childId, agent })
           reviewResults.set(installId, { done: false })
           const sq = ctx.get('sessionQuery') as
             | { readSession?(id: string): Promise<{ events?: Array<Record<string, any>> } | undefined> }
@@ -655,12 +666,14 @@ export function apply(ctx: {
         if (ac?.signal.aborted) {
           activeInstalls.delete(id)
           reviewResults.delete(id)
+          activeChildAgents.delete(id) // #228 · 审查取消时同步清理子代理登记
           return { done: true, cancelled: true }
         }
         const entry = reviewResults.get(id)
         if (!entry || !entry.done) return { done: false }
         reviewResults.delete(id)
         activeInstalls.delete(id)
+        activeChildAgents.delete(id) // #228 · 审查完成时同步清理子代理登记
         return { done: true, verdict: entry.verdict ?? null }
       }
       // 审查确认后的受控执行：建议命令仍过白名单（安全不变量），白名单外返回 manual 由用户手动执行
@@ -811,6 +824,20 @@ export function apply(ctx: {
           throw new Error(`GitHub star ${r.status}: ${body.slice(0, 200)}`)
         }
         return { ok: true }
+      }
+
+      // #228 · 0.4.11 客户端 buildDiagText 一直在调 diag:snapshot，但 dispatch 漏了这个
+      // case（core 的 buildDiagSnapshot 从未接进来）——「复制诊断」永远显示
+      // 「诊断 RPC 失败：未知方法: diag:snapshot」，让用户误以为宿主挂了。补齐，
+      // 实现与 core/src/cli.ts 的同名命令一致。
+      case 'diag:snapshot': {
+        let pv: string | null = null
+        try {
+          pv = (require('@dsh-market/plugin/package.json') as { version?: string }).version ?? null
+        } catch {
+          // 读不到自身版本就带 null（快照协议允许 null，诊断工具自身绝不抛错）
+        }
+        return buildDiagSnapshot(cfg, pv)
       }
 
       default:
@@ -1212,6 +1239,10 @@ function realRunner() {
 /** 进行中的安装（#165 建议三）：installId → AbortController，供「取消」RPC 终止 T0/T1 */
 const activeInstalls = new Map<string, AbortController>()
 
+/** #228 · 已启动的 T1/审查子代理（installId → childId + 父 agent）：
+ * alpha.2 起 abort 杀不掉已启动的子代理，取消路径须用 childId 调 subagents.interrupt */
+const activeChildAgents = new Map<string, { childId: string; agent: unknown }>()
+
 /** ai:install 主体（#165 建议三重构出函数）：T0 路由（可取消）→ needAi 时派 T1 子代理（可取消）。
  *  取消语义：T0 = 终止正在运行的子进程且不重试；T1 = 终止子代理并丢弃 verdict（不学配方、不记成功）。 */
 async function runAiInstall(opts: {
@@ -1222,8 +1253,9 @@ async function runAiInstall(opts: {
   profile: string
   security: boolean
   signal: AbortSignal
+  installId: string
 }): Promise<unknown> {
-  const { cfg, ctx, args, plugin, profile, security, signal } = opts
+  const { cfg, ctx, args, plugin, profile, security, signal, installId } = opts
   const t0 = security
     ? null
     : await routeInstall(cfg, plugin, {
@@ -1268,29 +1300,17 @@ async function runAiInstall(opts: {
         roots?: () => Array<{ sessionId?: string; id?: string }>
       }
     | undefined
-  const subagents = ctx.get('subagents') as
-    | {
-        list(): string[]
-        start(
-          name: string,
-          request: {
-            label?: string
-            prompt: Array<{ type: string; text: string }>
-            parent: unknown
-            signal: AbortSignal
-          },
-        ): Promise<{ sessionId?: string; id?: string }>
-      }
-    | undefined
+  const subagents = ctx.get('subagents') as SubagentsService | undefined
   if (!subagents) throw new Error('子代理服务不可用')
   // 优先 roots()：安装子代理要挂在「当前根会话」下，不能挂到别的子代理上
   const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0]
   if (!agent) throw new Error('当前会话代理不可用')
   const provider = subagents.list().includes('spawn') ? 'spawn' : subagents.list()[0]
   const prompt = buildInstallPrompt(plugin, profile, t0?.reason, { security })
-  // start 的 promise 在 run 发布后 fulfill；只等发布（10s 超时保护）
+  // #228 · 经双版本垫片启动（alpha.1 start / alpha.2 startActivation 自动适配）；
+  // start/startActivation 的 promise 在 run 发布后 fulfill，只等发布（10s 超时保护）
   const run = await Promise.race([
-    subagents.start(provider, {
+    startSubagent(subagents, provider, {
       label: `安装 ${plugin.name}`,
       prompt: [{ type: 'text', text: prompt }],
       parent: agent,
@@ -1301,7 +1321,7 @@ async function runAiInstall(opts: {
       setTimeout(() => rej(new Error('子代理启动超时')), 10000),
     ),
   ])
-  const sessionId = run.sessionId ?? run.id ?? null
+  const sessionId = run.sessionId
   // P1.5 度量：升级子代理
   recordInstallMetric(cfg, {
     ts: new Date().toISOString(),
@@ -1315,6 +1335,10 @@ async function runAiInstall(opts: {
   })
   // P1.5 T1 输出自动落库（后台，不阻塞 RPC）：轮询子会话 → JSON verdict → 学配方 + 完成度量
   if (sessionId) {
+    // #228 · 登记 childId：alpha.2 下 abort 杀不掉已启动的子代理，取消路径需 interrupt
+    if (run.childId && installId) {
+      activeChildAgents.set(installId, { childId: run.childId, agent })
+    }
     const sq = ctx.get('sessionQuery') as
       | { readSession?(id: string): Promise<{ events?: Array<Record<string, any>> } | undefined> }
       | undefined

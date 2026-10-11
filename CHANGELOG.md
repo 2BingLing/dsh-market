@@ -4,7 +4,14 @@
 
 ## [Unreleased]
 
-### 插件端（`@dsh-market/plugin@0.4.11`）
+### 插件端（`@dsh-market/plugin@0.4.12` / `@dsh-market/core@0.4.10`）
+
+**HOTFIX：DSH `0.2.1-alpha.2` 兼容（#228，0.4.11 在 alpha.2 上安全模式安装全灭）**
+
+- **子代理双版本垫片**（新增 `plugin/ui/src/subagent-compat.ts`，含 5 项回归测试）：alpha.2 重构子代理服务——`subagents.start(name, request)` 变为 `startActivation({provider, label, request, signal, delivery})`，返回 `{childId}` 且必须显式 `delivery: 'caller' | 'parent'`。垫片按**能力探测**（`typeof startActivation`）双兼容、不猜宿主版本号；`ai:review` 与 `runAiInstall`（T1 安装）统一走垫片——安全模式强制走 T1，因此 0.4.11 在 alpha.2 上「任何安装都不可能成功」的阻断级问题（`TypeError: subagents.start is not a function`）就此消除，alpha.1 宿主行为不变。
+- **取消路径语义修复**：alpha.2 的 abort signal 只在「初始消息被收件箱接受」之前有效，之后子代理成为独立常驻 agent——只 abort 会出现「UI 显示已取消、子代理继续跑完消耗额度」。取消时补 `interrupt(childId, {kind:'ancestor', agent})`，失败降级 `{kind:'user', parentSessionId}`；`interrupt` 不存在（旧宿主）安全降级为仅 abort。新增 `activeChildAgents` 登记表，安装/审查的完成、取消路径同步清理。
+- **diag:snapshot 宿主侧补洞**：0.4.11 客户端 `buildDiagText` 一直在调 `diag:snapshot`，但 dispatch 漏了这个 case（core 的 `buildDiagSnapshot` 从未接进来）——「复制诊断」永远显示「诊断 RPC 失败：未知方法: diag:snapshot」，让用户误以为宿主已无响应。补齐 case，实现与 cli.ts 同名命令一致（只读本地、字段级容错）。
+- **classifyFailure 新增 `incompatible` 分类**（core，0.4.10）：`TypeError` / `is not a function` 此前落进 unknown（「原因没能自动识别」），真实原因完全不可见——现单独分类为「插件与宿主版本不兼容（宿主接口变更）」并给出更新指引，keyLines 照常透出原始错误文本。
 
 **修复：中文分类与热门标签无法组合**
 
