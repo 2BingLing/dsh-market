@@ -1,50 +1,32 @@
 {
-  "generatedAt": "2026-10-10T22:31:45.607Z",
+  "generatedAt": "2026-10-11T23:55:25.807Z",
   "replies": [
     {
       "issueNumbers": [
-        227
+        232
       ],
-      "fullName": "Moolight/dsh-shader-workbench",
+      "fullName": "gulagala001/dsh-intelligent-ui",
+      "type": "cordis-plugin",
+      "stars": 5,
+      "score": 64
+    },
+    {
+      "issueNumbers": [
+        233
+      ],
+      "fullName": "wobenshiwomu/dsh-johnny",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 35
+      "score": 36
     },
     {
       "issueNumbers": [
-        226
+        230
       ],
-      "fullName": "Ronniealgo/dsh-find-file",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 56
-    },
-    {
-      "issueNumbers": [
-        225
-      ],
-      "fullName": "wobenshiwomu/dsh-facet",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        223
-      ],
-      "fullName": "klarkxy/dsh-plugins",
-      "type": "cordis-plugin",
-      "stars": 7,
-      "score": 69
-    },
-    {
-      "issueNumbers": [
-        224
-      ],
-      "fullName": "acdsh4869/dsh-deepseek-web-relay",
+      "fullName": "subisle/dsh-prompt-optimizer",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 35
+      "score": 36
     }
   ]
 }
