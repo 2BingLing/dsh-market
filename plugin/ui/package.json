@@ -38,7 +38,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@dsh-market/core": "^0.4.9",
+    "@dsh-market/core": "^0.4.10",
     "@dsh-market/schema": "^0.1.3"
   },
   "keywords": [
