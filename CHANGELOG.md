@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.13` / `@dsh-market/core@0.4.11`）
+
+**HOTFIX：schema 依赖范围收窄（#241，`"*"` 通配可解析到缺 `./zh-intent` 的旧版致 core 加载即崩）**
+
+- `plugin/core` 的 `@dsh-market/schema` 由 `"*"` 收窄为 `"^0.1.4"`，`plugin/ui` 由 `"^0.1.3"` 同步抬到 `"^0.1.4"`，`web` 的 `"*"` 一并收窄（monorepo 内用，纯一致性）。0.1.3 及以下要么缺 `./zh-intent` / `./zh-taxonomy` 子路径导出（≤0.1.2），要么子路径指向未编译的 `.ts`（0.1.3，node_modules 下被 Node 拒绝）——此前通配会让 pnpm 把旧版 hoist 到根目录，core 一加载就抛 `ERR_PACKAGE_PATH_NOT_EXPORTED`，市场入口整个消失且版本号层面毫无异常。
+- 下限钉 **0.1.4** 而非报告建议的 0.1.3：0.1.3 的子路径指向 `src/*.ts` 本身就是坏的（见 #241「相关的另一半问题」，0.1.4 改为 `dist/*.js` 才修好）。
+- 新增守卫测试（`plugin/core/test/package-range.test.ts`，4 项）：已发布包的 schema 范围禁止通配且下限 ≥0.1.4；workspace schema 的 exports 必须提供两个子路径且指向 `dist/*.js`；workspace 版本满足下限——防止将来再改回通配。
+
 ### 插件端（`@dsh-market/plugin@0.4.12` / `@dsh-market/core@0.4.10`）
 
 **HOTFIX：DSH `0.2.1-alpha.2` 兼容（#228，0.4.11 在 alpha.2 上安全模式安装全灭）**

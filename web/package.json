@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@dsh-market/schema": "*",
+    "@dsh-market/schema": "^0.1.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "fuse.js": "^7.0.0"
