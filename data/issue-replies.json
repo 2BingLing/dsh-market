@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-10-13T02:20:34.071Z",
+  "generatedAt": "2026-10-13T23:24:30.268Z",
   "replies": [
     {
       "issueNumbers": [
-        234
+        242
       ],
       "fullName": "FuSheng-cs/Trae2api-dsh",
       "type": "cordis-plugin",
@@ -12,75 +12,12 @@
     },
     {
       "issueNumbers": [
-        240
+        243
       ],
-      "fullName": "MacilyDots/dsh-session-inherit",
+      "fullName": "a775828b-dot/dsh-ntr-zcode",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        239
-      ],
-      "fullName": "wobenshiwomu/dsh-ration",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        237
-      ],
-      "fullName": "Ronniealgo/dsh-mail-guardian",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 54
-    },
-    {
-      "issueNumbers": [
-        238
-      ],
-      "fullName": "hpfs0/dsh-provider-proxy",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 56
-    },
-    {
-      "issueNumbers": [
-        236
-      ],
-      "fullName": "wenh56884-wq/dsh-llm-workbuddy",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        239
-      ],
-      "fullName": "wobenshiwomu/dsh-tide",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 34
-    },
-    {
-      "issueNumbers": [
-        236
-      ],
-      "fullName": "shatyuka/dsh-llm-codebuddy",
-      "type": "cordis-plugin",
-      "stars": 13,
-      "score": 80
-    },
-    {
-      "issueNumbers": [
-        231
-      ],
-      "fullName": "acdsh4869/dsh-aqua-theme",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 34
+      "stars": 2,
+      "score": 51
     }
   ]
 }
