@@ -1,32 +1,86 @@
 {
-  "generatedAt": "2026-10-11T23:55:25.807Z",
+  "generatedAt": "2026-10-13T02:20:34.071Z",
   "replies": [
     {
       "issueNumbers": [
-        232
+        234
       ],
-      "fullName": "gulagala001/dsh-intelligent-ui",
-      "type": "cordis-plugin",
-      "stars": 5,
-      "score": 64
-    },
-    {
-      "issueNumbers": [
-        233
-      ],
-      "fullName": "wobenshiwomu/dsh-johnny",
+      "fullName": "FuSheng-cs/Trae2api-dsh",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 36
     },
     {
       "issueNumbers": [
-        230
+        240
       ],
-      "fullName": "subisle/dsh-prompt-optimizer",
+      "fullName": "MacilyDots/dsh-session-inherit",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 36
+    },
+    {
+      "issueNumbers": [
+        239
+      ],
+      "fullName": "wobenshiwomu/dsh-ration",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        237
+      ],
+      "fullName": "Ronniealgo/dsh-mail-guardian",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 54
+    },
+    {
+      "issueNumbers": [
+        238
+      ],
+      "fullName": "hpfs0/dsh-provider-proxy",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 56
+    },
+    {
+      "issueNumbers": [
+        236
+      ],
+      "fullName": "wenh56884-wq/dsh-llm-workbuddy",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        239
+      ],
+      "fullName": "wobenshiwomu/dsh-tide",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 34
+    },
+    {
+      "issueNumbers": [
+        236
+      ],
+      "fullName": "shatyuka/dsh-llm-codebuddy",
+      "type": "cordis-plugin",
+      "stars": 13,
+      "score": 80
+    },
+    {
+      "issueNumbers": [
+        231
+      ],
+      "fullName": "acdsh4869/dsh-aqua-theme",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 34
     }
   ]
 }
