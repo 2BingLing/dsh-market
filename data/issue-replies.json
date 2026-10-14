@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-10-13T23:24:30.268Z",
+  "generatedAt": "2026-10-14T22:19:52.046Z",
   "replies": [
     {
       "issueNumbers": [
-        242
+        245
       ],
-      "fullName": "FuSheng-cs/Trae2api-dsh",
+      "fullName": "ouli-1242/dsh-plugin-tool-management",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
+      "stars": 14,
+      "score": 74
     },
     {
       "issueNumbers": [
-        243
+        244
       ],
-      "fullName": "a775828b-dot/dsh-ntr-zcode",
+      "fullName": "qikairo7/dsh-web-search-fetch",
       "type": "cordis-plugin",
-      "stars": 2,
-      "score": 51
+      "stars": 1,
+      "score": 52
     }
   ]
 }
