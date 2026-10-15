@@ -1,23 +1,32 @@
 {
-  "generatedAt": "2026-10-14T22:19:52.046Z",
+  "generatedAt": "2026-10-15T22:12:33.545Z",
   "replies": [
     {
       "issueNumbers": [
-        245
+        247
       ],
-      "fullName": "ouli-1242/dsh-plugin-tool-management",
+      "fullName": "diwer/dsh-codex-adapter",
       "type": "cordis-plugin",
-      "stars": 14,
-      "score": 74
+      "stars": 0,
+      "score": 36
     },
     {
       "issueNumbers": [
-        244
+        246
       ],
-      "fullName": "qikairo7/dsh-web-search-fetch",
+      "fullName": "6mt/dsh-control",
       "type": "cordis-plugin",
-      "stars": 1,
-      "score": 52
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        248
+      ],
+      "fullName": "exoticknight/dsh-system1",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 31
     }
   ]
 }
