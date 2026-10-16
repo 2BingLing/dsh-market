@@ -4,6 +4,17 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.14` / `@dsh-market/core@0.4.12`）
+
+**HOTFIX：国内可达性——数据源多镜像 + 可配置 + packs 不阻塞渲染（#249）**
+
+- **数据源多镜像回退**：取数候选从「lite/全量两个 Pages 地址」扩为「每个地址 + jsDelivr 双镜像（`cdn.jsdelivr.net` / `fastly.jsdelivr.net` 的 gh 分支路径）」。背景：绑定自定义域名 dsh.market 后，Pages 会把 `2bingling.github.io/dsh-market/*` **301 到明文 `http://dsh.market/*`**——原先「仓库路径永久有效」的假设失效，而 dsh.market 在国内直连基本不可用（实测 lite 10MB 180s 下不完、9KB 404 要 20s+），两个候选全部超时 → 面板永远加载中。jsDelivr 同文件 1.7–7s。gh 分支引用缓存 12h，市场数据每日更新一次，最坏滞后半天，可接受。
+- **单源超时 15s → 30s**，配合多源切换：慢速管道下单源 15s 本来就下不完，多源下单源快速失败才有意义。
+- **记忆地址失效可自愈**：`resolvedRemoteUrls` 记住的地址失败时清记忆、全量重探其余候选（此前只试记忆地址，一旦劣化就死锁在那）。
+- **数据源可配置**：`resolveConfig` 支持 `DSH_MARKET_REMOTE_URL` / `DSH_MARKET_LITE_URL` 环境变量（优先级：cordis config.dataSource → 环境变量 → 默认 Pages）。用户遇到网络问题不再无解。自定义源不自动套镜像（jsDelivr 上没有对应文件）。
+- **packs 同待遇**：`fetchPacksData` 此前单源无缓存，慢网下拖住列表渲染（实测 6.3s）。改为多源候选 + 磁盘缓存（fresh 直接用 / 全部失败回退过期缓存），客户端 `loadAll` 同步解耦——列表三件套先渲染，packs 异步补齐，不再互相拖。
+- 新增镜像回退测试 4 项（镜像接管 + 记忆、记忆失效重探、env 覆盖 + 自定义源不套镜像、packs 缓存兜底）。
+
 ### 插件端（`@dsh-market/plugin@0.4.13` / `@dsh-market/core@0.4.11`）
 
 **HOTFIX：schema 依赖范围收窄（#241，`"*"` 通配可解析到缺 `./zh-intent` 的旧版致 core 加载即崩）**

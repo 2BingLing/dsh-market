@@ -2044,16 +2044,19 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
     setLoading(true)
     setLoadError(null)
     try {
-      const [pl, prof, inst, pk] = await Promise.all([
+      // #249 · 整合包不进主 Promise.all：宿主侧 packs 慢网/无缓存时一次请求可达 30s+，
+      // 会把整个列表渲染拖住。列表三件套先落地渲染，packs 异步补齐（宿主有缓存时几乎瞬时）。
+      const [pl, prof, inst] = await Promise.all([
         api<LitePlugin[]>('plugins'),
         api<UserProfile | null>('profile:read'),
         api<InstalledItem[]>('installed'),
-        api<LitePack[]>('packs').catch(() => [] as LitePack[]),
       ])
       setPlugins(pl)
       setProfile(prof)
       setInstalled(inst)
-      setPacks(pk)
+      void api<LitePack[]>('packs')
+        .then((pk) => setPacks(pk))
+        .catch(() => {})
       // 场景推荐改为手动触发（读会话有成本），默认用已装插件标签近似兜底
       const counts = new Map<string, number>()
       for (const i of inst) {

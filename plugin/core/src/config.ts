@@ -7,18 +7,41 @@ import { join } from "node:path";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import type { CoreConfig, GitHubBinding, UserProfile } from "./types.js";
 
-// 数据源用 GitHub Pages 默认路径而非自定义域名（dsh.market）：
-// 仓库不变 → 该路径永久有效，不依赖域名续费/换绑；
-// 宣传链接（README/issue 回复）才用 dsh.market——机器读的数据源赌稳定，人读的链接赌品牌。
+// 数据源默认走 GitHub Pages 仓库路径。注意（#249）：绑定自定义域名 dsh.market 后，
+// github.io 不再直接 200——Pages 会 301 到 http://dsh.market（明文 http + 国内无加速，
+// 实测 9KB 404 都要 20s+）。因此 data.ts 的取数候选必须带上 jsDelivr 镜像兜底，
+// 这里只保留默认地址与镜像基座两个事实来源；宣传链接（README/issue 回复）用 dsh.market。
 const DEFAULT_REMOTE_URL =
   "https://2bingling.github.io/dsh-market/plugins.json";
 
 // 瘦身索引：collector 额外产出的 plugins-lite.json，只保留插件端真正读取的字段
 // （去掉 readmeSummary / topics / score.breakdown / score.explanation 等，
 //  gzip 传输量约降到全量的 43%）。插件端优先取它，404 时自动回退全量索引——
-// 这样在数据管道尚未产出该文件时也不会把插件打挂。
+//  这样在数据管道尚未产出该文件时也不会把插件打挂。
 const DEFAULT_LITE_URL =
   "https://2bingling.github.io/dsh-market/plugins-lite.json";
+
+/**
+ * #249 · jsDelivr 公共镜像基座：国内直连 GitHub Pages / dsh.market 常年不可达
+ * （实测 lite 10MB 在 180s 内下不完），jsDelivr 同文件 1.7–7s。
+ * gh 分支引用缓存 12h：市场数据每日 06:00 更新一次，最坏滞后半天，可接受。
+ * 取数候选 = 默认地址 + 这些镜像（见 config.ts → withMirrors / data.ts → remoteCandidates）。
+ */
+export const MIRROR_BASES = [
+  "https://cdn.jsdelivr.net/gh/2BingLing/dsh-market@master/web/public",
+  "https://fastly.jsdelivr.net/gh/2BingLing/dsh-market@master/web/public",
+] as const;
+
+/**
+ * 单地址 → [原地址, ...镜像地址]。
+ * 仅对默认 Pages 地址套镜像；用户自定义源（env / config 传入）不认识 jsDelivr 上的
+ * 对应文件，原样返回——自定义即用户自负其责。
+ */
+export function withMirrors(url: string): string[] {
+  if (url !== DEFAULT_REMOTE_URL && url !== DEFAULT_LITE_URL) return [url];
+  const file = url.split("/").pop()!;
+  return [url, ...MIRROR_BASES.map((b) => `${b}/${file}`)];
+}
 
 export interface ResolvedConfig {
   dshHome: string;
@@ -61,8 +84,16 @@ export function resolveConfig(config: CoreConfig = {}): ResolvedConfig {
     profilesDir,
     dataDir,
     defaultProfile: config.defaultProfile ?? "web",
-    remoteUrl: config.dataSource?.remoteUrl ?? DEFAULT_REMOTE_URL,
-    liteUrl: config.dataSource?.liteUrl ?? DEFAULT_LITE_URL,
+    // #249 · 数据源可配置：cordis config.dataSource（最显式）→ 环境变量（会话级）→ 默认 Pages。
+    // 环境变量名与 DSH_MARKET_DATA_DIR 命名风格对齐。
+    remoteUrl:
+      config.dataSource?.remoteUrl ??
+      process.env.DSH_MARKET_REMOTE_URL ??
+      DEFAULT_REMOTE_URL,
+    liteUrl:
+      config.dataSource?.liteUrl ??
+      process.env.DSH_MARKET_LITE_URL ??
+      DEFAULT_LITE_URL,
     localDataPath: config.dataSource?.localPath ?? null,
     cacheTtlMs: config.dataSource?.cacheTtlMs ?? 60 * 60 * 1000,
   };

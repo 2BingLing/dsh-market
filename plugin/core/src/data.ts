@@ -5,13 +5,23 @@
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { DshPack, MarketData } from "@dsh-market/schema";
+import { withMirrors } from "./config.js";
 import type { ResolvedConfig } from "./config.js";
 
 const CACHE_FILE = "plugins-cache.json";
+const PACKS_CACHE_FILE = "packs-cache.json";
+
+/**
+ * 单源超时（#249 由 15s 放宽到 30s）：lite 索引 gzip 后仍有数 MB，慢速网络下
+ * 15s 根本下不完；配合多源候选，单源失败快速切下一个，总量仍可控。
+ */
+const FETCH_TIMEOUT_MS = 30_000;
 
 /**
  * 每个配置记住「哪个远程地址真的能用」，避免每次取数都先撞一次 404 的瘦身索引。
  * 用 WeakMap 按 cfg 实例隔离：不同数据源互不影响，测试各自新建 cfg 也天然无串扰。
+ * 注意（#249）：记住的地址也可能失效（网络环境变化 / Pages 301 目标劣化），
+ * fetchRemote 会在记忆地址失败时清除记忆并全量重探。
  */
 const resolvedRemoteUrls = new WeakMap<ResolvedConfig, string>();
 
@@ -25,24 +35,39 @@ export interface MarketDataResult {
   ageMs?: number;
 }
 
-/** 远程候选地址：瘦身索引优先，全量兜底（同一地址只列一次） */
+/** 远程候选地址：记忆命中优先 → 瘦身索引（含镜像）→ 全量（含镜像）；同一地址只列一次 */
 function remoteCandidates(cfg: ResolvedConfig): string[] {
   const remembered = resolvedRemoteUrls.get(cfg);
   if (remembered !== undefined) return [remembered];
   const { liteUrl, remoteUrl } = cfg;
-  return liteUrl && liteUrl !== remoteUrl ? [liteUrl, remoteUrl] : [remoteUrl];
+  const lite = liteUrl && liteUrl !== remoteUrl ? withMirrors(liteUrl) : [];
+  return [...new Set([...lite, ...withMirrors(remoteUrl)])];
 }
 
 /**
  * 按候选顺序拉远程，返回首个成功的结果。
- * 记住命中的地址，后续调用不再重复试探（否则每次都要等 404 往返）。
+ * 记住命中的地址，后续调用不再重复试探（否则每次都要等 404 往返）；
+ * 记忆地址失效时（#249：网络环境变化 / Pages 301 目标劣化）清除记忆、全量重探。
  */
 async function fetchRemote(
   cfg: ResolvedConfig,
 ): Promise<{ data: MarketData; url: string } | null> {
-  for (const url of remoteCandidates(cfg)) {
+  const first = await tryFetchCandidates(cfg, remoteCandidates(cfg));
+  if (first !== null) return first;
+  if (resolvedRemoteUrls.has(cfg)) {
+    resolvedRemoteUrls.delete(cfg);
+    return tryFetchCandidates(cfg, remoteCandidates(cfg));
+  }
+  return null;
+}
+
+async function tryFetchCandidates(
+  cfg: ResolvedConfig,
+  candidates: string[],
+): Promise<{ data: MarketData; url: string } | null> {
+  for (const url of candidates) {
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+      const res = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
       if (!res.ok) continue;
       const data = (await res.json()) as MarketData;
       resolvedRemoteUrls.set(cfg, url);
@@ -143,20 +168,39 @@ export function readCachedData(cfg: ResolvedConfig): MarketDataResult | null {
   };
 }
 
-/** 拉取整合包数据（packs.json，与 plugins.json 同目录；失败静默返回空数组） */
+/**
+ * 拉取整合包数据（packs.json，与 plugins.json 同目录；失败静默返回空数组）。
+ * #249 · 与插件索引同待遇：多源候选（镜像兜底）+ 磁盘缓存（fresh 直接用 / 全部失败时用过期缓存），
+ * 否则 packs 请求超时会拖住客户端的列表渲染（实测拖 6.3s）。
+ */
 export async function fetchPacksData(cfg: ResolvedConfig): Promise<DshPack[]> {
+  const cached = readPacksCache(cfg);
+  if (cached !== null && Date.now() - cached.at < cfg.cacheTtlMs) return cached.packs;
+
   // 只替换文件名而不是匹配 "plugins.json"：数据源可能是 plugins-lite.json，
   // 旧写法 replace(/plugins\.json/) 在 lite 地址上不命中 → 会去拉 plugins-lite.json 当 packs。
-  const url = cfg.remoteUrl.replace(/[^/]*$/, "packs.json");
-  try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
-    if (res.ok) {
+  // 候选 = 瘦身索引与全量的全部镜像地址（去重后实际是同一份 packs.json 的多个源）。
+  const urls = [
+    ...new Set(
+      [...withMirrors(cfg.liteUrl), ...withMirrors(cfg.remoteUrl)].map((u) =>
+        u.replace(/[^/]*$/, "packs.json"),
+      ),
+    ),
+  ];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+      if (!res.ok) continue;
       const data = (await res.json()) as { packs?: DshPack[] };
-      return data.packs ?? [];
+      const packs = data.packs ?? [];
+      writePacksCache(cfg, packs);
+      return packs;
+    } catch {
+      /* 试下一个候选 */
     }
-  } catch {
-    /* 整合包数据缺失不影响主流程 */
   }
+  // 全部候选失败：有过期缓存就先用（总好过空数组，且不阻塞客户端渲染）
+  if (cached !== null) return cached.packs;
   return [];
 }
 
@@ -190,5 +234,30 @@ function cacheAge(cfg: ResolvedConfig): number {
     return Date.now() - statSync(p).mtimeMs;
   } catch {
     return Number.MAX_SAFE_INTEGER;
+  }
+}
+
+function packsCachePath(cfg: ResolvedConfig): string {
+  return join(cfg.dataDir, PACKS_CACHE_FILE);
+}
+
+function writePacksCache(cfg: ResolvedConfig, packs: DshPack[]): void {
+  try {
+    if (!existsSync(cfg.dataDir)) mkdirSync(cfg.dataDir, { recursive: true });
+    writeFileSync(packsCachePath(cfg), JSON.stringify({ at: Date.now(), packs }), "utf8");
+  } catch {
+    /* 缓存失败不影响主流程 */
+  }
+}
+
+function readPacksCache(cfg: ResolvedConfig): { at: number; packs: DshPack[] } | null {
+  try {
+    const p = packsCachePath(cfg);
+    if (!existsSync(p)) return null;
+    const parsed = JSON.parse(readFileSync(p, "utf8")) as { at?: number; packs?: DshPack[] };
+    if (!Array.isArray(parsed.packs)) return null;
+    return { at: parsed.at ?? 0, packs: parsed.packs };
+  } catch {
+    return null;
   }
 }
