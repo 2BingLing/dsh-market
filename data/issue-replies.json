@@ -1,32 +1,23 @@
 {
-  "generatedAt": "2026-10-15T22:12:33.545Z",
+  "generatedAt": "2026-10-16T22:34:36.478Z",
   "replies": [
     {
       "issueNumbers": [
-        247
+        250
       ],
-      "fullName": "diwer/dsh-codex-adapter",
+      "fullName": "zbzbhs/dsh-remote-agent",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
+      "stars": 2,
+      "score": 61
     },
     {
       "issueNumbers": [
-        246
+        251
       ],
-      "fullName": "6mt/dsh-control",
+      "fullName": "MacilyDots/dsh-prompt-inject",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 36
-    },
-    {
-      "issueNumbers": [
-        248
-      ],
-      "fullName": "exoticknight/dsh-system1",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 31
     }
   ]
 }
