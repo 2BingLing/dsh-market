@@ -1,23 +1,14 @@
 {
-  "generatedAt": "2026-10-16T22:34:36.478Z",
+  "generatedAt": "2026-10-17T21:32:09.534Z",
   "replies": [
     {
       "issueNumbers": [
-        250
+        252
       ],
-      "fullName": "zbzbhs/dsh-remote-agent",
+      "fullName": "panqing0313/dsh-plugin-weixin",
       "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        251
-      ],
-      "fullName": "MacilyDots/dsh-prompt-inject",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
+      "stars": 1,
+      "score": 56
     }
   ]
 }
