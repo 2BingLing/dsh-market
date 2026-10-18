@@ -72,8 +72,12 @@ function litePack(p) {
 		}))
 	};
 }
-function apply(ctx) {
-	const cfg = resolveConfig();
+function apply(ctx, config = {}) {
+	const cfg = resolveConfig({ dataSource: config?.dataSource });
+	if (process.env.DSH_MARKET_DEBUG) {
+		const src = config?.dataSource ? "cordis config" : process.env.DSH_MARKET_LITE_URL || process.env.DSH_MARKET_REMOTE_URL ? "env" : "默认";
+		console.log(`[dsh-market] 数据源(${src}) lite=${cfg.liteUrl} remote=${cfg.remoteUrl}`);
+	}
 	let cached = null;
 	/** 用 settings.json 的 modeOverride 覆盖画像（settings 是用户覆盖的单一来源） */
 	function withSettingsMode(profile) {

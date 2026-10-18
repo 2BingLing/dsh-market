@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.15` / `@dsh-market/core@0.4.12`）
+
+**cordis 配置透传（#249 后续）**
+
+- `apply(ctx, config)` 接住宿主传入的用户配置：在 profile 的 `cordis.patch.yml`（或 `--patch` overlay）里给 `id: dsh-market` 的条目写 `config.dataSource`（`remoteUrl` / `liteUrl` / `localPath` / `cacheTtlMs`），即可定向覆盖数据源；优先级 cordis config > 环境变量 > 默认 Pages 地址。已在 0.2.1-rc.2 真机验证：`--patch` overlay 注入 marker 地址，启动日志确认到达 resolveConfig。
+- 新增 `DSH_MARKET_DEBUG=1` 启动诊断：打印实际生效的数据源与来源（cordis config / env / 默认）——#249 这类"版本号正常但数据源不对"的问题从此可自查。
+- 老宿主 / 未配置场景 config 为 undefined → 走默认值链，行为与 0.4.14 完全一致。
+
 ### 插件端（`@dsh-market/plugin@0.4.14` / `@dsh-market/core@0.4.12`）
 
 **HOTFIX：国内可达性——数据源多镜像 + 可配置 + packs 不阻塞渲染（#249）**

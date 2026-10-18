@@ -141,12 +141,29 @@ function litePack(p: any): Record<string, unknown> {
   }
 }
 
+/** #249 · 用户配置入口：在 profile 的 cordis.patch.yml 里定向覆盖（id: dsh-market 的 config 块）。
+ *  优先级：cordis config.dataSource > DSH_MARKET_* 环境变量 > 默认 Pages 地址（resolveConfig 内实现）。 */
+export interface PluginUserConfig {
+  dataSource?: {
+    remoteUrl?: string
+    liteUrl?: string
+    localPath?: string
+    cacheTtlMs?: number
+  }
+}
+
 export function apply(ctx: {
   effect(fn: () => unknown, label?: string): unknown
   webServer: WebServer
   get(name: string): unknown
-}): void {
-  const cfg = resolveConfig()
+}, config: PluginUserConfig = {}): void {
+  const cfg = resolveConfig({ dataSource: config?.dataSource })
+  if (process.env.DSH_MARKET_DEBUG) {
+    const src = config?.dataSource
+      ? 'cordis config'
+      : (process.env.DSH_MARKET_LITE_URL || process.env.DSH_MARKET_REMOTE_URL) ? 'env' : '默认'
+    console.log(`[dsh-market] 数据源(${src}) lite=${cfg.liteUrl} remote=${cfg.remoteUrl}`)
+  }
   let cached: Awaited<ReturnType<typeof loadMarketData>> | null = null
 
   /** 用 settings.json 的 modeOverride 覆盖画像（settings 是用户覆盖的单一来源） */
