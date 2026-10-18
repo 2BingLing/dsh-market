@@ -1,14 +1,50 @@
 {
-  "generatedAt": "2026-10-17T21:32:09.534Z",
+  "generatedAt": "2026-10-18T22:31:48.467Z",
   "replies": [
     {
       "issueNumbers": [
-        252
+        256
       ],
-      "fullName": "panqing0313/dsh-plugin-weixin",
+      "fullName": "Tencent/BrowserSkill",
       "type": "cordis-plugin",
-      "stars": 1,
-      "score": 56
+      "stars": 9152,
+      "score": 89
+    },
+    {
+      "issueNumbers": [
+        258
+      ],
+      "fullName": "6mt/dsh-control",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        255
+      ],
+      "fullName": "DoveLi-Gu/dsh-dyou-wine",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 37
+    },
+    {
+      "issueNumbers": [
+        254
+      ],
+      "fullName": "ColdMagicchess/PTT-Studio",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        257
+      ],
+      "fullName": "zou-hong-run/dsh-deepseek-search",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
     }
   ]
 }
