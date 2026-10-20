@@ -29,6 +29,7 @@ import {
   checkUpdates,
   checkSelfUpdate,
   applyUpdate,
+  resolveNpmRegistry,
   writeMinimumReleaseAge,
   verifyAfterInstall,
   detectPnpmMajor,
@@ -251,7 +252,10 @@ export function apply(ctx: {
       case 'update:check': {
         const data = await market()
         const installed = scanInstalled(cfg, data)
-        return checkUpdates(cfg, installed, { force: Boolean(args.force) })
+        // #265 · 检测与安装同源：registry 取自安装侧 pnpm 配置（profile 目录解析链），
+        // 避免「官方源显示可更新、镜像源装不上」的错位
+        const registry = await resolveNpmRegistry(join(cfg.profilesDir, readSettings(cfg).profile), realRunner())
+        return checkUpdates(cfg, installed, { force: Boolean(args.force), registry })
       }
 
       // 插件自身更新检测（打开面板自动调用，force 强制刷新）。
@@ -261,7 +265,9 @@ export function apply(ctx: {
         const versions = readVersions()
         const current = versions['@dsh-market/plugin']
         if (!current) throw new Error('无法读取当前插件版本')
-        const check = await checkSelfUpdate(current, { force: Boolean(args.force) })
+        // #265 · 同源：与 applyUpdate 的安装侧保持一致
+        const registry = await resolveNpmRegistry(join(cfg.profilesDir, readSettings(cfg).profile), realRunner())
+        const check = await checkSelfUpdate(current, { force: Boolean(args.force), registry })
         if (!args.apply) return check
         const profile = readSettings(cfg).profile
         const manualCommand = `dsh plugin --profile ${profile} add @dsh-market/plugin@latest`
@@ -518,9 +524,12 @@ export function apply(ctx: {
             source: 'profile',
             plugin,
           }
+        const updateProfile = (args.targetProfile as string) ?? readSettings(cfg).profile
+        const registry = await resolveNpmRegistry(join(cfg.profilesDir, updateProfile), realRunner())
         const r = await applyUpdate(cfg, plugin, item, {
           runner: realRunner(),
-          profile: (args.targetProfile as string) ?? readSettings(cfg).profile,
+          profile: updateProfile,
+          registry,
         })
         // P6：更新失败 → 分类留痕
         if (!r.applied) {

@@ -1,7 +1,7 @@
 import { interruptSubagent, startSubagent } from "./subagent-compat.js";
 import { createRequire } from "node:module";
 import { join } from "node:path";
-import { aggregateTags, appendOpLog, applyUpdate, buildBackup, buildDiagSnapshot, canonicalCommands, checkSelfUpdate, checkUpdates, classifyFailure, deriveSmokeCommands, detectPnpmMajor, exportLogText, extractInstallPkgName, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, guardInstallCommands, hotTags, importBackup, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readOpLogTail, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
+import { aggregateTags, appendOpLog, applyUpdate, buildBackup, buildDiagSnapshot, canonicalCommands, checkSelfUpdate, checkUpdates, classifyFailure, deriveSmokeCommands, detectPnpmMajor, exportLogText, extractInstallPkgName, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, guardInstallCommands, hotTags, importBackup, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, parseBlockedBuilds, parseInstallVerdict, readOpLogTail, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, resolveNpmRegistry, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
 import { execFile } from "node:child_process";
 //#region src/index.ts
 /** 命令执行器：正式包运行在 harness 进程（无 shell 沙箱），可直接管道捕获。
@@ -136,12 +136,20 @@ function apply(ctx, config = {}) {
 			case "update:check": {
 				const data = await market();
 				const installed = scanInstalled(cfg, data);
-				return checkUpdates(cfg, installed, { force: Boolean(args.force) });
+				const registry = await resolveNpmRegistry(join(cfg.profilesDir, readSettings(cfg).profile), realRunner());
+				return checkUpdates(cfg, installed, {
+					force: Boolean(args.force),
+					registry
+				});
 			}
 			case "update:self": {
 				const current = readVersions()["@dsh-market/plugin"];
 				if (!current) throw new Error("无法读取当前插件版本");
-				const check = await checkSelfUpdate(current, { force: Boolean(args.force) });
+				const registry = await resolveNpmRegistry(join(cfg.profilesDir, readSettings(cfg).profile), realRunner());
+				const check = await checkSelfUpdate(current, {
+					force: Boolean(args.force),
+					registry
+				});
 				if (!args.apply) return check;
 				const manualCommand = `dsh plugin --profile ${readSettings(cfg).profile} add @dsh-market/plugin@latest`;
 				return {
@@ -364,9 +372,12 @@ function apply(ctx, config = {}) {
 					source: "profile",
 					plugin
 				};
+				const updateProfile = args.targetProfile ?? readSettings(cfg).profile;
+				const registry = await resolveNpmRegistry(join(cfg.profilesDir, updateProfile), realRunner());
 				const r = await applyUpdate(cfg, plugin, item, {
 					runner: realRunner(),
-					profile: args.targetProfile ?? readSettings(cfg).profile
+					profile: updateProfile,
+					registry
 				});
 				if (!r.applied) {
 					const cls = classifyFailure(r.error ?? r.reason ?? "");

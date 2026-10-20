@@ -119,16 +119,20 @@ function fetchTag(impl: FetchLike): string {
   return `#${id}`;
 }
 
-/** 查询 npm registry 指定包的最新版本（带内存缓存；失败返回 null） */
+/** 查询 npm registry 指定包的最新版本（带内存缓存；失败返回 null）。
+ *  #265 · registry 参数 = 安装侧实际使用的源（pnpm config get registry）：检测与安装
+ *  必须同源——官方源看到的新版本，用户镜像没同步时 pnpm 装上的仍是旧版，
+ *  造成「可更新但永远装不上」。只显示安装源里存在的更新。 */
 export async function fetchNpmLatest(
   pkgName: string,
   fetchImpl: FetchLike = fetch,
+  registry: string = NPM_REGISTRY,
 ): Promise<string | null> {
-  const key = `npm:${pkgName}${fetchTag(fetchImpl)}`;
+  const key = `npm:${registry}:${pkgName}${fetchTag(fetchImpl)}`;
   const cached = cacheGet(key);
   if (cached !== undefined) return cached;
   try {
-    const res = await fetchImpl(`${NPM_REGISTRY}/${pkgName}/latest`, {
+    const res = await fetchImpl(`${registry}/${pkgName}/latest`, {
       headers: { "User-Agent": "dsh-market" },
       signal: AbortSignal.timeout(10000),
     });
@@ -175,19 +179,58 @@ export async function fetchRepoPushedAt(
 
 // ---------- 主入口 ----------
 
+/** #265 · 安装侧 npm registry 探测：在 profile 目录下跑 `pnpm config get registry`
+ *  （pnpm 的解析顺序 = 项目 .npmrc > 用户 ~/.npmrc > 内置默认），与安装命令同源。
+ *  结果按 profileDir 进程级缓存（registry 极少中途变化）。失败/为空 → 官方源。 */
+const npmRegistryCache = new Map<string, string>();
+
+export async function resolveNpmRegistry(
+  profileDir: string,
+  runner?: CommandRunner,
+): Promise<string> {
+  const cached = npmRegistryCache.get(profileDir);
+  if (cached) return cached;
+  let registry = NPM_REGISTRY;
+  try {
+    let stdout = "";
+    if (runner) {
+      const r = await runner.run(`pnpm config get registry`, {
+        cwd: profileDir,
+        timeoutMs: 10_000,
+      });
+      if (r.exitCode === 0) stdout = r.stdout;
+    } else {
+      const { execFile } = await import("node:child_process");
+      const { promisify } = await import("node:util");
+      const out = await promisify(execFile)("pnpm", ["config", "get", "registry"], {
+        cwd: profileDir,
+        timeout: 10_000,
+      });
+      stdout = String(out.stdout ?? "");
+    }
+    const trimmed = stdout.trim().replace(/\/+$/, "");
+    if (trimmed) registry = trimmed;
+  } catch {
+    /* pnpm 不可用 / 超时 → 官方源兜底 */
+  }
+  npmRegistryCache.set(profileDir, registry);
+  return registry;
+}
+
 /** 已装插件更新检测（分批并发，默认每批 4 个请求，避免瞬时打满限额） */
 export async function checkUpdates(
   cfg: ResolvedConfig,
   installed: InstalledPlugin[],
-  opts: { force?: boolean; fetchImpl?: FetchLike } = {},
+  opts: { force?: boolean; fetchImpl?: FetchLike; registry?: string } = {},
 ): Promise<UpdateCheckResult[]> {
   if (opts.force) cache.clear();
   const fetchImpl = opts.fetchImpl ?? fetch;
+  const registry = opts.registry ?? NPM_REGISTRY;
   const results: UpdateCheckResult[] = [];
   const batch = 4;
   for (let i = 0; i < installed.length; i += batch) {
     const chunk = installed.slice(i, i + batch);
-    const out = await Promise.all(chunk.map((item) => checkOne(cfg, item, fetchImpl)));
+    const out = await Promise.all(chunk.map((item) => checkOne(cfg, item, fetchImpl, registry)));
     results.push(...out);
   }
   return results;
@@ -197,6 +240,7 @@ async function checkOne(
   cfg: ResolvedConfig,
   item: InstalledPlugin,
   fetchImpl: FetchLike,
+  registry?: string,
 ): Promise<UpdateCheckResult> {
   // cordis 型：本地实际版本 → npm registry 最新版本
   if (item.source === "profile") {
@@ -211,7 +255,7 @@ async function checkOne(
         error: "无法读取本地版本（git/本地路径依赖）",
       };
     }
-    const latest = await fetchNpmLatest(item.localName, fetchImpl);
+    const latest = await fetchNpmLatest(item.localName, fetchImpl, registry);
     if (!latest) {
       // npm 查不到（git tarball / 路径依赖 / 未发布 npm）：若被市场收录 → 降级 GitHub 检测
       if (item.plugin) {
@@ -314,10 +358,10 @@ async function checkOne(
 /** 插件自身更新检测：npm 最新版 vs 当前安装版本（force 绕过 1h 内存缓存） */
 export async function checkSelfUpdate(
   currentVersion: string,
-  opts: { fetchImpl?: FetchLike; force?: boolean } = {},
+  opts: { fetchImpl?: FetchLike; force?: boolean; registry?: string } = {},
 ): Promise<{ current: string | null; latest: string | null; hasUpdate: boolean }> {
   if (opts.force) cache.clear();
-  const latest = await fetchNpmLatest("@dsh-market/plugin", opts.fetchImpl ?? fetch);
+  const latest = await fetchNpmLatest("@dsh-market/plugin", opts.fetchImpl ?? fetch, opts.registry);
   if (!latest) {
     return { current: currentVersion, latest: null, hasUpdate: false };
   }
@@ -404,7 +448,7 @@ export async function applyUpdate(
   cfg: ResolvedConfig,
   plugin: DshPlugin,
   item: InstalledPlugin,
-  opts: { runner: CommandRunner; profile?: string; dryRun?: boolean; fetchImpl?: FetchLike },
+  opts: { runner: CommandRunner; profile?: string; dryRun?: boolean; fetchImpl?: FetchLike; registry?: string },
 ): Promise<ApplyUpdateResult> {
   const profile = opts.profile ?? cfg.defaultProfile;
 
@@ -457,7 +501,10 @@ export async function applyUpdate(
   }
   const after = readInstalledVersionForProfile(cfg, profile, name);
   if (before !== null && after !== null && compareVersions(before, after) === 0) {
-    const latest = await fetchNpmLatest(name, opts.fetchImpl);
+    // #265 · 版本探测与安装同源（opts.registry = pnpm 实际使用的源）：
+    // latest 来自安装源 ⇒ 它在安装源上必然存在 ⇒ 未装上只可能是
+    // pnpm 解析层拦截（发布年龄门槛 / 依赖约束），而不是镜像未同步。
+    const latest = await fetchNpmLatest(name, opts.fetchImpl, opts.registry);
     if (latest && compareVersions(before, latest) < 0) {
       return {
         applied: false,
@@ -465,7 +512,7 @@ export async function applyUpdate(
         after,
         noChange: true,
         blocked: "minimum-release-age",
-        reason: `最新版 ${latest} 已发布但未装上，可能被 pnpm 发布年龄门槛（minimumReleaseAge）挡住；可在设置里放宽门槛后重试`,
+        reason: `最新版 ${latest} 已发布，但 pnpm 解析到的仍是 ${before}——可能被发布年龄门槛（minimumReleaseAge，当前 profile 为 ${readMinimumReleaseAge(join(cfg.profilesDir, profile)) ?? "未设置"}）或依赖约束拦截；可在设置里放宽门槛后重试`,
       };
     }
     return { applied: false, before, after, noChange: true, reason: "已是最新版本，无需更新" };

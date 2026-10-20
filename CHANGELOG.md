@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.16` / `@dsh-market/core@0.4.13`）
+
+**HOTFIX：更新检测与安装同源——镜像源下「可更新但永远装不上」（#265）**
+
+- **根因**：检测固定走官方 npmjs（`fetchNpmLatest` 写死 `registry.npmjs.org`），安装走 pnpm 用户配置的镜像源（如 npmmirror）——官方已有 2.0.10 而镜像还停在 2.0.9 时，面板显示「可更新」，`@latest` 安装装回的仍是已装版本，判为失败；且失败提示固定猜 `minimumReleaseAge`，把用户引向无关设置。
+- **检测与安装同源**：新增 `resolveNpmRegistry(profileDir, runner?)`——在 profile 目录跑 `pnpm config get registry`（解析链 = 项目 .npmrc > 用户 ~/.npmrc），探测结果进程级缓存，失败兜底官方源；`checkUpdates` / `checkSelfUpdate` / `applyUpdate` 全部接收 `registry` 并传给版本探测。镜像未同步时不再显示「可更新」（只显示安装源里真正存在的更新）。
+- **假更新提示改为同源语义**：`applyUpdate` 的版本探测改用安装源后，"最新版已发布但未装上"只可能来自 pnpm 解析层拦截，提示语明确附上当前 profile 的 `minimumReleaseAge` 值，不再误导。
+- 调用侧（plugin）在 update:check / update:self / applyUpdate 三处解析并传入 registry。新增守卫测试 5 项（registry 探测/兜底/缓存、按 registry 分桶缓存、checkUpdates 串接）。
+
 ### 插件端（`@dsh-market/plugin@0.4.15` / `@dsh-market/core@0.4.12`）
 
 **cordis 配置透传（#249 后续）**
