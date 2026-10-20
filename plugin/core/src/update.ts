@@ -200,9 +200,10 @@ export async function resolveNpmRegistry(
       });
       if (r.exitCode === 0) stdout = r.stdout;
     } else {
-      const { execFile } = await import("node:child_process");
+      // 走 shell（exec）而非 execFile：Windows 上 pnpm 是 .cmd，execFile 不带 shell 会 ENOENT
+      const { exec } = await import("node:child_process");
       const { promisify } = await import("node:util");
-      const out = await promisify(execFile)("pnpm", ["config", "get", "registry"], {
+      const out = await promisify(exec)(`pnpm config get registry`, {
         cwd: profileDir,
         timeout: 10_000,
       });
