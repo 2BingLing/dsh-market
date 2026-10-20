@@ -1,47 +1,38 @@
 {
-  "generatedAt": "2026-10-18T22:31:48.467Z",
+  "generatedAt": "2026-10-20T00:02:05.115Z",
   "replies": [
     {
       "issueNumbers": [
-        256
+        264
       ],
-      "fullName": "Tencent/BrowserSkill",
+      "fullName": "chromoany/dsh-notify-me",
       "type": "cordis-plugin",
-      "stars": 9152,
-      "score": 89
+      "stars": 41,
+      "score": 82
     },
     {
       "issueNumbers": [
-        258
+        263
       ],
-      "fullName": "6mt/dsh-control",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        255
-      ],
-      "fullName": "DoveLi-Gu/dsh-dyou-wine",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 37
-    },
-    {
-      "issueNumbers": [
-        254
-      ],
-      "fullName": "ColdMagicchess/PTT-Studio",
+      "fullName": "wweir/dsh-advisor",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 36
     },
     {
       "issueNumbers": [
-        257
+        260
       ],
-      "fullName": "zou-hong-run/dsh-deepseek-search",
+      "fullName": "pg527322814/dsh-bayes-predict",
+      "type": "cordis-plugin",
+      "stars": 3,
+      "score": 62
+    },
+    {
+      "issueNumbers": [
+        259
+      ],
+      "fullName": "6mt/dsh-control",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 35
