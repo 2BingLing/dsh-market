@@ -1,41 +1,59 @@
 {
-  "generatedAt": "2026-10-20T00:02:05.115Z",
+  "generatedAt": "2026-10-20T22:23:11.184Z",
   "replies": [
     {
       "issueNumbers": [
-        264
+        271
       ],
-      "fullName": "chromoany/dsh-notify-me",
+      "fullName": "gulagala001/dsh-theme-plugin",
       "type": "cordis-plugin",
-      "stars": 41,
-      "score": 82
+      "stars": 1,
+      "score": 55
     },
     {
       "issueNumbers": [
-        263
+        266
       ],
-      "fullName": "wweir/dsh-advisor",
+      "fullName": "gulagala001/dsh-workflow",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
+      "stars": 1,
+      "score": 55
     },
     {
       "issueNumbers": [
-        260
+        268
       ],
-      "fullName": "pg527322814/dsh-bayes-predict",
-      "type": "cordis-plugin",
-      "stars": 3,
-      "score": 62
-    },
-    {
-      "issueNumbers": [
-        259
-      ],
-      "fullName": "6mt/dsh-control",
+      "fullName": "gulagala001/dsh-undo-plugin",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 35
+    },
+    {
+      "issueNumbers": [
+        269
+      ],
+      "fullName": "gulagala001/dsh-deepseek-workbench",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 55
+    },
+    {
+      "issueNumbers": [
+        270
+      ],
+      "fullName": "gulagala001/dsh-btw",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        267
+      ],
+      "fullName": "Lichtspur/deepseek-style-theme",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 59
     }
   ]
 }
