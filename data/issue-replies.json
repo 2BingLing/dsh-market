@@ -1,59 +1,14 @@
 {
-  "generatedAt": "2026-10-20T22:23:11.184Z",
+  "generatedAt": "2026-10-21T23:24:49.519Z",
   "replies": [
     {
       "issueNumbers": [
-        271
+        272
       ],
-      "fullName": "gulagala001/dsh-theme-plugin",
+      "fullName": "Duoasa/DSH-to-Figma",
       "type": "cordis-plugin",
-      "stars": 1,
-      "score": 55
-    },
-    {
-      "issueNumbers": [
-        266
-      ],
-      "fullName": "gulagala001/dsh-workflow",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 55
-    },
-    {
-      "issueNumbers": [
-        268
-      ],
-      "fullName": "gulagala001/dsh-undo-plugin",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        269
-      ],
-      "fullName": "gulagala001/dsh-deepseek-workbench",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 55
-    },
-    {
-      "issueNumbers": [
-        270
-      ],
-      "fullName": "gulagala001/dsh-btw",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        267
-      ],
-      "fullName": "Lichtspur/deepseek-style-theme",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 59
+      "stars": 6,
+      "score": 66
     }
   ]
 }
