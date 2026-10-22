@@ -1,14 +1,50 @@
 {
-  "generatedAt": "2026-10-21T23:24:49.519Z",
+  "generatedAt": "2026-10-22T23:24:34.275Z",
   "replies": [
     {
       "issueNumbers": [
-        272
+        273
       ],
-      "fullName": "Duoasa/DSH-to-Figma",
+      "fullName": "Yoimiya-Lover-0621-01/himeko-starry-night",
       "type": "cordis-plugin",
-      "stars": 6,
-      "score": 66
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        274
+      ],
+      "fullName": "Yoimiya-Lover-0621-01/dsh-local-avatar",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        278
+      ],
+      "fullName": "TowardsDawn/dsh-plugin-source-link",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 25
+    },
+    {
+      "issueNumbers": [
+        277
+      ],
+      "fullName": "TowardsDawn/dsh-layout-tweaks",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        275
+      ],
+      "fullName": "01men/ybkkasi",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 37
     }
   ]
 }
