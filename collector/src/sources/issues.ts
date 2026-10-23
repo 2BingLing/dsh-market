@@ -74,10 +74,12 @@ export interface SubmissionMeta {
 
 /**
  * 提交/修正 issue 的标题前缀（README「已收录插件可提交 `[数据修正]` issue 补写作者自述」，
- * CONTRIBUTING 同款说明）——`[数据修正]` 必须一并识别，否则补写的自述永远不会被读到
+ * CONTRIBUTING 同款说明）——`[数据修正]` 必须一并识别，否则补写的自述永远不会被读到。
+ * #276/#279/#280 教训：英文用户常用 `[Plugin]` 起标题（而非模板的 `[提交插件]`），
+ * 白名单缺 `plugin` 会让没打 submission 标签的提交静默漏收，故补上（`plugins?` 兼容复数）。
  */
 export const SUBMISSION_TITLE_RE =
-  /^\[(提交插件|提交工具|数据修正|submit|plugin submission)\]/i;
+  /^\[(提交插件|提交工具|数据修正|submit|plugins?|plugin submission)\]/i;
 
 /** 读取本仓库所有 open 的提交插件 issue：返回 fullName(lower) → 元数据（issue 号 + 作者自述） */
 export async function fetchSubmissionRepos(): Promise<Map<string, SubmissionMeta>> {
