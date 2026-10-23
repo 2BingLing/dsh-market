@@ -1,50 +1,68 @@
 {
-  "generatedAt": "2026-10-22T23:24:34.275Z",
+  "generatedAt": "2026-10-23T17:42:27.247Z",
   "replies": [
     {
       "issueNumbers": [
-        273
+        281
       ],
-      "fullName": "Yoimiya-Lover-0621-01/himeko-starry-night",
+      "fullName": "ouli-1242/dsh-plugin-tool-management",
+      "type": "cordis-plugin",
+      "stars": 24,
+      "score": 87
+    },
+    {
+      "issueNumbers": [
+        284
+      ],
+      "fullName": "jjjjjsgrmjjjjj/dsh-qq-plugin-group-expand",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 57
+    },
+    {
+      "issueNumbers": [
+        282
+      ],
+      "fullName": "kingofpowers/dsh-chat-ctxmenu",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 36
     },
     {
       "issueNumbers": [
-        274
+        276
       ],
-      "fullName": "Yoimiya-Lover-0621-01/dsh-local-avatar",
+      "fullName": "Yoimiya-Lover-0621-01/dsh-plugin-font-switcher",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 35
     },
     {
       "issueNumbers": [
-        278
+        279
       ],
-      "fullName": "TowardsDawn/dsh-plugin-source-link",
+      "fullName": "gulagala001/dsh-extensions",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 25
+      "score": 35
     },
     {
       "issueNumbers": [
-        277
+        280
       ],
-      "fullName": "TowardsDawn/dsh-layout-tweaks",
+      "fullName": "gulagala001/dsh-persona-plugin",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
+      "score": 34
     },
     {
       "issueNumbers": [
-        275
+        283
       ],
-      "fullName": "01men/ybkkasi",
+      "fullName": "TangerineSplendor/dsh-screenshot",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 37
+      "score": 26
     }
   ]
 }
