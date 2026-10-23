@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-23T17:42:27.247Z",
+  "generatedAt": "2026-10-23T22:06:23.256Z",
   "replies": [
     {
       "issueNumbers": [
@@ -7,7 +7,7 @@
       ],
       "fullName": "ouli-1242/dsh-plugin-tool-management",
       "type": "cordis-plugin",
-      "stars": 24,
+      "stars": 23,
       "score": 87
     },
     {
@@ -27,15 +27,6 @@
       "type": "cordis-plugin",
       "stars": 0,
       "score": 36
-    },
-    {
-      "issueNumbers": [
-        276
-      ],
-      "fullName": "Yoimiya-Lover-0621-01/dsh-plugin-font-switcher",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
     },
     {
       "issueNumbers": [
@@ -63,6 +54,15 @@
       "type": "cordis-plugin",
       "stars": 0,
       "score": 26
+    },
+    {
+      "issueNumbers": [
+        276
+      ],
+      "fullName": "Yoimiya-Lover-0621-01/dsh-plugin-font-switcher",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
     }
   ]
 }
