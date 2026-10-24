@@ -1,68 +1,23 @@
 {
-  "generatedAt": "2026-10-23T22:06:23.256Z",
+  "generatedAt": "2026-10-24T22:38:33.470Z",
   "replies": [
     {
       "issueNumbers": [
-        281
+        285
       ],
-      "fullName": "ouli-1242/dsh-plugin-tool-management",
-      "type": "cordis-plugin",
-      "stars": 23,
-      "score": 87
-    },
-    {
-      "issueNumbers": [
-        284
-      ],
-      "fullName": "jjjjjsgrmjjjjj/dsh-qq-plugin-group-expand",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 57
-    },
-    {
-      "issueNumbers": [
-        282
-      ],
-      "fullName": "kingofpowers/dsh-chat-ctxmenu",
+      "fullName": "exoticknight/dsh-system1",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
+      "score": 30
     },
     {
       "issueNumbers": [
-        279
+        286
       ],
-      "fullName": "gulagala001/dsh-extensions",
+      "fullName": "Duoasa/DSH-to-Figma",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        280
-      ],
-      "fullName": "gulagala001/dsh-persona-plugin",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 34
-    },
-    {
-      "issueNumbers": [
-        283
-      ],
-      "fullName": "TangerineSplendor/dsh-screenshot",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 26
-    },
-    {
-      "issueNumbers": [
-        276
-      ],
-      "fullName": "Yoimiya-Lover-0621-01/dsh-plugin-font-switcher",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
+      "stars": 14,
+      "score": 77
     }
   ]
 }
