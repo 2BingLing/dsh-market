@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/core@0.4.14`）
+
+**HOTFIX：「已装」漏判——名字不带 dsh 前缀但已收录的插件永远不显示已安装（#288）**
+
+- **根因**：`scanInstalled` 扫描 profile 依赖与 bundles 时有两道前置闸门，未过则直接跳过；闸门用的 `looksLikeDshPlugin` 是纯名字形态判断（`dsh-` 前缀 / `@dsh` / `@deepseek-ai/dsh` / 含 `dsh-`）。名字不带 dsh 但确实已被市场收录的插件（如 `billion-context` → `ranxianglei/billion-context`、`@liustack/modlens` → `yukitakasama/modlens`）在进入市场匹配之前就被丢弃，「已装」Tab 与已安装标记永远不出现。
+- **修复**：闸门放宽为**或**关系——名字形态像 DSH 插件，**或**能直接在市场目录命中（目录本身即白名单）；`react` / `lodash` 等非收录普通包仍被跳过。
+- **官方包泄漏防护**（报告者实测踩到的坑）：`matchMarketPlugin` 的 scoped fallback 会把官方包 `@deepseek-ai/dsh-web-app` 误命中第三方同名条目 `frankshi2024/dsh-web-app`——放宽判断**之前**保留 `OFFICIAL_BUNDLES` 前置排除，官方包绝不进入结果。
+- 装后校验（`verifyAfterInstall`）复用 `scanInstalled`，从市场装此类无前缀插件时的同源问题一并修复。新增守卫测试 3 项（deps 识别+普通包跳过、bundles 识别+官方包泄漏防护、scoped 无前缀命中），全套 253 项通过。
+
 ### 插件端（`@dsh-market/plugin@0.4.16` / `@dsh-market/core@0.4.13`）
 
 **HOTFIX：更新检测与安装同源——镜像源下「可更新但永远装不上」（#265）**

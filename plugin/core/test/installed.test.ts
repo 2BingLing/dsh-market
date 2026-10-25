@@ -155,3 +155,46 @@ describe("scanInstalled · skill 目录约定（issue #102 回归）", () => {
     expect(found.find((i) => i.localName === "web-scraper-latest")?.pluginId).toBe("acme/web-scraper");
   });
 });
+
+describe("#288 无 dsh 前缀但已收录的插件不应漏判", () => {
+  // 市场目录里有一条第三方 dsh-web-app（与官方包 @deepseek-ai/dsh-web-app 同名异主），
+  // 用于复现 scoped fallback 的官方包泄漏陷阱
+  const webAppClone = plugin({ id: "frankshi2024/dsh-web-app", name: "dsh-web-app" });
+  const billion = plugin({ id: "ranxianglei/billion-context", name: "billion-context" });
+  const modlens = plugin({ id: "yukitakasama/modlens", name: "modlens" });
+  const market288: MarketData = {
+    schemaVersion: 2,
+    generatedAt: new Date().toISOString(),
+    plugins: [webAppClone, billion, modlens, scopedPlugin],
+  };
+
+  it("deps：无 dsh 前缀但市场收录（billion-context）→ 已装识别；普通包（react）仍跳过", () => {
+    const cfg = makeCfg();
+    setupProfile(cfg, { dependencies: { "billion-context": "^0.1.206", react: "^18.0.0" } });
+    const r = scanInstalled(cfg, market288);
+    const hit = r.find((x) => x.localName === "billion-context");
+    expect(hit?.pluginId).toBe("ranxianglei/billion-context");
+    expect(hit?.version).toBe("0.1.206");
+    expect(r.find((x) => x.localName === "react")).toBeUndefined();
+  });
+
+  it("bundles：插件只在 bundles 里 → 识别；官方包经 scoped fallback 也不得泄漏", () => {
+    const cfg = makeCfg();
+    setupProfile(cfg, {
+      dependencies: {},
+      dsh: { profile: { bundles: ["@deepseek-ai/dsh-web-app", "billion-context"] } },
+    });
+    const r = scanInstalled(cfg, market288).filter((x) => x.source === "profile");
+    expect(r.map((x) => x.localName)).toEqual(["billion-context"]);
+    expect(r[0]?.pluginId).toBe("ranxianglei/billion-context");
+    expect(r.find((x) => x.pluginId === "frankshi2024/dsh-web-app")).toBeUndefined();
+  });
+
+  it("scoped 无前缀：@liustack/modlens → 市场条目 yukitakasama/modlens（#288 另一处漏判）", () => {
+    const cfg = makeCfg();
+    setupProfile(cfg, { dependencies: { "@liustack/modlens": "3.27.2" } });
+    const hit = scanInstalled(cfg, market288).find((x) => x.localName === "@liustack/modlens");
+    expect(hit?.pluginId).toBe("yukitakasama/modlens");
+    expect(hit?.version).toBe("3.27.2");
+  });
+});

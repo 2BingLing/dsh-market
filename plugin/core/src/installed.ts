@@ -61,8 +61,13 @@ export function scanInstalled(
         const deps = { ...pkg.dependencies, ...pkg.devDependencies };
         const depNames = new Set(Object.keys(deps));
         for (const [dep, ver] of Object.entries(deps)) {
-          // 只关注看起来像 dsh 插件的依赖（dsh- 前缀或知名组织）
-          if (!looksLikeDshPlugin(dep)) continue;
+          // 只关注可能成为市场插件的依赖（#288）：名字形态像 DSH 插件，或能直接在市场
+          // 目录命中——目录本身即白名单，比名字前缀可靠（billion-context / @liustack/modlens
+          // 这类无 dsh 前缀的收录插件此前永远漏判）。
+          // 官方基础包必须先排除：matchMarketPlugin 的 scoped fallback 会把
+          // @deepseek-ai/dsh-web-app 误命中第三方同名条目 frankshi2024/dsh-web-app。
+          if (OFFICIAL_BUNDLES.has(dep)) continue;
+          if (!looksLikeDshPlugin(dep) && !matchMarketPlugin(dep, byName, byFull)) continue;
           const plugin = matchMarketPlugin(dep, byName, byFull);
           // 版本优先读 node_modules 实际安装版本（`*` 依赖也准），其次依赖声明；git URL/路径 → null
           const installedVer = readInstalledVersion(
@@ -81,8 +86,10 @@ export function scanInstalled(
         // dsh.profile.bundles：组合包清单（官方基础包 @deepseek-ai/dsh-* 跳过）
         // 已在 dependencies 中出现的包跳过（避免同一插件显示两条：依赖 + bundle）
         for (const bundle of pkg.dsh?.profile?.bundles ?? []) {
-          if (!looksLikeDshPlugin(bundle)) continue;
+          // #288 · 与 deps 循环同口径：官方包先排除，再放宽为「形态像 or 目录命中」
+          if (OFFICIAL_BUNDLES.has(bundle)) continue;
           if (depNames.has(bundle)) continue; // 去重：依赖里已有版本信息
+          if (!looksLikeDshPlugin(bundle) && !matchMarketPlugin(bundle, byName, byFull)) continue;
           const plugin = matchMarketPlugin(bundle, byName, byFull);
           found.push({
             pluginId: plugin?.id ?? null,
