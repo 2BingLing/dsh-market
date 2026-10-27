@@ -1,23 +1,50 @@
 {
-  "generatedAt": "2026-10-24T22:38:33.470Z",
+  "generatedAt": "2026-10-27T00:17:35.078Z",
   "replies": [
     {
       "issueNumbers": [
-        285
+        294
       ],
-      "fullName": "exoticknight/dsh-system1",
+      "fullName": "xsllo425/dsh-work-status",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 30
+      "score": 36
     },
     {
       "issueNumbers": [
-        286
+        293
       ],
-      "fullName": "Duoasa/DSH-to-Figma",
+      "fullName": "PandaBlessing/dsh-user-sync",
       "type": "cordis-plugin",
-      "stars": 14,
-      "score": 77
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        292
+      ],
+      "fullName": "yr584/dsh-qq-sticker",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 33
+    },
+    {
+      "issueNumbers": [
+        291
+      ],
+      "fullName": "zhaohzXo/dsh-appearance",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        289
+      ],
+      "fullName": "tryqylz/dsh-jingjing-sticky-notes",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 37
     }
   ]
 }
