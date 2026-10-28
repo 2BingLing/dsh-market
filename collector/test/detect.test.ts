@@ -244,6 +244,22 @@ describe("extractDshEngines", () => {
     expect(r).toEqual({ range: "^0.1.2", source: "engines" });
   });
 
+  it.each(["*", " * "])("显式 engines.dsh=%s 不被 peer/dev 依赖收窄", (dsh) => {
+    expect(extractDshEngines(pkg({
+      engines: { dsh },
+      peerDependencies: { "@deepseek-ai/dsh-mcp-client": "0.2.1-rc.3 || 0.2.0-rc.2 || 0.2.1-rc.2" },
+      devDependencies: { "@deepseek-ai/dsh-mcp-client": "0.2.1-rc.2" },
+    }))).toBeNull();
+    expect(extractDshEngines(pkg({
+      engines: { dsh },
+      peerDependencies: { "@deepseek-ai/dsh-mcp-client": ">=0.2.1-rc.3" },
+    }))).toBeNull();
+    expect(extractDshEngines(pkg({
+      engines: { dsh },
+      devDependencies: { "@deepseek-ai/dsh-mcp-client": "0.2.1-rc.2" },
+    }))).toBeNull();
+  });
+
   it("无 engines 时退 peerDependencies，再退 devDependencies", () => {
     expect(
       extractDshEngines(pkg({ peerDependencies: { "@deepseek-ai/dsh-base": ">=0.1.5" } })),

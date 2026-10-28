@@ -222,7 +222,7 @@ export function extractDshEngines(
   const clean = (v: unknown): string | null => {
     if (typeof v !== "string") return null;
     const t = v.trim();
-    // 过滤空值、通配全部（`*` 等于没声明）、以及明显不是范围的字符串
+    // 依赖兜底过滤空值、通配全部以及明显不是范围的字符串
     if (!t || t === "*" || t.startsWith("http") || t.startsWith("file:") || t.startsWith("link:")) {
       return null;
     }
@@ -231,6 +231,9 @@ export function extractDshEngines(
 
   // 1) engines.dsh（作者显式声明，最可信）
   const engines = pkg.engines as Record<string, unknown> | undefined;
+  // 显式不限制宿主版本，不应被 peer/dev 的开发或兼容约束重新收窄。
+  // 保持 null 的现有展示语义，但在这里终止依赖兜底。
+  if (typeof engines?.dsh === "string" && engines.dsh.trim() === "*") return null;
   const fromEngines = clean(engines?.dsh);
   if (fromEngines) return { range: fromEngines, source: "engines" };
 
