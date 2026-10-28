@@ -1,50 +1,32 @@
 {
-  "generatedAt": "2026-10-27T00:17:35.078Z",
+  "generatedAt": "2026-10-28T20:16:23.954Z",
   "replies": [
     {
       "issueNumbers": [
-        294
+        299
       ],
-      "fullName": "xsllo425/dsh-work-status",
+      "fullName": "Duoasa/DSH-to-Figma",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
+      "stars": 30,
+      "score": 81
     },
     {
       "issueNumbers": [
-        293
+        301
       ],
-      "fullName": "PandaBlessing/dsh-user-sync",
-      "type": "cordis-plugin",
+      "fullName": "P3NN4L/Tribot",
+      "type": "skill",
       "stars": 0,
-      "score": 36
+      "score": 39
     },
     {
       "issueNumbers": [
-        292
+        298
       ],
-      "fullName": "yr584/dsh-qq-sticker",
+      "fullName": "contraliz/dsh-occlick",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 33
-    },
-    {
-      "issueNumbers": [
-        291
-      ],
-      "fullName": "zhaohzXo/dsh-appearance",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        289
-      ],
-      "fullName": "tryqylz/dsh-jingjing-sticky-notes",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 37
+      "stars": 4,
+      "score": 66
     }
   ]
 }
