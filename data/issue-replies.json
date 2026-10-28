@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-28T20:16:23.954Z",
+  "generatedAt": "2026-10-28T23:12:34.386Z",
   "replies": [
     {
       "issueNumbers": [
@@ -27,6 +27,24 @@
       "type": "cordis-plugin",
       "stars": 4,
       "score": 66
+    },
+    {
+      "issueNumbers": [
+        296
+      ],
+      "fullName": "sailina-afk/cyrene-balance-widget",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 33
+    },
+    {
+      "issueNumbers": [
+        297
+      ],
+      "fullName": "Rakanrkk/dsh-sidebar-scroll",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
     }
   ]
 }
