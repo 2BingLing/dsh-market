@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   extractRepoFromText,
   extractIntroByAuthor,
+  extractSubdirHints,
   SUBMISSION_TITLE_RE,
 } from "../src/sources/issues.js";
 
@@ -99,5 +100,21 @@ describe("extractIntroByAuthor", () => {
 
   it("方括号为空回退裸写法", () => {
     expect(extractIntroByAuthor("作者自述：[] 实际在另一行")).toBe("[] 实际在另一行");
+  });
+});
+
+describe("extractSubdirHints（#295 子目录提示）", () => {
+  it("提取反引号包裹、以 / 结尾的子目录路径", () => {
+    const body = "插件本体在**子目录 `cyrene-balance-widget/`** 里（根目录是个人杂物箱）。cordis 标记在 `cyrene-balance-widget/cordis.patch.yml`";
+    expect(extractSubdirHints(body)).toEqual(["cyrene-balance-widget"]);
+  });
+
+  it("排除 URL 与多斜杠路径", () => {
+    const body = "见 `https://github.com/a/b/` 与 `packages/plugin/`，别看 `docs/`";
+    expect(extractSubdirHints(body)).toEqual(["packages/plugin", "docs"]);
+  });
+
+  it("无提示时返回空数组", () => {
+    expect(extractSubdirHints("没有子目录提示的正文")).toEqual([]);
   });
 });

@@ -70,6 +70,8 @@ export interface SubmissionMeta {
   introByAuthor?: string;
   /** 数据修正（来自 `[数据修正]` issue）：作者自述清空 / 简介修正 */
   corrections?: DataCorrections;
+  /** 子目录提示（#295：插件本体在仓库子目录，正文常自述「子目录 `xxx/`」） */
+  subdirHints?: string[];
 }
 
 /**
@@ -89,6 +91,18 @@ export async function fetchSubmissionRepos(): Promise<Map<string, SubmissionMeta
 /** 读取本仓库所有 open 的提交整合包 issue（[提交整合包] 标题）→ fullName(lower) → issue 号列表 */
 export async function fetchPackSubmissionRepos(): Promise<Map<string, number[]>> {
   return fetchSubmissionReposByPack(/^\[提交整合包\]|^\[submit pack/i, "submission", "issues:pack-submission");
+}
+
+/** 从提交正文提取子目录提示（#295：「插件本体在子目录 `cyrene-balance-widget/`」）。
+ *  识别反引号包裹、以 / 结尾的相对路径 token；URL（含 //）排除。 */
+export function extractSubdirHints(text: string): string[] {
+  const out: string[] = [];
+  for (const m of text.matchAll(/`([^`\s]+)\/`/g)) {
+    const p = m[1];
+    if (!p || p.includes("//") || /^https?$/i.test(p)) continue;
+    if (!out.includes(p)) out.push(p);
+  }
+  return out;
 }
 
 async function fetchSubmissionReposBy(
@@ -115,6 +129,7 @@ async function fetchSubmissionReposBy(
       // 正文常只写反引号包裹的裸 `owner/repo`（如 #135），严格 URL 提取为空时用裸写法兜底
       const isDataFix = DATA_FIX_TITLE_RE.test(issue.title);
       const corrections = isDataFix ? extractCorrections(issue.body ?? null) : undefined;
+      const subdirHints = extractSubdirHints(text);
       const fromText = extractRepoFromText(text);
       const fns = fromText.length > 0 ? fromText : (isDataFix ? extractRepoFromDataFixText(text) : []);
       for (const fn of fns) {
@@ -122,6 +137,9 @@ async function fetchSubmissionReposBy(
         if (!meta.issueNumbers.includes(issue.number)) meta.issueNumbers.push(issue.number);
         meta.introByAuthor = meta.introByAuthor ?? introByAuthor;
         meta.corrections = mergeCorrections(meta.corrections, corrections);
+        if (subdirHints.length) {
+          meta.subdirHints = [...new Set([...(meta.subdirHints ?? []), ...subdirHints])];
+        }
         out.set(fn, meta);
       }
     }

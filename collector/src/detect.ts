@@ -95,23 +95,38 @@ export async function detectPlugin(
 
 /** 子目录 bundle 探测：根目录无插件标记时，检查是否存在子目录内的插件成品
  * （仓库根目录放素材/文档/工具链，插件在子目录——如 dsh-pet/、monorepo 的 packages/plugin）
- * 候选：与仓库同名 / dsh|cordis|plugin|bundle|client 开头 + monorepo 的 packages|apps 下子目录，最多 4 个 */
+ * 候选：与仓库同名 / dsh|cordis|plugin|bundle|client 开头 + monorepo 的 packages|apps 下子目录，最多 4 个。
+ * #295 · 投稿正文自述的子目录（subdirHints，如「插件本体在子目录 cyrene-balance-widget/」）优先探测——
+ * 作者最清楚插件在哪，且这些名字常不含任何可启发式匹配的前缀。 */
 export async function detectSubdirBundle(
   fullName: string,
   rootItems: RepoContentItem[],
-  branch?: string | null
+  branch?: string | null,
+  subdirHints: string[] = []
 ): Promise<{ subdir: string; evidence: string[] } | null> {
   const repoName = fullName.split("/")[1]?.toLowerCase();
   // 常见非插件目录直接跳过（素材/文档/构建目录）
   const SKIP_DIRS =
     /^(docs?|assets?|test|tests|scripts?|tools?|examples?|images?|img|public|src|lib|dist|node_modules|vendor|\.github)$/i;
   const dirs = rootItems.filter((i) => i.type === "dir" && !SKIP_DIRS.test(i.name));
+  const candidates: { path: string }[] = [];
+  const seen = new Set<string>();
+  // #295 · 投稿自述的子目录优先（仅支持根级子目录提示；路径含二级斜杠的暂不处理）
+  for (const hint of subdirHints) {
+    const p = hint.replace(/^\/+|\/+$/g, "");
+    if (!p || p.includes("/")) continue;
+    const hit = dirs.find((d) => d.name.toLowerCase() === p.toLowerCase());
+    if (!hit || seen.has(hit.path.toLowerCase())) continue;
+    seen.add(hit.path.toLowerCase());
+    candidates.push({ path: hit.path });
+  }
   // monorepo 子目录优先（packages|apps 下的插件包，如 #52 的 packages/plugin、#91 的 packages/deepc-link）
   // 注意：apps 与 packages 可能并存（如 deepSea），全部探测——原实现 find 只取第一个曾漏掉 packages/deepc-link
-  const candidates: { path: string }[] = [];
   for (const mono of dirs.filter((d) => /^(packages|apps)$/i.test(d.name))) {
     const subs = await fetchRepoRoot(fullName, branch, mono.path);
     for (const s of subs.filter((x) => x.type === "dir")) {
+      if (seen.has(`${mono.path}/${s.name}`.toLowerCase())) continue;
+      seen.add(`${mono.path}/${s.name}`.toLowerCase());
       candidates.push({ path: `${mono.path}/${s.name}` });
     }
   }
@@ -119,7 +134,8 @@ export async function detectSubdirBundle(
   //（web 开头如 web-plugin 也是常见插件子目录名——#111-113 UnKnownFish 系列插件都放 web-plugin/）
   for (const d of dirs) {
     const n = d.name.toLowerCase();
-    if (n === repoName || /^(dsh|cordis|plugin|bundle|client|web)/.test(n)) {
+    if ((n === repoName || /^(dsh|cordis|plugin|bundle|client|web)/.test(n)) && !seen.has(d.path.toLowerCase())) {
+      seen.add(d.path.toLowerCase());
       candidates.push({ path: d.path });
     }
   }

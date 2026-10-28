@@ -85,6 +85,8 @@ interface Candidate {
   introByAuthor?: string;
   /** 数据修正（`[数据修正]` issue）：覆盖作者自述/中文简介等 */
   corrections?: DataCorrections;
+  /** 子目录提示（#295：投稿正文自述插件所在子目录，供 detectSubdirBundle 优先探测） */
+  subdirHints?: string[];
 }
 
 interface Detected {
@@ -219,7 +221,7 @@ async function main() {
     fullName: string,
     repo: GithubRepo | null,
     source: string,
-    meta?: { name?: string; description?: string; issueNumbers?: number[]; introByAuthor?: string; corrections?: DataCorrections }
+    meta?: { name?: string; description?: string; issueNumbers?: number[]; introByAuthor?: string; corrections?: DataCorrections; subdirHints?: string[] }
   ) => {
     const key = fullName.toLowerCase();
     if (EXCLUDED_REPOS.has(key)) return;
@@ -239,6 +241,11 @@ async function main() {
       }
       // 数据修正并入：逐字段合并（后到 issue 的修正覆盖先到的，含「无」清空）
       existing.corrections = mergeCorrections(existing.corrections, meta?.corrections);
+      if (meta?.subdirHints?.length) {
+        existing.subdirHints = [
+          ...new Set([...(existing.subdirHints ?? []), ...meta.subdirHints]),
+        ];
+      }
       return;
     }
     candidates.set(key, {
@@ -263,6 +270,7 @@ async function main() {
       issueNumbers: meta.issueNumbers,
       introByAuthor: meta.introByAuthor,
       corrections: meta.corrections,
+      subdirHints: meta.subdirHints,
     });
   }
 
@@ -354,10 +362,12 @@ async function main() {
         detection = await detectPlugin(candidate.fullName, rootItems);
         if (!detection.isPlugin) {
           // 子目录 bundle 探测：根目录无标记时，检查子目录内的插件成品（如 dsh-pet/）
+          // #295 · 投稿正文自述的子目录作为优先候选传入
           const sub = await detectSubdirBundle(
             candidate.fullName,
             rootItems,
-            repo!.default_branch
+            repo!.default_branch,
+            candidate.subdirHints ?? []
           );
           if (sub) {
             detection = {

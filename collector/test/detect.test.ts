@@ -52,6 +52,25 @@ describe("detectSubdirBundle", () => {
     expect(r?.subdir).toBe("dsh-plugin");
   });
 
+  it("#295 · 投稿自述的子目录优先探测（启发式不匹配也可命中）", async () => {
+    const root = [rootItem("README.md"), rootItem("cyrene-balance-widget", "dir")];
+    mockFetch.mockResolvedValue(CORDIS_SUBDIR);
+    const r = await detectSubdirBundle(
+      "sailina-afk/sailina-s-box",
+      root as never,
+      "main",
+      ["cyrene-balance-widget"]
+    );
+    expect(r?.subdir).toBe("cyrene-balance-widget");
+  });
+
+  it("#295 · 无提示且启发式不匹配 → null 且不调 API（旧行为）", async () => {
+    const root = [rootItem("README.md"), rootItem("cyrene-balance-widget", "dir")];
+    const r = await detectSubdirBundle("sailina-afk/sailina-s-box", root as never, "main");
+    expect(r).toBeNull();
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
   it("无可疑目录（仅 docs/assets/src 等）返回 null 且不调 API", async () => {
     const root = [
       rootItem("README.md"),
