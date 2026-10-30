@@ -1,50 +1,50 @@
 {
-  "generatedAt": "2026-10-28T23:12:34.386Z",
+  "generatedAt": "2026-10-30T00:21:15.837Z",
   "replies": [
     {
       "issueNumbers": [
-        299
+        295
       ],
-      "fullName": "Duoasa/DSH-to-Figma",
+      "fullName": "sailina-afk/sailina-s-box",
       "type": "cordis-plugin",
-      "stars": 30,
-      "score": 81
+      "stars": 1,
+      "score": 19
     },
     {
       "issueNumbers": [
-        301
+        305
       ],
-      "fullName": "P3NN4L/Tribot",
-      "type": "skill",
-      "stars": 0,
-      "score": 39
-    },
-    {
-      "issueNumbers": [
-        298
-      ],
-      "fullName": "contraliz/dsh-occlick",
-      "type": "cordis-plugin",
-      "stars": 4,
-      "score": 66
-    },
-    {
-      "issueNumbers": [
-        296
-      ],
-      "fullName": "sailina-afk/cyrene-balance-widget",
+      "fullName": "P3NN4L/dsh-tribot-team",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 33
+      "score": 38
     },
     {
       "issueNumbers": [
-        297
+        304
       ],
-      "fullName": "Rakanrkk/dsh-sidebar-scroll",
+      "fullName": "ayuanxx-max/dsh-session-fork-tree",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 56
+    },
+    {
+      "issueNumbers": [
+        303
+      ],
+      "fullName": "ayuanxx-max/dsh-session-accordion",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 61
+    },
+    {
+      "issueNumbers": [
+        302
+      ],
+      "fullName": "2239058652/dsh-mcp-workbench",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 35
+      "score": 36
     }
   ]
 }
