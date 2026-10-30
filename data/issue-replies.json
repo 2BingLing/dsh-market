@@ -1,50 +1,41 @@
 {
-  "generatedAt": "2026-10-30T00:21:15.837Z",
+  "generatedAt": "2026-10-30T23:04:09.884Z",
   "replies": [
     {
       "issueNumbers": [
-        295
+        309
       ],
-      "fullName": "sailina-afk/sailina-s-box",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 19
-    },
-    {
-      "issueNumbers": [
-        305
-      ],
-      "fullName": "P3NN4L/dsh-tribot-team",
+      "fullName": "Aliciawque/dsh-big-whale",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 38
+      "score": 37
     },
     {
       "issueNumbers": [
-        304
+        310
       ],
-      "fullName": "ayuanxx-max/dsh-session-fork-tree",
+      "fullName": "xin505/dsh-task-shelf",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 56
+      "score": 54
     },
     {
       "issueNumbers": [
-        303
+        307
       ],
-      "fullName": "ayuanxx-max/dsh-session-accordion",
+      "fullName": "ownduck/dsh-skill-experts",
       "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
+      "stars": 1,
+      "score": 52
     },
     {
       "issueNumbers": [
-        302
+        308
       ],
-      "fullName": "2239058652/dsh-mcp-workbench",
+      "fullName": "Mersolceil/dsh-computer-use",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
+      "score": 26
     }
   ]
 }
