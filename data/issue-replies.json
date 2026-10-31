@@ -1,38 +1,246 @@
 {
-  "generatedAt": "2026-10-30T23:04:09.884Z",
+  "generatedAt": "2026-10-31T08:04:20.720Z",
   "replies": [
     {
       "issueNumbers": [
-        309
+        313
       ],
-      "fullName": "Aliciawque/dsh-big-whale",
+      "fullName": "lw24-1936/dsh-agent-prompts",
+      "type": "cordis-plugin",
+      "stars": 3,
+      "score": 65
+    },
+    {
+      "issueNumbers": [
+        312
+      ],
+      "fullName": "techflag/dsh-friends",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 37
+      "score": 27
     },
     {
       "issueNumbers": [
-        310
+        311,
+        306
       ],
-      "fullName": "xin505/dsh-task-shelf",
+      "fullName": "xushilianzhuren/dsh-constitution-seed",
       "type": "cordis-plugin",
-      "stars": 1,
-      "score": 54
+      "stars": 0,
+      "score": 26
     },
     {
       "issueNumbers": [
-        307
+        311
       ],
-      "fullName": "ownduck/dsh-skill-experts",
+      "fullName": "xushilianzhuren/dsh-sleep-core",
       "type": "cordis-plugin",
-      "stars": 1,
-      "score": 52
+      "stars": 0,
+      "score": 19
     },
     {
       "issueNumbers": [
-        308
+        311
       ],
-      "fullName": "Mersolceil/dsh-computer-use",
+      "fullName": "xushilianzhuren/dsh-identity-continuity",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 19
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-legion-pack",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 23
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-image-sovereign",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 19
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-constitution-viz",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 25
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-goal-core",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 25
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-learn-core",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 25
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-mind-core",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 25
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-eye-extract",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 21
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-update-guard",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 21
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-anti-degrade-core",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 19
+    },
+    {
+      "issueNumbers": [
+        314
+      ],
+      "fullName": "Lionad-Morotar/dsh-jump",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-bili-upload-kit",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 26
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-chat-export",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 26
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-bili2text",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 24
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-daily-brief",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 24
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-frame-scan",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 24
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-translate-kit",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 26
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-notify-relay",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 24
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-first-principles",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 26
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-hello-pipeline",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 12
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-winreset-kit",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 26
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-xianyu-kit",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 26
+    },
+    {
+      "issueNumbers": [
+        311
+      ],
+      "fullName": "xushilianzhuren/dsh-rea-kit",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 26
