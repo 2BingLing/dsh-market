@@ -3,6 +3,8 @@ import {
   extractRepoFromText,
   extractIntroByAuthor,
   extractSubdirHints,
+  extractBatchRepos,
+  SUBMISSION_TITLE_LOOSE_RE,
   SUBMISSION_TITLE_RE,
 } from "../src/sources/issues.js";
 
@@ -116,5 +118,45 @@ describe("extractSubdirHints（#295 子目录提示）", () => {
 
   it("无提示时返回空数组", () => {
     expect(extractSubdirHints("没有子目录提示的正文")).toEqual([]);
+  });
+});
+
+describe("#306/#311 · 标题宽松形式与批量收录", () => {
+  it("SUBMISSION_TITLE_LOOSE_RE：英文冒号式 Plugin submission: x", () => {
+    expect(
+      SUBMISSION_TITLE_LOOSE_RE.test(
+        "Plugin submission: dsh-constitution-seed (bounded charter-file injector)"
+      ),
+    ).toBe(true);
+  });
+
+  it("SUBMISSION_TITLE_LOOSE_RE：全角【收录申请】批量标题", () => {
+    expect(SUBMISSION_TITLE_LOOSE_RE.test("【收录申请】批量收录 xushilianzhuren 名下 30 个 dsh-plugin 仓库")).toBe(true);
+    expect(SUBMISSION_TITLE_LOOSE_RE.test("【收录】dsh-x")).toBe(true);
+    expect(SUBMISSION_TITLE_LOOSE_RE.test("普通问题咨询")).toBe(false);
+  });
+
+  it("extractBatchRepos：编号清单 + 正文主页链接 → owner/repo 候选", () => {
+    const text = [
+      "## 批量收录申请（30件）",
+      "1. dsh-constitution-seed — 宪法种子注入器",
+      "2. dsh-mind-core — 器灵意识口径闸",
+      "11. dsh-legion-pack — 军团包",
+      "",
+      "全部仓库：github.com/xushilianzhuren → 30仓均挂 dsh-plugin 话题",
+    ].join("\n");
+    expect(extractBatchRepos(text, "someone-else")).toEqual([
+      "xushilianzhuren/dsh-constitution-seed",
+      "xushilianzhuren/dsh-mind-core",
+      "xushilianzhuren/dsh-legion-pack",
+    ]);
+  });
+
+  it("extractBatchRepos：正文无主页链接时回退 issue 作者 login", () => {
+    const text = "1. dsh-alpha — Alpha\n2. dsh-beta — Beta";
+    expect(extractBatchRepos(text, "author-login")).toEqual([
+      "author-login/dsh-alpha",
+      "author-login/dsh-beta",
+    ]);
   });
 });

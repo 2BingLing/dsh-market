@@ -23,6 +23,7 @@ interface GithubIssue {
   body: string | null;
   state: string;
   labels?: Array<{ name?: string }>;
+  user?: { login?: string };
 }
 
 /** 从 issue 正文提取 GitHub 仓库地址（兼容多种写法） */
@@ -93,6 +94,15 @@ export async function fetchPackSubmissionRepos(): Promise<Map<string, number[]>>
   return fetchSubmissionReposByPack(/^\[提交整合包\]|^\[submit pack/i, "submission", "issues:pack-submission");
 }
 
+/** #306/#311 · 标题白名单（无括号冒号式与全角标题式）：
+ *  - `Plugin submission: dsh-constitution-seed`（英文用户不套方括号，冒号直排）
+ *  - `【收录申请】批量收录 …`（全角括号批量通道） */
+export const SUBMISSION_TITLE_LOOSE_RE =
+  /^\s*(?:plugins?\s+submission\s*[:：]|【\s*收录(?:申请)?\s*】)/i;
+
+/** #311 · 批量收录申请标题（正文是编号清单，走 extractBatchRepos 提取） */
+export const BATCH_SUBMISSION_TITLE_RE = /【\s*收录申请\s*】|批量收录/;
+
 /** 从提交正文提取子目录提示（#295：「插件本体在子目录 `cyrene-balance-widget/`」）。
  *  识别反引号包裹、以 / 结尾的相对路径 token；URL（含 //）排除。 */
 export function extractSubdirHints(text: string): string[] {
@@ -101,6 +111,25 @@ export function extractSubdirHints(text: string): string[] {
     const p = m[1];
     if (!p || p.includes("//") || /^https?$/i.test(p)) continue;
     if (!out.includes(p)) out.push(p);
+  }
+  return out;
+}
+
+/** #311 · 批量收录申请：从编号清单（`1. dsh-xxx — 简介`）提取包名，
+ *  结合 owner 构造 owner/repo 候选。owner 来源：正文里的 github.com/<owner>
+ *  （批量提交常只给一个主页链接），否则 issue 作者 login。
+ *  名字合法性：字母数字开头 + [\w.-]，长度 ≥ 3；404 仓库由后续检测阶段自然拒绝。 */
+export function extractBatchRepos(text: string, authorLogin: string): string[] {
+  const ownerM = text.match(/github\.com\/([A-Za-z0-9_.-]+)(?:\/|$|\s)/);
+  const owner = (ownerM?.[1] ?? authorLogin).toLowerCase();
+  if (!owner || ["github", "user-attachments"].includes(owner)) return [];
+  const out: string[] = [];
+  for (const m of text.matchAll(
+    /^\s*(?:\d+[.、)]|[-*+])\s*`?([A-Za-z0-9][a-zA-Z0-9_.-]{2,})`?\s*(?:$|[—–:：])/gm,
+  )) {
+    const name = m[1].toLowerCase();
+    const fn = `${owner}/${name}`;
+    if (!out.includes(fn)) out.push(fn);
   }
   return out;
 }
@@ -120,7 +149,8 @@ async function fetchSubmissionReposBy(
     for (const issue of issues) {
       const isSubmission =
         (issue.labels ?? []).some((l: { name?: string }) => l.name === label) ||
-        titleRe.test(issue.title);
+        titleRe.test(issue.title) ||
+        SUBMISSION_TITLE_LOOSE_RE.test(issue.title);
       if (!isSubmission) continue;
       counted++;
       const text = `${issue.title}\n${issue.body ?? ""}`;
@@ -130,8 +160,14 @@ async function fetchSubmissionReposBy(
       const isDataFix = DATA_FIX_TITLE_RE.test(issue.title);
       const corrections = isDataFix ? extractCorrections(issue.body ?? null) : undefined;
       const subdirHints = extractSubdirHints(text);
-      const fromText = extractRepoFromText(text);
-      const fns = fromText.length > 0 ? fromText : (isDataFix ? extractRepoFromDataFixText(text) : []);
+      let fromText = extractRepoFromText(text);
+      if (fromText.length === 0 && isDataFix) fromText = extractRepoFromDataFixText(text);
+      // #311 · 批量收录申请：编号清单只有裸包名（无 URL）→ owner 取正文主页链接或 issue 作者；
+      // 与 URL 提取结果取并集（混合格式：部分给了链接、部分只有编号清单）
+      if (BATCH_SUBMISSION_TITLE_RE.test(issue.title)) {
+        fromText = [...new Set([...fromText, ...extractBatchRepos(text, issue.user?.login ?? "")])];
+      }
+      const fns = fromText;
       for (const fn of fns) {
         const meta = out.get(fn) ?? { issueNumbers: [] };
         if (!meta.issueNumbers.includes(issue.number)) meta.issueNumbers.push(issue.number);
