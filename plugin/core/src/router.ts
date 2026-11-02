@@ -9,7 +9,8 @@ import { join, normalize } from "node:path";
 import type { DshPlugin } from "@dsh-market/schema";
 import type { CommandRunner, InstallResult, SmokeCheck, StepCallback } from "./types.js";
 import { installPlugin, installPackageName, skillsDestName } from "./installer.js";
-import { guardInstallCommands } from "./command-guard.js";
+import { filterInstallCommands } from "./command-guard.js";
+import { appendOpLog } from "./log.js";
 import type { ResolvedConfig } from "./config.js";
 import {
   envFingerprint,
@@ -189,6 +190,30 @@ export function canonicalCommands(
   return [`dsh plugin --profile ${profile} add ${installPackageName(plugin)}`];
 }
 
+/**
+ * `dsh plugin` 形态命令的 --profile 归一化（issue #320 修复四）：
+ * collector 忠实解析 README，命令常带作者机器上的 profile（如 --profile web），
+ * 与用户实际目标 profile 不一致——照原样执行会装进错误/不存在的 profile。
+ * 这里统一改写为当前目标 profile；缺省 --profile 时注入目标值（保证冒烟对账一致）。
+ * 仅处理 `dsh plugin` 开头的命令，其他形态原样返回。
+ */
+export function normalizeDshProfileCommands(commands: string[], profile: string): string[] {
+  return commands.map((raw) => {
+    const tokens = raw.trim().split(/\s+/).filter(Boolean);
+    if ((tokens[0] ?? "").toLowerCase() !== "dsh" || (tokens[1] ?? "").toLowerCase() !== "plugin") {
+      return raw;
+    }
+    const out = [...tokens];
+    const pi = out.findIndex((t, i) => i >= 2 && t.toLowerCase() === "--profile");
+    if (pi >= 0 && pi + 1 < out.length) {
+      out[pi + 1] = profile;
+    } else {
+      out.splice(2, 0, "--profile", profile);
+    }
+    return out.join(" ");
+  });
+}
+
 /** T0 路由安装：已装 → 配方 → 解析命令；全部落空/失败 → needAi */
 export async function routeInstall(
   cfg: ResolvedConfig,
@@ -197,8 +222,11 @@ export async function routeInstall(
 ): Promise<RouterResult> {
   const { profile, runner, force, onStep, useRecipe = true, signal } = opts;
 
-  // 前置计算：解析命令（skill 目标规范化）+ cordis 冒烟对账包名（解析命令提取优先）
-  const parsed = normalizeSkillCommands(cfg, plugin, plugin.install?.commands ?? []);
+  // 前置计算：解析命令（skill 目标规范化 + --profile 归一）+ cordis 冒烟对账包名（解析命令提取优先）
+  const parsed = normalizeDshProfileCommands(
+    normalizeSkillCommands(cfg, plugin, plugin.install?.commands ?? []),
+    profile,
+  );
   const pkgName = smokePkgName(plugin, parsed);
 
   // 0. 已装：直接跳过（零动作）
@@ -227,25 +255,32 @@ export async function routeInstall(
       recipe.commands.length > 0 &&
       recipe.type === plugin.type
     ) {
-      // 命令安全门（issue #165）：配方命令也未过白名单 → 拒绝直装，交 AI 复核
-      const recipeGuard = guardInstallCommands(plugin, recipe.commands, {
+      // 命令安全门（issue #165 + #320）：配方命令归一 profile 后**逐条过滤**——
+      // 白名单外命令丢弃（不执行），合法子集照常直装；全被丢才升级 T1
+      const recipeNorm = normalizeDshProfileCommands(recipe.commands, profile);
+      const recipeFilter = filterInstallCommands(plugin, recipeNorm, {
         allowedDestPrefix: cfg.skillsDir,
       });
-      if (!recipeGuard.ok) {
+      if (recipeFilter.pass.length === 0) {
         return {
           mode: "recipe",
           ok: false,
           needAi: true,
-          reason: `配方命令未通过直装白名单（${recipeGuard.blocked[0]?.reason ?? "未知"}），已拦截，交 AI 复核`,
+          reason: `配方命令未通过直装白名单（${recipeFilter.dropped[0]?.reason ?? "未知"}），已拦截，交 AI 复核`,
           recipe,
         };
       }
       const result = await install(
-        recipe.commands,
+        recipeFilter.pass,
         recipe.smoke.length > 0 ? recipe.smoke : deriveSmokeCommands(cfg, plugin, profile, pkgName),
       );
       if (result.ok && !result.smokeFailed) {
-        writeRecipe(cfg, { ...recipe, verifiedAt: new Date().toISOString(), lastSmoke: "pass" });
+        writeRecipe(cfg, {
+          ...recipe,
+          commands: recipeFilter.pass,
+          verifiedAt: new Date().toISOString(),
+          lastSmoke: "pass",
+        });
         return { mode: "recipe", ok: true, needAi: false, result, recipe };
       }
       const reason = result.smokeFailed
@@ -258,26 +293,39 @@ export async function routeInstall(
 
   // 2. collector 解析命令（有则优先执行；无则内置确定性路径兜底——两者都零 LLM）
   const smoke = deriveSmokeCommands(cfg, plugin, profile, pkgName);
-  // 命令安全门（issue #165）：解析命令未过白名单 → 拒绝直装（不做内置路径静默兜底——
-  // 那会执行与 README 所述不同的安装方式），升级 T1 复核；reason 同步告知 AI 不得原样重试
-  const parsedGuard = guardInstallCommands(plugin, parsed, {
+  // 命令安全门（issue #165 + #320）：解析命令**逐条过滤**——白名单外命令丢弃（不执行），
+  // 合法子集照常直装（如「add + update」混合批不再整批连坐）；全被丢才升级 T1（reason 带丢弃明细，
+  // 告知 AI 不得原样重试被拦截的命令）
+  const parsedFilter = filterInstallCommands(plugin, parsed, {
     allowedDestPrefix: cfg.skillsDir,
   });
-  if (parsed.length > 0 && !parsedGuard.ok) {
+  if (parsed.length > 0 && parsedFilter.pass.length === 0) {
     return {
       mode: "parsed",
       ok: false,
       needAi: true,
-      reason: `解析命令未通过直装白名单（${parsedGuard.blocked[0]?.reason ?? "未知"}）：${parsedGuard.blocked
+      reason: `解析命令未通过直装白名单（${parsedFilter.dropped[0]?.reason ?? "未知"}）：${parsedFilter.dropped
         .map((b) => b.command.slice(0, 80))
         .join(" ; ")}。直装已拦截、未执行任何命令；复核时不得原样重试被拦截的命令`,
       recipe: null,
     };
   }
-  const useParsed = parsed.length > 0;
+  if (parsedFilter.dropped.length > 0) {
+    // 丢弃明细进操作日志：直装结果可解释（丢过什么、为什么），不静默
+    appendOpLog(cfg, {
+      t: new Date().toISOString(),
+      op: "install",
+      ok: true,
+      target: plugin.id,
+      msg: `[guard] 丢弃非白名单命令 ${parsedFilter.dropped.length} 条：${parsedFilter.dropped
+        .map((b) => `${b.command.slice(0, 60)}（${b.reason}）`)
+        .join(" ; ")}`,
+    });
+  }
+  const useParsed = parsedFilter.pass.length > 0;
   // 内置兜底：skill → git clone <repo> <skillsDir>/<name>；cordis → dsh plugin add <pkgName>
   const result = useParsed
-    ? await install(parsed, smoke)
+    ? await install(parsedFilter.pass, smoke)
     : await installPlugin(cfg, plugin, {
         targetProfile: profile,
         runner,
@@ -294,7 +342,7 @@ export async function routeInstall(
       version: null,
       envFingerprint: envFingerprint(),
       type: plugin.type,
-      commands: useParsed ? parsed : canonicalCommands(cfg, plugin, profile),
+      commands: useParsed ? parsedFilter.pass : canonicalCommands(cfg, plugin, profile),
       smoke,
       learnedFrom: "parsed",
       verifiedAt: new Date().toISOString(),

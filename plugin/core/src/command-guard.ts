@@ -9,6 +9,10 @@
  * 这里用「白名单」而非「黑名单」：只放行结构受限、可预期的命令形态，
  * 其余一律拒绝直装（needAi 升级 T1 复核，或转人工/安全模式）。
  *
+ * #320 补充：guardInstallCommands（整批判定，用于已确认命令的受控执行）之外，
+ * 提供 filterInstallCommands（逐条过滤：丢弃非法命令、保留合法子集）——
+ * README 混合命令批（合法 add + 越权 update）不再整批连坐。
+ *
  * 放行形态：
  * - `dsh plugin [--profile <p>] add <pkg>`           官方安装命令（与内置路径同款）
  * - `git clone https://github.com/<owner>/<repo>`    仅限插件自身仓库；目标不允许 ~ 与 ..，
@@ -64,85 +68,110 @@ export function guardInstallCommands(
   opts?: GuardOptions,
 ): GuardResult {
   const blocked: BlockedCommand[] = [];
-  for (const raw of commands) {
-    const command = raw.trim();
-    const reject = (reason: string) => blocked.push({ command: raw, reason });
-
-    if (!command) {
-      reject("空命令");
-      continue;
-    }
-    if (SHELL_OPERATOR_RE.test(command)) {
-      reject(
-        REMOTE_EXEC_RE.test(command)
-          ? "包含远程脚本下载执行（curl/wget 管道 bash 等），已阻止直装"
-          : "包含管道/链式/重定向等 shell 操作符",
-      );
-      continue;
-    }
-
-    const tokens = command.split(/\s+/).filter(Boolean);
-    const head = (tokens[0] ?? "").toLowerCase();
-
-    if (head === "dsh") {
-      if (
-        (tokens[1] ?? "").toLowerCase() === "plugin" &&
-        tokens.some((t) => /^(add|install)$/i.test(t))
-      ) {
-        continue;
-      }
-      reject("dsh 命令仅放行「dsh plugin ... add <pkg>」形态");
-      continue;
-    }
-
-    if (head === "git") {
-      const urlIdx = tokens.findIndex((t, i) => i >= 2 && /^https:\/\/github\.com\//i.test(t));
-      const url = urlIdx > 0 ? tokens[urlIdx] : "";
-      const m = url.match(/^https:\/\/github\.com\/([\w.-]+)\/([\w.-]+?)(?:\.git)?$/i);
-      const own =
-        m !== null && `${m[1]}/${m[2]}`.toLowerCase() === plugin.fullName.toLowerCase();
-      if ((tokens[1] ?? "").toLowerCase() !== "clone" || !own) {
-        reject("git 仅放行克隆插件自身 GitHub 仓库");
-        continue;
-      }
-      const dest = tokens.length > urlIdx + 1 ? tokens[tokens.length - 1] : "";
-      if (dest) {
-        const destBad =
-          dest.startsWith("~") ||
-          dest.includes("..") ||
-          (/^([a-z]:)?[\\/]/i.test(dest) &&
-            !(opts?.allowedDestPrefix && normPath(dest).startsWith(normPath(opts.allowedDestPrefix))));
-        if (destBad) {
-          reject("git clone 目标目录越界（~ / .. / 非技能目录的绝对路径）");
-          continue;
-        }
-      }
-      continue;
-    }
-
-    if (head === "npm" || head === "pnpm") {
-      const sub = (tokens[1] ?? "").toLowerCase();
-      if (!["install", "i", "add"].includes(sub)) {
-        reject(`${head} 仅放行 install/i/add 形态`);
-        continue;
-      }
-      if (tokens.some(isGlobalFlag)) {
-        reject("全局安装（-g/--global）已阻止：插件应装进 profile 或技能目录");
-        continue;
-      }
-      const pkgs = tokens.slice(2).filter((t) => !t.startsWith("-"));
-      if (pkgs.length === 0) {
-        reject("缺少包名");
-        continue;
-      }
-      if (!pkgs.every(isRegistryPkg)) {
-        reject("包名含 URL/git 源/路径形态，已阻止（仅放行 registry 包名）");
-        continue;
-      }
-      continue;
-    }
-
-    reject("非白名单命令形态");
+  for (const command of commands) {
+    const reason = checkInstallCommand(plugin, command, opts);
+    if (reason !== null) blocked.push({ command, reason });
   }
   return { ok: blocked.length === 0, blocked };
+}
+
+export interface FilterResult {
+  /** 通过白名单的命令子集（可安全执行） */
+  pass: string[];
+  /** 未通过而被丢弃的命令（不执行，原因随行） */
+  dropped: BlockedCommand[];
+}
+
+/**
+ * 逐条过滤（issue #320）：白名单外命令**丢弃而非整批拒绝**。
+ * 安全语义不变——丢弃 = 不执行，严格 safer；收益是 README 常见的
+ * 混合命令批（合法 add + 越权的 update/uninstall 等）不再连坐，
+ * 合法子集可直接零 token 直装，避免无谓升级 T1。
+ * 全部被丢 → pass 为空，调用方按原语义升级 T1（reason 带丢弃明细）。
+ */
+export function filterInstallCommands(
+  plugin: Pick<DshPlugin, "fullName">,
+  commands: string[],
+  opts?: GuardOptions,
+): FilterResult {
+  const pass: string[] = [];
+  const dropped: BlockedCommand[] = [];
+  for (const command of commands) {
+    const reason = checkInstallCommand(plugin, command, opts);
+    if (reason === null) pass.push(command);
+    else dropped.push({ command, reason });
+  }
+  return { pass, dropped };
+}
+
+/** 单条命令白名单校验：null = 放行；否则返回人话拒绝原因 */
+function checkInstallCommand(
+  plugin: Pick<DshPlugin, "fullName">,
+  raw: string,
+  opts?: GuardOptions,
+): string | null {
+  const command = raw.trim();
+
+  if (!command) return "空命令";
+  if (SHELL_OPERATOR_RE.test(command)) {
+    return REMOTE_EXEC_RE.test(command)
+      ? "包含远程脚本下载执行（curl/wget 管道 bash 等），已阻止直装"
+      : "包含管道/链式/重定向等 shell 操作符";
+  }
+
+  const tokens = command.split(/\s+/).filter(Boolean);
+  const head = (tokens[0] ?? "").toLowerCase();
+
+  if (head === "dsh") {
+    if (
+      (tokens[1] ?? "").toLowerCase() === "plugin" &&
+      tokens.some((t) => /^(add|install)$/i.test(t))
+    ) {
+      return null;
+    }
+    return "dsh 命令仅放行「dsh plugin ... add <pkg>」形态";
+  }
+
+  if (head === "git") {
+    const urlIdx = tokens.findIndex((t, i) => i >= 2 && /^https:\/\/github\.com\//i.test(t));
+    const url = urlIdx > 0 ? tokens[urlIdx] : "";
+    const m = url.match(/^https:\/\/github\.com\/([\w.-]+)\/([\w.-]+?)(?:\.git)?$/i);
+    const own =
+      m !== null && `${m[1]}/${m[2]}`.toLowerCase() === plugin.fullName.toLowerCase();
+    if ((tokens[1] ?? "").toLowerCase() !== "clone" || !own) {
+      return "git 仅放行克隆插件自身 GitHub 仓库";
+    }
+    const dest = tokens.length > urlIdx + 1 ? tokens[tokens.length - 1] : "";
+    if (dest) {
+      const destBad =
+        dest.startsWith("~") ||
+        dest.includes("..") ||
+        (/^([a-z]:)?[\\/]/i.test(dest) &&
+          !(opts?.allowedDestPrefix && normPath(dest).startsWith(normPath(opts.allowedDestPrefix))));
+      if (destBad) {
+        return "git clone 目标目录越界（~ / .. / 非技能目录的绝对路径）";
+      }
+    }
+    return null;
+  }
+
+  if (head === "npm" || head === "pnpm") {
+    const sub = (tokens[1] ?? "").toLowerCase();
+    if (!["install", "i", "add"].includes(sub)) {
+      return `${head} 仅放行 install/i/add 形态`;
+    }
+    if (tokens.some(isGlobalFlag)) {
+      return "全局安装（-g/--global）已阻止：插件应装进 profile 或技能目录";
+    }
+    const pkgs = tokens.slice(2).filter((t) => !t.startsWith("-"));
+    if (pkgs.length === 0) {
+      return "缺少包名";
+    }
+    if (!pkgs.every(isRegistryPkg)) {
+      return "包名含 URL/git 源/路径形态，已阻止（仅放行 registry 包名）";
+    }
+    return null;
+  }
+
+  return "非白名单命令形态";
 }

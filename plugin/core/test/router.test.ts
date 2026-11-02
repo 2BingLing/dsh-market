@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { DshPlugin } from "@dsh-market/schema";
 import { resolveConfig } from "../src/config.js";
-import { deriveSmokeCommands, expandHome, extractInstallPkgName, isInstalled, normalizeSkillCommands, routeInstall } from "../src/router.js";
+import { deriveSmokeCommands, expandHome, extractInstallPkgName, isInstalled, normalizeDshProfileCommands, normalizeSkillCommands, routeInstall } from "../src/router.js";
 import { envFingerprint, readRecipe, writeRecipe } from "../src/recipe.js";
 import type { CommandRunner } from "../src/types.js";
 import { makeMarket } from "./fixture.js";
@@ -315,6 +315,30 @@ describe("normalizeSkillCommands · skill 解析命令规范化", () => {
     expect(expandHome("~/.dsh/skills/x")).toBe(join(require("node:os").homedir(), ".dsh", "skills", "x"));
     expect(expandHome("~")).toBe(require("node:os").homedir());
     expect(expandHome("/abs/path")).toBe("/abs/path");
+  });
+});
+
+describe("normalizeDshProfileCommands · --profile 归一化（#320 修复四）", () => {
+  it("README 带来的 --profile web 改写为目标 profile", () => {
+    expect(
+      normalizeDshProfileCommands(["dsh plugin --profile web add dsh-context"], "desktop"),
+    ).toEqual(["dsh plugin --profile desktop add dsh-context"]);
+  });
+
+  it("缺省 --profile 时注入目标 profile", () => {
+    expect(normalizeDshProfileCommands(["dsh plugin add dsh-context"], "desktop")).toEqual([
+      "dsh plugin --profile desktop add dsh-context",
+    ]);
+  });
+
+  it("非 dsh plugin 形态原样返回", () => {
+    const cmds = ["npm install dsh-context", "git clone https://github.com/a/b"];
+    expect(normalizeDshProfileCommands(cmds, "desktop")).toEqual(cmds);
+  });
+
+  it("dsh 非 plugin 子命令不受影响", () => {
+    const cmds = ["dsh context add x"];
+    expect(normalizeDshProfileCommands(cmds, "desktop")).toEqual(cmds);
   });
 });
 

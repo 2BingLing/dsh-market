@@ -315,6 +315,10 @@ function InstallModal(props: {
   const [phase, setPhase] = useState<'confirm' | 'reviewing' | 'report' | 'running' | 'handedOff' | 'error'>('confirm')
   // #165 建议三（可取消）：记录当前安装的 installId，供取消按钮定位宿主侧 AbortController
   const lastInstallIdRef = useRef('')
+  // #320：T1 终态（宿主代执行完成后轮询得到）；null = 仍在确认中
+  const [t1Result, setT1Result] = useState<{ ok: boolean; error?: string | null } | null>(null)
+  // #320：终态轮询的停止器（组件卸载时停止；PENDING_INSTALL_KEY 留给恢复逻辑）
+  const t1WatchStopRef = useRef<(() => void) | null>(null)
   // #165 建议二（审查与安装分离）：安全审查报告（review 阶段展示，确认后按 commands 受控执行）
   const [review, setReview] = useState<{
     securityBlocked: boolean
@@ -349,6 +353,48 @@ function InstallModal(props: {
   // AI 代理安装（路由式）：T0 直装（零 LLM：已装/配方/解析命令）→ 需要时才交给协议子代理。
   // 安全模式（security=true）：跳过 T0，强制 AI 先扫描再安装。
   // #165 建议三（可取消）：installId 供「取消」终止宿主侧 T0/T1。
+  /** #320：T1 转交后轮询 ai:install:status 到终态（宿主代执行完成后才有）。
+   *  PENDING_INSTALL_KEY 保留到终态——面板中途关闭/刷新后重开可由恢复逻辑接手。 */
+  const watchT1Terminal = (installId: string) => {
+    let alive = true
+    let polls = 0
+    const tick = async () => {
+      if (!alive) return
+      polls += 1
+      try {
+        const s = await api<{ running: boolean; known?: boolean; ok?: boolean; cancelled?: boolean; error?: string | null }>(
+          'ai:install:status',
+          { installId },
+        )
+        if (!alive) return
+        if (s.running && polls < 200) {
+          setTimeout(() => {
+            if (alive) void tick()
+          }, 3000)
+          return
+        }
+        localStorage.removeItem(PENDING_INSTALL_KEY)
+        if (s.running) return // 轮询上限：放弃恢复（宿主继续，重开面板可再恢复）
+        if (s.known === false) return // 宿主重启过：终态随进程丢失
+        setT1Result({ ok: Boolean(s.ok), error: s.error ?? null })
+        if (s.ok) onDone()
+      } catch {
+        // 网络抖动：下一轮再试
+        if (alive && polls < 200) {
+          setTimeout(() => {
+            if (alive) void tick()
+          }, 3000)
+        }
+      }
+    }
+    void tick()
+    return () => {
+      alive = false
+    }
+  }
+  // 组件卸载：停止终态轮询（安装不受影响，重开面板由恢复逻辑接管）
+  useEffect(() => () => t1WatchStopRef.current?.(), [])
+
   const startAi = async () => {
     setPhase('running')
     const installId = `${plugin.id}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
@@ -359,6 +405,7 @@ function InstallModal(props: {
       PENDING_INSTALL_KEY,
       JSON.stringify({ installId, pluginId: plugin.id, pluginName: plugin.name, at: Date.now() }),
     )
+    let keepPending = false
     try {
       const r = await api<{
         started: boolean
@@ -386,6 +433,13 @@ function InstallModal(props: {
       }
       if (!r.started) setT0(r)
       setPhase('handedOff')
+      // #320：T1 转交不是终态——保留 PENDING_INSTALL_KEY 并轮询到宿主代执行完成；
+      // 此前 finally 立即清 key，断线恢复逻辑从未真正生效
+      if (r.started && r.childSessionId) {
+        keepPending = true
+        t1WatchStopRef.current?.()
+        t1WatchStopRef.current = watchT1Terminal(installId)
+      }
     } catch (e) {
       // 用户在等待期间点了取消：宿主已终止安装，回到确认页
       if ((e as Error).name === 'AbortError' || /取消/.test((e as Error).message)) {
@@ -398,8 +452,8 @@ function InstallModal(props: {
       setDiagCopied(false)
       setPhase('error')
     } finally {
-      // RPC 已有明确结果（完成/取消/报错）→ 清掉断线重连标记；页面关闭导致 await 未落地的情形不会走到这里
-      localStorage.removeItem(PENDING_INSTALL_KEY)
+      // RPC 已有明确结果（完成/取消/报错）→ 清掉断线重连标记；T1 转交（keepPending）除外
+      if (!keepPending) localStorage.removeItem(PENDING_INSTALL_KEY)
     }
   }
 
@@ -525,23 +579,25 @@ function InstallModal(props: {
     plugin.installCommands && plugin.installCommands.length > 0
       ? plugin.installCommands
       : [cmd]
+  // #320：转交后是否已到终态——T0 直装结果（无子会话）天然是终态；T1 要等轮询拿到 t1Result
+  const handedOffDone = phase === 'handedOff' && (!childSessionId || t1Result !== null)
 
   return El('div', { className: styles.modalBackdrop, onClick: onClose },
     El('div', { className: styles.modal, onClick: (e: MouseEvent) => e.stopPropagation() },
-      // 步骤条（B：确认 → 运行中 → 完成）
+      // 步骤条（B：确认 → 运行中 → 完成）；#320：T1 转交但未到终态时不算"完成"
       El('div', { className: styles.steps },
         El('div', { className: `${styles.step} ${styles.stepActive}` },
           El('span', { className: styles.stepDot }, '1'),
           '确认',
           El('span', { className: phase === 'confirm' ? styles.stepBar : `${styles.stepBar} ${styles.stepBarDone}` }),
         ),
-        El('div', { className: phase === 'confirm' ? styles.step : `${styles.step} ${phase === 'handedOff' ? styles.stepDone : styles.stepActive}` },
-          El('span', { className: styles.stepDot }, phase === 'handedOff' ? El(Icon, { d: ICON_CHECK, size: 11 }) : '2'),
+        El('div', { className: phase === 'confirm' ? styles.step : `${styles.step} ${handedOffDone ? styles.stepDone : styles.stepActive}` },
+          El('span', { className: styles.stepDot }, phase === 'confirm' ? '2' : El(Icon, { d: ICON_CHECK, size: 11 })),
           '运行中',
-          El('span', { className: phase === 'handedOff' ? `${styles.stepBar} ${styles.stepBarDone}` : styles.stepBar }),
+          El('span', { className: handedOffDone ? `${styles.stepBar} ${styles.stepBarDone}` : styles.stepBar }),
         ),
-        El('div', { className: phase === 'handedOff' ? `${styles.step} ${styles.stepDone}` : styles.step },
-          El('span', { className: styles.stepDot }, phase === 'handedOff' ? El(Icon, { d: ICON_CHECK, size: 11 }) : '3'),
+        El('div', { className: handedOffDone ? `${styles.step} ${styles.stepDone}` : styles.step },
+          El('span', { className: styles.stepDot }, handedOffDone ? El(Icon, { d: ICON_CHECK, size: 11 }) : '3'),
           '完成',
         ),
       ),
@@ -676,30 +732,51 @@ function InstallModal(props: {
               ),
             )
           : phase === 'handedOff'
-            ? El('div', { className: styles.modalSuccess },
-                El('div', { className: styles.modalSuccessIcon }, El(Icon, { d: ICON_CHECK, size: 22 })),
-                El('div', { className: styles.modalSuccessTitle },
-                  childSessionId ? '已交给 AI 助手安装' : '安装完成（零 Token 直装）'),
-                El('p', { className: styles.modalDesc },
-                  childSessionId
-                    ? `AI 助手已开始工作（子会话 ${childSessionId.slice(0, 8)}…），请到会话中查看进度；需要配置时 AI 会向你确认。`
-                    : t0?.alreadyInstalled
+            ? childSessionId
+              ? // #320：T1 转交 = 中性状态，不再是成功样式（旧版"已交给 AI 助手安装"+对勾
+                // 与真成功无法区分，用户以为装好了实际没有）。终态（宿主代执行完成）到达后
+                // 由轮询更新为真实成功/失败
+                El('div', null,
+                  t1Result === null
+                    ? El('div', null,
+                        El('div', { className: styles.modalTitle }, '已转交 AI 助手处理'),
+                        El('div', { className: styles.modalDesc },
+                          `AI 助手正在诊断安装命令（子会话 ${childSessionId.slice(0, 8)}…）；宿主将代为执行并做安装验证——结果出来会自动更新，无需在此等待。`),
+                        El('div', { className: styles.loading }, '正在确认安装结果…'),
+                      )
+                    : t1Result.ok
+                      ? El('div', { className: styles.modalSuccess },
+                          El('div', { className: styles.modalSuccessIcon }, El(Icon, { d: ICON_CHECK, size: 22 })),
+                          El('div', { className: styles.modalSuccessTitle }, '安装完成（AI 协助）'),
+                          El('div', { className: styles.modalDesc }, `「${plugin.name}」已安装并通过冒烟验证。`),
+                        )
+                      : El('div', null,
+                          El('div', { className: styles.modalError },
+                            El(Icon, { d: ICON_CLOSE, size: 14, className: styles.inlineIcon }),
+                            'AI 协助安装未完成'),
+                          El('div', { className: styles.modalDesc, style: { marginTop: 8, fontSize: 12.5 } },
+                            `${t1Result.error ?? '未知原因'}。可按插件 README 手动安装，完成后重开面板查看。`),
+                        ),
+                  El('div', { className: styles.modalActions },
+                    t1Result && !t1Result.ok
+                      ? El('button', { className: styles.btn, onClick: () => { setT1Result(null); setPhase('confirm') } }, '重试')
+                      : null,
+                    El('button', { className: `${styles.btn} ${styles.btnPrimary}`, onClick: () => { onDone(); onClose() } }, '知道了'),
+                  ),
+                )
+              : El('div', { className: styles.modalSuccess },
+                  El('div', { className: styles.modalSuccessIcon }, El(Icon, { d: ICON_CHECK, size: 22 })),
+                  El('div', { className: styles.modalSuccessTitle }, '安装完成（零 Token 直装）'),
+                  El('p', { className: styles.modalDesc },
+                    t0?.alreadyInstalled
                       ? `「${plugin.name}」已在目标位置检测到安装，已跳过。`
                     : t0?.ok && !t0.smokeFailed
                       ? `已通过${t0.mode === 'recipe' ? '配方' : '解析命令'}直装完成，冒烟验证通过，无需 AI 介入。`
-                      : t0?.classified
-                        ? El('span', null,
-                            // P6：T0 失败展示人话原因 + 建议动作（保留"转交 AI"语义）
-                            `直装未通过：${t0.classified.title}，已转交 AI 助手处理。`,
-                            El('span', { className: styles.modalDesc, style: { display: 'block', marginTop: 6, fontSize: 12, color: '#8a919f' } },
-                              `原因：${t0.error ?? ''}。建议：${t0.classified.hint}`),
-                          )
-                        : `直装未通过验证（${t0?.error ?? '冒烟失败'}），已转交 AI 助手处理。`,
-                ),
-                El('div', { className: styles.modalActions },
-                  El('button', { className: `${styles.btn} ${styles.btnPrimary}`, onClick: () => { onDone(); onClose() } }, '知道了'),
-                ),
-              )
+                      : `直装完成。`),
+                  El('div', { className: styles.modalActions },
+                    El('button', { className: `${styles.btn} ${styles.btnPrimary}`, onClick: () => { onDone(); onClose() } }, '知道了'),
+                  ),
+                )
             : El('div', null,
                 // P6：有分类 → 人话标题 + 建议动作；原始报错降级为次要信息
                 El('div', { className: styles.modalError },

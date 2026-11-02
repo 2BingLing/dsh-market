@@ -4,6 +4,17 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.17` / `@dsh-market/core@0.4.15`）
+
+**HOTFIX：T1 兜底安装链路三连修——白名单整批拒绝、T1 沙箱悖论、转交误报成功（#320）**
+
+- **白名单逐条过滤，不再整批连坐**（core）：collector 从 README 解析出的混合命令批（如 dsh-context 的「`add` + `update`」两条）此前任一条不过白名单就**整批**拒绝，白白升级 T1 烧 token。新增 `filterInstallCommands`：非法命令**丢弃不执行**（安全语义严格不变——丢弃即不执行），合法子集照常零 token 直装；全被丢才升级 T1（原因带丢弃明细）。丢弃动作写操作日志，可解释不静默。原 `guardInstallCommands`（整批判定）保留给「用户已确认命令」的受控执行场景。
+- **`--profile` 归一化**（core）：README 命令常带作者机器的 profile（如 `--profile web`），与用户实际目标 profile 不一致——照原样执行会装进错误/不存在的 profile。`routeInstall` 现将 `dsh plugin` 形态命令的 `--profile` 统一归一为目标 profile（缺省则注入），保证装对位置且冒烟对账一致。
+- **T1 沙箱悖论消除**（plugin）：T1 子代理此前要**亲自执行**安装命令，但子代理继承宿主会话的 workspace-write 沙箱、写不了 `~/.dsh/profiles`——EPERM 结构性必败（#320 实测，`package.json.lock` 打不开）。改为**子代理只诊断**（提示词改为「安装命令诊断器」，绝对禁止执行命令/安装/写文件），宿主进程收到 verdict 后：profile 归一 → 白名单过滤 → 真正执行 → 冒烟验证 → 成功才学配方。与 `ai:install:reviewed` 的宿主受控执行模型对齐；白名单全被丢的 verdict 绝不执行，按失败处理并给手动指引。
+- **转交状态不再误报成功**（plugin client）：旧版「已交给 AI 助手安装」绿色对勾与真成功无法区分（#320 报告者以为装好了实际没装）。改为中性「已转交 AI 助手处理…正在确认安装结果」，轮询到宿主代执行终态后才显示真实成功（对勾）/失败（原因 + 重试入口）；步骤条同步不再提前打勾。
+- **断线恢复真正生效**（plugin client）：`PENDING_INSTALL_KEY` 此前在 RPC 返回的 `finally` 立即清除，恢复轮询（`ai:install:status`）从未触发过——现在 T1 转交后保留到终态，面板关闭/刷新重开可接续；宿主侧新增 `pendingT1Installs` 登记，`ai:install:status` 能看到转交中的安装（此前转交即「消失」，面板永远等不到终态），`ai:install:cancel` 也能终止后台代执行。
+- 测试：core 全套 260 项通过（command-guard +4 逐条过滤、router +4 profile 归一化）；#320 原始命令批已在 dist 产物上复现验证（`add` 保留 / `update` 丢弃 / `--profile web`→`desktop` / 白名单通过 → 零 token 直装）。
+
 ### 插件端（`@dsh-market/core@0.4.14`）
 
 **HOTFIX：「已装」漏判——名字不带 dsh 前缀但已收录的插件永远不显示已安装（#288）**

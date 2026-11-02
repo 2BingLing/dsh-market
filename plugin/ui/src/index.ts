@@ -40,6 +40,8 @@ import {
   canonicalCommands,
   learnRecipe,
   guardInstallCommands,
+  filterInstallCommands,
+  normalizeDshProfileCommands,
   extractInstallPkgName,
   listRecipes,
   recordInstallMetric,
@@ -612,10 +614,16 @@ export function apply(ctx: {
         try {
           const result = await runAiInstall({ cfg, ctx, args, plugin, profile, security, signal: ac.signal, installId })
           // 断线重连：面板关闭/刷新不会终止宿主侧安装，但会丢掉这次 RPC 的返回值——
-          // 终态留存一份，供 ai:install:status 在面板重新打开时恢复
+          // 终态留存一份，供 ai:install:status 在面板重新打开时恢复。
+          // #320：T1 转交（started=true）不是终态——登记 pendingT1Installs，等 watchInstallVerdict
+          // 宿主代执行完再落终态；此前误记 ok:false 会立刻污染轮询结果。
           if (installId) {
-            const outcome = (result ?? {}) as { ok?: boolean; cancelled?: boolean; error?: string | null }
-            rememberFinishedInstall(installId, plugin.id, outcome)
+            const outcome = (result ?? {}) as { started?: boolean; ok?: boolean; cancelled?: boolean; error?: string | null }
+            if (outcome.started) {
+              pendingT1Installs.set(installId, { pluginId: plugin.id, ac })
+            } else {
+              rememberFinishedInstall(installId, plugin.id, outcome)
+            }
           }
           return result
         } catch (err) {
@@ -631,20 +639,30 @@ export function apply(ctx: {
 
       // 断线重连：面板重新打开后按 installId 轮询安装状态（运行中 / 已结束含终态 / 未知=宿主重启过）。
       // 终态为一次性读取（读到即删），与 ai:review:poll 同语义。
+      // #320：T1 转交后（RPC 已返回、宿主代执行仍在后台）也算 running——之前只查
+      // activeInstalls，转交即"消失"，面板永远等不到终态。
       case 'ai:install:status': {
         const id = String(args.installId ?? '')
-        if (activeInstalls.has(id)) return { running: true }
+        if (activeInstalls.has(id) || pendingT1Installs.has(id)) return { running: true }
         const rec = finishedInstalls.get(id)
         if (!rec) return { running: false, known: false }
         finishedInstalls.delete(id)
         return { running: false, known: true, ...rec }
       }
 
-      // #165 建议三（可取消）：终止进行中的安装（T0 命令立即杀进程；T1 子代理随 signal 终止）
+      // #165 建议三（可取消）：终止进行中的安装（T0 命令立即杀进程；T1 子代理随 signal 终止）。
+      // #320：T1 转交后（RPC 已返回）安装登记在 pendingT1Installs——同样可取消。
       case 'ai:install:cancel': {
         const id = String(args.installId ?? '')
         const ac = activeInstalls.get(id)
-        if (!ac) return { ok: false, error: '没有进行中的安装或已完成' }
+        if (!ac) {
+          const pending = pendingT1Installs.get(id)
+          if (!pending) return { ok: false, error: '没有进行中的安装或已完成' }
+          pending.ac.abort()
+          pendingT1Installs.delete(id)
+          rememberFinishedInstall(id, pending.pluginId, { ok: false, cancelled: true })
+          return { ok: true, interrupted: false }
+        }
         ac.abort()
         // #228 · alpha.2 abort 语义变更：signal 只在初始消息被收件箱接受前有效，之后子代理
         // 常驻运行——abort 之外必须显式 interrupt，否则 UI 显示「已取消」而子代理继续跑完、
@@ -1003,8 +1021,8 @@ function buildInstallPrompt(
   const securitySection = security
     ? [
         ``,
-        `【⛔ 安全模式：安装前必须先扫描（2026-09 新增；防御供应链投毒 + QVD-2026-57410 CVSS 9.8 式网络暴露攻击）】`,
-        `在【协议】第 1 步执行命令**之前**，先完成以下安全检查：`,
+        `【⛔ 安全模式：产出命令前必须先扫描（2026-09 新增；防御供应链投毒 + QVD-2026-57410 CVSS 9.8 式网络暴露攻击）】`,
+        `在产出 commands 之前，先完成以下安全检查：`,
         `1. 读插件仓库 README 全文关键段 + 安装用的脚本/清单（cordis.patch.yml / dsh.bundle / install.sh / package.json 等），逐个核对：`,
         `   a. 安装命令是否有危险模式：curl|sh、wget 后立即执行、下载二进制执行、base64 解码后执行、从不可信 URL 拉取代码；`,
         `   b. 是否收集/回传敏感信息：读取 API Key / Token / 环境变量（GITHUB_TOKEN、DEEPSEEK_API_KEY、OPENAI_API_KEY 等）并发送到外部地址；`,
@@ -1013,37 +1031,41 @@ function buildInstallPrompt(
         `   e. 网络暴露与信任围栏（QVD-2026-57410 实证：伪造 Host 头即可绕过 DSH 信任围栏，无需密钥直接命令执行——本地端口一旦出公网等于交出控制权）：`,
         `      - 安装脚本/文档是否把本地端口暴露到公网：绑定 0.0.0.0/:: 或 --host 0.0.0.0、EXPOSE、云服务器部署/域名反代/端口转发指引（ngrok、frp、cloudflared、localtunnel、花生壳、ssh -R 等）；`,
         `      - 自带 web 服务的插件是否弱化 Host/Origin 信任：allowedHosts 通配（true 或 "*"）、disableHostCheck、无条件信任 X-Forwarded-*，或诱导用户关闭 DSH 信任围栏/本机校验；`,
-        `      - 远程访问的正确姿势是「服务留本机 + 隧道回连」（本地端口映射/远程终端），插件若提供远程使用指引，核对它是否遵守该原则；`,
         `2. 结论必须明确：`,
-        `   - 无风险 → 继续按【协议】安装；`,
-        `   - 发现可疑（危险命令 / 信息收集 / 配置篡改 / 网络暴露 / 来源存疑）→ **立即停止**：不执行任何命令，输出 {"ok":false,"security_blocked":true,"reason":"<具体风险描述>"} 并结束。`,
-        `3. 需要配置时（协议第 5 条触发）：确认配置只写入本机（环境变量 / profile），不发送到任何外部地址。`,
-        `4. 安装完成后把扫描要点与结论写入 recipe 的 "security" 字段（无风险也写 "no risk detected"）。`,
+        `   - 无风险 → 继续产出安装命令；`,
+        `   - 发现可疑（危险命令 / 信息收集 / 配置篡改 / 网络暴露 / 来源存疑）→ **立即停止**：不产出 commands，输出 {"ok":false,"fail":"[security_blocked] <具体风险描述>"} 并结束。`,
+        `3. 产出的 recipe 命令须附 "security": "no risk detected" 结论（recipe 仅支持 commands/smoke 字段时省略，安全结论写入 fail 之外无妨）。`,
       ].join('\n')
     : []
   return [
-    `你是「极简安装执行器」，安装 DSH 插件「${plugin.name}」（${plugin.fullName}）。只做安装，不做别的。${security ? '本次为【安全模式】。' : ''}`,
+    `你是「安装命令诊断器」，为 DSH 插件「${plugin.name}」（${plugin.fullName}）产出可安全执行的安装命令。只做诊断，不做别的。${security ? '本次为【安全模式】。' : ''}`,
+    ``,
+    `【⛔ 绝对禁止：执行任何安装命令、安装任何包、写入任何文件（#320）】`,
+    `你的运行环境带沙箱，写不了 DSH profile 目录——安装命令在你这里执行必然 EPERM 失败，且毫无必要：`,
+    `宿主会在你产出结果后，把 commands 交给**宿主进程**（有完整权限、过直装白名单后）代为执行并做冒烟验证。`,
+    `你的全部价值是：读懂参考命令与 README，纠正错误，产出**白名单形态**的正确命令。`,
     ``,
     `【插件信息】`,
     `- 类型：${plugin.type === 'skill' ? 'skill（技能）' : 'cordis 插件'}（${plugin.type}）`,
     `- 简介：${plugin.descriptionZh ?? '(无中文简介)'}`,
     `- 需要配置：${plugin.install.needsConfig ? '是（API Key / Token 等）' : plugin.install.usageNeedsConfig ? '安装无需；使用时需配置模型（可能产生费用）' : '否'}`,
     `- 目标 profile：${targetProfile}`,
-    `- 参考命令（collector 已从 README 解析，优先直接使用）：`,
+    `- 参考命令（collector 已从 README 解析，其中的 --profile 可能是作者机器上的值，必须修正为目标 profile）：`,
     `    ${cmdLine}`,
-    ...(reason ? [`- 前序尝试（T0 已失败，仅作线索，不要重复踩坑）：${reason}`] : []),
+    ...(reason ? [`- 前序尝试（T0 已失败，仅作线索，不要产出同样的坏命令）：${reason}`] : []),
     ...securitySection,
     ``,
-    `【协议（必须遵守）】`,
-    `1. 先执行参考命令（可做最少修正：包管理器 / 平台差异）。不要先读 README。${security ? '【安全模式下：先完成上方扫描，再执行本条】' : ''}`,
-    `2. 命令缺失或明显错误时：只读仓库 README 的安装段落（grep install/安装/代码块，前 200 行），禁止全文阅读。`,
-    `3. 执行后必须验证：${plugin.type === 'skill' ? '技能目录存在且含 SKILL.md' : `profile「${targetProfile}」的 package.json 的 dependencies 含包名`}；exit 0 且验证通过才算成功。`,
-    `4. 失败时：重试 1 次 → 用错误文本 grep README → 仍失败则如实放弃并报告，不要无限尝试。`,
-    `5. 需要配置（API Key/Token/环境变量）时：只填 config_needed，不猜测、不伪造、不自行写入；先停下向用户确认。`,
-    `6. 全程禁止：思考过程、解释、总结散文、阅读文档其余部分、搜索网络（除非 README 明确引用必要的安装文档）、用重定向包管理器全局目录/缓存目录等方式绕过沙箱写权限（目标目录写不进就如实报告失败，不要绕路）、原样重试被直装安全白名单拦截过的命令（前序尝试里注明"未通过直装白名单"的命令只能分析不能执行）。`,
+    `【任务】`,
+    `1. 检查参考命令是否正确、完整；缺命令或明显错误时：只读仓库 README 的安装段落（grep install/安装/代码块，前 200 行），禁止全文阅读。`,
+    `2. 产出 commands——只允许三种白名单形态（宿主会再次校验，白名单外命令会被丢弃）：`,
+    `   ① dsh plugin --profile ${targetProfile} add <pkg>；② git clone https://github.com/${plugin.fullName}（仅限插件自身仓库）；③ npm install|pnpm add <pkg>（非全局）。`,
+    `   cordis 插件的 --profile 必须是「${targetProfile}」；skill 用 git clone，目标目录由宿主规范化，不用你指定。`,
+    `3. 无法产出任何白名单内命令（如需要交互式安装/专有脚本）→ ok:false + fail 说明原因与手动安装指引。`,
+    `4. 需要配置（API Key/Token/环境变量）时：只填 config_needed，不猜测、不伪造、不自行写入。`,
+    `5. 全程禁止：执行命令、思考过程、解释散文、阅读文档其余部分、搜索网络（除非 README 明确引用必要的安装文档）、产出被直装白名单拦截过的命令原样重试（前序尝试里注明"未通过直装白名单"的命令只能分析修正）。`,
     ``,
     `【输出】严格 JSON，无其他文本：`,
-    `{"ok":true|false,"commands":["实际执行的命令"],"smoke":["执行并验证的命令"],"fail":"失败与已尝试方案（失败时）","config_needed":null|{"what":"需要什么配置","hint":"在哪获取"},"recipe":{"commands":["可用安装命令"],"smoke":["验证命令"]}${security ? `,"security_blocked":false|true,"security_reason":"安全扫描结论或风险描述"` : ''}}`,
+    `{"ok":true|false,"commands":["产出给宿主执行的安装命令"],"smoke":["宿主执行后应运行的验证命令"],"fail":"无法产出的原因与手动指引（失败时）","config_needed":null|{"what":"需要什么配置","hint":"在哪获取"},"recipe":{"commands":["可用安装命令"],"smoke":["验证命令"]}}`,
   ].join('\n')
 }
 
@@ -1092,22 +1114,34 @@ function buildReviewPrompt(
 }
 
 /** T1 子代理验收（后台，不阻塞 RPC）：轮询子会话输出 → 解析 JSON verdict →
- *  ok 且带命令 → 学配方（learnedFrom=t1，含 config_needed）；记录完成度量（sessionChars 为 token 粗略代理）。
+ *  #320：verdict 只是**命令建议**——真正的安装由宿主进程执行（有完整权限，子代理沙箱
+ *  写不了 profile 目录；命令先过白名单过滤，执行后做冒烟验证），成功才学配方。
+ *  任何终态（成功/失败/超时/取消）都 rememberFinishedInstall，供面板轮询 ai:install:status。
  *  终止条件：拿到 verdict（成功或失败）→ 停止；否则轮询到 10 分钟上限。
- *  signal（#165 建议三）：用户取消 → 立即停止轮询，verdict 不落库、配方不学习。 */
+ *  signal（#165 建议三）：用户取消 → 立即停止轮询，verdict 不执行、配方不学习。 */
 async function watchInstallVerdict(opts: {
   cfg: ReturnType<typeof resolveConfig>
   plugin: Awaited<ReturnType<typeof fetchMarketData>>['data']['plugins'][number]
   profile: string
   sessionId: string
+  installId: string
   readSession: (id: string) => Promise<{ events?: Array<Record<string, any>> } | undefined>
   signal?: AbortSignal
 }): Promise<void> {
-  const { cfg, plugin, profile, sessionId, readSession, signal } = opts
+  const { cfg, plugin, profile, sessionId, installId, readSession, signal } = opts
   const deadline = Date.now() + 10 * 60 * 1000
   let chars = 0
+  /** 终态落库（幂等）：面板轮询 ai:install:status 的唯一事实源 */
+  const finish = (outcome: { ok?: boolean; cancelled?: boolean; error?: string | null }) => {
+    if (!installId) return
+    rememberFinishedInstall(installId, plugin.id, outcome)
+    pendingT1Installs.delete(installId)
+  }
   const tick = async () => {
-    if (signal?.aborted) return
+    if (signal?.aborted) {
+      finish({ ok: false, cancelled: true })
+      return
+    }
     let done = false
     try {
       const s = await readSession(sessionId)
@@ -1115,25 +1149,71 @@ async function watchInstallVerdict(opts: {
       chars = Math.max(chars, text.length)
       const verdict = parseInstallVerdict(text)
       if (verdict && verdict.ok && verdict.commands && verdict.commands.length > 0) {
-        const recipe = verdict.recipe ?? { commands: verdict.commands, smoke: verdict.smoke }
-        learnRecipe(cfg, plugin, profile, {
-          commands: recipe.commands ?? verdict.commands,
-          smoke: recipe.smoke,
-          ...(verdict.configNeeded?.what
-            ? { config: { type: 'env' as const, prompt: verdict.configNeeded.what } }
-            : {}),
-          learnedFrom: 't1',
-        })
-        recordInstallMetric(cfg, {
-          ts: new Date().toISOString(),
-          pluginId: plugin.id,
-          type: 'ai',
-          mode: 't1',
-          ok: true,
-          phase: 'done',
-          recipeLearned: true,
-          sessionChars: chars,
-        })
+        // 宿主代执行：profile 归一 → 白名单逐条过滤（丢弃非法命令）→ 执行 → 冒烟验证
+        const norm = normalizeDshProfileCommands(verdict.commands, profile)
+        const f = filterInstallCommands(plugin, norm, { allowedDestPrefix: cfg.skillsDir })
+        if (f.pass.length > 0) {
+          const pkgName = f.pass.map(extractInstallPkgName).find((n): n is string => n !== null) ?? undefined
+          const smoke = deriveSmokeCommands(cfg, plugin, profile, pkgName)
+          const r = await installPlugin(cfg, plugin, {
+            commands: f.pass,
+            smoke,
+            targetProfile: profile,
+            runner: realRunner(),
+            signal,
+          })
+          if (r.ok && !r.smokeFailed && !signal?.aborted) {
+            const recipe = verdict.recipe ?? { commands: f.pass, smoke: verdict.smoke }
+            learnRecipe(cfg, plugin, profile, {
+              commands: recipe.commands ?? f.pass,
+              smoke: recipe.smoke,
+              ...(verdict.configNeeded?.what
+                ? { config: { type: 'env' as const, prompt: verdict.configNeeded.what } }
+                : {}),
+              learnedFrom: 't1',
+            })
+            recordInstallMetric(cfg, {
+              ts: new Date().toISOString(),
+              pluginId: plugin.id,
+              type: 'ai',
+              mode: 't1',
+              ok: true,
+              phase: 'done',
+              recipeLearned: true,
+              sessionChars: chars,
+            })
+            finish({ ok: true })
+          } else {
+            const err = r.smokeFailed
+              ? '宿主已按 AI 建议命令安装，但冒烟验证未通过'
+              : `宿主执行 AI 建议命令失败：${r.error ?? '未知'}`
+            recordInstallMetric(cfg, {
+              ts: new Date().toISOString(),
+              pluginId: plugin.id,
+              type: 'ai',
+              mode: 't1',
+              ok: false,
+              phase: 'done',
+              sessionChars: chars,
+              error: err,
+            })
+            finish({ ok: false, error: err })
+          }
+        } else {
+          // 白名单全被丢：绝不执行，按失败处理并给手动指引（安全不变量）
+          const err = `AI 产出的命令未通过直装白名单（${f.dropped[0]?.reason ?? '未知'}），已拦截；请按 README 手动安装`
+          recordInstallMetric(cfg, {
+            ts: new Date().toISOString(),
+            pluginId: plugin.id,
+            type: 'ai',
+            mode: 't1',
+            ok: false,
+            phase: 'done',
+            sessionChars: chars,
+            error: err,
+          })
+          finish({ ok: false, error: err })
+        }
         done = true
       } else if (verdict && verdict.ok === false) {
         recordInstallMetric(cfg, {
@@ -1146,12 +1226,21 @@ async function watchInstallVerdict(opts: {
           sessionChars: chars,
           error: verdict.fail,
         })
+        finish({ ok: false, error: verdict.fail ?? 'AI 诊断未能产出可用安装命令' })
         done = true
       }
     } catch {
       /* 会话读取失败：继续轮询 */
     }
-    if (!done && !signal?.aborted && Date.now() < deadline) setTimeout(() => void tick(), 5000)
+    if (!done && !signal?.aborted && Date.now() < deadline) {
+      setTimeout(() => void tick(), 5000)
+    } else if (!done) {
+      finish({
+        ok: false,
+        cancelled: signal?.aborted,
+        error: 'AI 协助安装未在时限内产出可用结果，请按 README 手动安装',
+      })
+    }
   }
   setTimeout(() => void tick(), 5000)
 }
@@ -1290,6 +1379,11 @@ const activeInstalls = new Map<string, AbortController>()
  * alpha.2 起 abort 杀不掉已启动的子代理，取消路径须用 childId 调 subagents.interrupt */
 const activeChildAgents = new Map<string, { childId: string; agent: unknown }>()
 
+/** #320 · T1 已转交、宿主侧仍在确认中的安装：installId → { pluginId, ac }。
+ *  RPC 返回（started=true）后 ai:install 的 activeInstalls 已清理，但 T1 verdict
+ *  轮询 + 宿主代执行仍在后台进行——状态查询与取消都要能找到它们。 */
+const pendingT1Installs = new Map<string, { pluginId: string; ac: AbortController }>()
+
 /** 已结束安装的结果留存（断线重连）：installId → 终态快照。
  *  面板关闭/浏览器刷新不会终止宿主侧安装，但会丢掉那次 RPC 的返回值——
  *  这里按 installId 记住终态，供 ai:install:status 轮询恢复；上限 20 条，超出淘汰最旧。 */
@@ -1416,6 +1510,7 @@ async function runAiInstall(opts: {
         plugin,
         profile,
         sessionId,
+        installId,
         readSession: sq.readSession,
         signal,
       })
