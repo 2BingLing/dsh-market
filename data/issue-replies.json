@@ -1,14 +1,41 @@
 {
-  "generatedAt": "2026-11-01T23:50:33.518Z",
+  "generatedAt": "2026-11-03T02:41:28.367Z",
   "replies": [
     {
       "issueNumbers": [
-        319
+        322
       ],
-      "fullName": "exoticknight/dsh-system1",
+      "fullName": "1129742588/dsh-memory-tiers",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 30
+      "stars": 2,
+      "score": 34
+    },
+    {
+      "issueNumbers": [
+        321
+      ],
+      "fullName": "LeLiu/dsh-codeisland-bridge",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 57
+    },
+    {
+      "issueNumbers": [
+        323
+      ],
+      "fullName": "zuwenyin/dsh-plugin-upgrader",
+      "type": "cordis-plugin",
+      "stars": 3,
+      "score": 65
+    },
+    {
+      "issueNumbers": [
+        318
+      ],
+      "fullName": "WWFZS/dsh-plugin-startup-animation",
+      "type": "cordis-plugin",
+      "stars": 4,
+      "score": 66
     }
   ]
 }
