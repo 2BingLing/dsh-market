@@ -1,59 +1,59 @@
 {
-  "generatedAt": "2026-11-04T00:07:34.077Z",
+  "generatedAt": "2026-11-05T01:28:11.813Z",
   "replies": [
     {
       "issueNumbers": [
-        324
+        332
       ],
-      "fullName": "Duoasa/DSH-to-Figma",
+      "fullName": "exoticknight/dsh-system1",
       "type": "cordis-plugin",
-      "stars": 44,
-      "score": 82
+      "stars": 0,
+      "score": 30
     },
     {
       "issueNumbers": [
-        330
+        336
       ],
-      "fullName": "lijiaqi-AI-Product-Manager/dsh-agent-compare",
+      "fullName": "Fyerl/dsh-2d-model-picker",
       "type": "cordis-plugin",
-      "stars": 25,
-      "score": 74
+      "stars": 0,
+      "score": 33
     },
     {
       "issueNumbers": [
-        329
+        334
+      ],
+      "fullName": "lijiaqi-AI-Product-Manager/dsh-bug-gps",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 57
+    },
+    {
+      "issueNumbers": [
+        333
+      ],
+      "fullName": "Kevinwu901113/dsh-dot",
+      "type": "cordis-plugin",
+      "stars": 4,
+      "score": 64
+    },
+    {
+      "issueNumbers": [
+        331
       ],
       "fullName": "123zxs345/dsh-plugin-companion-memory",
       "type": "cordis-plugin",
+      "stars": 3,
+      "score": 64
+    },
+    {
+      "issueNumbers": [
+        335
+      ],
+      "fullName": "Tsechiyuan/dsh-session-manager",
+      "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        326
-      ],
-      "fullName": "yixin2021/dsh-skills",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 62
-    },
-    {
-      "issueNumbers": [
-        325
-      ],
-      "fullName": "Zai-G/dsh-preset-workshop",
-      "type": "cordis-plugin",
-      "stars": 15,
-      "score": 81
-    },
-    {
-      "issueNumbers": [
-        328
-      ],
-      "fullName": "archiecheung/dsh-plugmart",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 55
+      "score": 17
     }
   ]
 }
