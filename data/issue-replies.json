@@ -1,59 +1,32 @@
 {
-  "generatedAt": "2026-11-05T01:28:11.813Z",
+  "generatedAt": "2026-11-06T00:12:53.041Z",
   "replies": [
     {
       "issueNumbers": [
-        332
+        339
       ],
-      "fullName": "exoticknight/dsh-system1",
+      "fullName": "f-e-n-g-0531/dsh-code-report",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 30
     },
     {
       "issueNumbers": [
-        336
+        340
       ],
-      "fullName": "Fyerl/dsh-2d-model-picker",
+      "fullName": "AyanamiiiRei/agent-interactive-terminal",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 58
+    },
+    {
+      "issueNumbers": [
+        341
+      ],
+      "fullName": "a2092776074-collab/-",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 33
-    },
-    {
-      "issueNumbers": [
-        334
-      ],
-      "fullName": "lijiaqi-AI-Product-Manager/dsh-bug-gps",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 57
-    },
-    {
-      "issueNumbers": [
-        333
-      ],
-      "fullName": "Kevinwu901113/dsh-dot",
-      "type": "cordis-plugin",
-      "stars": 4,
-      "score": 64
-    },
-    {
-      "issueNumbers": [
-        331
-      ],
-      "fullName": "123zxs345/dsh-plugin-companion-memory",
-      "type": "cordis-plugin",
-      "stars": 3,
-      "score": 64
-    },
-    {
-      "issueNumbers": [
-        335
-      ],
-      "fullName": "Tsechiyuan/dsh-session-manager",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 17
+      "score": 27
     }
   ]
 }
