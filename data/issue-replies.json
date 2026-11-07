@@ -1,50 +1,23 @@
 {
-  "generatedAt": "2026-11-07T00:53:55.340Z",
+  "generatedAt": "2026-11-07T22:48:15.829Z",
   "replies": [
     {
       "issueNumbers": [
-        345
-      ],
-      "fullName": "exoticknight/dsh-system1",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 30
-    },
-    {
-      "issueNumbers": [
-        347
-      ],
-      "fullName": "EternalNight996/memory-eternal",
-      "type": "cordis-plugin",
-      "stars": 147,
-      "score": 87
-    },
-    {
-      "issueNumbers": [
-        344
+        349
       ],
       "fullName": "Duoasa/DSH-to-Figma",
       "type": "cordis-plugin",
-      "stars": 56,
+      "stars": 64,
       "score": 82
     },
     {
       "issueNumbers": [
-        346
+        348
       ],
-      "fullName": "shin4/inkpond-dsh",
+      "fullName": "a2092776074-collab/-",
       "type": "cordis-plugin",
-      "stars": 1,
-      "score": 57
-    },
-    {
-      "issueNumbers": [
-        342
-      ],
-      "fullName": "illli-studio/mory",
-      "type": "cordis-plugin",
-      "stars": 8,
-      "score": 68
+      "stars": 0,
+      "score": 27
     }
   ]
 }
