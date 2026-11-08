@@ -1,23 +1,32 @@
 {
-  "generatedAt": "2026-11-07T22:48:15.829Z",
+  "generatedAt": "2026-11-08T23:55:14.934Z",
   "replies": [
     {
       "issueNumbers": [
-        349
+        351
       ],
-      "fullName": "Duoasa/DSH-to-Figma",
+      "fullName": "Beellix-dev/beellix-dsh-ui",
       "type": "cordis-plugin",
-      "stars": 64,
-      "score": 82
+      "stars": 0,
+      "score": 35
     },
     {
       "issueNumbers": [
-        348
+        353
       ],
-      "fullName": "a2092776074-collab/-",
+      "fullName": "130927-666/dsh-whale-calculator",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 27
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        350
+      ],
+      "fullName": "MathewWuZJ/dsh-tv",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
     }
   ]
 }
