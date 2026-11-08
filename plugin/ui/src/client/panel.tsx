@@ -308,10 +308,11 @@ function PluginCard(props: {
 
 function InstallModal(props: {
   plugin: LitePlugin
+  targetProfile: string
   onDone: () => void
   onClose: () => void
 }): ReactNode {
-  const { plugin, onDone, onClose } = props
+  const { plugin, targetProfile, onDone, onClose } = props
   const [phase, setPhase] = useState<'confirm' | 'reviewing' | 'report' | 'running' | 'handedOff' | 'error'>('confirm')
   // #165 建议三（可取消）：记录当前安装的 installId，供取消按钮定位宿主侧 AbortController
   const lastInstallIdRef = useRef('')
@@ -573,7 +574,8 @@ function InstallModal(props: {
       ? plugin.installCommands[0]
       : plugin.installMethod === 'skills-add'
         ? `git clone https://github.com/${plugin.fullName}.git`
-        : `dsh plugin --profile web add ${plugin.name}`
+        // #343：兜底展示命令跟随目标 profile（此前硬编码 web，纯展示但误导）
+        : `dsh plugin --profile ${targetProfile} add ${plugin.name}`
   // #165 执行前展示：直装将执行的命令默认可见（此前藏在"高级"里，用户点安装前看不到）
   const t0Commands =
     plugin.installCommands && plugin.installCommands.length > 0
@@ -637,7 +639,7 @@ function InstallModal(props: {
             El('p', { className: styles.ghTip },
               plugin.type === 'skill'
                 ? '目标：装到技能目录（~/.agents/skills），装完即可用。'
-                : '目标：装进 web profile，装完需重启 harness 生效。'),
+                : `目标：装进 ${targetProfile} profile，装完需重启 harness 生效。`),
             El('div', { className: styles.advanced, style: { marginTop: 6 } },
               El('p', { className: styles.advancedTip, style: { marginBottom: 4 } },
                 '直装将执行以下命令（白名单外的命令会被拦截并转 AI 复核，不会直接运行）：'),
@@ -1546,6 +1548,12 @@ function SettingsTab(props: {
     void api<{ versions?: Record<string, string> }>('config').then((c) => {
       if (c?.versions) setVersions(c.versions)
     }).catch(() => {})
+    // #343：已保存的目标 profile 回显——此前 profileName 硬编码初始 'web' 且从未同步，
+    // 保存成功后重开面板仍显示 web，让人误以为没保存。宿主实际生效值一直是对的，
+    // 这里只是把 UI 补上（读 settings 与保存写 settings:update 同源）
+    void api<{ profile?: string }>('settings').then((s) => {
+      if (s?.profile) setProfileName(s.profile)
+    }).catch(() => {})
   }, [profile])
 
   const saveSettings = async (patch: Record<string, unknown>) => {
@@ -2116,11 +2124,18 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
   const [loadError, setLoadError] = useState<Error | null>(null)
   // 断线重连：上次关闭面板时有未等完的安装 → 恢复横幅 + 轮询宿主终态
   const [resuming, setResuming] = useState<{ pluginName: string } | null>(null)
+  // #343：目标 profile（settings.profile）——安装弹窗兜底命令 / 目标文案 / 自更新命令
+  // 跟随实际设置，不再硬编码 'web'
+  const [targetProfile, setTargetProfile] = useState('web')
 
   const loadAll = async () => {
     setLoading(true)
     setLoadError(null)
     try {
+      // #343 · settings 读本地文件几乎零成本，不入 Promise.all（失败不影响主列表）
+      void api<{ profile?: string }>('settings').then((s) => {
+        if (s?.profile) setTargetProfile(s.profile)
+      }).catch(() => {})
       // #249 · 整合包不进主 Promise.all：宿主侧 packs 慢网/无缓存时一次请求可达 30s+，
       // 会把整个列表渲染拖住。列表三件套先落地渲染，packs 异步补齐（宿主有缓存时几乎瞬时）。
       const [pl, prof, inst] = await Promise.all([
@@ -2233,7 +2248,8 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
     try {
       const r = await api<SelfUpdateInfo>('update:self', { apply: true })
       if (r.needsManual) {
-        const cmd = r.manualCommand ?? 'dsh plugin --profile web add @dsh-market/plugin@latest'
+        // #343：手动更新命令跟随目标 profile（不再硬编码 web）
+        const cmd = r.manualCommand ?? `dsh plugin --profile ${targetProfile} add @dsh-market/plugin@latest`
         if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
           navigator.clipboard.writeText(cmd).catch(() => {})
         }
@@ -2423,6 +2439,7 @@ export function MarketPanel(props: { onClose: () => void; mode?: 'overlay' | 'ma
         ? El(Boundary, { key: installTarget.id, label: '安装弹窗' },
             El(InstallModal, {
               plugin: installTarget,
+              targetProfile,
               onDone: onInstalledChanged,
               onClose: () => setInstallTarget(null),
             }))

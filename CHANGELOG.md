@@ -4,6 +4,17 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.18`）
+
+**FIX：设置页「目标 Profile」回显 + 三处 profile 硬编码展示跟随实际设置（#343）**
+
+- **主 bug**：设置页「目标 Profile」输入框初始值硬编码 `'web'` 且全文件从未从 settings 同步——保存成功后重开面板/刷新页面/重启 harness 仍显示 `web`，让人误以为设置没保存（宿主实际生效值一直是对的，`settings` RPC 可查）。修复：设置页初始化 effect 读取 `settings` 回显已保存值（与保存写的 `settings:update` 同源）。报告者 song-v79 的根因分析与修复建议完全正确，照单采纳。
+- **顺带同类硬编码**（报告者列出的两处 + 自查一处，均纯展示、不影响实际安装目标，实际目标始终取 `settings.profile`）：
+  - 安装弹窗兜底命令 `dsh plugin --profile web add <pkg>`（插件无 README 安装命令时展示）→ 跟随目标 profile；
+  - 安装弹窗文案「目标：装进 web profile」→ 动态生成；
+  - （自查）插件自更新的手动兜底命令 `dsh plugin --profile web add @dsh-market/plugin@latest` → 同样跟随。
+- 实现：面板级新增 `targetProfile` 状态（`loadAll` 时读 `settings`，保存后随 `onChanged` 刷新），贯穿安装弹窗与自更新提示；设置页回显独立读取，编辑保存后即时一致。
+
 ### 插件端（`@dsh-market/plugin@0.4.17` / `@dsh-market/core@0.4.15`）
 
 **HOTFIX：T1 兜底安装链路三连修——白名单整批拒绝、T1 沙箱悖论、转交误报成功（#320）**
