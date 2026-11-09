@@ -38,5 +38,14 @@
     "plugin",
     "market"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2BingLing/dsh-market.git",
+    "directory": "plugin/core"
+  },
+  "homepage": "https://github.com/2BingLing/dsh-market#readme",
+  "bugs": {
+    "url": "https://github.com/2BingLing/dsh-market/issues"
+  }
 }

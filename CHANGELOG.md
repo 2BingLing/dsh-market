@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.19`）
+
+**HOTFIX：core 依赖下限收紧 `^0.4.10` → `^0.4.15`（#352，0.4.17+ 配旧 core 启动即 SyntaxError）**
+
+- **根因**：0.4.17 起 `plugin/lib` 具名导入 core 0.4.15 的新导出（`filterInstallCommands` / `normalizeDshProfileCommands`），但 ui 对 core 的依赖范围还是 `^0.4.10`——已有 lockfile 解析到 core 0.4.10–0.4.14（满足范围）时，升级 plugin 不会顺带升 core，启动即 `SyntaxError: does not provide an export named 'filterInstallCommands'`，且版本号层面一切"正常"，极难自查。全新安装解析到 0.4.10–0.4.14 之间任何版本同样失败。与 #241（schema `"*"` 通配）同款教训，属于发布纪律漏洞：**具名导入新导出的发版，必须同步抬依赖下限**。
+- **修复**：`@dsh-market/core` 范围收紧为 `^0.4.15`；受影响用户升级 plugin 到 0.4.19 后 `pnpm install` 即自动拉到合规 core，无需手动 `pnpm add @dsh-market/core@^0.4.15`。
+- **防回归守卫**：`package-range.test.ts` 新增 2 项——ui 对 core 的范围下限 ≥0.4.15（注释写明原因）；已发布包必须带 `repository.url` 指向本仓库。
+- **repository 元数据补齐**（#352 小建议采纳）：core / plugin 的 `package.json` 补上 `repository` / `homepage` / `bugs` 字段，npm 页可直接跳转仓库与 issue 区。
+
 ### 插件端（`@dsh-market/plugin@0.4.18`）
 
 **FIX：设置页「目标 Profile」回显 + 三处 profile 硬编码展示跟随实际设置（#343）**

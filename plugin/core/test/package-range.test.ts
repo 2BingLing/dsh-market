@@ -40,6 +40,13 @@ const atLeastFloor = (v: [number, number, number]): boolean =>
   v[0] > FLOOR[0] ||
   (v[0] === FLOOR[0] && (v[1] > FLOOR[1] || (v[1] === FLOOR[1] && v[2] >= FLOOR[2])));
 
+/** #352 · plugin 具名导入的 core 新导出所在版本——ui 对 core 的下限不得低于它 */
+const CORE_FLOOR: [number, number, number] = [0, 4, 15];
+const atLeastCoreFloor = (v: [number, number, number]): boolean =>
+  v[0] > CORE_FLOOR[0] ||
+  (v[0] === CORE_FLOOR[0] &&
+    (v[1] > CORE_FLOOR[1] || (v[1] === CORE_FLOOR[1] && v[2] >= CORE_FLOOR[2])));
+
 describe("#241 schema 依赖范围守卫", () => {
   it("已发布包的 schema 范围不允许通配、下限 ≥ 0.1.4", () => {
     for (const rel of ["../package.json", "../../ui/package.json"]) {
@@ -60,6 +67,30 @@ describe("#241 schema 依赖范围守卫", () => {
     const floor = rangeFloor(pkg.dependencies?.["@dsh-market/schema"] ?? "*");
     expect(floor).not.toBeNull();
     expect(atLeastFloor(floor!)).toBe(true);
+  });
+
+  it("#352 · ui 对 core 的范围下限 ≥ 0.4.15（filterInstallCommands 引入版本）", () => {
+    // 0.4.17 起 plugin/lib 具名导入 core 0.4.15 新导出（filterInstallCommands /
+    // normalizeDshProfileCommands），`^0.4.10` 会放行旧 core → 启动即 SyntaxError
+    // 且极难自查（版本号层面一切"正常"）。与 #241 同款教训，锁死下限防回落。
+    const pkg = readPkg("../../ui/package.json");
+    const range = pkg.dependencies?.["@dsh-market/core"];
+    expect(range, "plugin 必须显式声明 @dsh-market/core").toBeDefined();
+    const floor = rangeFloor(range!);
+    expect(floor, `范围 "${range}" 必须是 ^x.y.z / >=x.y.z 形式`).not.toBeNull();
+    expect(
+      atLeastCoreFloor(floor!),
+      `plugin 对 core 的范围 "${range}" 下限低于 0.4.15——0.4.17+ 具名导入 filterInstallCommands/normalizeDshProfileCommands（0.4.15 引入），旧 core 启动即 SyntaxError`,
+    ).toBe(true);
+  });
+
+  it("#352 · 已发布包带 repository 元数据（npm 页可直接跳转仓库）", () => {
+    for (const rel of ["../package.json", "../../ui/package.json"]) {
+      const pkg = readPkg(rel);
+      expect(pkg.repository?.url, `${pkg.name} 应声明 repository.url`).toContain(
+        "github.com/2BingLing/dsh-market",
+      );
+    }
   });
 
   it("workspace schema 提供 zh-intent / zh-taxonomy 子路径，且指向 dist 而非 src", () => {
