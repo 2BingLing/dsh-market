@@ -1,32 +1,68 @@
 {
-  "generatedAt": "2026-11-08T23:55:14.934Z",
+  "generatedAt": "2026-11-10T03:10:56.149Z",
   "replies": [
     {
       "issueNumbers": [
-        351
+        355
       ],
-      "fullName": "Beellix-dev/beellix-dsh-ui",
+      "fullName": "a961282799-crypto/dsh-talent-tree",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
+      "stars": 2,
+      "score": 60
     },
     {
       "issueNumbers": [
-        353
+        357
       ],
-      "fullName": "130927-666/dsh-whale-calculator",
+      "fullName": "xkzdwb/DSH-UseWebDeepseek-WhenEasyWork",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
+      "stars": 1,
+      "score": 55
     },
     {
       "issueNumbers": [
-        350
+        357
       ],
-      "fullName": "MathewWuZJ/dsh-tv",
+      "fullName": "xkzdwb/DSH-UsageStats-WhenNeedOverview",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 55
+    },
+    {
+      "issueNumbers": [
+        357
+      ],
+      "fullName": "xkzdwb/DSH-ApproveByEmail-WhenApprovalNeeded",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 47
+    },
+    {
+      "issueNumbers": [
+        357
+      ],
+      "fullName": "xkzdwb/DSH-MarketSync-WhenNewPlugin",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 51
+    },
+    {
+      "issueNumbers": [
+        358
+      ],
+      "fullName": "chenhao233/pmnote-agent-plugin",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
+      "score": 24
+    },
+    {
+      "issueNumbers": [
+        357
+      ],
+      "fullName": "xkzdwb/DSH-WeeklyReport-WhenOneWeekFinish",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 55
     }
   ]
 }
