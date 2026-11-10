@@ -2,7 +2,7 @@
  * detectSubdirBundle 单元测试：子目录 bundle 探测（根目录无标记、插件在子目录）
  */
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { detectPlugin, detectSubdirBundle, isCordisPackageJson, extractDshEngines, detectRiskyInstall } from "../src/detect.js";
+import { detectPlugin, detectSubdirBundle, isCordisPackageJson, isSkillInstallCommand, extractDshEngines, detectRiskyInstall } from "../src/detect.js";
 import { fetchRepoRoot, fetchFileViaApi } from "../src/github.js";
 
 vi.mock("../src/github.js", () => ({
@@ -336,5 +336,25 @@ describe("detectRiskyInstall（#165 建议五：市场侧风险标记）", () =>
     expect(detectRiskyInstall(["git clone https://github.com/a/b.git"]).length).toBe(0);
     expect(detectRiskyInstall(["npm install ruflo@latest"]).length).toBe(0);
     expect(detectRiskyInstall(undefined)).toEqual([]);
+  });
+});
+
+describe("isSkillInstallCommand（#365：SKILL.md 改判 cordis 的技能形态例外）", () => {
+  it("npx skills add 形态 → 技能安装", () => {
+    expect(isSkillInstallCommand(["npx skills add alchaincyf/huashu-design"])).toBe(true);
+  });
+
+  it("git clone 到 skills 目录形态 → 技能安装", () => {
+    expect(
+      isSkillInstallCommand(["git clone https://github.com/a/b.git ~/.claude/skills/b"]),
+    ).toBe(true);
+    expect(isSkillInstallCommand(["git clone https://github.com/a/b ~/.dsh/skills/b"])).toBe(true);
+  });
+
+  it("cordis / npm 形态 → 不是技能安装", () => {
+    expect(isSkillInstallCommand(["dsh plugin --profile web add dsh-context"])).toBe(false);
+    expect(isSkillInstallCommand(["npm install some-pkg"])).toBe(false);
+    expect(isSkillInstallCommand(["git clone https://github.com/a/b.git ~/plugins/b"])).toBe(false);
+    expect(isSkillInstallCommand([])).toBe(false);
   });
 });

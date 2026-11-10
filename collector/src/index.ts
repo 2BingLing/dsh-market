@@ -25,7 +25,7 @@ import { fetchAwesomeEntries } from "./sources/awesome.js";
 import { scanByTopics, scanOrg } from "./sources/github-search.js";
 import { fetchSubmissionRepos, fetchPackSubmissionRepos } from "./sources/issues.js";
 import { mergeCorrections, type DataCorrections } from "./sources/corrections.js";
-import { detectPlugin, isCordisPackageJson, detectNeedsConfig, detectUsageNeedsConfig, detectRiskyInstall, detectCrossEcosystem, detectSubdirBundle, extractDshEngines, CORDIS_MARKERS } from "./detect.js";
+import { detectPlugin, isCordisPackageJson, isSkillInstallCommand, detectNeedsConfig, detectUsageNeedsConfig, detectRiskyInstall, detectCrossEcosystem, detectSubdirBundle, extractDshEngines, CORDIS_MARKERS } from "./detect.js";
 import { computePracticalScore, computeP99Stars } from "./scoring.js";
 import { cached, cacheGet, cacheSet } from "./cache.js";
 import { batchProbeRepos } from "./decay-probe.js";
@@ -39,6 +39,8 @@ import { loadScoringReadme } from "./scoring-readme.js";
 
 /** 检测结果缓存（增量核心：repo 未变化时复用，跳过重复检测网络调用） */
 interface DetectCache {
+  /** 检测规则版本——规则变更时 bump，老缓存自动失效重检（#365：SKILL 改判例外） */
+  rulesRev?: number;
   pushedAt: string;
   detection: {
     isPlugin: boolean;
@@ -66,6 +68,11 @@ interface DetectCache {
 }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+/** 检测规则版本：规则变更时 bump（写入 DetectCache 并使老缓存失效重检）。
+ *  rev 2（#365）：SKILL.md + package.json 判 cordis 的改判规则增加例外——README
+ *  安装命令是技能形态（npx skills add / git clone 到 skills 目录）时保留 skill 判定。 */
+const DETECT_RULES_REV = 2;
 const DATA_DIR = join(__dirname, "../../data");
 const CONCURRENCY = 10;
 const EXCLUDED_REPOS = new Set([
@@ -321,7 +328,7 @@ async function main() {
       let dshEngines: string | null = null;
       let dshEnginesSource: string | undefined;
 
-      if (cachedDetect && cachedDetect.pushedAt === repo.pushed_at && cachedDetect.detection.isPlugin) {
+      if (cachedDetect && cachedDetect.pushedAt === repo.pushed_at && cachedDetect.detection.isPlugin && cachedDetect.rulesRev === DETECT_RULES_REV) {
         // 命中：复用检测产物；评分正文缓存过期时仍需回补。
         detection = cachedDetect.detection;
         isCordis = cachedDetect.isCordis;
@@ -403,14 +410,26 @@ async function main() {
         // 实际生效的 package.json（子目录 bundle 兜底时会换成子目录那份）——N2 的 engines 提取以它为准
         let effectivePkgJson = packageJsonContent;
         // skill 型但 package.json 声明 cordis 结构（npm 发布的 cordis 插件常附带 SKILL.md 当文档）→ 改判 cordis-plugin（#95）
+        // #365 · 例外：README 安装命令是技能安装形态（npx skills add / git clone 到 skills
+        // 目录）→ 作者意图是技能，保留 skill 判定不改判（huashu-design / nuwa-skill 类：
+        // 技能仓库的工具链 package.json 碰巧命中 cordis 关键词，改判会让市场验证必然失败）
         if (detection.type === "skill" && isCordis) {
-          detection = {
-            isPlugin: true,
-            type: "cordis-plugin",
-            installMethod: "pnpm-profile",
-            skillFiles: [],
-            evidence: [...detection.evidence, "package.json cordis（SKILL.md 改判）"],
-          };
+          const earlyReadme = await loadScoringReadme(candidate.fullName, repo!.default_branch);
+          const earlyCmds = parseInstallCommands(earlyReadme).commands;
+          if (isSkillInstallCommand(earlyCmds)) {
+            detection = {
+              ...detection,
+              evidence: [...detection.evidence, "package.json cordis 但 README 安装命令为技能形态，保留 skill（#365）"],
+            };
+          } else {
+            detection = {
+              isPlugin: true,
+              type: "cordis-plugin",
+              installMethod: "pnpm-profile",
+              skillFiles: [],
+              evidence: [...detection.evidence, "package.json cordis（SKILL.md 改判）"],
+            };
+          }
         }
         // 根标记文件（dsh.profile / cordis.patch.yml / dsh-manifest.json / dsh.plugin.json 等）
         // 本身就是插件声明：清单/patch 在，插件就成立，跳过 package.json 二次确认
@@ -492,6 +511,7 @@ async function main() {
         // 避免"误判无标记"被缓存固化（作者补标记后仍 stuck 7 天，#123 dsh-reasoning-bridge 教训）
         if (detection.isPlugin) {
           cacheSet<DetectCache>("detect", candidate.fullName, {
+            rulesRev: DETECT_RULES_REV,
             pushedAt: repo.pushed_at,
             detection,
             isCordis,

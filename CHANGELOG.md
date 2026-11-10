@@ -4,6 +4,16 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.20` / `@dsh-market/core@0.4.16`）
+
+**FIX：「验证」三类误报（#365）——scope 短名不匹配、技能被误标 cordis、bundles 安装恒显「重启后生效」**
+
+- **scope / 短名不匹配误报 broken**（core）：`verifyCordis` 用市场短名（如 `plugin`）严格比对 profile 依赖键（`@dsh-market/plugin`）→ 永远查不到，市场自身等带 scope 的包恒判「校验失败」。匹配放宽为「完全相等 或 末段相等」，并用**命中的真实依赖键**读 `node_modules`（短名直读会 miss）。
+- **技能被误标 cordis-plugin 的兜底**（core）：索引把 `huashu-design` / `nuwa-skill` 标成 cordis-plugin（实际以 git clone 落到技能目录），按 cordis 走 profile 依赖校验必然失败。`verifyActivation` 增加技能目录兜底——`type=cordis-plugin` 但 `skillsDir/<name>` 存在时按技能验证。
+- **bundles 安装恒显「重启后生效」**（core，报告者评论补充）：`dsh plugin add` 装进 `dsh.profile.bundles` 的插件，bundle 自带的 cordis.patch.yml 由 loader 启动时合成、**不出现在用户层 patch 文件** → `isPatchApplied` 恒 false，重启多少次都显示「重启后生效」。增加判定：已在 bundles + `node_modules/<pkg>/package.json` 的 mtime 早于本次进程启动 → 已加载（live）；本次会话刚安装/重装仍正确显示 restart。
+- **数据源头修复**（collector，报告者建议 3 采纳）：`SKILL.md + package.json 判 cordis` 的改判规则（#95）增加例外——README 安装命令是技能形态（`npx skills add` / `git clone` 到 skills 目录）时保留 skill 判定（命令形态是作者意图的最直接信号）；检测缓存引入 `rulesRev` 规则版本号（rev 2），老缓存自动失效重检，huashu-design / nuwa-skill 等存量误标条目随下次收录跑自动修正。
+- 测试：core 247 全绿（verify +7：scope 短名、bundles live/restart 语义、技能兜底、broken 对照）、collector 108 全绿（isSkillInstallCommand +3）；报告者描述的 `plugin` / `huashu-design` / `nuwa-skill` / 真未安装对照场景全部按预期。ui 0.4.20 同步抬 core 下限 `^0.4.16`，升级插件即自动拿到修复后的验证逻辑。
+
 ### 插件端（`@dsh-market/plugin@0.4.19`）
 
 **HOTFIX：core 依赖下限收紧 `^0.4.10` → `^0.4.15`（#352，0.4.17+ 配旧 core 启动即 SyntaxError）**

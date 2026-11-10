@@ -24,6 +24,16 @@ export interface Detection {
 }
 
 const SKILL_MARKER = "SKILL.md";
+
+/** #365 · README 安装命令是否为「技能安装」形态（npx skills add / git clone 到 skills 目录）。
+ *  技能仓库（根目录 SKILL.md）常附带 package.json（Vite/工具链），若依赖碰巧命中 cordis
+ *  关键词，会被 #95 规则改判成 cordis-plugin——但它的真实安装方式是落到技能目录，
+ *  改判会导致市场验证（profile 依赖校验）必然失败。命令形态是作者意图的最直接信号。 */
+const SKILL_INSTALL_CMD_RE = /npx\s+skills\s+add|git\s+clone[^\n]*\/skills?\//i;
+
+export function isSkillInstallCommand(commands: string[]): boolean {
+  return commands.some((c) => SKILL_INSTALL_CMD_RE.test(c));
+}
 export const CORDIS_MARKERS = [
   "dsh.profile",
   "cordis.patch.yml",

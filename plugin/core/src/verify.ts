@@ -12,7 +12,7 @@
  *
  * 纯 Node 实现，零 DSH 依赖，可独立测试。
  */
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import type { DshPlugin } from "@dsh-market/schema";
 import type { ResolvedConfig } from "./config.js";
@@ -114,9 +114,18 @@ function verifyCordis(
 
   const deps = { ...pkg.dependencies, ...pkg.devDependencies };
   const bundles = pkg.dsh?.profile?.bundles ?? [];
-  const inBundles = bundles.some((b) => b.toLowerCase() === name.toLowerCase());
+  // #365 · 名称匹配放宽为「完全相等 或 末段相等」：市场短名/仓库名（plugin、dsh-context）
+  // 与 profile 依赖键（@dsh-market/plugin、@deepseek-ai/dsh-context）常不同名，
+  // 严格相等会永远查不到 → 必然误报 broken。用命中的真实依赖键读 node_modules。
+  const nameLower = name.toLowerCase();
+  const matchesName = (k: string): boolean => {
+    const v = k.toLowerCase();
+    return v === nameLower || v.endsWith("/" + nameLower);
+  };
+  const depKey = Object.keys(deps).find(matchesName);
+  const inBundles = bundles.some(matchesName);
 
-  if (!(name in deps) && !inBundles) {
+  if (!depKey && !inBundles) {
     return {
       state: "broken",
       inBundles,
@@ -127,7 +136,8 @@ function verifyCordis(
     };
   }
 
-  const installed = readInstalledPackage(cfg, profile, name);
+  const effectiveKey = depKey ?? name;
+  const installed = readInstalledPackage(cfg, profile, effectiveKey);
   if (!installed) {
     return {
       state: "broken",
@@ -189,8 +199,14 @@ function verifyCordis(
     };
   }
 
-  // 已是正式插件层：patch 已应用 → live，否则 restart
-  if (isPatchApplied(cfg, profile, name)) {
+  // 已是正式插件层 → live / restart：
+  // 1) 用户层 cordis.patch.yml 已含该插件（overlay 安装路径）→ live；
+  // 2) #365 · dsh plugin add / 市场内置安装路径：bundle 自带的 cordis.patch.yml 由
+  //    loader 启动时合成，**不会**出现在用户层 patch 文件里 → isPatchApplied 恒 false，
+  //    此前恒显示「重启后生效」，重启多少次都一样。改用「已在 bundles + 安装早于本次
+  //    启动」判定已加载：node_modules/<pkg>/package.json 的 mtime 在进程启动之前
+  //    （安装于本次会话 → 需重启；上次会话装好且进程已重启 → loader 必已加载 → live）
+  if (isPatchApplied(cfg, profile, effectiveKey) || isPatchApplied(cfg, profile, name)) {
     return {
       state: "live",
       inBundles,
@@ -200,17 +216,45 @@ function verifyCordis(
       action: "已生效；若界面无变化请刷新页面或重启 harness",
     };
   }
+  const installedBeforeBoot = (() => {
+    try {
+      const mtimeMs = statSync(
+        join(cfg.profilesDir, profile, "node_modules", effectiveKey, "package.json"),
+      ).mtimeMs;
+      return mtimeMs < Date.now() - process.uptime() * 1000;
+    } catch {
+      return false;
+    }
+  })();
+  if (inBundles && installedBeforeBoot) {
+    return {
+      state: "live",
+      inBundles,
+      hasBundle,
+      hasClient,
+      reasons: ["已进入 dsh.profile.bundles，且安装早于本次启动 → 已加载"],
+      action: "已生效，无需操作",
+    };
+  }
   return {
     state: "restart",
     inBundles,
     hasBundle,
     hasClient,
-    reasons: ["已安装并进入 profile 插件层", "patch 尚未应用，重启 harness 后生效"],
+    reasons: [
+      "已安装并进入 profile 插件层",
+      inBundles
+        ? "本次会话期间安装（或刚重装），重启 harness 后生效"
+        : "patch 尚未应用，重启 harness 后生效",
+    ],
     action: "重启 harness 即可",
   };
 }
 
-/** 装后四态验证（通用入口：skill 目录存在即 live；cordis 走 verifyCordis） */
+/** 装后四态验证（通用入口：skill 目录存在即 live；cordis 走 verifyCordis）
+ *  #365 · 技能目录兜底：索引把技能仓库误标成 cordis-plugin（如 README 安装命令是
+ *  git clone 到技能目录的 huashu-design / nuwa-skill）时，按 cordis 走 profile 依赖
+ *  校验必然失败——只要技能目录存在就按技能验证，消除标注错误带来的误报 */
 export function verifyActivation(
   cfg: ResolvedConfig,
   opts: {
@@ -221,7 +265,9 @@ export function verifyActivation(
     name: string;
   },
 ): ActivationStatus {
-  if (opts.type === "skill") {
+  const asSkill =
+    opts.type === "skill" || (!!opts.name && existsSync(join(cfg.skillsDir, opts.name)));
+  if (asSkill) {
     const dir = join(cfg.skillsDir, opts.name);
     if (existsSync(dir)) {
       return {
