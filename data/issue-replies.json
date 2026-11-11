@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T19:48:15.049Z",
+  "generatedAt": "2026-11-11T00:09:59.076Z",
   "replies": [
     {
       "issueNumbers": [
@@ -7,7 +7,7 @@
       ],
       "fullName": "polang233/dsh-plugin-index",
       "type": "cordis-plugin",
-      "stars": 218,
+      "stars": 220,
       "score": 74
     },
     {
@@ -16,8 +16,8 @@
       ],
       "fullName": "tm5452/dsh-workspace-explorer",
       "type": "cordis-plugin",
-      "stars": 1,
-      "score": 57
+      "stars": 2,
+      "score": 61
     },
     {
       "issueNumbers": [
@@ -36,6 +36,15 @@
       "type": "cordis-plugin",
       "stars": 1,
       "score": 57
+    },
+    {
+      "issueNumbers": [
+        364
+      ],
+      "fullName": "modusensus/dsh-artifacts",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
     },
     {
       "issueNumbers": [
@@ -63,15 +72,6 @@
       "type": "cordis-plugin",
       "stars": 1,
       "score": 41
-    },
-    {
-      "issueNumbers": [
-        364
-      ],
-      "fullName": "modusensus/dsh-artifacts",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
     }
   ]
 }
