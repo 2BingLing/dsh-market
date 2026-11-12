@@ -1,77 +1,60 @@
 {
-  "generatedAt": "2026-11-11T00:09:59.076Z",
+  "generatedAt": "2026-11-12T02:38:23.429Z",
   "replies": [
     {
       "issueNumbers": [
-        367
+        368
       ],
-      "fullName": "polang233/dsh-plugin-index",
+      "fullName": "Duoasa/DSH-to-Figma",
       "type": "cordis-plugin",
-      "stars": 220,
-      "score": 74
+      "stars": 93,
+      "score": 83
     },
     {
       "issueNumbers": [
-        354
+        374
       ],
-      "fullName": "tm5452/dsh-workspace-explorer",
+      "fullName": "leetp2001-cmd/dsh-android-apk",
       "type": "cordis-plugin",
       "stars": 2,
-      "score": 61
+      "score": 59
     },
     {
       "issueNumbers": [
-        367
+        369
       ],
-      "fullName": "maverikhe-cpu/zhuangzai-dsh-workbench",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        366
-      ],
-      "fullName": "0231071/dsh-mobile-remote",
+      "fullName": "mkt-agents/dsh-session-cleanup",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 57
+      "score": 60
     },
     {
       "issueNumbers": [
-        364
+        373
       ],
-      "fullName": "modusensus/dsh-artifacts",
+      "fullName": "thus-zhou/dsh-chapter-whale",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
+      "stars": 2,
+      "score": 59
     },
     {
       "issueNumbers": [
-        362
+        375
       ],
-      "fullName": "morefreeze/dsh-plugin-rss-pal",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        361
-      ],
-      "fullName": "Junyinoie/dsh-branch-overview",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 26
-    },
-    {
-      "issueNumbers": [
-        360
-      ],
-      "fullName": "xkzdwb/DSH-PeakHoursHint-WhenSendingMessage",
+      "fullName": "xkzdwb/DSH-WeeklyTidy-WhenSundayMidnight",
       "type": "cordis-plugin",
       "stars": 1,
       "score": 41
+    },
+    {
+      "issueNumbers": [
+        372,
+        371
+      ],
+      "fullName": "a2092776074-collab/-",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
     }
   ]
 }
