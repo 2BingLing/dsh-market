@@ -96,9 +96,10 @@ export async function fetchPackSubmissionRepos(): Promise<Map<string, number[]>>
 
 /** #306/#311 · 标题白名单（无括号冒号式与全角标题式）：
  *  - `Plugin submission: dsh-constitution-seed`（英文用户不套方括号，冒号直排）
+ *  - `Listing request: 萧何 / Xiao He (dsh-execution-bus) v1.7.1`（#363：另一种英文变体）
  *  - `【收录申请】批量收录 …`（全角括号批量通道） */
 export const SUBMISSION_TITLE_LOOSE_RE =
-  /^\s*(?:plugins?\s+submission\s*[:：]|【\s*收录(?:申请)?\s*】)/i;
+  /^\s*(?:plugins?\s+submission\s*[:：]|listing\s+request\s*[:：]|【\s*收录(?:申请)?\s*】)/i;
 
 /** #311 · 批量收录申请标题（正文是编号清单，走 extractBatchRepos 提取） */
 export const BATCH_SUBMISSION_TITLE_RE = /【\s*收录申请\s*】|批量收录/;

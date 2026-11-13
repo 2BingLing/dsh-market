@@ -136,6 +136,15 @@ describe("#306/#311 · 标题宽松形式与批量收录", () => {
     expect(SUBMISSION_TITLE_LOOSE_RE.test("普通问题咨询")).toBe(false);
   });
 
+  it("SUBMISSION_TITLE_LOOSE_RE：Listing request: 变体（#363 实例）", () => {
+    expect(
+      SUBMISSION_TITLE_LOOSE_RE.test(
+        "Listing request: 萧何 / Xiao He (dsh-execution-bus) v1.7.1",
+      ),
+    ).toBe(true);
+    expect(SUBMISSION_TITLE_LOOSE_RE.test("listing request: some-repo")).toBe(true);
+  });
+
   it("extractBatchRepos：编号清单 + 正文主页链接 → owner/repo 候选", () => {
     const text = [
       "## 批量收录申请（30件）",
