@@ -1,32 +1,23 @@
 {
-  "generatedAt": "2026-11-13T00:14:28.387Z",
+  "generatedAt": "2026-11-13T18:55:38.308Z",
   "replies": [
     {
       "issueNumbers": [
-        376
+        381
       ],
-      "fullName": "02TJS/ProgressTarget",
+      "fullName": "kingcharleslzy-ai/DSH-Spicy",
       "type": "cordis-plugin",
-      "stars": 15,
-      "score": 73
+      "stars": 90,
+      "score": 91
     },
     {
       "issueNumbers": [
-        370
+        363
       ],
-      "fullName": "Jayden-ren/patch-relay",
+      "fullName": "f-e-n-g-0531/dsh-execution-bus",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        377
-      ],
-      "fullName": "ZhaoZiyangShaanxi/dsh-go-workbuddy",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 37
+      "stars": 1,
+      "score": 41
     }
   ]
 }
