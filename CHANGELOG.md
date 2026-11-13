@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.21` / `@dsh-market/core@0.4.17`）
+
+**HOTFIX：宿主 0.2.2-rc.2 子代理 API 再变——安装/安全审查必炸 `subagents.list is not a function`（#378）**
+
+- **根因一：`SubagentService.list()` 已被删除**。0.4.20 在 `ai:review` 与 `runAiInstall` 两处写死 `subagents.list()` 拿 provider 名——rc.2 宿主上启动即 TypeError，安装流程根本走不到子代理。修复：新增 `pickSubagentProvider`（能力探测）——`list()` 可用且有结果用之（老宿主原语义）→ `getProvider(name)` 按候选序（spawn/fork/claude-code/codex/acp）探测第一个真实存在的 → `'spawn'` 兜底。**绝不按版本号分支**：npm 上 `@deepseek-ai/dsh-subagent` 发布的是 0.0.1-rc.1，与实机版本完全脱节。
+- **根因二：`startActivation` 的 spec 从嵌套改扁平**（修掉根因一后会紧接着炸）。rc.2 的 `prompt` / `parent` 在 spec 顶层；旧垫片按 alpha.2 嵌套形态传 `request: {prompt, parent}` → 宿主读 `spec.parent.id` 直接 TypeError。修复：`startSubagent` **扁平先试、失败回退嵌套**，两形态全失败抛**原始扁平错误**（不掩盖真因）。返回值无 `sessionId` → `childId` 即持久化子会话 id，`sessionQuery.readSession(childId)` 轮询与 `interrupt(childId, …)` 取消路径均与宿主一致（报告者已实测）。
+- **附带修复：`detectActiveProfile` 写死落 `"web"`**（core）。桌面端不设 `DSH_PROFILE` 环境变量，settings.json 被写成 `{"profile":"web"}`——已装校验、`resolveNpmRegistry` 全部指向不存在的 profile 目录。探测链增加一层兜底：**profilesDir 下恰好一个有效 profile 目录（含 package.json）时采用它**；多个或扫描失败仍回默认（不乱猜）。单 profile 桌面端用户从此自动对准真实 profile。
+- 测试：core 247 全绿（detectActiveProfile 兜底 +5：env 优先、唯一 profile 采纳、多 profile 不猜、空壳回默认、目录缺失）；垫片回归 8/8（rc.2 扁平 spec 一次成功、嵌套宿主回退、全失败抛原始错误、getProvider 探测与兜底）。报告者 qzin123 的补丁已实测验证，本版按其思路落地。
+
 ### 插件端（`@dsh-market/plugin@0.4.20` / `@dsh-market/core@0.4.16`）
 
 **FIX：「验证」三类误报（#365）——scope 短名不匹配、技能被误标 cordis、bundles 安装恒显「重启后生效」**

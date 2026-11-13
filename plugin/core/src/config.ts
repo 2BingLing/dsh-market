@@ -4,7 +4,7 @@
  */
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import type { CoreConfig, GitHubBinding, UserProfile } from "./types.js";
 
 // 数据源默认走 GitHub Pages 仓库路径。注意（#249）：绑定自定义域名 dsh.market 后，
@@ -179,7 +179,24 @@ export function snapshotDir(cfg: ResolvedConfig): string {
   return join(ensureDataDir(cfg), "snapshots");
 }
 
-/** 当前 harness 运行的 profile（尽力探测：env → 默认） */
+/** 当前 harness 运行的 profile（尽力探测：env → profilesDir 唯一 profile → 默认）。
+ *  #378：桌面端不设 DSH_PROFILE 环境变量，此前直接落 defaultProfile（"web"）——
+ *  桌面端真实 profile（如 desktop）的 settings.json 被写成 web，已装校验/
+ *  resolveNpmRegistry 全部指向不存在的 profile 目录。兜底：profilesDir 下恰好一个
+ *  有效 profile 目录（含 package.json）时采用它——单 profile 用户的环境事实只有一个答案；
+ *  多个或扫描失败仍回默认（不乱猜）。 */
 export function detectActiveProfile(cfg: ResolvedConfig): string {
-  return process.env.DSH_PROFILE ?? process.env.DSH_MARKET_PROFILE ?? cfg.defaultProfile;
+  const fromEnv = process.env.DSH_PROFILE ?? process.env.DSH_MARKET_PROFILE;
+  if (fromEnv) return fromEnv;
+  try {
+    if (existsSync(cfg.profilesDir)) {
+      const valid = readdirSync(cfg.profilesDir, { withFileTypes: true })
+        .filter((e) => e.isDirectory() && existsSync(join(cfg.profilesDir, e.name, "package.json")))
+        .map((e) => e.name);
+      if (valid.length === 1) return valid[0];
+    }
+  } catch {
+    /* 扫描失败：落默认 */
+  }
+  return cfg.defaultProfile;
 }

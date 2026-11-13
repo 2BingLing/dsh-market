@@ -11,7 +11,7 @@
  * 用法：node test/subagent-compat.mjs（plugin/ui 下 npm test 已接）
  */
 import assert from 'node:assert/strict'
-import { startSubagent, interruptSubagent } from '../lib/subagent-compat.js'
+import { startSubagent, interruptSubagent, pickSubagentProvider } from '../lib/subagent-compat.js'
 
 const PROMPT = [{ type: 'text', text: 'hi' }]
 const SIGNAL = AbortSignal.timeout(1000)
@@ -38,27 +38,28 @@ const OPTS = { label: 'L', prompt: PROMPT, parent: { sessionId: 'root-1' }, sign
   assert.equal(await interruptSubagent(subagents, { childId: 'x', agent: {} }), false)
 }
 
-// ---------- 2. alpha.2：startActivation ----------
+// ---------- 2. alpha.2：startActivation（嵌套形态宿主；扁平 spec 会被宿主拒绝） ----------
 {
   const specs = []
   const subagents = {
     list: () => ['spawn', 'other'],
     startActivation: async (spec) => {
       specs.push(spec)
+      // 真实 alpha.2 宿主读 spec.request.prompt —— 收到扁平 spec 会炸（#378 报告者核对的形态）
+      if (!spec.request) throw new TypeError("Cannot read properties of undefined (reading 'prompt')")
       return { childId: 'child-new' }
     },
   }
   const h = await startSubagent(subagents, 'spawn', OPTS)
-  assert.equal(specs.length, 1, 'alpha.2 必须走 startActivation')
-  assert.equal(specs[0].provider, 'spawn')
-  assert.equal(specs[0].label, 'L')
-  assert.deepEqual(specs[0].request.prompt, PROMPT)
-  assert.equal(specs[0].request.parent.sessionId, 'root-1')
-  assert.equal(specs[0].signal, SIGNAL)
-  assert.equal(specs[0].delivery, 'caller', '结果投递必须显式 caller')
+  assert.equal(specs.length, 2, '扁平先试失败 → 回退嵌套，共两次调用')
+  assert.equal(specs[1].provider, 'spawn')
+  assert.equal(specs[1].label, 'L')
+  assert.deepEqual(specs[1].request.prompt, PROMPT)
+  assert.equal(specs[1].request.parent.sessionId, 'root-1')
+  assert.equal(specs[1].signal, SIGNAL)
+  assert.equal(specs[1].delivery, 'caller', '结果投递必须显式 caller')
   assert.equal(h.childId, 'child-new')
   assert.equal(h.sessionId, 'child-new', 'alpha.2 sessionId 回退取 childId')
-  // 旧 start 不得被调用（宿主上不存在则无所谓，但 fake 里没定义，调了会 TypeError）
 }
 
 // ---------- 3. alpha.2 interrupt：ancestor 优先 ----------
@@ -109,4 +110,68 @@ const OPTS = { label: 'L', prompt: PROMPT, parent: { sessionId: 'root-1' }, sign
   assert.equal(await interruptSubagent(subagents, { childId: null, agent: {} }), false, 'childId 缺失 → false（不调 interrupt）')
 }
 
-console.log('subagent-compat: 5/5 全部通过')
+// ---------- 6. #378 · 0.2.2-rc.2：无 list()，扁平 spec 先试成功 ----------
+{
+  const specs = []
+  const subagents = {
+    getProvider: (name) => (name === 'spawn' ? { name } : null),
+    startActivation: async (spec) => {
+      specs.push(spec)
+      return { childId: 'child-flat', runId: 'run-1' }
+    },
+  }
+  // provider 选择：list 不存在 → getProvider 探测命中 spawn
+  assert.equal(pickSubagentProvider(subagents), 'spawn', 'getProvider 探测应命中 spawn')
+  const h = await startSubagent(subagents, 'spawn', OPTS)
+  assert.equal(specs.length, 1, '扁平 spec 一次成功，不得再试嵌套')
+  assert.equal(specs[0].prompt, PROMPT, '0.2.2-rc.2 扁平形态：prompt 在 spec 顶层')
+  assert.equal(specs[0].parent.sessionId, 'root-1', '扁平形态：parent 在 spec 顶层')
+  assert.equal(specs[0].request, undefined, '扁平形态：不得带 request 包裹')
+  assert.equal(specs[0].delivery, 'caller')
+  assert.equal(h.childId, 'child-flat')
+  assert.equal(h.sessionId, 'child-flat', '0.2.2-rc.2 返回无 sessionId → 取 childId（即持久化子会话 id）')
+}
+
+// ---------- 7. #378 · alpha.2 嵌套宿主：扁平失败 → 回退嵌套，抛原始错误 ----------
+{
+  const specs = []
+  const subagents = {
+    list: () => ['spawn'],
+    startActivation: async (spec) => {
+      specs.push(spec)
+      if (!spec.request) throw new TypeError("Cannot read properties of undefined (reading 'id')")
+      return { childId: 'child-nested' }
+    },
+  }
+  const h = await startSubagent(subagents, 'spawn', OPTS)
+  assert.equal(specs.length, 2, '扁平失败后应回退嵌套')
+  assert.equal(specs[0].request, undefined, '第一次尝试是扁平形态')
+  assert.deepEqual(specs[1].request.prompt, PROMPT, '第二次尝试是嵌套形态')
+  assert.equal(h.sessionId, 'child-nested')
+}
+
+// ---------- 8. #378 · 两形态全失败 → 抛原始扁平错误（不掩盖真因） ----------
+{
+  const subagents = {
+    getProvider: () => null,
+    startActivation: async () => {
+      throw new Error('host rejected')
+    },
+  }
+  try {
+    await startSubagent(subagents, 'spawn', OPTS)
+    assert.fail('两形态全失败必须抛错')
+  } catch (e) {
+    assert.equal(e.message, 'host rejected', '抛的是原始扁平错误')
+  }
+  // provider 选择：list/getProvider 都不可用 → 'spawn' 兜底
+  assert.equal(pickSubagentProvider({ start: async () => ({}) }), 'spawn', '无探测手段 → spawn 兜底')
+  // getProvider 抛错 → 继续兜底，不炸
+  assert.equal(
+    pickSubagentProvider({ getProvider: () => { throw new Error('boom') } }),
+    'spawn',
+    'getProvider 抛错安全兜底',
+  )
+}
+
+console.log('subagent-compat: 8/8 全部通过')

@@ -1,4 +1,4 @@
-import { interruptSubagent, startSubagent } from "./subagent-compat.js";
+import { interruptSubagent, pickSubagentProvider, startSubagent } from "./subagent-compat.js";
 import { createRequire } from "node:module";
 import { join } from "node:path";
 import { aggregateTags, appendOpLog, applyUpdate, buildBackup, buildDiagSnapshot, canonicalCommands, checkSelfUpdate, checkUpdates, classifyFailure, deriveSmokeCommands, detectPnpmMajor, exportLogText, extractInstallPkgName, fetchCurrentUser, fetchMarketData, fetchPacksData, fetchStarred, filterInstallCommands, guardInstallCommands, hotTags, importBackup, installPlugin, learnRecipe, listRecipes, liteDshCompat, loadMarketData, metricSummary, normalizeDshProfileCommands, parseBlockedBuilds, parseInstallVerdict, readOpLogTail, readProfile, readSettings, recommend, recordInstallMetric, resolveConfig, resolveNpmRegistry, routeInstall, scanInstalled, search, uninstallPlugin, updateProfile, verifyAfterInstall, writeBuildApprovals, writeMinimumReleaseAge, writeProfile, writeSettings } from "@dsh-market/core";
@@ -541,7 +541,7 @@ function apply(ctx, config = {}) {
 				if (!subagents) throw new Error("子代理服务不可用");
 				const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0];
 				if (!agent) throw new Error("当前会话代理不可用");
-				const provider = subagents.list().includes("spawn") ? "spawn" : subagents.list()[0];
+				const provider = pickSubagentProvider(subagents);
 				const prompt = buildReviewPrompt(plugin);
 				const run = await Promise.race([startSubagent(subagents, provider, {
 					label: `安全审查 ${plugin.name}`,
@@ -1198,7 +1198,7 @@ async function runAiInstall(opts) {
 	if (!subagents) throw new Error("子代理服务不可用");
 	const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0];
 	if (!agent) throw new Error("当前会话代理不可用");
-	const provider = subagents.list().includes("spawn") ? "spawn" : subagents.list()[0];
+	const provider = pickSubagentProvider(subagents);
 	const prompt = buildInstallPrompt(plugin, profile, t0?.reason, { security });
 	const run = await Promise.race([startSubagent(subagents, provider, {
 		label: `安装 ${plugin.name}`,

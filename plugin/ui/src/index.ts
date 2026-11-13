@@ -60,6 +60,7 @@ import {
 import {
   startSubagent,
   interruptSubagent,
+  pickSubagentProvider,
   type SubagentsService,
 } from './subagent-compat'
 
@@ -697,7 +698,8 @@ export function apply(ctx: {
         if (!subagents) throw new Error('子代理服务不可用')
         const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0]
         if (!agent) throw new Error('当前会话代理不可用')
-        const provider = subagents.list().includes('spawn') ? 'spawn' : subagents.list()[0]
+        // #378 · 0.2.2-rc.2 删除了 subagents.list()——provider 选择改为能力探测
+        const provider = pickSubagentProvider(subagents)
         const prompt = buildReviewPrompt(plugin)
         // #228 · 经双版本垫片启动（alpha.1 start / alpha.2 startActivation 自动适配）
         const run = await Promise.race([
@@ -1467,7 +1469,8 @@ async function runAiInstall(opts: {
   // 优先 roots()：安装子代理要挂在「当前根会话」下，不能挂到别的子代理上
   const agent = (agents?.roots?.() ?? agents?.list?.() ?? [])[0]
   if (!agent) throw new Error('当前会话代理不可用')
-  const provider = subagents.list().includes('spawn') ? 'spawn' : subagents.list()[0]
+  // #378 · 0.2.2-rc.2 删除了 subagents.list()——provider 选择改为能力探测
+  const provider = pickSubagentProvider(subagents)
   const prompt = buildInstallPrompt(plugin, profile, t0?.reason, { security })
   // #228 · 经双版本垫片启动（alpha.1 start / alpha.2 startActivation 自动适配）；
   // start/startActivation 的 promise 在 run 发布后 fulfill，只等发布（10s 超时保护）
