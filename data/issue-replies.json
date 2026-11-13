@@ -1,60 +1,32 @@
 {
-  "generatedAt": "2026-11-12T02:38:23.429Z",
+  "generatedAt": "2026-11-13T00:14:28.387Z",
   "replies": [
     {
       "issueNumbers": [
-        368
+        376
       ],
-      "fullName": "Duoasa/DSH-to-Figma",
+      "fullName": "02TJS/ProgressTarget",
       "type": "cordis-plugin",
-      "stars": 93,
-      "score": 83
+      "stars": 15,
+      "score": 73
     },
     {
       "issueNumbers": [
-        374
+        370
       ],
-      "fullName": "leetp2001-cmd/dsh-android-apk",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 59
-    },
-    {
-      "issueNumbers": [
-        369
-      ],
-      "fullName": "mkt-agents/dsh-session-cleanup",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 60
-    },
-    {
-      "issueNumbers": [
-        373
-      ],
-      "fullName": "thus-zhou/dsh-chapter-whale",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 59
-    },
-    {
-      "issueNumbers": [
-        375
-      ],
-      "fullName": "xkzdwb/DSH-WeeklyTidy-WhenSundayMidnight",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 41
-    },
-    {
-      "issueNumbers": [
-        372,
-        371
-      ],
-      "fullName": "a2092776074-collab/-",
+      "fullName": "Jayden-ren/patch-relay",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 36
+    },
+    {
+      "issueNumbers": [
+        377
+      ],
+      "fullName": "ZhaoZiyangShaanxi/dsh-go-workbuddy",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 37
     }
   ]
 }
