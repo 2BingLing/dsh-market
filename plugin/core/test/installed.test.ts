@@ -6,8 +6,15 @@ import { resolveConfig } from "../src/config.js";
 import { scanInstalled, matchMarketPlugin } from "../src/installed.js";
 import type { DshPlugin, MarketData } from "@dsh-market/schema";
 
-/** 构造一个 str库条目（缩略，够 scanInstalled 用即可） */
-function plugin(partial: { id: string; name: string; fullName?: string }): DshPlugin {
+/** 构造一个市场条目（缩略，够 scanInstalled 用即可） */
+function plugin(partial: {
+  id: string;
+  name: string;
+  fullName?: string;
+  stars?: number;
+  curated?: boolean;
+  commands?: string[];
+}): DshPlugin {
   return {
     id: partial.id,
     type: "cordis-plugin",
@@ -15,14 +22,14 @@ function plugin(partial: { id: string; name: string; fullName?: string }): DshPl
     owner: partial.id.split("/")[0] ?? "o",
     repo: partial.name,
     fullName: partial.fullName ?? partial.id,
-    stars: 1,
+    stars: partial.stars ?? 1,
     forks: 0,
     openIssues: 0,
     language: null,
     description: `${partial.id} desc`,
     descriptionZh: null,
     tags: [],
-    curated: false,
+    curated: partial.curated ?? false,
     homepage: null,
     license: null,
     topics: [],
@@ -30,7 +37,11 @@ function plugin(partial: { id: string; name: string; fullName?: string }): DshPl
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     readmeSummary: null,
-    install: { method: "pnpm-profile", needsConfig: false },
+    install: {
+      method: "pnpm-profile",
+      needsConfig: false,
+      ...(partial.commands ? { commands: partial.commands } : {}),
+    },
     score: {
       total: 50,
       breakdown: { maintain: 50, practical: 50, popularity: 50, ease: 50, signal: 50 },
@@ -196,5 +207,91 @@ describe("#288 无 dsh 前缀但已收录的插件不应漏判", () => {
     const hit = scanInstalled(cfg, market288).find((x) => x.localName === "@liustack/modlens");
     expect(hit?.pluginId).toBe("yukitakasama/modlens");
     expect(hit?.version).toBe("3.27.2");
+  });
+});
+
+describe("重名条目消歧（同名不同仓库）", () => {
+  // 市场索引里 dsh-context 有两条同名条目：真实的 npm 包（bowenliang123，安装命令点名了
+  // dsh-context）和一条 0 星重名仓库（qiangweiliu）。早先 byName 是单值 Map，后者会覆盖
+  // 前者，「已装 dsh-context」于是被记到 0 星条目上，用户装的那张卡片仍显示「安装」。
+  const realContext = plugin({
+    id: "bowenliang123/dsh-context",
+    name: "dsh-context",
+    stars: 5104,
+    commands: [
+      "dsh plugin --profile web add dsh-context",
+      "dsh plugin --profile web update dsh-context@latest",
+    ],
+  });
+  const strayContext = plugin({ id: "qiangweiliu/dsh-context", name: "dsh-context", stars: 0 });
+
+  function marketWith(plugins: DshPlugin[]): MarketData {
+    return { schemaVersion: 2, generatedAt: new Date().toISOString(), plugins };
+  }
+
+  it("安装命令点名该包的条目优先（重名条目排在后面也不被覆盖）", () => {
+    const cfg = makeCfg();
+    setupProfile(cfg, { dependencies: { "dsh-context": "^0.84.1" } });
+    const hit = scanInstalled(cfg, marketWith([realContext, strayContext])).find(
+      (i) => i.localName === "dsh-context",
+    );
+    expect(hit?.pluginId).toBe("bowenliang123/dsh-context");
+    expect(hit?.version).toBe("0.84.1");
+  });
+
+  it("结果不依赖索引顺序", () => {
+    const cfg = makeCfg();
+    setupProfile(cfg, { dependencies: { "dsh-context": "^0.84.1" } });
+    const hit = scanInstalled(cfg, marketWith([strayContext, realContext])).find(
+      (i) => i.localName === "dsh-context",
+    );
+    expect(hit?.pluginId).toBe("bowenliang123/dsh-context");
+  });
+
+  it("两条都没有安装命令时退到精选/热度，同样与索引顺序无关", () => {
+    const cfg = makeCfg();
+    setupProfile(cfg, { dependencies: { "dsh-context": "^0.84.1" } });
+    const low = plugin({ id: "aaa/dsh-context", name: "dsh-context", stars: 3 });
+    const high = plugin({ id: "zzz/dsh-context", name: "dsh-context", stars: 900 });
+    expect(
+      scanInstalled(cfg, marketWith([low, high])).find((i) => i.localName === "dsh-context")
+        ?.pluginId,
+    ).toBe("zzz/dsh-context");
+    expect(
+      scanInstalled(cfg, marketWith([high, low])).find((i) => i.localName === "dsh-context")
+        ?.pluginId,
+    ).toBe("zzz/dsh-context");
+  });
+});
+
+describe("scoped 依赖不被同名裸包名的第三方仓库认领", () => {
+  // @dsh-market/plugin 的包名末段是 "plugin"，市场里恰有一条名为 plugin 的仓库
+  // dsh-remote/plugin（安装命令 add @dsh-remote/plugin）。旧实现按裸包名兜底会把它
+  // 认成「已装」：已安装列表多一条错归属，dsh-remote/plugin 卡片还会被从发现页误排除。
+  const remotePlugin = plugin({
+    id: "dsh-remote/plugin",
+    name: "plugin",
+    stars: 4,
+    commands: ["dsh plugin --profile web add @dsh-remote/plugin"],
+  });
+  const marketData: MarketData = {
+    schemaVersion: 2,
+    generatedAt: new Date().toISOString(),
+    plugins: [remotePlugin],
+  };
+
+  it("@dsh-market/plugin 不再被 dsh-remote/plugin 认领（pluginId=null）", () => {
+    const cfg = makeCfg();
+    setupProfile(cfg, { dependencies: { "@dsh-market/plugin": "^0.4.21" } });
+    const hit = scanInstalled(cfg, marketData).find((i) => i.localName === "@dsh-market/plugin");
+    expect(hit).toBeTruthy();
+    expect(hit!.pluginId).toBeNull();
+  });
+
+  it("真正安装 @dsh-remote/plugin 时仍能匹配", () => {
+    const cfg = makeCfg();
+    setupProfile(cfg, { dependencies: { "@dsh-remote/plugin": "^0.1.0" } });
+    const hit = scanInstalled(cfg, marketData).find((i) => i.localName === "@dsh-remote/plugin");
+    expect(hit?.pluginId).toBe("dsh-remote/plugin");
   });
 });
