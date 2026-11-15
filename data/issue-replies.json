@@ -1,23 +1,32 @@
 {
-  "generatedAt": "2026-11-13T18:55:38.308Z",
+  "generatedAt": "2026-11-15T00:07:14.730Z",
   "replies": [
     {
       "issueNumbers": [
-        381
+        385
       ],
-      "fullName": "kingcharleslzy-ai/DSH-Spicy",
+      "fullName": "plasticmemories-0823/dsh-session-tree",
       "type": "cordis-plugin",
-      "stars": 90,
-      "score": 91
+      "stars": 1,
+      "score": 55
     },
     {
       "issueNumbers": [
-        363
+        383
       ],
-      "fullName": "f-e-n-g-0531/dsh-execution-bus",
+      "fullName": "a2092776074-collab/-",
       "type": "cordis-plugin",
-      "stars": 1,
-      "score": 41
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        382
+      ],
+      "fullName": "MakerFlyFly/DSH-better-classifier",
+      "type": "cordis-plugin",
+      "stars": 4,
+      "score": 66
     }
   ]
 }
