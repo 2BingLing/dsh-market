@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.22` / `@dsh-market/core@0.4.18`）
+
+**FIX：已装检测按同名条目消歧，修正重名仓库抢归属（#387，社区 PR 合入）**
+
+- **问题**：市场里同名不同仓库的条目很多（如 `dsh-context` 同时挂着 bowenliang123/dsh-context 5104★ 正牌与 qiangweiliu/dsh-context 0★），`scanInstalled` 的 `byName` 是单值 Map，后者覆盖前者——**用户真正安装的插件被记到 0 星同名条目上，卡片永远显示「安装」而非「已装」**。
+- **修复**（PR #387，作者 joyjianglong-coder）：市场索引改 `Map<string, DshPlugin[]>` 保留全部同名候选；新增 `matchMarketPluginInIndex` + `buildMarketIndex`，同名多条目按 `pickBest` 消歧——**安装命令点名该包的条目优先**（作者意图）→ curated → star 数 → fullName 字典序（稳定，结果不依赖索引顺序）；scoped 包防认领：`@dsh-market/plugin` 匹配时过滤掉「自己声明安装另一个 scoped 包」的条目；旧签名 `matchMarketPlugin` 兼容保留，#288 官方包排除闸门原样保留。
+- 验证：core 全量 261 项通过（installed 16/16，含新增 5 个消歧用例：点名优先、与索引顺序无关、无命令退热度、scoped 防认领、broken 对照）。ui 0.4.22 同步抬 core 下限 `^0.4.18`，升级插件即自动带上修复。
+
 ### 插件端（`@dsh-market/plugin@0.4.21` / `@dsh-market/core@0.4.17`）
 
 **HOTFIX：宿主 0.2.2-rc.2 子代理 API 再变——安装/安全审查必炸 `subagents.list is not a function`（#378）**

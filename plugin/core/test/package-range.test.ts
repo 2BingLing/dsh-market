@@ -23,6 +23,7 @@ interface Pkg {
   version: string;
   dependencies?: Record<string, string>;
   exports?: Record<string, unknown>;
+  repository?: { url?: string };
 }
 
 function readPkg(rel: string): Pkg {
