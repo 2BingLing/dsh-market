@@ -64,6 +64,24 @@ describe("detectSubdirBundle", () => {
     expect(r?.subdir).toBe("cyrene-balance-widget");
   });
 
+  it("#359 · 二级子目录 hint 直接探测（tw93/Mole 的 plugins/mole 场景）", async () => {
+    // 根目录是 CLI 本体（无插件标记），插件在 plugins/mole/ 二级——启发式一层候选全落空，
+    // 只有投稿正文自述的二级 hint 能救
+    const root = [rootItem("README.md"), rootItem("cmd", "dir"), rootItem("plugins", "dir")];
+    // hint 候选排最前：第一次 fetch 就是 plugins/mole（返回 package.json + cordis.patch.yml）
+    mockFetch.mockResolvedValue(CORDIS_SUBDIR);
+    const r = await detectSubdirBundle("tw93/Mole", root as never, "main", ["plugins/mole"]);
+    expect(r?.subdir).toBe("plugins/mole");
+    expect(mockFetch).toHaveBeenCalledWith("tw93/Mole", "main", "plugins/mole");
+  });
+
+  it("#359 · 二级 hint 路径 fetch 404/空 → 安全落空", async () => {
+    const root = [rootItem("README.md"), rootItem("plugins", "dir")];
+    mockFetch.mockResolvedValue([]);
+    const r = await detectSubdirBundle("someone/some-repo", root as never, "main", ["plugins/typo-name"]);
+    expect(r).toBeNull();
+  });
+
   it("#295 · 无提示且启发式不匹配 → null 且不调 API（旧行为）", async () => {
     const root = [rootItem("README.md"), rootItem("cyrene-balance-widget", "dir")];
     const r = await detectSubdirBundle("sailina-afk/sailina-s-box", root as never, "main");

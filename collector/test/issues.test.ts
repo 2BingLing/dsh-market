@@ -108,11 +108,16 @@ describe("extractIntroByAuthor", () => {
 describe("extractSubdirHints（#295 子目录提示）", () => {
   it("提取反引号包裹、以 / 结尾的子目录路径", () => {
     const body = "插件本体在**子目录 `cyrene-balance-widget/`** 里（根目录是个人杂物箱）。cordis 标记在 `cyrene-balance-widget/cordis.patch.yml`";
-    expect(extractSubdirHints(body)).toEqual(["cyrene-balance-widget"]);
+    expect(extractSubdirHints(body)).toEqual(["cyrene-balance-widget", "cyrene-balance-widget/cordis.patch.yml"]);
   });
 
-  it("排除 URL 与多斜杠路径", () => {
-    const body = "见 `https://github.com/a/b/` 与 `packages/plugin/`，别看 `docs/`";
+  it("#359 放宽：无尾斜杠的二级路径同样提取（plugins/mole 实例）", () => {
+    const body = "**插件在子目录 `plugins/mole`，npm 包名 `dsh-mole`**\n仓库根目录是 Mole CLI 本身，没有插件标记，请按子目录收录。";
+    expect(extractSubdirHints(body)).toEqual(["plugins/mole"]);
+  });
+
+  it("排除 URL / 纯文件名 / 命令 token", () => {
+    const body = "见 `https://github.com/a/b/` 与 `packages/plugin/`，别看 `docs/`；装法 `npm install x`；文档见 `README.md`";
     expect(extractSubdirHints(body)).toEqual(["packages/plugin", "docs"]);
   });
 

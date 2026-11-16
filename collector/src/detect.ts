@@ -121,13 +121,18 @@ export async function detectSubdirBundle(
   const dirs = rootItems.filter((i) => i.type === "dir" && !SKIP_DIRS.test(i.name));
   const candidates: { path: string }[] = [];
   const seen = new Set<string>();
-  // #295 · 投稿自述的子目录优先（仅支持根级子目录提示；路径含二级斜杠的暂不处理）
+  // #295 · 投稿自述的子目录优先（#359 放宽：支持二级路径如 plugins/mole——
+  // 根级 hint 仍在根目录列表里校验；二级 hint 直接信任投稿正文 fetch 探测，
+  // 404/无插件标记自然落空，噪音无害。`..` 穿越一律拒绝）
   for (const hint of subdirHints) {
     const p = hint.replace(/^\/+|\/+$/g, "");
-    if (!p || p.includes("/")) continue;
-    const hit = dirs.find((d) => d.name.toLowerCase() === p.toLowerCase());
-    if (!hit || seen.has(hit.path.toLowerCase())) continue;
-    seen.add(hit.path.toLowerCase());
+    if (!p || p.includes("..") || /^https?:/i.test(p)) continue;
+    if (seen.has(p.toLowerCase())) continue;
+    const hit = p.includes("/")
+      ? { path: p }
+      : dirs.find((d) => d.name.toLowerCase() === p.toLowerCase());
+    if (!hit) continue;
+    seen.add(p.toLowerCase());
     candidates.push({ path: hit.path });
   }
   // monorepo 子目录优先（packages|apps 下的插件包，如 #52 的 packages/plugin、#91 的 packages/deepc-link）

@@ -105,12 +105,20 @@ export const SUBMISSION_TITLE_LOOSE_RE =
 export const BATCH_SUBMISSION_TITLE_RE = /【\s*收录申请\s*】|批量收录/;
 
 /** 从提交正文提取子目录提示（#295：「插件本体在子目录 `cyrene-balance-widget/`」）。
- *  识别反引号包裹、以 / 结尾的相对路径 token；URL（含 //）排除。 */
+ *  #359 放宽：反引号包裹的**相对路径** token 即提取（`plugins/mole` 无尾斜杠同样成立）——
+ *  必须含 `/` 或以 `/` 结尾（排除纯文件名/包名/命令等非路径 token），URL（含 //）排除。
+ *  噪音 hint 无害：detectSubdirBundle 端会验证（根级需存在于根目录列表，二级 fetch 落空即跳过）。 */
 export function extractSubdirHints(text: string): string[] {
   const out: string[] = [];
-  for (const m of text.matchAll(/`([^`\s]+)\/`/g)) {
-    const p = m[1];
-    if (!p || p.includes("//") || /^https?$/i.test(p)) continue;
+  for (const m of text.matchAll(/`([^`\s]+)`/g)) {
+    const raw = m[1];
+    if (!raw || raw.includes("//") || /^https?:/i.test(raw)) continue;
+    const p = raw.replace(/\/+$/, "");
+    if (!p) continue;
+    // 接受：以 / 结尾的目录 hint（含单级，#295 原形态）或含 / 的相对路径（#359 二级形态）；
+    // 排除：纯文件名 / 包名 / 命令（无 / 且非尾斜杠目录）
+    if (!raw.endsWith("/") && !p.includes("/")) continue;
+    if (!/^[\w@.][\w@./-]*$/.test(p)) continue;
     if (!out.includes(p)) out.push(p);
   }
   return out;
