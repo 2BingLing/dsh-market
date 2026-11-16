@@ -1,32 +1,14 @@
 {
-  "generatedAt": "2026-11-15T00:07:14.730Z",
+  "generatedAt": "2026-11-16T00:33:26.750Z",
   "replies": [
     {
       "issueNumbers": [
-        385
+        386
       ],
-      "fullName": "plasticmemories-0823/dsh-session-tree",
+      "fullName": "polear234/dsh-local-recall",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 55
-    },
-    {
-      "issueNumbers": [
-        383
-      ],
-      "fullName": "a2092776074-collab/-",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        382
-      ],
-      "fullName": "MakerFlyFly/DSH-better-classifier",
-      "type": "cordis-plugin",
-      "stars": 4,
-      "score": 66
+      "score": 41
     }
   ]
 }
