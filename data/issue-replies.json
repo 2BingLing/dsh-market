@@ -1,6 +1,15 @@
 {
-  "generatedAt": "2026-11-16T19:20:39.637Z",
+  "generatedAt": "2026-11-16T19:58:00.199Z",
   "replies": [
+    {
+      "issueNumbers": [
+        359
+      ],
+      "fullName": "tw93/Mole",
+      "type": "cordis-plugin",
+      "stars": 75289,
+      "score": 97
+    },
     {
       "issueNumbers": [
         388
