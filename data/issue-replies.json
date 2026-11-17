@@ -1,23 +1,14 @@
 {
-  "generatedAt": "2026-11-16T19:58:00.199Z",
+  "generatedAt": "2026-11-17T02:35:57.787Z",
   "replies": [
     {
       "issueNumbers": [
-        359
+        391
       ],
-      "fullName": "tw93/Mole",
-      "type": "cordis-plugin",
-      "stars": 75289,
-      "score": 97
-    },
-    {
-      "issueNumbers": [
-        388
-      ],
-      "fullName": "lw24-1936/dsh-memweave",
+      "fullName": "xkzdwb/DSH-SlashMenuChinese-LeftAligned",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 51
+      "score": 35
     }
   ]
 }
