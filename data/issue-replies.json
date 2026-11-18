@@ -1,14 +1,41 @@
 {
-  "generatedAt": "2026-11-17T02:35:57.787Z",
+  "generatedAt": "2026-11-18T02:47:07.268Z",
   "replies": [
     {
       "issueNumbers": [
-        391
+        395
       ],
-      "fullName": "xkzdwb/DSH-SlashMenuChinese-LeftAligned",
+      "fullName": "ninihao1743/dsh-memorytree-rule",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 32
+    },
+    {
+      "issueNumbers": [
+        396
+      ],
+      "fullName": "nakemer/pc-doctor",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        393
+      ],
+      "fullName": "lw24-1936/dsh-memweave",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 35
+      "score": 51
+    },
+    {
+      "issueNumbers": [
+        392
+      ],
+      "fullName": "lw24-1936/dsh-frontend-page-craft",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 57
     }
   ]
 }
