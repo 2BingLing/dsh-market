@@ -1,41 +1,23 @@
 {
-  "generatedAt": "2026-11-18T02:47:07.268Z",
+  "generatedAt": "2026-11-19T02:13:48.696Z",
   "replies": [
     {
       "issueNumbers": [
-        395
+        399
       ],
-      "fullName": "ninihao1743/dsh-memorytree-rule",
+      "fullName": "hAcKlyc/dsh-zsearch",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 32
+      "score": 36
     },
     {
       "issueNumbers": [
-        396
+        398
       ],
-      "fullName": "nakemer/pc-doctor",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
-        393
-      ],
-      "fullName": "lw24-1936/dsh-memweave",
+      "fullName": "Wanqiu12345/dsh-session-matrix",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 51
-    },
-    {
-      "issueNumbers": [
-        392
-      ],
-      "fullName": "lw24-1936/dsh-frontend-page-craft",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 57
+      "score": 56
     }
   ]
 }
