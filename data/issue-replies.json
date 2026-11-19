@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T15:48:11.313Z",
+  "generatedAt": "2026-11-19T18:50:49.237Z",
   "replies": [
     {
       "issueNumbers": [
@@ -30,15 +30,6 @@
     },
     {
       "issueNumbers": [
-        397
-      ],
-      "fullName": "pcysanji/dsh-search-plus",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
-    },
-    {
-      "issueNumbers": [
         405
       ],
       "fullName": "dan-cube/dsh-balance-center",
@@ -54,6 +45,15 @@
       "type": "cordis-plugin",
       "stars": 3,
       "score": 81
+    },
+    {
+      "issueNumbers": [
+        397
+      ],
+      "fullName": "pcysanji/dsh-search-plus",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
     }
   ]
 }
