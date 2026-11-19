@@ -71,8 +71,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 /** 检测规则版本：规则变更时 bump（写入 DetectCache 并使老缓存失效重检）。
  *  rev 2（#365）：SKILL.md + package.json 判 cordis 的改判规则增加例外——README
- *  安装命令是技能形态（npx skills add / git clone 到 skills 目录）时保留 skill 判定。 */
-const DETECT_RULES_REV = 2;
+ *  安装命令是技能形态（npx skills add / git clone 到 skills 目录）时保留 skill 判定。
+ *  rev 3（#394）：安装命令解析新增 release TGZ 分支 + 变量引用下载行过滤 +
+ *  README 抓取失败不再清空缓存中的已解析命令——bump 使被污染的缓存失效重检。 */
+const DETECT_RULES_REV = 3;
 const DATA_DIR = join(__dirname, "../../data");
 const CONCURRENCY = 10;
 const EXCLUDED_REPOS = new Set([
@@ -504,7 +506,17 @@ async function main() {
           : skillMd
             ? summarizeReadme(skillMd)
             : null;
-        installParsed = parseInstallCommands(readmeContent);
+        // #394 · README 抓取失败（null）≠ README 无安装命令：parseInstallCommands(null)
+        // 返回空，若直接落库会**把瞬时抓取失败固化进缓存与数据并自续命**（缓存命中后
+        // 每轮复用空值——dsh-purge 条目 install.commands 被清空的实测根因）。
+        // 抓取失败且缓存里有非空命令 → 沿用缓存值；README 真抓到了但确实无命令 → 如实更新为空。
+        const freshParsed = parseInstallCommands(readmeContent);
+        const readmeFailed = readmeContent === null;
+        const cachedCmds = cachedDetect?.installParsed?.commands?.length ?? 0;
+        installParsed =
+          readmeFailed && freshParsed.commands.length === 0 && cachedCmds > 0
+            ? cachedDetect!.installParsed!
+            : freshParsed;
         hasSkillMd = detection.skillFiles.length > 0;
 
         // 写入检测缓存（含派生产物）——仅插件命中时写；非插件（isPlugin:false）不写缓存，
