@@ -1,23 +1,59 @@
 {
-  "generatedAt": "2026-11-19T02:13:48.696Z",
+  "generatedAt": "2026-11-19T15:48:11.313Z",
   "replies": [
     {
       "issueNumbers": [
-        399
+        404
       ],
-      "fullName": "hAcKlyc/dsh-zsearch",
+      "fullName": "kadaliao/dsh-atlas",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 36
     },
     {
       "issueNumbers": [
-        398
+        403
       ],
-      "fullName": "Wanqiu12345/dsh-session-matrix",
+      "fullName": "kadaliao/dsh-prompt-en",
       "type": "cordis-plugin",
-      "stars": 1,
-      "score": 56
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        402
+      ],
+      "fullName": "kadaliao/dsh-images",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 34
+    },
+    {
+      "issueNumbers": [
+        397
+      ],
+      "fullName": "pcysanji/dsh-search-plus",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        405
+      ],
+      "fullName": "dan-cube/dsh-balance-center",
+      "type": "cordis-plugin",
+      "stars": 2,
+      "score": 59
+    },
+    {
+      "issueNumbers": [
+        400
+      ],
+      "fullName": "erinwangstudio-art/dsh-trafficlight",
+      "type": "cordis-plugin",
+      "stars": 3,
+      "score": 81
     }
   ]
 }
