@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.23` / `@dsh-market/core@0.4.19`）
+
+**FIX：release TGZ 安装的冒烟对账 + README 变量下载行过滤（#394）**
+
+- **release TGZ 安装的包名提取**（core）：`dsh plugin add "https://github.com/<o>/<r>/releases/download/v1.7.20/dsh-purge-community-1.7.20.tgz"` 这类版本化 release 安装（dsh CLI 原生支持）此前包名提取失败——落市场短名对账，而实际依赖键是 `dsh-purge-community` → **冒烟验证必然失败**，明明装上了却误报「校验失败/升级 AI 复核」。修复：`extractInstallPkgName` 增加 TGZ 分支，文件名去 semver 尾巴 = 包名（预发布尾巴 `-beta.1` 同样处理；非 semver 文件名用整个 stem，对不上仍有 needAi 兜底不伪报成功）。附带支持**带双引号**的 token（README 命令常带引号）。
+- **README 变量下载行过滤**（collector）：`curl … -o "$PURGE_INSTALL_DIR/install.sh"` 这类引用前文 shell 变量的下载步骤，此前被当独立命令收录——单独复制既装不了也误导。`cleanCmdLine` 现过滤「下载类命令（curl/wget/irm/iwr 等）+ 含 `$VAR`/`${VAR}` 引用」的行；自包含的完整下载命令不受影响。
+- **核实自动化刷新链路正常**（issue 报告者的疑问）：README 安装命令更新 → 仓库 pushed_at 变化 → 检测缓存失效重检 → 数据次日自动刷新——dsh-purge 实测 11-18 run 已从 1.7.14 刷到 README 当时的 1.7.18，README 现为 1.7.20 将随下轮跟上。前提是作者发版时同步更新 README 的版本号（dsh-purge 已这么做）。issue 时点的 1.7.14 是数据快照滞后，非机制故障。
+- 测试：core router +4（TGZ 提取全形态）、collector install-parse 新测试文件（变量行过滤 + 自包含命令不受影响），双端 tsc 干净。ui 0.4.23 抬 core 下限 `^0.4.19`。
+
 ### 插件端（`@dsh-market/plugin@0.4.22` / `@dsh-market/core@0.4.18`）
 
 **FIX：已装检测按同名条目消歧，修正重名仓库抢归属（#387，社区 PR 合入）**

@@ -70,13 +70,25 @@ function cloneDestOf(command: string): string | null {
  * 从 cordis 安装命令提取真实包名（`dsh plugin --profile <p> add <pkg>` / `pnpm add <pkg>` 等）。
  * 市场数据里大量 name 字段是 "owner/repo" 格式，installPackageName 猜不出真实安装名，
  * 冒烟必须对"实际执行的安装"做验证 → 优先从命令本身提取。
+ * #394 · release TGZ URL 分支：`add "https://github.com/<o>/<r>/releases/download/v1.7.20/
+ * dsh-purge-community-1.7.20.tgz"` → 文件名去版本尾巴 = 包名（dsh-purge-community）。
+ * 此前 URL 提取失败 → 落 installPackageName（市场短名）→ 冒烟对账必然失败 → 误升级 AI。
  */
 export function extractInstallPkgName(command: string): string | null {
-  const add = command.match(/(?:^|\s)(?:add|i|install)\s+([\w@][\w@.:/~-]*)/i);
+  const add = command.match(/(?:^|\s)(?:add|i|install)\s+("[^"]+"|[\w@][\w@.:/~-]*)/i);
   if (!add) return null;
   let pkg = add[1].replace(/^["']|["']$/g, "");
+  // release TGZ：文件名形如 <pkg>-<semver>.tgz，去版本尾巴得 npm 包名
+  const tgz = pkg.match(
+    /^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/releases\/download\/[^/]+\/(.+)\.(?:tgz|tar\.gz)$/i,
+  );
+  if (tgz) {
+    const stem = tgz[1];
+    const mVer = stem.match(/^(.+?)-\d+\.\d+\.\d+(?:-[\w.]+)?$/);
+    pkg = mVer ? mVer[1] : stem;
+  }
   // github:/git 源 → 提取仓库名尾部（github:owner/repo → repo）
-  if (/^(github:|git\+|https?:\/\/.*(?:github\.com|gitlab\.com))/.test(pkg)) {
+  else if (/^(github:|git\+|https?:\/\/.*(?:github\.com|gitlab\.com))/.test(pkg)) {
     const m = pkg.match(/([^/]+?)(?:\.git)?$/);
     if (m) pkg = m[1];
   }

@@ -276,6 +276,34 @@ describe("routeInstall T0 路由", () => {
     expect(extractInstallPkgName("git clone https://github.com/a/b.git x")).toBeNull();
     expect(extractInstallPkgName("echo hi")).toBeNull();
   });
+
+  it("#394 · release TGZ URL → 文件名去版本尾巴 = 包名", () => {
+    // dsh-purge 实例：带引号的 release TGZ（此前提取失败落市场短名 → 冒烟对账必失败）
+    expect(
+      extractInstallPkgName(
+        'dsh plugin --profile web add "https://github.com/kingcharleslzy-ai/dsh-purge/releases/download/v1.7.20/dsh-purge-community-1.7.20.tgz"',
+      ),
+    ).toBe("dsh-purge-community");
+    expect(
+      extractInstallPkgName(
+        "dsh plugin add https://github.com/a/b/releases/download/v2.0.0/pkg-name-2.0.0.tgz",
+      ),
+    ).toBe("pkg-name");
+    // 预发布版本尾巴
+    expect(
+      extractInstallPkgName(
+        "dsh plugin add https://github.com/a/b/releases/download/v1.0.0/x-tool-1.0.0-beta.1.tgz",
+      ),
+    ).toBe("x-tool");
+    // 非 semver 文件名 → 用整个文件名 stem（冒烟对不上会 needAi 兜底，不伪报成功）
+    expect(
+      extractInstallPkgName(
+        "dsh plugin add https://github.com/a/b/releases/download/rel1/bundle.tgz",
+      ),
+    ).toBe("bundle");
+    // 非 release 路径的 URL 仍不提取
+    expect(extractInstallPkgName("dsh plugin add https://example.com/pkg.tgz")).toBeNull();
+  });
 });
 
 describe("normalizeSkillCommands · skill 解析命令规范化", () => {

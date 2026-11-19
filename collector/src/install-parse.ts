@@ -47,6 +47,11 @@ function cleanCmdLine(line: string): string {
   c = c.replace(/\s*#.*$/, "").trim();
   // 过滤 cd/mkdir/echo 等纯前置命令（不含 && 链的）
   if (/^(cd |mkdir |echo |touch |cat >|ls |rm )/.test(c) && !c.includes("&&")) return "";
+  // 过滤引用 shell 变量的下载/写入行（#394）：`curl … -o "$PURGE_INSTALL_DIR/install.sh"`
+  // 这类行依赖前文定义的变量，单独收录既装不了也误导；变量引用识别 = $VAR / ${VAR}
+  if (/\$\{?[A-Za-z_]\w*\}?/.test(c) && /(?:curl|wget|irm|iwr|invoke-webrequest|invoke-restmethod|fetch)\b/i.test(c)) {
+    return "";
+  }
   return c;
 }
 
