@@ -4,6 +4,20 @@
 
 ## [Unreleased]
 
+### 插件端（`@dsh-market/plugin@0.4.24` / `@dsh-market/core@0.4.20`）
+
+**FIX：scope 包已装检测失效（#408，router/installer 同 #406 家族）**
+
+- **根因**：`installPackageName` 在 homepage 非 npmjs 时退化为仓库短名 `owner/repo`（如 `liustack/modlens`），而 profile 依赖键是 scoped 包名 `@liustack/modlens`——`isInstalled` 的严格 `deps[k]` 查找永远 false：**装好了、运行正常，「已装」页与路由仍判未装**，一键安装继续撞白名单。与 #406（verify.js）同族不同文件。
+- **修复**：`isInstalled` 依赖键匹配放宽——完全相等；scoped 键去 `@` 后与 owner/repo 相等（scope=owner 强匹配，scope 不同不认领，防抢归属）；无 scope 键与 owner/repo 的仓库名段相等（#288 场景）。
+
+**FIX：install.commands 抓错——npx 宿主 CLI 归一化 + curl|bash 禁录（#408，collector）**
+
+- **问题**：`liustack/modlens` 的 `install.commands` 抓成了 Antigravity CLI 的环境引导命令 `curl -fsSL …| bash`（必撞直装白名单），真正的命令 `npx -y @deepseek-ai/dsh plugin --profile web add @liustack/modlens@3.27.5` 因 `npx` 开头没被识别。同类：modsearch 两条命令全过不了白名单；全量索引含 curl/wget 的 cordis 条目 111 条、npx 开头 95 条。
+- **修复**（collector）：INSTALL_CMD_RE 增加 `npx [-y] @deepseek-ai/dsh plugin` 形态并**归一化为 `dsh plugin …`**（npx 调的就是宿主 CLI，语义等价）；`cleanCmdLine` 过滤「远程脚本下载执行」行（curl/wget 管道 bash）——对 cordis-plugin 从来不是有效安装命令，riskyInstall 评分标记不受影响；`rulesRev` bump 4 使抓错命令的存量条目（modlens/modsearch 等）随重检自动修正。
+- **补充**（core）：`extractInstallPkgName` 剥版本尾巴——`@liustack/modlens@3.27.5` → `@liustack/modlens`（scoped 的 `@` 不误剥），此前带版本对账 profile 依赖键必然失败。ui 0.4.24 抬 core 下限 `^0.4.20`。
+- 测试：core router 30/30（isInstalled scope 强匹配/防抢归属/无 scope 场景 + 剥版本）、collector install-parse 5/5（modlens 归一化、curl|bash 禁录、modsearch 场景）、issues 28/28（#380 URL 子目录提取）。
+
 ### 插件端（`@dsh-market/plugin@0.4.23` / `@dsh-market/core@0.4.19`）
 
 **FIX：release TGZ 安装的冒烟对账 + README 变量下载行过滤（#394）**

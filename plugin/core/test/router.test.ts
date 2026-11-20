@@ -238,6 +238,45 @@ describe("routeInstall T0 路由", () => {
     expect(isInstalled(cfg, cordisPlugin, "web")).toBe(true);
   });
 
+  it("#408 · isInstalled：homepage 非 npmjs 时 owner/repo 短名对 scoped 依赖键匹配", () => {
+    // liustack/modlens 实例：homepage 非 npmjs → installPackageName 退化为
+    // "liustack/modlens"，而 profile 依赖键是 @liustack/modlens（scope=owner 强匹配）
+    const modlens = { ...cordisPlugin, id: "liustack/modlens", name: "liustack/modlens", fullName: "liustack/modlens", owner: "liustack", repo: "modlens", homepage: null };
+    const cfg = makeCfg();
+    const profileDir = join(cfg.profilesDir, "web");
+    mkdirSync(profileDir, { recursive: true });
+    writeFileSync(
+      join(profileDir, "package.json"),
+      JSON.stringify({ dependencies: { "@liustack/modlens": "^3.27.5" } }),
+      "utf8",
+    );
+    expect(isInstalled(cfg, modlens, "web")).toBe(true);
+    // scope 与 owner 不同 → 不认领（防抢归属）
+    const other = { ...modlens, id: "other/modlens", name: "other/modlens", fullName: "other/modlens", owner: "other" };
+    expect(isInstalled(cfg, other, "web")).toBe(false);
+    // #288 · 无 scope 依赖键与仓库名段相等 → 已装
+    const noScopeCfg = makeCfg();
+    const nsDir = join(noScopeCfg.profilesDir, "web");
+    mkdirSync(nsDir, { recursive: true });
+    writeFileSync(
+      join(nsDir, "package.json"),
+      JSON.stringify({ dependencies: { modlens: "^1.0.0" } }),
+      "utf8",
+    );
+    expect(isInstalled(noScopeCfg, modlens, "web")).toBe(true);
+  });
+
+  it("#408 · extractInstallPkgName：剥版本尾巴（scoped 与普通）", () => {
+    expect(extractInstallPkgName("dsh plugin --profile web add @liustack/modlens@3.27.5")).toBe(
+      "@liustack/modlens",
+    );
+    expect(extractInstallPkgName("dsh plugin --profile web add dsh-context@latest")).toBe(
+      "dsh-context",
+    );
+    // scope 里的 @ 不误剥
+    expect(extractInstallPkgName("dsh plugin --profile web add @scope/pkg")).toBe("@scope/pkg");
+  });
+
   it("cordis 冒烟对账：解析命令包名优先（name 字段为 owner/repo 也能正确对账）", async () => {
     const cfg = makeCfg();
     // 真实数据形态：name 是 owner/repo，命令里才是真实包名

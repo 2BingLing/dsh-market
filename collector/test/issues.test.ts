@@ -3,6 +3,7 @@ import {
   extractRepoFromText,
   extractIntroByAuthor,
   extractSubdirHints,
+  extractSubdirHintsFromUrls,
   extractBatchRepos,
   SUBMISSION_TITLE_LOOSE_RE,
   SUBMISSION_TITLE_RE,
@@ -123,6 +124,24 @@ describe("extractSubdirHints（#295 子目录提示）", () => {
 
   it("无提示时返回空数组", () => {
     expect(extractSubdirHints("没有子目录提示的正文")).toEqual([]);
+  });
+
+  it("#380 · GitHub tree/blob URL 提取子目录 hint（finogeeks/finsafe 实例）", () => {
+    const body = [
+      "- **插件目录**：https://github.com/finogeeks/finsafe/tree/main/integrations/dsh/windows",
+      "- **插件清单**：https://github.com/finogeeks/finsafe/blob/main/integrations/dsh/windows/package.json",
+      "- **Cordis补丁**：https://github.com/finogeeks/finsafe/blob/main/integrations/dsh/windows/cordis.patch.yml",
+      "- 其他仓库链接：https://github.com/deepseek-ai/deepseek-harness/tree/main/docs",
+    ].join("\n");
+    expect(extractSubdirHintsFromUrls(body, "finogeeks/finsafe")).toEqual([
+      "integrations/dsh/windows",
+    ]);
+    // 指向其他仓库的 URL 不提取
+    expect(extractSubdirHintsFromUrls(body, "deepseek-ai/deepseek-harness")).toEqual(["docs"]);
+    // owner/repo 大小写不敏感
+    expect(extractSubdirHintsFromUrls(body, "Finogeeks/FinSafe")).toEqual([
+      "integrations/dsh/windows",
+    ]);
   });
 });
 

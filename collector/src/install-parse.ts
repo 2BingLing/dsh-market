@@ -33,7 +33,7 @@ export function extractInstallSection(readme: string): string | null {
 }
 
 const INSTALL_CMD_RE =
-  /^(git clone|git submodule|git config|dsh plugin|dsh\s+.*\sadd|pnpm (add|i)\b|npm (install|i)\b|npx skills add|npx @[^\s]+ add|curl .*install|pip install|uv (tool )?install|brew install|cargo install|git init)/;
+  /^(git clone|git submodule|git config|dsh plugin|dsh\s+.*\sadd|pnpm (add|i)\b|npm (install|i)\b|npx skills add|npx @[^\s]+ add|npx -y @deepseek-ai\/dsh plugin|npx @deepseek-ai\/dsh plugin|curl .*install|pip install|uv (tool )?install|brew install|cargo install|git init)/;
 
 /** 判断是否为安装类命令 */
 function isInstallCmd(cmd: string): boolean {
@@ -52,7 +52,25 @@ function cleanCmdLine(line: string): string {
   if (/\$\{?[A-Za-z_]\w*\}?/.test(c) && /(?:curl|wget|irm|iwr|invoke-webrequest|invoke-restmethod|fetch)\b/i.test(c)) {
     return "";
   }
+  // 过滤「远程脚本下载执行」行（#408）：`curl -fsSL https://…/install.sh | bash`——
+  // 对 cordis-plugin 从来不是有效的插件安装命令（必撞直装白名单），只是别的
+  // 产品的环境引导（如 Antigravity CLI）；riskyInstall 评分标记不受影响
+  if (/(?:curl|wget)\b/i.test(c) && /\|\s*(?:sudo\s+)?(?:ba|z|fi|da)?sh\b/.test(c)) {
+    return "";
+  }
   return c;
+}
+
+/**
+ * #408 · `npx [-y] @deepseek-ai/dsh plugin …` 归一为 `dsh plugin …`：
+ * README 常用 npx 直接调用宿主 CLI（如 liustack/modlens），形态不被 dsh 前缀
+ * 规则之外的启发式覆盖时整条漏抓，被 curl|bash 环境引导行顶替。npx 调的
+ * 就是 dsh 本体，归一为官方 CLI 命令语义等价（profile 参数原样保留）。
+ */
+export function normalizeDshCliCmd(cmd: string): string {
+  return cmd
+    .replace(/^npx\s+(?:-y\s+)?@deepseek-ai\/dsh\s+plugin\b/, "dsh plugin")
+    .replace(/^npx\s+@deepseek-ai\/dsh\s+plugin\b/, "dsh plugin");
 }
 
 /** 从安装章节提取安装命令列表（去重，最多 3 条） */
@@ -60,7 +78,9 @@ export function extractInstallCommands(section: string): string[] {
   const cmds: string[] = [];
   const push = (line: string) => {
     const c = cleanCmdLine(line);
-    if (c && isInstallCmd(c) && !cmds.includes(c)) cmds.push(c);
+    if (!c || !isInstallCmd(c)) return;
+    const norm = normalizeDshCliCmd(c);
+    if (!cmds.includes(norm)) cmds.push(norm);
   };
 
   // 1. 代码块内的行

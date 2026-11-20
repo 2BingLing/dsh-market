@@ -73,8 +73,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  *  rev 2（#365）：SKILL.md + package.json 判 cordis 的改判规则增加例外——README
  *  安装命令是技能形态（npx skills add / git clone 到 skills 目录）时保留 skill 判定。
  *  rev 3（#394）：安装命令解析新增 release TGZ 分支 + 变量引用下载行过滤 +
- *  README 抓取失败不再清空缓存中的已解析命令——bump 使被污染的缓存失效重检。 */
-const DETECT_RULES_REV = 3;
+ *  README 抓取失败不再清空缓存中的已解析命令——bump 使被污染的缓存失效重检。
+ *  rev 4（#408）：npx @deepseek-ai/dsh plugin 归一化 + curl|bash 管道行禁录——
+ *  modlens/modsearch 等抓错命令的条目随重检自动修正。 */
+const DETECT_RULES_REV = 4;
 const DATA_DIR = join(__dirname, "../../data");
 const CONCURRENCY = 10;
 const EXCLUDED_REPOS = new Set([

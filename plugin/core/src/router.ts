@@ -92,6 +92,16 @@ export function extractInstallPkgName(command: string): string | null {
     const m = pkg.match(/([^/]+?)(?:\.git)?$/);
     if (m) pkg = m[1];
   }
+  // #408 · 剥版本尾巴（@liustack/modlens@3.27.5 → @liustack/modlens）：profile 依赖键
+  // 无版本，带版本对账必然失败。scoped 包只剥第二个 / 之后的 @（@scope 不是版本）
+  if (pkg.startsWith("@")) {
+    const slash = pkg.indexOf("/");
+    const at = slash === -1 ? -1 : pkg.indexOf("@", slash);
+    if (at !== -1) pkg = pkg.slice(0, at);
+  } else {
+    const at = pkg.indexOf("@");
+    if (at > 0) pkg = pkg.slice(0, at);
+  }
   return /^[\w@][\w@./-]*$/.test(pkg) ? pkg : null;
 }
 
@@ -168,7 +178,12 @@ export function deriveSmokeCommands(
   ];
 }
 
-/** 安装是否已完成（skill：<name> 或旧 <name>-latest 存在；cordis：profile 依赖含包名；pkgName 同上优先级） */
+/** 安装是否已完成（skill：<name> 或旧 <name>-latest 存在；cordis：profile 依赖含包名；pkgName 同上优先级）
+ *  #408 · 依赖键匹配放宽（#406 verify.js 同思路，此处是 router）：installPackageName 在
+ *  homepage 非 npmjs 时退化为仓库短名（owner/repo，如 liustack/modlens），而真实依赖键是
+ *  scoped 包名（@liustack/modlens）——严格 `deps[k]` 查找永远 false，装好了也判未装。
+ *  匹配规则：完全相等；或 scoped 键去 @ 后与 owner/repo 相等（scope=owner 强匹配，scope
+ *  不同不认领）；或无 scope 键与 owner/repo 尾段相等（#288 仓库短名场景）。 */
 export function isInstalled(
   cfg: ResolvedConfig,
   plugin: DshPlugin,
@@ -184,7 +199,32 @@ export function isInstalled(
     const pkg = JSON.parse(readFileSync(pkgJsonPath, "utf8")) as {
       dependencies?: Record<string, string>;
     };
-    return pkg.dependencies?.[pkgName ?? installPackageName(plugin)] != null;
+    const target = (pkgName ?? installPackageName(plugin)).toLowerCase();
+    const deps = pkg.dependencies ?? {};
+    if (deps[target] != null) return true;
+    for (const k of Object.keys(deps)) {
+      const kLower = k.toLowerCase();
+      if (kLower === target) return true;
+      // scoped 依赖键 @scope/pkg：scope 与插件 owner 段一致 + pkg 段与 name/repo 段一致
+      if (kLower.startsWith("@")) {
+        const withoutScope = kLower.slice(1);
+        if (withoutScope === target) return true;
+        const pkgPart = withoutScope.includes("/") ? withoutScope.split("/")[1] : withoutScope;
+        const targetPkgPart = target.includes("/") ? target.split("/")[1] : target;
+        const targetOwner = target.includes("/") ? target.split("/")[0] : "";
+        if (
+          pkgPart === targetPkgPart &&
+          targetOwner !== "" &&
+          withoutScope.split("/")[0] === targetOwner
+        ) {
+          return true;
+        }
+      } else if (target.includes("/") && target.split("/")[1] === kLower) {
+        // 无 scope 依赖键与 owner/repo 的仓库名段相等（#288 场景）
+        return true;
+      }
+    }
+    return false;
   } catch {
     return false;
   }
