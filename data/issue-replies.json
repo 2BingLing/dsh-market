@@ -1,59 +1,14 @@
 {
-  "generatedAt": "2026-11-19T18:50:49.237Z",
+  "generatedAt": "2026-11-20T20:10:34.935Z",
   "replies": [
     {
       "issueNumbers": [
-        404
+        407
       ],
-      "fullName": "kadaliao/dsh-atlas",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        403
-      ],
-      "fullName": "kadaliao/dsh-prompt-en",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
-    },
-    {
-      "issueNumbers": [
-        402
-      ],
-      "fullName": "kadaliao/dsh-images",
+      "fullName": "ppy-web/dsh-audio-reactive",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 34
-    },
-    {
-      "issueNumbers": [
-        405
-      ],
-      "fullName": "dan-cube/dsh-balance-center",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 59
-    },
-    {
-      "issueNumbers": [
-        400
-      ],
-      "fullName": "erinwangstudio-art/dsh-trafficlight",
-      "type": "cordis-plugin",
-      "stars": 3,
-      "score": 81
-    },
-    {
-      "issueNumbers": [
-        397
-      ],
-      "fullName": "pcysanji/dsh-search-plus",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
     }
   ]
 }
