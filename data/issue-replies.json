@@ -1,14 +1,23 @@
 {
-  "generatedAt": "2026-11-21T00:53:57.697Z",
+  "generatedAt": "2026-11-22T00:56:30.258Z",
   "replies": [
     {
       "issueNumbers": [
-        407
+        410
       ],
-      "fullName": "ppy-web/dsh-audio-reactive",
+      "fullName": "firefoxbig/dsh-seasonal-theme",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 34
+      "stars": 1,
+      "score": 53
+    },
+    {
+      "issueNumbers": [
+        411
+      ],
+      "fullName": "Maxc100/dsh-cloud-backup",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 55
     }
   ]
 }
