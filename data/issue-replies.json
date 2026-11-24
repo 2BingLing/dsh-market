@@ -1,117 +1,18 @@
 {
-  "generatedAt": "2026-11-23T01:19:25.771Z",
+  "generatedAt": "2026-11-24T05:29:39.151Z",
   "replies": [
     {
       "issueNumbers": [
-        418
+        430
       ],
-      "fullName": "PerryLink/dsh-settlement-docs",
+      "fullName": "lansijian/dsh-model-usage-board",
       "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
+      "stars": 0,
+      "score": 36
     },
     {
       "issueNumbers": [
-        419
-      ],
-      "fullName": "PerryLink/dsh-store-replenish",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        417
-      ],
-      "fullName": "PerryLink/dsh-provider-params",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 74
-    },
-    {
-      "issueNumbers": [
-        416
-      ],
-      "fullName": "PerryLink/dsh-rfq-compare",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        421
-      ],
-      "fullName": "PerryLink/dsh-progress-payment",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        420
-      ],
-      "fullName": "PerryLink/dsh-pdf-table",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        423
-      ],
-      "fullName": "PerryLink/dsh-labor-contract",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        422
-      ],
-      "fullName": "PerryLink/dsh-import-customs-check",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        427
-      ],
-      "fullName": "PerryLink/dsh-contract-renewal",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        426
-      ],
-      "fullName": "PerryLink/dsh-attendance-check",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        424
-      ],
-      "fullName": "PerryLink/dsh-ar-collection",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        425
-      ],
-      "fullName": "PerryLink/dsh-ar-aging",
-      "type": "cordis-plugin",
-      "stars": 2,
-      "score": 61
-    },
-    {
-      "issueNumbers": [
-        414
+        428
       ],
       "fullName": "www111-ui/dsh-plugin-conflict-audit",
       "type": "cordis-plugin",
@@ -120,12 +21,12 @@
     },
     {
       "issueNumbers": [
-        415
+        429
       ],
-      "fullName": "PerryLink/dsh-sherlock",
+      "fullName": "PerryLink/dsh-famling",
       "type": "cordis-plugin",
-      "stars": 2,
-      "score": 62
+      "stars": 3,
+      "score": 61
     }
   ]
 }
