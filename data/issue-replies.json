@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-25T03:12:56.409Z",
+  "generatedAt": "2026-11-25T05:03:43.532Z",
   "replies": [
     {
       "issueNumbers": [
@@ -39,21 +39,12 @@
     },
     {
       "issueNumbers": [
-        436
-      ],
-      "fullName": "dzc55551-eng/dsh-headhunter-industry-ramp",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 57
-    },
-    {
-      "issueNumbers": [
         433
       ],
       "fullName": "yicun0316/dsh-claude-slider",
       "type": "cordis-plugin",
-      "stars": 3,
-      "score": 65
+      "stars": 4,
+      "score": 67
     },
     {
       "issueNumbers": [
@@ -63,6 +54,15 @@
       "type": "cordis-plugin",
       "stars": 0,
       "score": 34
+    },
+    {
+      "issueNumbers": [
+        436
+      ],
+      "fullName": "dzc55551-eng/dsh-headhunter-industry-ramp",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 57
     }
   ]
 }
