@@ -1,32 +1,68 @@
 {
-  "generatedAt": "2026-11-24T05:29:39.151Z",
+  "generatedAt": "2026-11-25T03:12:56.409Z",
   "replies": [
     {
       "issueNumbers": [
-        430
+        431
       ],
-      "fullName": "lansijian/dsh-model-usage-board",
+      "fullName": "ximizhou/convenient_window_free",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 36
+      "stars": 200,
+      "score": 85
     },
     {
       "issueNumbers": [
-        428
+        434
       ],
-      "fullName": "www111-ui/dsh-plugin-conflict-audit",
+      "fullName": "renzg/dsh-token-bill",
       "type": "cordis-plugin",
-      "stars": 0,
-      "score": 37
+      "stars": 1,
+      "score": 57
     },
     {
       "issueNumbers": [
-        429
+        412
       ],
-      "fullName": "PerryLink/dsh-famling",
+      "fullName": "finogeeks/finsafe",
+      "type": "cordis-plugin",
+      "stars": 9,
+      "score": 51
+    },
+    {
+      "issueNumbers": [
+        435
+      ],
+      "fullName": "why3316-g/why-gzh-writer",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 53
+    },
+    {
+      "issueNumbers": [
+        436
+      ],
+      "fullName": "dzc55551-eng/dsh-headhunter-industry-ramp",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 57
+    },
+    {
+      "issueNumbers": [
+        433
+      ],
+      "fullName": "yicun0316/dsh-claude-slider",
       "type": "cordis-plugin",
       "stars": 3,
-      "score": 61
+      "score": 65
+    },
+    {
+      "issueNumbers": [
+        432
+      ],
+      "fullName": "AlexMillerOvO/dsh-imagen",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 34
     }
   ]
 }
