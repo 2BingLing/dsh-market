@@ -1,68 +1,50 @@
 {
-  "generatedAt": "2026-11-25T05:03:43.532Z",
+  "generatedAt": "2026-11-26T02:21:11.036Z",
   "replies": [
     {
       "issueNumbers": [
-        431
+        441
       ],
-      "fullName": "ximizhou/convenient_window_free",
-      "type": "cordis-plugin",
-      "stars": 200,
-      "score": 85
-    },
-    {
-      "issueNumbers": [
-        434
-      ],
-      "fullName": "renzg/dsh-token-bill",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 57
-    },
-    {
-      "issueNumbers": [
-        412
-      ],
-      "fullName": "finogeeks/finsafe",
-      "type": "cordis-plugin",
-      "stars": 9,
-      "score": 51
-    },
-    {
-      "issueNumbers": [
-        435
-      ],
-      "fullName": "why3316-g/why-gzh-writer",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 53
-    },
-    {
-      "issueNumbers": [
-        433
-      ],
-      "fullName": "yicun0316/dsh-claude-slider",
-      "type": "cordis-plugin",
-      "stars": 4,
-      "score": 67
-    },
-    {
-      "issueNumbers": [
-        432
-      ],
-      "fullName": "AlexMillerOvO/dsh-imagen",
+      "fullName": "cq-dong/dsh-nexus-grid",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 34
+      "score": 25
     },
     {
       "issueNumbers": [
-        436
+        440
       ],
-      "fullName": "dzc55551-eng/dsh-headhunter-industry-ramp",
+      "fullName": "SPYfighting/dsh-science-review",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 36
+    },
+    {
+      "issueNumbers": [
+        439
+      ],
+      "fullName": "benz-ai-x/dsh-research-graph",
+      "type": "cordis-plugin",
+      "stars": 10,
+      "score": 69
+    },
+    {
+      "issueNumbers": [
+        437
+      ],
+      "fullName": "evjohn-icu/dsh-rtk-bridge",
+      "type": "cordis-plugin",
+      "stars": 0,
+      "score": 35
+    },
+    {
+      "issueNumbers": [
+        438
+      ],
+      "fullName": "officesdk/officesdk-plugin-dsh",
       "type": "cordis-plugin",
       "stars": 1,
-      "score": 57
+      "score": 58
     }
   ]
 }
