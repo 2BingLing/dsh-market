@@ -1,50 +1,41 @@
 {
-  "generatedAt": "2026-11-26T02:21:11.036Z",
+  "generatedAt": "2026-11-27T03:16:34.399Z",
   "replies": [
     {
       "issueNumbers": [
-        441
+        451
       ],
-      "fullName": "cq-dong/dsh-nexus-grid",
+      "fullName": "ppy-web/dsh-plugin-xiaomi-mimo-tts",
+      "type": "cordis-plugin",
+      "stars": 68,
+      "score": 77
+    },
+    {
+      "issueNumbers": [
+        443
+      ],
+      "fullName": "SPYfighting/dsh-science-plugin",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 25
+      "score": 37
     },
     {
       "issueNumbers": [
-        440
+        452
       ],
-      "fullName": "SPYfighting/dsh-science-review",
+      "fullName": "Howell5/dsh-open-desktop",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 36
+      "score": 37
     },
     {
       "issueNumbers": [
-        439
+        450
       ],
-      "fullName": "benz-ai-x/dsh-research-graph",
-      "type": "cordis-plugin",
-      "stars": 10,
-      "score": 69
-    },
-    {
-      "issueNumbers": [
-        437
-      ],
-      "fullName": "evjohn-icu/dsh-rtk-bridge",
+      "fullName": "mbcc5732/dsh-screenshot",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 35
-    },
-    {
-      "issueNumbers": [
-        438
-      ],
-      "fullName": "officesdk/officesdk-plugin-dsh",
-      "type": "cordis-plugin",
-      "stars": 1,
-      "score": 58
     }
   ]
 }
