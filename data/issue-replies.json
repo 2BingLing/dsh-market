@@ -1,41 +1,50 @@
 {
-  "generatedAt": "2026-11-27T03:16:34.399Z",
+  "generatedAt": "2026-11-28T03:04:22.602Z",
   "replies": [
     {
       "issueNumbers": [
-        451
+        455
       ],
-      "fullName": "ppy-web/dsh-plugin-xiaomi-mimo-tts",
+      "fullName": "EternalNight996/memory-eternal",
       "type": "cordis-plugin",
-      "stars": 68,
-      "score": 77
+      "stars": 232,
+      "score": 89
     },
     {
       "issueNumbers": [
-        443
+        454
       ],
-      "fullName": "SPYfighting/dsh-science-plugin",
+      "fullName": "him-steve/dsh-memora",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 57
+    },
+    {
+      "issueNumbers": [
+        442
+      ],
+      "fullName": "zhiyuanvision-lang/InkMap",
+      "type": "cordis-plugin",
+      "stars": 1,
+      "score": 56
+    },
+    {
+      "issueNumbers": [
+        453
+      ],
+      "fullName": "Cyrus0719/dsh-pet-remielle",
       "type": "cordis-plugin",
       "stars": 0,
       "score": 37
     },
     {
       "issueNumbers": [
-        452
+        444
       ],
-      "fullName": "Howell5/dsh-open-desktop",
+      "fullName": "SPYfighting/dsh-science-review",
       "type": "cordis-plugin",
       "stars": 0,
-      "score": 37
-    },
-    {
-      "issueNumbers": [
-        450
-      ],
-      "fullName": "mbcc5732/dsh-screenshot",
-      "type": "cordis-plugin",
-      "stars": 0,
-      "score": 35
+      "score": 36
     }
   ]
 }
